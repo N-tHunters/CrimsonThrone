@@ -1,0 +1,11 @@
+#include "log.h"
+
+void Log(std::string severity, std::string message) {
+  time_t t;
+  time(&t);
+  printf(":INFO:%s\n", ctime(&t), severity.c_str(),  message.c_str());
+}
+
+void LogInfo(std::string message) {
+  Log("INFO", message);
+}

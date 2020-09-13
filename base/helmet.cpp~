@@ -1,0 +1,9 @@
+#include "helmet.h"
+#include "actor.h"
+
+Helmet::Helmet(std::string name, int defence) :
+  Armor(name, defence) {}
+
+void Helmet::Wear(Actor * target) {
+  target->WearHelmet(this);
+}

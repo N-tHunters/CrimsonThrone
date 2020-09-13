@@ -1,0 +1,20 @@
+#ifndef WEAPON_H
+#define WEAPON_H
+
+#include "item.h"
+
+class Weapon : public Item {
+private:
+  int damage;
+  int range;
+
+public:
+  Weapon(std::string, int, int);
+  int GetDamage();
+  int GetRange();
+
+  void SetDamage(int);
+  void SetRange(int);
+};
+
+#endif

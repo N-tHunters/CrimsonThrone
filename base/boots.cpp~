@@ -1,0 +1,9 @@
+#include "boots.h"
+#include "actor.h"
+
+Boots::Boots(std::string name, int defence) :
+  Armor(name, defence) {}
+
+void Boots::Wear(Actor * target) {
+  target->WearBoots(this);
+}

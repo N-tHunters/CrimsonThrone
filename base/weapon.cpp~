@@ -1,0 +1,23 @@
+#include "weapon.h"
+
+Weapon::Weapon(std::string name, int damage, int range) :
+  Item(name) {
+  this->damage = damage;
+  this->range = range;
+}
+
+int Weapon::GetDamage() {
+  return this->damage;
+}
+
+int Weapon::GetRange() {
+  return this->range;
+}
+
+void Weapon::SetDamage(int damage) {
+  this->damage = damage;
+}
+
+void Weapon::SetRange(int range) {
+  this->range = range;
+}

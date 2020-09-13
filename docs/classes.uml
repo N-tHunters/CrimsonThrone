@@ -1,0 +1,312 @@
+@startuml
+package Base {
+	class Actor {
+    		-std::string name
+    		
+    		-int health
+    		-int max_health
+    		
+    		-Item* inventory[INVENTORY_SIZE]
+    		
+    		-Weapon* weapon
+    	
+    		-Helmet* helmet
+    		-Boots* boots
+    		-Gloves* gloves
+    		-Chestplate* chestplate
+    		-Leggins* leggins
+    	
+    		-void JustifyHealth()
+    
+    		+Actor()
+    		.. Getters ..
+    		+std::string GetName()
+    		+int GetHealth()
+    		+int GetMaxHealth()
+    		+Weapon* GetWeapon()
+    		+Helmet* GetHelmet()
+    		+Boots* GetBoots()
+    		+Gloves* GetGloves()
+    		+Chestplate* GetChestplate()
+    		+Leggins* GetLeggins()
+    		.. Setters ..
+    		+void SetName(std::string)
+    		+void SetHealth(int)
+    		+void SetMaxHealth(int)
+    		+void SetWeapon(Weapon*)
+    		+void SetHelmet(Helmet*)
+    		+void SetBoots(Boots*)
+    		+void SetGloves(Gloves*)
+    		+void SetChestplate(Chestplate*)
+    		+void SetLeggins(Leggins*)
+    		.. Wearers ..
+    		+void WearWeapon(Weapon*)
+    		+void WearHelmet(Helmet*)
+    		+void WearBoots(Boots*)
+    		+void WearGloves(Gloves*)
+    		+void WearChestplate(Chestplate*)
+    		+void WearLeggins(Leggins*)
+    		.. General ..
+    		+int GetDefence()
+    		+int GetDamage()
+    		+void DealDamage(int)
+    		+void Heal(int)
+    		.. Inventory ..
+    		+Item *GetItemAt(int)
+    		+void SetItemAt(int, Item *)
+    		+int GetEmptyCell()
+    		+bool PickupItem(Item *)
+    		+void DeleteItem(Item *)
+    
+    		+StackableItem * FindCompatibleItem(Item *)
+    		+int GetItemIndex(Item *)
+		
+    		+std::stringsream Save(Saver *)
+	}
+    
+	class Item {
+    		-std::string name
+
+    		+Item(std::string name)
+    	
+    		+std::string GetName()
+    		+void SetName(std::string)
+    
+    		+virtual void Use(Actor *)
+    		+virtual void Wear(Actor *)
+    	
+    		+virtual bool IsUsable()
+    		+virtual bool IsWearable()
+    		+virtual bool IsStackable()
+		
+    		+std::stringstream Save(Saver *)
+    		+std::stringstream Save(Saver *, int)
+	}
+    
+	class Weapon {
+    		-int damage
+    		-int range
+    
+    		+Weapon(std::string name, int damage, int range)
+    	
+    		+int GetDamage()
+    		+int GetRange()
+    	
+    		+void SetDamage(int)
+    		+void SetRange(int)
+    
+    		+bool IsWearable()
+    
+    		+void Wear(Actor *)
+		
+    		+virtual std::stringstream Save(Saver *)
+    		+std::stringstream Save(Saver *, int)
+	}
+    
+	class Armor {
+    		-int defence
+		
+    		+Armor(std::string name, int defence)
+    		
+    		+int GetDefence()
+    		+void SetDefence()
+		
+    		+bool IsWearable()
+		
+    		+virtual std::stringstream Save(Saver *, int)
+    		+virtual std::stringstream Save(Saver *)
+	}
+    
+	class Helmet {
+    		+Helmet(std::string name, int defence)
+    		+void Wear(Actor *)
+    
+    		+std::stringstream Save(Saver *)
+	}
+    
+	class Gloves {
+    		+Gloves(std::string name, int defence)
+    		+void Wear(Actor *)
+    
+    		+std::stringstream Save(Saver *)
+	}
+    
+	class Chestplate {
+    		+Chestplate(std::string name, int defence)
+    		+void Wear(Actor *)
+		
+    		+std::stringstream Save(Saver *)
+	}
+    
+	class Leggins {
+    		+Leggins(std::string name, int defence)
+    		+void Wear(Actor *)
+    
+    		+std::stringstream Save(Saver *)
+	}
+    
+	class Boots {
+    		+Boots(std::string name, int defence)
+    		+void Wear(Actor *)
+    
+		+std::stringstream Save(Saver *)
+	}
+	
+	class HealPotion {
+    		-int heal_amount
+		
+    		+int GetHealAmount()
+    		+void SetHealAmount(int)
+    		
+    		+void Use(Actor *)
+		
+    		+std::stringstream Save(Saver *)
+	}
+	
+	class RangedWeapon {
+    		-Missle * missle
+		
+    		+Missle * GetMissle()
+    		+void SetMissle(Missle *)
+    		+void UseMissle(Actor *)
+		
+    		+std::stringstream Save(Saver *)
+	}
+	
+	class StackableItem {
+    		-int count
+		
+    		+int GetCount()
+    		+void SetCount(int)
+		
+    		+bool IsStackable()
+    		+void Use(Actor *)
+		
+    		+void Stack(Item *)
+		
+    		+std::stringstream Save(Saver *)
+    		+std::stringstream Save(Saver *, int)
+	}
+	
+	class Missle {
+    		+std::stringstream Save(Saver *)
+	}
+	
+	class Player {}
+	
+	class Animal {}
+	
+	class NPC {}
+	
+	class RangedWeapon {}
+	
+	class Saver {
+    		-std::string path
+    		-std::vector<Actor>*actors
+    		-std::vector<Item>*items
+    		-std::map<Item*, int>item2index
+    		
+    		+Saver(std::string, std::vector<Actor>*, std::vector<Item>*)
+		
+    		+void SaveInt(std::stringstream, int)
+    		+void SaveString(std::stringstream, std::stringstream)
+    		
+    		+void Save()
+	}
+    
+	class Loader {
+	      	-std::string path
+		-std::vector<Actor*>*actors
+		-std::vector<Item*>*items
+
+		+Loader(std::string, std::vector<Actor*>*actors, std::vector<Item*>*items)
+		+int LoadInt(std::ifstream *)
+		+int LoadInt(std::stringstream *)
+		+std::string LoadString(std::ifstream *)
+		+std::string LoadString(std::stringstream *)
+
+		+Item * LoadItem(std::stringstream *)
+
+		+void Load()
+	}
+}
+
+package Render {
+	class Camera {
+		-glm::vec3 position
+		-glm::vec3 rotation
+		+glm::vec3 getPosition()
+		+glm::vec3 getRotation()
+		+void setRotation(glm::vec3)
+		+void setPosition(glm::vec3)
+		+void changePosition(glm::vec3)
+		+void changeRotation(glm::vec3)
+	}
+
+	class Mesh {
+	}
+}
+
+Helmet <--> Actor
+Gloves <--> Actor
+Chestplate <--> Actor
+Leggins <--> Actor
+Boots <--> Actor
+
+Item <|-- Weapon
+Item <|-- Armor
+
+Armor <|-- Helmet
+Armor <|-- Gloves
+Armor <|-- Chestplate
+Armor <|-- Leggins
+Armor <|-- Boots
+
+Item <|-- StackableItem
+
+StackableItem <|-- HealPotion
+
+Actor <--> StackableItem
+
+Actor <-- RangedWeapon
+
+Actor <|-- Player
+Actor <|-- Animal
+Actor <|-- NPC
+
+Weapon <|-- RangedWeapon
+
+Actor <--> Item
+Actor <-- HealPotion
+Actor <--> Weapon
+
+StackableItem <|-- Missle
+
+Missle <-- RangedWeapon
+
+Item <--> Saver
+Actor <--> Saver
+
+Saver <-- StackableItem
+Saver <-- Weapon
+Saver <-- Armor
+Saver <-- Helmet
+Saver <-- Boots
+Saver <-- Gloves
+Saver <-- Chestplate
+Saver <-- Leggins
+Saver <-- HealPotion
+Saver <-- RangedWeapon
+Saver <-- Missle
+
+Actor <-- Loader
+Item <-- Loader
+Weapon <-- Loader
+Armor <-- Loader
+Helmet <-- Loader
+Chestplate <-- Loader
+Gloves <-- Loader
+Leggins <-- Loader
+Boots <-- Loader
+
+@enduml

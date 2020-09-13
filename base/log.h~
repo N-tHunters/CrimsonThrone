@@ -1,0 +1,10 @@
+#ifndef CT_LOG_H
+#define CT_LOG_H
+
+#include <string>
+
+void LogInfo(std::string message) {
+
+}
+
+#endif

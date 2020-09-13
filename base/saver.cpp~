@@ -1,0 +1,43 @@
+#include "saver.h"
+#include "actor.h"
+#include "item.h"
+#include <stdio.h>
+
+
+Saver::Saver(std::string path, std::vector<Actor>* actors, std::vector<Item>* items) {
+  this->actors = actors;
+  this->items = items;
+
+  this->fs.open(path);
+}
+
+int Saver::SaveValue(unsigned char * buffer, int value_length, unsigned char * value) {
+  buffer[0] = value_length;
+  for(int i = 0; i < value_length; i++) {
+    buffer[i + 1] = value[i];
+  }
+  return value_length + 1;
+}
+
+int Saver::SaveInt(unsigned char * buffer, int value) {
+  this->SaveValue(buffer, sizeof(int), (unsigned char *)&value);
+  return sizeof(int) + 1;
+}
+
+int Saver::SaveString(unsigned char * buffer, std::string str) {
+  this->SaveValue(buffer, str.length(), (unsigned char *)str.c_str());
+  return str.length() + 1;
+}
+
+void Saver::Save() {
+  this->item2index.clear();
+  
+  for(unsigned int i = 0; i < this->items->size(); i++) {
+    this->items->at(i).Save(this);
+    this->item2index[&(*this->items).at(i)] = i;
+  }
+
+  for(unsigned int i = 0; i < this->items->size(); i++) {
+    this->actors->at(i).Save(this);
+  }
+}

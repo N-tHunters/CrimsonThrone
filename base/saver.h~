@@ -1,0 +1,27 @@
+#ifndef SAVER_H
+#define SAVER_H
+
+#include <string>
+#include <vector>
+#include <map>
+#include <fstream>
+
+class Actor;
+class Item;
+
+class Saver {
+  std::ofstream fs;
+  std::vector<Actor>*actors;
+  std::vector<Item>*items;
+  std::map<Item*, int>item2index;
+ public:
+  Saver(std::string, std::vector<Actor>*, std::vector<Item>*);
+
+  int SaveValue(unsigned char *, int, unsigned char *);
+  int SaveInt(unsigned char *, int);
+  int SaveString(unsigned char *, std::string);
+
+  void Save();
+};
+
+#endif

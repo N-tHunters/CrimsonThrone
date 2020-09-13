@@ -1,0 +1,10 @@
+#include "chestplate.h"
+#include "actor.h"
+
+
+Chestplate::Chestplate(std::string name, int defence) :
+  Armor(name, defence) {}
+
+void Chestplate::Wear(Actor * target) {
+  target->WearChestplate(this);
+}

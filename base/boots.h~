@@ -1,0 +1,14 @@
+#ifndef BOOTS_H
+#define BOOTS_H
+
+#include "armor.h"
+
+class Actor;
+
+class Boots : public Armor {
+public:
+  Boots(std::string, int);
+  void Wear(Actor *);
+};
+
+#endif

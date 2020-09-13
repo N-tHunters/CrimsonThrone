@@ -1,0 +1,10 @@
+#include "gloves.h"
+#include "actor.h"
+
+
+Gloves::Gloves(std::string name, int defence) :
+  Armor(name, defence) {}
+
+void Gloves::Wear(Actor * target) {
+  target->WearGloves(this);
+}

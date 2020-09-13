@@ -1,0 +1,6 @@
+#include "missle.h"
+#include "entries.h"
+
+std::stringstream Save(Saver* saver) {
+  return StackableItem(saver, ENTRY_MISSLE);
+}

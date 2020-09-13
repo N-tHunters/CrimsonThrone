@@ -1,0 +1,14 @@
+#ifndef GLOVES_H
+#define GLOVES_H
+
+#include "armor.h"
+
+class Gloves;
+
+class Gloves : public Armor {
+public:
+  Gloves(std::string, int);
+  void Wear(Actor *);
+};
+
+#endif

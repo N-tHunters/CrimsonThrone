@@ -1,0 +1,15 @@
+#include "rangedweapon.h"
+#include "actor.h"
+#include "missle.h"
+
+Missle* RangedWeapon::GetMissle() {
+  return this->missle;
+}
+
+void RangedWeapon::SetMissle(Missle *missle) {
+  this->missle = missle;
+}
+
+void RangedWeapon::UseMissle(Actor * target) {
+  this->missle->Use(target);
+}
