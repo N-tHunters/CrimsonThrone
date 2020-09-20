@@ -1,9 +1,0 @@
-#include "leggins.h"
-#include "actor.h"
-
-Leggins::Leggins(std::string name, int defence) :
-  Armor(name, defence) {}
-
-void Leggins::Wear(Actor* target) {
-  target->WearLeggins(this);
-}

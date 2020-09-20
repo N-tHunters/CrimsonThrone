@@ -1,8 +1,0 @@
-#ifndef MISSLE_H
-#define MISSLE_H
-
-#include "stackableitem.h"
-
-class Missle : public StackableItem {};
-
-#endif

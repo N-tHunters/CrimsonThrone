@@ -1,7 +1,0 @@
-#ifndef ENTRIES_H
-#define ENTRIES_H
-
-const int ENTRY_ITEM = 0;
-const int ENTRY_STACKABLE_ITEM = 1;
-
-#endif
