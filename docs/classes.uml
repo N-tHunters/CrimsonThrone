@@ -269,6 +269,7 @@ package Render {
 	      +std::vector<GLfloat> verticles
 	      +std::vector<GLuint> indices
 	      +Model(char *)
+	}
 }
 
 Helmet <--> Actor
