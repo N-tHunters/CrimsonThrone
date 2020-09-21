@@ -244,7 +244,31 @@ package Render {
 	}
 
 	class Mesh {
+	      -GLuint texture
+	      -GLuint VBO
+	      -GLuint VAO
+	      -GLuint EBO
+	      -glm::vec3 rotation
+	      -glm::vec3 position
+	      -int size
+	      +Mesh(std::string, std::vector<GLfloat>, std::vector<GLuint>, glm::vec3, glm::vec3)
+	      +void draw(Shader, glm::vec3, glm::vec3)
+	      +void rotate(glm::vec3)
+	      +void load(std::string filename)
 	}
+
+	class Shader {
+	      +GLuint Program
+	      +Shader(const GLchar*, const GLchar*)
+	      +void Use()
+	}
+
+	class Model {
+	      -void loadModel(std::string)
+	      -void processNode(aiNode *, const aiScene *)
+	      +std::vector<GLfloat> verticles
+	      +std::vector<GLuint> indices
+	      +Model(char *)
 }
 
 Helmet <--> Actor
@@ -308,5 +332,9 @@ Chestplate <-- Loader
 Gloves <-- Loader
 Leggins <-- Loader
 Boots <-- Loader
+
+
+
+Shader <-- Mesh
 
 @enduml
