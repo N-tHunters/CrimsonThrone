@@ -20,6 +20,7 @@
 #include "render/shaderLoader.h"
 #include "render/constants.h"
 #include "render/model.h"
+#include "render/camera.h"
 //#include "boundary.h"
 #include <math.h>
 
@@ -35,9 +36,12 @@ glm::vec2 normalize(glm::vec2 vec) {
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 // Window dimensions
-glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
-glm::vec3 cameraRotation = glm::vec3(0.0f, 0.0f, 0.0f);
+// glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+// glm::vec3 cameraRotation = glm::vec3(0.0f, 0.0f, 0.0f);
 glm::vec2 speed = glm::vec2(0.0f, 0.0f);
+
+Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+
 glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 int direction = 1;
 float directionSide = 0;
@@ -92,59 +96,40 @@ int main()
 	// Game loop
 	while (!glfwWindowShouldClose(window))
 	{
-		cameraPosition.x += speed.x + speedSide.x;
-		cameraPosition.z += speed.y + speedSide.y;
+		camera.changePositionX(speed.x + speedSide.x);
+		camera.changePositionZ(speed.y + speedSide.y);
 		lastXPos = xpos;
 		lastYPos = ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 		glm::vec2 cursorMotion = glm::vec2(lastXPos - xpos, lastYPos - ypos);
 		if(cursorMotion.x != 0 || cursorMotion.y != 0) {
 			if(speed.x != 0 || speed.y != 0) {
-				speed.x = -sin(glm::radians(-cameraRotation.y)) * velocity * direction;
-				speed.y = -cos(glm::radians(-cameraRotation.y)) * velocity * direction;
+				speed.x = -sin(glm::radians(-camera.getRotation().y)) * velocity * direction;
+				speed.y = -cos(glm::radians(-camera.getRotation().y)) * velocity * direction;
 			}
 			if(speedSide.x != 0 || speedSide.y != 0) {
-				speedSide.x = -sin(glm::radians(-(cameraRotation.y + directionSide))) * velocity;
-				speedSide.y = -cos(glm::radians(-(cameraRotation.y + directionSide))) * velocity;
+				speedSide.x = -sin(glm::radians(-(camera.getRotation().y + directionSide))) * velocity;
+				speedSide.y = -cos(glm::radians(-(camera.getRotation().y + directionSide))) * velocity;
 			}
-			//if(cursorMotion.x * cursorMotion.x + cursorMotion.y * cursorMotion.y > 1)
-			//	cursorMotion = normalize(cursorMotion) * sensivity;
 			cursorMotion *= sensivity;
-			cameraRotation.x -= cursorMotion.y;
-			cameraRotation.y -= cursorMotion.x;
-			if(cameraRotation.x < -90.0f)
-				cameraRotation.x = -90.0f;
-			if(cameraRotation.x > 90.0f)
-				cameraRotation.x = 90.0f;
+			camera.changeRotationX(-cursorMotion.y);
+			camera.changeRotationY(-cursorMotion.x);
+			if(camera.getRotation().x < -90.0f)
+				camera.setRotationX(-90.0f);
+			if(camera.getRotation().x > 90.0f)
+				camera.setRotationX(90.0f);
 		}
-		/*
-		if(ypos > lastYPos) {
-			cameraRotation.x += 1.0f;
-		} else if(ypos < lastYPos) {
-			cameraRotation.x -= 1.0f;
-		}
-		if(xpos > lastXPos) {
-			cameraRotation.y += 1.0f;
-		} else if(xpos < lastXPos) {
-			cameraRotation.y -= 1.0f;
-		}*/
 		// Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
-		//std::cout << cameraRotation.x << std::endl;
 		// Render
 		// Clear the color buffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		plane.draw(ourShader, cameraRotation, cameraPosition);
+		plane.draw(ourShader, camera.getRotation(), camera.getPosition());
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
 	}
-	// Properly de-allocate all resources once they've outlived their purpose
-	//glDeleteVertexArrays(1, &VAO);
-	//glDeleteBuffers(1, &VBO);
-	//glDeleteBuffers(1, &EBO);
-	// Terminate GLFW, clearing any resources allocated by GLFW.
 	glfwTerminate();
 	return 0;
 }
@@ -155,8 +140,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-		speed.x = -sin(glm::radians(-cameraRotation.y)) * velocity;
-		speed.y = -cos(glm::radians(-cameraRotation.y)) * velocity;
+		speed.x = -sin(glm::radians(-camera.getRotation().z)) * velocity;
+		speed.y = -cos(glm::radians(-camera.getRotation().z)) * velocity;
 		direction = 1;
 	}
 	if (key == GLFW_KEY_W && action == GLFW_RELEASE && direction > 0) {
@@ -164,8 +149,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speed.y = 0.0f;
 	}
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-		speed.x = sin(glm::radians(-cameraRotation.y)) * velocity;
-		speed.y = cos(glm::radians(-cameraRotation.y)) * velocity;
+		speed.x = sin(glm::radians(-camera.getRotation().z)) * velocity;
+		speed.y = cos(glm::radians(-camera.getRotation().z)) * velocity;
 		direction = -1;
 	}
 	if (key == GLFW_KEY_S && action == GLFW_RELEASE && direction < 0) {
@@ -173,8 +158,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speed.y = 0.0f;
 	}
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-		speedSide.x = sin(glm::radians(-(cameraRotation.y + 90.0f))) * velocity;
-		speedSide.y = cos(glm::radians(-(cameraRotation.y + 90.0f))) * velocity;
+		speedSide.x = sin(glm::radians(-(camera.getRotation().z + 90.0f))) * velocity;
+		speedSide.y = cos(glm::radians(-(camera.getRotation().z + 90.0f))) * velocity;
 		directionSide = -90.0f;
 	}
 	if (key == GLFW_KEY_A && action == GLFW_RELEASE && directionSide < 0.0f) {
@@ -182,8 +167,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speedSide.y = 0.0f;
 	}
 	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-		speedSide.x = sin(glm::radians(-(cameraRotation.y - 90.0f))) * velocity;
-		speedSide.y = cos(glm::radians(-(cameraRotation.y - 90.0f))) * velocity;
+		speedSide.x = sin(glm::radians(-(camera.getRotation().z - 90.0f))) * velocity;
+		speedSide.y = cos(glm::radians(-(camera.getRotation().z - 90.0f))) * velocity;
 		directionSide = 90.0f;
 	}
 	if (key == GLFW_KEY_D && action == GLFW_RELEASE && directionSide > 0.0f) {
