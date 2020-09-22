@@ -15,24 +15,29 @@
 #include <string>
 #include <vector>
 
-#include <SOIL.h>
 #include "constants.h"
+#include "camera.h"
 
 using namespace std;
+
+class PhysicalObj;
+class Model;
 
 class Mesh {
 	GLuint texture;
 	GLuint VBO, VAO, EBO;
-	glm::vec3 rotation;
-	glm::vec3 position;
+	PhysicalObj* obj;
 	int size;
 public:
-	Mesh(string texturePath, std::vector<GLfloat> vertices, std::vector<GLuint> indices, glm::vec3 rotation, glm::vec3 position);
+	Mesh(string, Model*);
+	Mesh();
 
-	void draw(Shader shader, glm::vec3 cameraRotation, glm::vec3 cameraPosition);
+	void init(PhysicalObj*);
 
-	void rotate(glm::vec3 deltaRotation);
+	void draw(Shader, Camera*);
 
-	void load(std::string filename);
+	void rotate(glm::vec3);
+
+	void load(std::string);
 };
 #endif
