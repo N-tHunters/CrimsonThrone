@@ -16,11 +16,12 @@
 #include <glm/gtx/string_cast.hpp>
 
 // Other includes
+#include "render/camera.h"
 #include "render/mesh.h"
 #include "render/shaderLoader.h"
 #include "render/constants.h"
 #include "render/model.h"
-#include "render/camera.h"
+#include "physics/physicalObj.h"
 //#include "boundary.h"
 #include <math.h>
 
@@ -87,13 +88,18 @@ int main()
 	Shader ourShader("resources/shaders/vertex_shader.glsl", "resources/shaders/fragment_shader.glsl");
 
 	// Set up vertex data (and buffer(s)) and attribute pointers
-	Model Plane = Model((char*)"resources/models/plane.obj");
+	Model planeModel = Model((char*)"resources/models/plane.obj");
 
-	Mesh plane = Mesh("resources/textures/stone.jpg", Plane.vertices, Plane.indices, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -2.0f, 0.0f));
+	//Mesh plane = Mesh("resources/textures/stone.jpg", Plane.vertices, Plane.indices, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -2.0f, 0.0f));
+
+	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/stone.jpg", &planeModel), false, true, false, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+
+	PhysicalObj plane2 = PhysicalObj(Mesh("resources/textures/rock.png", &planeModel), false, true, false, glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	// Create transformations
 
 	// Game loop
+
 	while (!glfwWindowShouldClose(window))
 	{
 		camera.changePositionX(speed.x + speedSide.x);
@@ -125,7 +131,8 @@ int main()
 		// Clear the color buffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		plane.draw(ourShader, camera.getRotation(), camera.getPosition());
+		plane.draw(ourShader, &camera);
+		plane2.draw(ourShader, &camera);
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
@@ -140,8 +147,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-		speed.x = -sin(glm::radians(-camera.getRotation().z)) * velocity;
-		speed.y = -cos(glm::radians(-camera.getRotation().z)) * velocity;
+		speed.x = -sin(glm::radians(-camera.getRotation().y)) * velocity;
+		speed.y = -cos(glm::radians(-camera.getRotation().y)) * velocity;
 		direction = 1;
 	}
 	if (key == GLFW_KEY_W && action == GLFW_RELEASE && direction > 0) {
@@ -149,8 +156,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speed.y = 0.0f;
 	}
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-		speed.x = sin(glm::radians(-camera.getRotation().z)) * velocity;
-		speed.y = cos(glm::radians(-camera.getRotation().z)) * velocity;
+		speed.x = sin(glm::radians(-camera.getRotation().y)) * velocity;
+		speed.y = cos(glm::radians(-camera.getRotation().y)) * velocity;
 		direction = -1;
 	}
 	if (key == GLFW_KEY_S && action == GLFW_RELEASE && direction < 0) {
@@ -158,8 +165,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speed.y = 0.0f;
 	}
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-		speedSide.x = sin(glm::radians(-(camera.getRotation().z + 90.0f))) * velocity;
-		speedSide.y = cos(glm::radians(-(camera.getRotation().z + 90.0f))) * velocity;
+		speedSide.x = sin(glm::radians(-(camera.getRotation().y + 90.0f))) * velocity;
+		speedSide.y = cos(glm::radians(-(camera.getRotation().y + 90.0f))) * velocity;
 		directionSide = -90.0f;
 	}
 	if (key == GLFW_KEY_A && action == GLFW_RELEASE && directionSide < 0.0f) {
@@ -167,8 +174,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speedSide.y = 0.0f;
 	}
 	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-		speedSide.x = sin(glm::radians(-(camera.getRotation().z - 90.0f))) * velocity;
-		speedSide.y = cos(glm::radians(-(camera.getRotation().z - 90.0f))) * velocity;
+		speedSide.x = sin(glm::radians(-(camera.getRotation().y - 90.0f))) * velocity;
+		speedSide.y = cos(glm::radians(-(camera.getRotation().y - 90.0f))) * velocity;
 		directionSide = 90.0f;
 	}
 	if (key == GLFW_KEY_D && action == GLFW_RELEASE && directionSide > 0.0f) {

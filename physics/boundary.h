@@ -1,3 +1,5 @@
+#include <glm/glm.hpp>
+
 class Boundary {
 public:
 	virtual bool Collide(Boundary*, glm::vec3, glm::vec3, glm::vec3, glm::vec3);
@@ -19,7 +21,7 @@ public:
 
 class BoundaryPlane: public Boundary {
 public:
-	float width, length;
+	float width, height;
 	BoundaryPlane(float, float);
 	bool Collide(Boundary*, glm::vec3, glm::vec3, glm::vec3, glm::vec3);
 };
@@ -27,6 +29,6 @@ public:
 class BoundarySphere: public Boundary {
 public:
 	float radius;
-	BoundaryPlane(float);
+	BoundarySphere(float);
 	bool Collide(Boundary*, glm::vec3, glm::vec3, glm::vec3, glm::vec3);
 };

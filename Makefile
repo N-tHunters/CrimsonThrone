@@ -8,6 +8,9 @@ BASE_OBJS = $(patsubst %.cpp,%.o,$(BASE_SRCS))
 RENDER_SRCS=$(wildcard render/*.cpp)
 RENDER_OBJS=$(patsubst %.cpp,%.o,$(RENDER_SRCS))
 
+PHYSICS_SRCS=$(wildcard physics/*.cpp)
+PHYSICS_OBJS=$(patsubst %.cpp,%.o,$(PHYSICS_SRCS))
+
 SRCS := $(wildcard *.cpp)
 OBJS := $(patsubst %.cpp,%.o,$(SRCS))
 
@@ -20,14 +23,14 @@ endif
 
 all: $(TARGET)
 
-$(TARGET): main.o $(BASE_OBJS) $(RENDER_OBJS)
+$(TARGET): main.o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS)
 	$(CC) -o $@ $^ -g $(CFLAGS)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(TARGET) $(patsubst base/%,base\\%,$(BASE_OBJS)) $(OBJS) $(patsubst render/%,render\\%,$(RENDER_OBJS))
+	$(RM) $(TARGET) $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS)
 
 .PHONY: all clean
 
