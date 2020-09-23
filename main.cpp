@@ -88,13 +88,13 @@ int main()
 	Shader ourShader("resources/shaders/vertex_shader.glsl", "resources/shaders/fragment_shader.glsl");
 
 	// Set up vertex data (and buffer(s)) and attribute pointers
-	Model planeModel = Model((char*)"resources/models/plane.obj");
+	Model planeModel = Model((char*)"resources/models/frog.obj");
 
 	//Mesh plane = Mesh("resources/textures/stone.jpg", Plane.vertices, Plane.indices, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -2.0f, 0.0f));
 
-	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/stone.jpg", &planeModel), false, true, false, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel), false, true, false, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
-	PhysicalObj plane2 = PhysicalObj(Mesh("resources/textures/rock.png", &planeModel), false, true, false, glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	//PhysicalObj plane2 = PhysicalObj(Mesh("resources/textures/rock.png", &planeModel), false, true, false, glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	// Create transformations
 
@@ -132,7 +132,10 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		plane.draw(ourShader, &camera);
-		plane2.draw(ourShader, &camera);
+		//plane2.draw(ourShader, &camera);
+		//plane.changeRotationX(3.0f);
+		plane.changeRotationY(1.0f);
+		//plane.changeRotationZ(1.0f);
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
