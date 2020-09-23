@@ -6,6 +6,8 @@
 #include <string>
 #include <sstream>
 
+#include "../physics/physicalObj.h"
+
 class Item;
 class StackableItem;
 class Weapon;
@@ -34,6 +36,8 @@ class Actor {
 
   std::string name;
 
+  PhysicalObj obj;
+
   
   // Helper functions
   void JustifyHealth(); // Check if health is over max_health and justify it
@@ -52,6 +56,8 @@ class Actor {
   Chestplate* GetChestplate();
   Boots* GetBoots();
   Leggins* GetLeggins();
+
+  PhysicalObj* GetPhysicalObj();
 
   // Setters
   void SetHealth(int);
