@@ -238,12 +238,22 @@ package Render {
 	class Camera {
 		-glm::vec3 position
 		-glm::vec3 rotation
+		+Camera(glm::vec3, glm::vec3)
 		+glm::vec3 getPosition()
-		+glm::vec3 getRotation()
-		+void setRotation(glm::vec3)
-		+void setPosition(glm::vec3)
-		+void changePosition(glm::vec3)
-		+void changeRotation(glm::vec3)
+                +glm::vec3 getRotation()
+                +void setPosition(glm::vec3)
+                +void setRotation(glm::vec3)
+                +void setRotationX(float)
+                +void setRotationY(float)
+                +void setRotationZ(float)
+                +void changePosition(glm::vec3)
+                +void changePositionX(float)
+                +void changePositionY(float)
+                +void changePositionZ(float)
+                +void changeRotation(glm::vec3)
+                +void changeRotationX(float)
+                +void changeRotationY(float)
+                +void changeRotationZ(float)
 	}
 
 	class Mesh {
@@ -251,13 +261,13 @@ package Render {
 	      -GLuint VBO
 	      -GLuint VAO
 	      -GLuint EBO
-	      -glm::vec3 rotation
-	      -glm::vec3 position
 	      -int size
-	      +Mesh(std::string, std::vector<GLfloat>, std::vector<GLuint>, glm::vec3, glm::vec3)
-	      +void draw(Shader, glm::vec3, glm::vec3)
+	      +Mesh(std::string, Model*)
+	      +Mesh()
+	      +void init(PhysicalObj *)
+	      +void draw(Shader, Camera *)
 	      +void rotate(glm::vec3)
-	      +void load(std::string filename)
+	      +void load(std::string)
 	}
 
 	class Shader {
@@ -272,6 +282,85 @@ package Render {
 	      +std::vector<GLfloat> verticles
 	      +std::vector<GLuint> indices
 	      +Model(char *)
+	}
+}
+
+package Physics {
+	class PhysicalObj {
+	      -Mesh mesh
+	      -bool isActive
+	      -bool isVisible
+	      -bool isTransparent
+	      -glm::vec3 position
+	      -glm::vec3 rotation
+	      
+	      +glm::vec3 velocity
+	      +glm::vec3 acceleration
+	      +PhysicalObj(Mesh, bool, bool, bool, glm::vec3, glm::vec3)
+	      +glm::vec3 getRotation()
+	      +float getPositionX()
+	      +float getPositionY()
+	      +float getPositionZ()
+	      
+	      +glm::vec3 getPosition()
+	      +float getRotationX()
+	      +float getRotationY()
+	      +float getRotationZ()
+	      
+	      +void setPosition(glm::vec3)
+	      +void setPositionX(float)
+	      +void setPositionY(float)
+	      +void setPositionZ(float)
+	      
+	      +void setRotation(glm::vec3)
+	      +void setRotationX(float)
+	      +void setRotationY(float)
+	      +void setRotationZ(float)
+	      
+	      +void changePosition(glm::vec3)
+	      +void changePositionX(float)
+	      +void changePositionY(float)
+	      +void changePositionZ(float)
+	      
+	      +void changeRotation(glm::vec3)
+	      +void changeRotationX(float)
+	      +void changeRotationY(float)
+	      +void changeRotationZ(float)
+	      
+	      +void draw(Shader, Camera*)
+	      +void update()
+	}
+
+	class Boundary {
+	      +virtrual bool Collide(Boundary*, glm::vec3, glm::vec3, glm::vec3, glm::vec3)
+	}
+
+	class BoundaryBox {
+	      +float width
+	      +float height
+	      +float length
+	      +BoundaryBox(float, float, float)
+	      +bool Collide(Boundary*, glm::vec3, glm::vec3, glm::vec3, glm::vec3)
+	}
+	
+	class BoundaryCapsule {
+	      +float radius
+	      +float height
+	      +BoundaryBox(float, float)
+	      +bool Collide(Boundary*, glm::vec3, glm::vec3, glm::vec3, glm::vec3)
+	}
+
+	class BoundaryPlane {
+	      +float width
+	      +float height
+	      +BoundaryBox(float, float)
+	      +bool Collide(Boundary*, glm::vec3, glm::vec3, glm::vec3, glm::vec3)
+	}
+	
+	class BoundarySphere {
+	      +float radius
+	      +BoundaryBox(float)
+	      +bool Collide(Boundary*, glm::vec3, glm::vec3, glm::vec3, glm::vec3)
 	}
 }
 
@@ -338,8 +427,19 @@ Leggins <-- Loader
 Boots <-- Loader
 
 
-
+Camera <-- Mesh
+PhysicalObj <-- Mesh
+Model <-- Mesh
 Shader <-- Mesh
+
+Camera <-- PhysicalObj
+Shader <-- PhysicalObj
+
+Boundary <|-- BoundaryBox
+Boundary <|-- BoundaryCapsule
+Boundary <|-- BoundaryPlane
+Boundary <|-- BoundarySphere
+
 
 PhysicalObj <-- Actor
 
