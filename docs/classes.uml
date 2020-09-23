@@ -42,6 +42,7 @@ package Base {
     		+void SetGloves(Gloves*)
     		+void SetChestplate(Chestplate*)
     		+void SetLeggins(Leggins*)
+		+void SetPhysicalObj(PhysicalObj)
     		.. Wearers ..
     		+void WearWeapon(Weapon*)
     		+void WearHelmet(Helmet*)

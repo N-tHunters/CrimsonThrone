@@ -72,6 +72,8 @@ class Actor {
   void SetBoots(Boots*);
   void SetLeggins(Leggins*);
 
+  void SetPhysicalObj(PhysicalObj);
+
   void WearWeapon(Weapon*);
   void WearHelmet(Helmet*);
   void WearGloves(Gloves*);
