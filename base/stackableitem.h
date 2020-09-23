@@ -4,6 +4,7 @@
 #include "item.h"
 #include "actor.h"
 #include "saver.h"
+#include "../physics/physicalObj.h"
 #include <sstream>
 
 class StackableItem : public Item {
