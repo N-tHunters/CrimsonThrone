@@ -69,10 +69,13 @@ package Base {
     
 	class Item {
     		-std::string name
+		-PhysicalObj obj
 
-    		+Item(std::string name)
+    		+Item(std::string, PhysicalObj)
     	
     		+std::string GetName()
+		+PhysicalObj* GetPhysicalObj()
+		
     		+void SetName(std::string)
     
     		+virtual void Use(Actor *)
@@ -442,5 +445,6 @@ Boundary <|-- BoundarySphere
 
 
 PhysicalObj <-- Actor
+PhysicalObj <-- Item
 
 @enduml
