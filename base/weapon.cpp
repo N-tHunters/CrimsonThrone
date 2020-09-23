@@ -2,8 +2,8 @@
 #include "entries.h"
 #include "saver.h"
 
-Weapon::Weapon(std::string name, int damage, int range) :
-  Item(name) {
+Weapon::Weapon(std::string name, PhysicalObj obj, int damage, int range) :
+  Item(name, obj) {
   this->damage = damage;
   this->range = range;
 }
