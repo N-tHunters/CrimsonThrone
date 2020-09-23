@@ -14,6 +14,7 @@ class PhysicalObj {
 public:
 	glm::vec3 velocity;
 	glm::vec3 acceleration;
+	PhysicalObj();
 	PhysicalObj(Mesh, bool, bool, bool, glm::vec3, glm::vec3);
 	glm::vec3 getRotation();
 	float getPositionX();

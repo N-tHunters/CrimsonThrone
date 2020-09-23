@@ -1,5 +1,7 @@
 #include "physicalObj.h"
 
+PhysicalObj::PhysicalObj() {}
+
 PhysicalObj::PhysicalObj(Mesh mesh, bool isActive, bool isVisible, bool isTransparent, glm::vec3 position, glm::vec3 rotation) {
 	this->mesh = mesh;
 	this->position = position;
