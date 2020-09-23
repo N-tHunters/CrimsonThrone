@@ -4,6 +4,8 @@
 #include <string>
 #include <sstream>
 
+#include "../physics/physicsObj.h"
+
 class Actor;
 class Saver;
 
@@ -13,12 +15,17 @@ private:
 
   std::string LogDescribe();
 
+  PhysicalObj obj;
+
 public:
-  Item(std::string);
+  Item(std::string, PhysicalObj);
   Item();
   
   std::string GetName();
+  PhysicalObj* GetPhysicalObj();
+  
   void SetName(std::string);
+  void SetPhysicalObj();
 
   virtual bool IsUsable();
   virtual bool IsWearable();

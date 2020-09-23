@@ -7,8 +7,9 @@
 
 
 
-Item::Item(std::string name) {
+Item::Item(std::string name, PhysicalObj obj) {
   this->name = name;
+  this->obj = obj;
 }
 
 Item::Item() {}
@@ -17,8 +18,16 @@ std::string Item::GetName() {
   return this->name;
 }
 
+PhysicalObj* Item::GetPhysicalObj() {
+  return &this->obj;
+}
+
 void Item::SetName(std::string name) {
   this->name = name;
+}
+
+void Item::GetPhysicalObj(PhysicalObj obj) {
+  this->obj = obj;
 }
 
 bool Item::IsWearable() {
