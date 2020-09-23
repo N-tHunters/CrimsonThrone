@@ -425,7 +425,7 @@ Boots <-- Loader
 
 
 Camera <-- Mesh
-PhysicalObj <-- Mesh
+PhysicalObj <--> Mesh
 Model <-- Mesh
 Shader <-- Mesh
 
@@ -436,5 +436,8 @@ Boundary <|-- BoundaryBox
 Boundary <|-- BoundaryCapsule
 Boundary <|-- BoundaryPlane
 Boundary <|-- BoundarySphere
+
+
+PhysicalObj <-- Actor
 
 @enduml
