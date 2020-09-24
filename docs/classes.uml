@@ -93,7 +93,8 @@ package Base {
     		-int damage
     		-int range
     
-    		+Weapon(std::string name, int damage, int range)
+    		+Weapon(std::string name, PhsysicalObj, int damage, int range)
+		+Weapon()
     	
     		+int GetDamage()
     		+int GetRange()
@@ -112,7 +113,8 @@ package Base {
 	class Armor {
     		-int defence
 		
-    		+Armor(std::string name, int defence)
+    		+Armor(std::string name, PhysicalObj, int defence)
+		+Armor()
     		
     		+int GetDefence()
     		+void SetDefence()
@@ -124,35 +126,36 @@ package Base {
 	}
     
 	class Helmet {
-    		+Helmet(std::string name, int defence)
+    		+Helmet(std::string name, PhysicalObj, int defence)
+		
     		+void Wear(Actor *)
     
     		+std::stringstream Save(Saver *)
 	}
     
 	class Gloves {
-    		+Gloves(std::string name, int defence)
+    		+Gloves(std::string name, PhysicalObj, int defence)
     		+void Wear(Actor *)
     
     		+std::stringstream Save(Saver *)
 	}
     
 	class Chestplate {
-    		+Chestplate(std::string name, int defence)
+    		+Chestplate(std::string name, PhysicalObj, int defence)
     		+void Wear(Actor *)
 		
     		+std::stringstream Save(Saver *)
 	}
     
 	class Leggins {
-    		+Leggins(std::string name, int defence)
+    		+Leggins(std::string name, PhysicalObj, int defence)
     		+void Wear(Actor *)
     
     		+std::stringstream Save(Saver *)
 	}
     
 	class Boots {
-    		+Boots(std::string name, int defence)
+    		+Boots(std::string name, PhysicalObj, int defence)
     		+void Wear(Actor *)
     
 		+std::stringstream Save(Saver *)
@@ -446,5 +449,13 @@ Boundary <|-- BoundarySphere
 
 PhysicalObj <-- Actor
 PhysicalObj <-- Item
+PhysicalObj <-- Armor
+PhysicalObj <-- Gloves
+PhysicalObj <-- Chestplate
+PhysicalObj <-- Leggins
+PhysicalObj <-- Boots
+PhysicalObj <-- Helmet
+
+PhysicalObj <-- Weapon
 
 @enduml
