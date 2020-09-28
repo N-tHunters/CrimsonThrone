@@ -1,3 +1,6 @@
+#ifndef PHYSICALOBJ_H
+#define PHYSICALOBJ_H
+
 #include "../render/mesh.h"
 //#include "physics/boundary.h"
 #include <glm/glm.hpp>
@@ -12,9 +15,11 @@ class PhysicalObj {
 	glm::vec3 position;
 	glm::vec3 rotation;
 public:
+	string name;
 	glm::vec3 velocity;
 	glm::vec3 acceleration;
-	PhysicalObj(Mesh, bool, bool, bool, glm::vec3, glm::vec3);
+	PhysicalObj();
+	PhysicalObj(Mesh, bool, bool, bool, glm::vec3, glm::vec3, string);
 	glm::vec3 getRotation();
 	float getPositionX();
 	float getPositionY();
@@ -47,4 +52,8 @@ public:
 
 	void draw(Shader, Camera*);
 	void update();
+
+	string getName();
 };
+
+#endif
