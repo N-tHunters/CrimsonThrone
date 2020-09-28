@@ -2,8 +2,8 @@
 #include "actor.h"
 #include "entries.h"
 
-Boots::Boots(std::string name, int defence) :
-  Armor(name, defence) {}
+Boots::Boots(std::string name, PhysicalObj obj, int defence) :
+  Armor(name, obj, defence) {}
 
 void Boots::Wear(Actor * target) {
   target->WearBoots(this);

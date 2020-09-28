@@ -3,6 +3,7 @@
 
 #include "item.h"
 #include "saver.h"
+#include "../physics/physicalObj.h"
 #include <sstream>
 
 class Weapon : public Item {
@@ -11,7 +12,8 @@ private:
   int range;
 
 public:
-  Weapon(std::string, int, int);
+  Weapon(std::string, PhysicalObj, int, int);
+  Weapon();
   int GetDamage();
   int GetRange();
 

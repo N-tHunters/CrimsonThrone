@@ -3,8 +3,8 @@
 #include "entries.h"
 
 
-Chestplate::Chestplate(std::string name, int defence) :
-  Armor(name, defence) {}
+Chestplate::Chestplate(std::string name, PhysicalObj obj, int defence) :
+  Armor(name, obj, defence) {}
 
 void Chestplate::Wear(Actor * target) {
   target->WearChestplate(this);

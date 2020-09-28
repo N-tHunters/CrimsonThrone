@@ -3,8 +3,8 @@
 #include "entries.h"
 
 
-Gloves::Gloves(std::string name, int defence) :
-  Armor(name, defence) {}
+Gloves::Gloves(std::string name, PhysicalObj obj, int defence) :
+  Armor(name, obj, defence) {}
 
 void Gloves::Wear(Actor * target) {
   target->WearGloves(this);

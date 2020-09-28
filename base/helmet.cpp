@@ -2,8 +2,8 @@
 #include "actor.h"
 #include "entries.h"
 
-Helmet::Helmet(std::string name, int defence) :
-  Armor(name, defence) {}
+Helmet::Helmet(std::string name, PhysicalObj obj, int defence) :
+  Armor(name, obj, defence) {}
 
 void Helmet::Wear(Actor * target) {
   target->WearHelmet(this);

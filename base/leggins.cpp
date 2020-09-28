@@ -2,8 +2,8 @@
 #include "actor.h"
 #include "entries.h"
 
-Leggins::Leggins(std::string name, int defence) :
-  Armor(name, defence) {}
+Leggins::Leggins(std::string name, PhysicalObj obj, int defence) :
+  Armor(name, obj, defence) {}
 
 void Leggins::Wear(Actor* target) {
   target->WearLeggins(this);

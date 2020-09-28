@@ -3,6 +3,7 @@
 
 #include "item.h"
 #include "saver.h"
+#include "../physics/physicalObj.h"
 #include <sstream>
 #include <string>
 
@@ -11,7 +12,8 @@ class Armor : public Item {
   int defence;
 
  public:
-  Armor(std::string, int);
+  Armor(std::string, PhysicalObj, int);
+  Armor()
   int GetDefence();
 
   void SetDefence(int);
