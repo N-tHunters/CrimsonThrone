@@ -12,5 +12,5 @@ class Terrain {
 public:
 	Terrain(int, float);
 	void draw(Shader, Camera*);
-	flaot getHeight(glm::vec3);
+	float getHeight(glm::vec3);
 };
