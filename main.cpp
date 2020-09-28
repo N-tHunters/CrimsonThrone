@@ -24,6 +24,7 @@
 #include "physics/physicalObj.h"
 //#include "boundary.h"
 #include <math.h>
+#include <time.h>
 
 glm::vec2 normalize(glm::vec2 vec) {
 	float d = sqrt(vec.x * vec.x + vec.y * vec.y);
