@@ -23,6 +23,7 @@
 #include "render/model.h"
 #include "physics/physicalObj.h"
 //#include "boundary.h"
+#include "physics/terrain.h"
 #include <math.h>
 
 glm::vec2 normalize(glm::vec2 vec) {
@@ -92,7 +93,9 @@ int main()
 
 	//Mesh plane = Mesh("resources/textures/stone.jpg", Plane.vertices, Plane.indices, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -2.0f, 0.0f));
 
-	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel), false, true, false, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	Terrain terrain(10, 4.0f);
+	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel), false, true, false, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "frog");
+
 
 	//PhysicalObj plane2 = PhysicalObj(Mesh("resources/textures/rock.png", &planeModel), false, true, false, glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
@@ -131,10 +134,12 @@ int main()
 		// Clear the color buffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		terrain.draw(ourShader, &camera);
+		camera.setPositionY(terrain.getHeight(camera.getPosition()).x);
 		plane.draw(ourShader, &camera);
 		//plane2.draw(ourShader, &camera);
 		//plane.changeRotationX(3.0f);
-		plane.changeRotationY(1.0f);
+		//plane.changeRotationY(1.0f);
 		//plane.changeRotationZ(1.0f);
 
 		// Swap the screen buffers
@@ -184,5 +189,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_D && action == GLFW_RELEASE && directionSide > 0.0f) {
 		speedSide.x = 0.0f;
 		speedSide.y = 0.0f;
+	}
+	if (key == GLFW_KEY_E) {
+		camera.changePositionY(0.1f);
+	}
+
+	if (key == GLFW_KEY_Q) {
+		camera.changePositionY(-0.1f);
 	}
 }

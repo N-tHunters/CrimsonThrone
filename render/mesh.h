@@ -30,7 +30,7 @@ class Mesh {
 	int size;
 public:
 	Mesh(string, Model*);
-	Mesh(string, std::vector<GLfloat>, std::std::vector<unsigned int>);
+	Mesh(string, std::vector<GLfloat>, std::vector<unsigned int>);
 	Mesh();
 
 	void init(PhysicalObj*);

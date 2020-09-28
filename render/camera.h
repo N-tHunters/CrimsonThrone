@@ -11,6 +11,9 @@ public:
 	glm::vec3 getPosition();
 	glm::vec3 getRotation();
 	void setPosition(glm::vec3);
+	void setPositionX(float);
+	void setPositionY(float);
+	void setPositionZ(float);
 	void setRotation(glm::vec3);
 	void setRotationX(float);
 	void setRotationY(float);

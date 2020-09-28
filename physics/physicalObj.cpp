@@ -2,7 +2,8 @@
 
 PhysicalObj::PhysicalObj() {}
 
-PhysicalObj::PhysicalObj(Mesh mesh, bool isActive, bool isVisible, bool isTransparent, glm::vec3 position, glm::vec3 rotation) {
+PhysicalObj::PhysicalObj(Mesh mesh, bool isActive, bool isVisible, bool isTransparent, glm::vec3 position, glm::vec3 rotation, string name) {
+	this->name = name;
 	this->mesh = mesh;
 	this->position = position;
 	this->rotation = rotation;
@@ -120,4 +121,8 @@ void PhysicalObj::changeRotationY(float delta) {
 
 void PhysicalObj::changeRotationZ(float delta) {
 	this->rotation.z += delta;
+}
+
+string PhysicalObj::getName() {
+	return this->name;
 }

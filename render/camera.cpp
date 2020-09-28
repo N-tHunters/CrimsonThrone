@@ -17,6 +17,18 @@ void Camera::setPosition(glm::vec3 newPosition) {
 	this->position = newPosition;
 }
 
+void Camera::setPositionX(float value) {
+	this->position.x = value;
+}
+
+void Camera::setPositionY(float value) {
+	this->position.y = value;
+}
+
+void Camera::setPositionZ(float value) {
+	this->position.z = value;
+}
+
 void Camera::setRotation(glm::vec3 newRotation) {
 	this->rotation = newRotation;
 }
