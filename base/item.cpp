@@ -12,6 +12,9 @@ Item::Item(std::string name, PhysicalObj obj) {
   this->obj = obj;
 }
 
+Item::Item(std::string name) :
+  Item(name, PhysicalObj()) {};
+
 Item::Item() {}
 
 std::string Item::GetName() {

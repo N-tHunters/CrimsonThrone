@@ -8,6 +8,9 @@ Armor::Armor(std::string name, PhysicalObj obj, int defence) :
   this->defence = defence;
 }
 
+Armor::Armor(std::string name, int defence) :
+  Armor(name, PhysicalObj(), defence) {}
+
 Armor::Armor() {}
 
 int Armor::GetDefence() {

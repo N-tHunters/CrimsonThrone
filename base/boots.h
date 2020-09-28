@@ -11,6 +11,7 @@ class Actor;
 class Boots : public Armor {
 public:
   Boots(std::string, PhysicalObj, int);
+  Boots(std::string, int);
   void Wear(Actor *);
 
   std::stringstream Save(Saver *);
