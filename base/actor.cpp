@@ -55,6 +55,10 @@ Chestplate* Actor::GetChestplate() {
   return this->chestplate;
 }
 
+PhysicalObj* Actor::GetPhysicalObj() {
+  return &this->obj;
+}
+
 // Setters
 void Actor::SetName(std::string name) {
   this->name = name;
@@ -90,6 +94,10 @@ void Actor::SetChestplate(Chestplate* chestplate) {
 
 void Actor::SetLeggins(Leggins* leggins) {
   this->leggins = leggins;
+}
+
+void Actor::SetPhysicalObj(PhysicalObj obj) {
+  this->obj = obj;
 }
 
 // Wear functions

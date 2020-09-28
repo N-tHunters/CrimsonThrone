@@ -3,13 +3,14 @@
 
 #include "armor.h"
 #include "saver.h"
+#include "../physics/physicalObj.h"
 #include <sstream>
 
 class Actor;
 
 class Boots : public Armor {
 public:
-  Boots(std::string, int);
+  Boots(std::string, PhysicalObj, int);
   void Wear(Actor *);
 
   std::stringstream Save(Saver *);

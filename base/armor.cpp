@@ -3,10 +3,12 @@
 #include "entries.h"
 #include <string>
 
-Armor::Armor(std::string name, int defence) :
-  Item(name) {
+Armor::Armor(std::string name, PhysicalObj obj, int defence) :
+  Item(name, obj) {
   this->defence = defence;
 }
+
+Armor::Armor() {}
 
 int Armor::GetDefence() {
   return this->defence;
