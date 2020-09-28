@@ -8,6 +8,9 @@ Weapon::Weapon(std::string name, PhysicalObj obj, int damage, int range) :
   this->range = range;
 }
 
+Weapon::Weapon(std::string name, int damage, int range) :
+  Weapon(name, PhysicalObj(), damage, range) {}
+
 Weapon::Weapon() {}
 
 int Weapon::GetDamage() {

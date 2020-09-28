@@ -5,6 +5,9 @@
 Leggins::Leggins(std::string name, PhysicalObj obj, int defence) :
   Armor(name, obj, defence) {}
 
+Leggins::Leggins(std::string name, int defence) :
+  Leggins(name, PhysicalObj(), defence) {}
+
 void Leggins::Wear(Actor* target) {
   target->WearLeggins(this);
 }

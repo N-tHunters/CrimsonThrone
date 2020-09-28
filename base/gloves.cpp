@@ -6,6 +6,9 @@
 Gloves::Gloves(std::string name, PhysicalObj obj, int defence) :
   Armor(name, obj, defence) {}
 
+Gloves::Gloves(std::string name, int defence) :
+  Gloves(name, PhysicalObj(), defence) {}
+
 void Gloves::Wear(Actor * target) {
   target->WearGloves(this);
 }

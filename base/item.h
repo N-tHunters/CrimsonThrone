@@ -19,6 +19,7 @@ private:
 
 public:
   Item(std::string, PhysicalObj);
+  Item(std::string);
   Item();
   
   std::string GetName();
