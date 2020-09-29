@@ -1,6 +1,7 @@
 #include <iostream>
 
 #define GLFW_INCLUDE_NONE
+#define GLFW_DLL
 // GLEW
 #define GLEW_STATIC
 #include <GL/glew.h>
