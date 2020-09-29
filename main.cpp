@@ -44,6 +44,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 glm::vec2 speed = glm::vec2(0.0f, 0.0f);
 
 Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+PhysicalObj player = PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f));
 
 glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 int direction = 1;
@@ -68,7 +69,7 @@ int main()
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "3O/\\0TAR >|<AbKA", nullptr, nullptr);
 	glfwMakeContextCurrent(window);
 
 	glEnable(GL_DEPTH_TEST);
@@ -94,7 +95,7 @@ int main()
 
 	//Mesh plane = Mesh("resources/textures/stone.jpg", Plane.vertices, Plane.indices, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -2.0f, 0.0f));
 
-	Terrain terrain(10, 4.0f);
+	Terrain terrain(100, 4.0f);
 	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel), false, true, false, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "frog");
 
 
@@ -106,8 +107,6 @@ int main()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		camera.changePositionX(speed.x + speedSide.x);
-		camera.changePositionZ(speed.y + speedSide.y);
 		lastXPos = xpos;
 		lastYPos = ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
@@ -136,12 +135,46 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		terrain.draw(ourShader, &camera);
-		camera.setPositionY(terrain.getHeight(camera.getPosition()));
+		float terrainHeight = terrain.getHeight(camera.getPosition());
+
+		player.changePositionX(speed.x + speedSide.x);
+
+		if(player.getPosition().y < terrainHeight) {
+			//if(terrainHeight - player.getPosition().y > 0.1f) {
+			//	player.changePositionX(-speed.x - speedSide.x);
+			//}
+			player.setPositionY(terrainHeight);
+			player.acceleration.y = 0;
+		} else if(player.getPosition().y > terrainHeight + 0.01) {
+			player.acceleration.y = -9.81f;
+		} else {
+			player.acceleration.y = 0;
+		}
+
+		player.changePositionZ(speed.y + speedSide.y);
+
+		if(player.getPosition().y < terrainHeight) {
+			//if(terrainHeight - player.getPosition().y > 0.1f) {
+			//	player.changePositionZ(-speed.y - speedSide.y);
+			//}
+			player.setPositionY(terrainHeight);
+			player.acceleration.y = 0;
+		} else if(player.getPosition().y > terrainHeight + 0.01) {
+			player.acceleration.y = -9.81f;
+		} else {
+			player.acceleration.y = 0;
+		}
+
 		plane.draw(ourShader, &camera);
+
+
+		player.update();
+		camera.setPosition(player.getPosition());
+
 		//plane2.draw(ourShader, &camera);
-		//plane.changeRotationX(3.0f);
-		//plane.changeRotationY(1.0f);
-		//plane.changeRotationZ(1.0f);
+		plane.changeRotationX(3.0f);
+		plane.changeRotationY(1.0f);
+		plane.changeRotationZ(1.0f);
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
@@ -197,5 +230,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_Q) {
 		camera.changePositionY(-0.1f);
+	}
+
+	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+		player.velocity.y = 10.0f;
 	}
 }
