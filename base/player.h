@@ -13,6 +13,8 @@ public:
 
   void Update();
 
+  void SetCamera(Camera *);
+  Camera * GetCamera();
 };
 
 #endif
