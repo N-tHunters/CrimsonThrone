@@ -44,6 +44,7 @@ class Actor {
 
  public:
   Actor();
+  Actor(std::string, int, PhysicalObj);
   // Getters
   int GetHealth();
   int GetMaxHealth();

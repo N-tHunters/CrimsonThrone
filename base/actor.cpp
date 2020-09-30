@@ -18,6 +18,13 @@ Actor::Actor() {
   }
 }
 
+Actor::Actor(std::string name, int max_health, PhysicalObj obj) : Actor() {
+  this->name = name;
+  this->max_health = max_health;
+  this->health = max_health;
+  this->obj = obj;
+}
+
 // Getters
 std::string Actor::GetName() {
   return this->name;
