@@ -104,18 +104,20 @@ void Mesh::draw(Shader shader, Camera* camera) {
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 cameraRot = glm::mat4(1.0f);
 	glm::mat4 projection;
+	glm::vec3 cameraPosition = glm::vec3(camera->getPosition().x, camera->getPosition().y + 0.5, camera->getPosition().z);
 	model = glm::rotate(model, glm::radians(this->obj->getRotationX()), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(this->obj->getRotationY()), glm::vec3(0.0f, 1.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(this->obj->getRotationZ()), glm::vec3(0.0f, 0.0f, 1.0f));
 	cameraRot = glm::rotate(cameraRot, glm::radians(camera->getRotation().x), glm::vec3(1.0f, 0.0f, 0.0f));
 	cameraRot = glm::rotate(cameraRot, glm::radians(camera->getRotation().y), glm::vec3(0.0f, 1.0f, 0.0f));
 	cameraRot = glm::rotate(cameraRot, glm::radians(camera->getRotation().z), glm::vec3(0.0f, 0.0f, 1.0f));
-	view = glm::translate(view, this->obj->getPosition() - camera->getPosition());
+	view = glm::translate(view, this->obj->getPosition() - cameraPosition);
 	projection = glm::perspective(glm::radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
 	GLint modelLoc = glGetUniformLocation(shader.Program, "model");
 	GLint viewLoc = glGetUniformLocation(shader.Program, "view");
 	GLint projLoc = glGetUniformLocation(shader.Program, "projection");
 	GLint camRotLoc = glGetUniformLocation(shader.Program, "cameraRot");
+	GLint skyColor = glGetUniformLocation(shader.Program, "skyColor");
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -126,6 +128,7 @@ void Mesh::draw(Shader shader, Camera* camera) {
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(camRotLoc, 1, GL_FALSE, glm::value_ptr(cameraRot));
+	glUniformMatrix4fv(skyColor, 1, GL_FALSE, glm::value_ptr(glm::vec3(1.0f, 0.0f, 0.0f)));
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);

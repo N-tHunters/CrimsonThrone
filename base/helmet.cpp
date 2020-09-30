@@ -5,6 +5,9 @@
 Helmet::Helmet(std::string name, PhysicalObj obj, int defence) :
   Armor(name, obj, defence) {}
 
+Helmet::Helmet(std::string name, int defence) :
+  Helmet(name, PhysicalObj(), defence) {}
+
 void Helmet::Wear(Actor * target) {
   target->WearHelmet(this);
 }

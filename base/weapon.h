@@ -13,6 +13,7 @@ private:
 
 public:
   Weapon(std::string, PhysicalObj, int, int);
+  Weapon(std::string, int, int);
   Weapon();
   int GetDamage();
   int GetRange();

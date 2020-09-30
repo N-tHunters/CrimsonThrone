@@ -5,6 +5,9 @@
 Boots::Boots(std::string name, PhysicalObj obj, int defence) :
   Armor(name, obj, defence) {}
 
+Boots::Boots(std::string name, int defence) :
+  Boots(name, PhysicalObj(), defence) {}
+
 void Boots::Wear(Actor * target) {
   target->WearBoots(this);
 }
