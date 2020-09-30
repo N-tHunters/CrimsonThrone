@@ -30,7 +30,6 @@
 
 glm::vec2 normalize(glm::vec2 vec) {
 	float d = sqrt(vec.x * vec.x + vec.y * vec.y);
-	//std::cout << d << std::endl;
 	vec.x /= d;
 	vec.y /= d;
 	return vec;
@@ -39,10 +38,9 @@ glm::vec2 normalize(glm::vec2 vec) {
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
-// Window dimensions
-// glm::vec3 cameraPosition = glm::vec3(0.0f, 0.0f, 0.0f);
-// glm::vec3 cameraRotation = glm::vec3(0.0f, 0.0f, 0.0f);
 glm::vec2 speed = glm::vec2(0.0f, 0.0f);
+
+float VCAP = 0.1f;
 
 Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 PhysicalObj player = PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f));
@@ -96,7 +94,7 @@ int main()
 
 	//Mesh plane = Mesh("resources/textures/stone.jpg", Plane.vertices, Plane.indices, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -2.0f, 0.0f));
 
-	Terrain terrain(100, 4.0f);
+	Terrain terrain(100, 0.5f);
 	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel), false, true, false, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "frog");
 
 
@@ -138,29 +136,41 @@ int main()
 		terrain.draw(ourShader, &camera);
 		float terrainHeight = terrain.getHeight(camera.getPosition());
 
-		player.changePositionX(speed.x + speedSide.x);
+		float Xchange = speed.x + speedSide.x;
+
+		player.changePositionX(Xchange);
 
 		if(player.getPosition().y < terrainHeight) {
-			//if(terrainHeight - player.getPosition().y > 0.1f) {
-			//	player.changePositionX(-speed.x - speedSide.x);
-			//}
-			player.setPositionY(terrainHeight);
-			player.acceleration.y = 0;
-		} else if(player.getPosition().y > terrainHeight + 0.01) {
+			float diff = terrainHeight - player.getPosition().y;
+			if(diff > VCAP) {
+				player.changePositionY(diff * VCAP);
+				player.acceleration.y = 0.0f;
+				player.velocity.y = 0.0f;
+			} else {
+				player.setPositionY(terrainHeight);
+			}
+			player.acceleration.y = 0.0f;
+		} else if(player.getPosition().y > terrainHeight + 0.1) {
 			player.acceleration.y = -9.81f;
 		} else {
 			player.acceleration.y = 0;
 		}
 
-		player.changePositionZ(speed.y + speedSide.y);
+		float Ychange = speed.y + speedSide.y;
+
+		player.changePositionZ(Ychange);
 
 		if(player.getPosition().y < terrainHeight) {
-			//if(terrainHeight - player.getPosition().y > 0.1f) {
-			//	player.changePositionZ(-speed.y - speedSide.y);
-			//}
-			player.setPositionY(terrainHeight);
-			player.acceleration.y = 0;
-		} else if(player.getPosition().y > terrainHeight + 0.01) {
+			float diff = terrainHeight - player.getPosition().y;
+			if(diff > VCAP) {
+				player.changePositionY(VCAP * diff);
+				player.acceleration.y = 0.0f;
+				player.velocity.y = 0.0f;
+			} else {
+				player.setPositionY(terrainHeight);
+			}
+			player.acceleration.y = 0.0f;
+		} else if(player.getPosition().y > terrainHeight + 0.1) {
 			player.acceleration.y = -9.81f;
 		} else {
 			player.acceleration.y = 0;
