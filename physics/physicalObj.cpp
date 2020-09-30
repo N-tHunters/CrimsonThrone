@@ -2,6 +2,12 @@
 
 PhysicalObj::PhysicalObj() {}
 
+PhysicalObj::PhysicalObj(glm::vec3 position) {
+	this->position = position;
+	this->velocity = glm::vec3(0.0f);
+	this->acceleration = glm::vec3(0.0f);
+}
+
 PhysicalObj::PhysicalObj(Mesh mesh, bool isActive, bool isVisible, bool isTransparent, glm::vec3 position, glm::vec3 rotation, string name) {
 	this->name = name;
 	this->mesh = mesh;
@@ -23,8 +29,8 @@ void PhysicalObj::draw(Shader shader, Camera* camera) {
 }
 
 void PhysicalObj::update() {
-	this->position += this->velocity;
-	this->velocity += this->acceleration;
+	this->position += this->velocity * 0.01f;
+	this->velocity += this->acceleration * 0.01f;
 }
 
 glm::vec3 PhysicalObj::getPosition() {
