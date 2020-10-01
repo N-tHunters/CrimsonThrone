@@ -20,7 +20,7 @@ OBJS := $(patsubst %.cpp,%.o,$(SRCS))
 # OS specific
 ifeq ($(OS),Windows_NT)
 	RM := rm
-	LFLAGS := -L ./lib -lgdi32 -lglu32 -lglew32 -lassimp -lzlib1 -lstdc++ -lopengl32 -lglfw3 -Wl,--subsystem,windows
+	LFLAGS := -L ./lib -lgdi32 -lglu32 -lglew32 -lassimp -lzlib1 -lopengl32 -lglfw3 -Wl,--subsystem,windows
 
 	CC := mingw32-g++
 	CCX := mingw32-gcc
