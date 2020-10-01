@@ -1,7 +1,7 @@
 #ifndef SOUNDPLAYER_H
 #define SOUNDPLAYER_H
 
-#include <irrKlang.h>
+#include <irrklang/irrKlang.h>
 
 class SoundPlayer {
  private:

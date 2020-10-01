@@ -11,6 +11,9 @@ RENDER_OBJS=$(patsubst %.cpp,%.o,$(RENDER_SRCS))
 PHYSICS_SRCS=$(wildcard physics/*.cpp)
 PHYSICS_OBJS=$(patsubst %.cpp,%.o,$(PHYSICS_SRCS))
 
+SOUND_SRCS=$(wildcard sound/*.cpp)
+SOUND_OBJS=$(patsubst %.cpp,%.o,$(SOUND_SRCS))
+
 OTH_SRCS=$(wildcard src/*.c)
 OTH_OBJS=$(patsubst %.c,%.o,$(OTH_SRCS))
 
