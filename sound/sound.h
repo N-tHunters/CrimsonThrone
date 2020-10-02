@@ -1,11 +1,11 @@
 #ifndef SOUND_H
 #define SOUND_H
 
-#include "soundplayer.h"
+#include <irrklang/irrKlang.h>
 
 class Sound {
  public:
-  virtual void Play(SoundPlayer *);
+  virtual void Play(irrklang::ISoundEngine *);
 };
 
 #endif

@@ -1,3 +1,3 @@
 #include "sound.h"
 
-void Sound::Play(SoundPlayer *) {}
+void Sound::Play(irrklang::ISoundEngine *) {}

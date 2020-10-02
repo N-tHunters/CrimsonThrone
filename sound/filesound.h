@@ -3,13 +3,16 @@
 
 #include <string>
 #include "sound.h"
+#include <irrklang/irrKlang.h>
 
 class FileSound : public Sound {
  private:
   std::string filename;
+  bool loop;
  public:
   FileSound(std::string);
-  void Play(SoundPlayer *);
+  FileSound(std::string, bool);
+  void Play(irrklang::ISoundEngine *);
 };
 
 #endif
