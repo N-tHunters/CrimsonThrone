@@ -23,21 +23,24 @@ OBJS := $(patsubst %.cpp,%.o,$(SRCS))
 # OS specific
 ifeq ($(OS),Windows_NT)
 	RM := rm
-	LFLAGS := -L ./lib -lgdi32 -lglu32 -lglew32 -lassimp -lzlib1 -lopengl32 -lglfw3 -Wl,--subsystem,windows
+	LFLAGS := -L ./lib -lgdi32 -lglu32 -lglew32 -lassimp -lzlib1 -lopengl32 -lglfw3 -lirrKlang
+	SFLAGS :=  -Wl,--subsystem,windows 
 
 	CC := mingw32-g++
 	CCX := mingw32-gcc
 else
 	RM := rm
 	LFLAGS := -lGL -ldl -lglfw -lGLEW -lX11 -lpthread -lassimp
+	SFLAGS :=
+
 	CC := g++
 	CCX := gcc
 endif
 
 all: $(TARGET)
 
-$(TARGET): main.o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS)
-	$(CC) -o $@ $^ $(CFLAGS) $(LFLAGS)
+$(TARGET): main.o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS)
+	$(CC) -o $@ $^ $(CFLAGS) $(LFLAGS) $(SFLAGS)
 
 %.o: %.cpp
 	$(CC) $(CFLAGS) -c $< -o $@

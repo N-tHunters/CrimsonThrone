@@ -22,9 +22,13 @@
 #include "render/shaderLoader.h"
 #include "render/constants.h"
 #include "render/model.h"
+
 #include "physics/physicalObj.h"
 //#include "boundary.h"
 #include "physics/terrain.h"
+
+#include "sound/soundplayer.h"
+
 #include <math.h>
 #include <time.h>
 
@@ -38,6 +42,8 @@ glm::vec2 normalize(glm::vec2 vec) {
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
+
+// Global variabels
 glm::vec2 speed = glm::vec2(0.0f, 0.0f);
 
 float VCAP = 0.1f;
@@ -49,6 +55,8 @@ glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 int direction = 1;
 float directionSide = 0;
 float velocity = 0.1f;
+
+SoundPlayer splayer = SoundPlayer();
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
