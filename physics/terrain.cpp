@@ -94,7 +94,7 @@ float Terrain::getHeight(glm::vec3 position) {
 	float tileX = floor(terrainX / tileSize);
 	float tileY = floor(terrainY / tileSize);
 	if(tileX >= this->size - 1 || tileY >= this->size - 1 || tileX < 0 || tileY < 0) {
-		return 0.0f;
+		return -900.0f;
 	}
 	float xCoord = (terrainX - tileSize * tileX) / tileSize;
 	float yCoord = (terrainY - tileSize * tileY) / tileSize;
