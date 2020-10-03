@@ -1,0 +1,6 @@
+class Frame {
+
+public:
+	Frame()
+	
+}

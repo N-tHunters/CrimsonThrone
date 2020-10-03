@@ -31,6 +31,7 @@
 
 #include <math.h>
 #include <time.h>
+#include "base/player.h"
 
 #include <stdio.h>
 
@@ -51,7 +52,8 @@ glm::vec2 speed = glm::vec2(0.0f, 0.0f);
 float VCAP = 0.1f;
 
 Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-PhysicalObj player = PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f));
+//PhysicalObj player = PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f));
+Player player("player", 10, PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f)), &camera);
 
 glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 int direction = 1;
@@ -77,6 +79,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	glfwWindowHint(GLFW_MAXIMIZED, GL_TRUE);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
 	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "3O/\\0TAR >|<AbKA", nullptr, nullptr);
@@ -127,20 +130,20 @@ int main()
 		glm::vec2 cursorMotion = glm::vec2(lastXPos - xpos, lastYPos - ypos);
 		if(cursorMotion.x != 0 || cursorMotion.y != 0) {
 			if(speed.x != 0 || speed.y != 0) {
-				speed.x = -sin(glm::radians(-camera.getRotation().y)) * velocity * direction;
-				speed.y = -cos(glm::radians(-camera.getRotation().y)) * velocity * direction;
+				speed.x = -sin(glm::radians(-player.GetCamera()->getRotation().y)) * velocity * direction;
+				speed.y = -cos(glm::radians(-player.GetCamera()->getRotation().y)) * velocity * direction;
 			}
 			if(speedSide.x != 0 || speedSide.y != 0) {
-				speedSide.x = -sin(glm::radians(-(camera.getRotation().y + directionSide))) * velocity;
-				speedSide.y = -cos(glm::radians(-(camera.getRotation().y + directionSide))) * velocity;
+				speedSide.x = -sin(glm::radians(-(player.GetCamera()->getRotation().y + directionSide))) * velocity;
+				speedSide.y = -cos(glm::radians(-(player.GetCamera()->getRotation().y + directionSide))) * velocity;
 			}
 			cursorMotion *= sensivity;
-			camera.changeRotationX(-cursorMotion.y);
-			camera.changeRotationY(-cursorMotion.x);
-			if(camera.getRotation().x < -90.0f)
-				camera.setRotationX(-90.0f);
-			if(camera.getRotation().x > 90.0f)
-				camera.setRotationX(90.0f);
+			player.GetCamera()->changeRotationX(-cursorMotion.y);
+			player.GetCamera()->changeRotationY(-cursorMotion.x);
+			if(player.GetCamera()->getRotation().x < -90.0f)
+				player.GetCamera()->setRotationX(-90.0f);
+			if(player.GetCamera()->getRotation().x > 90.0f)
+				player.GetCamera()->setRotationX(90.0f);
 		}
 		// Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
@@ -149,58 +152,66 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		terrain.draw(ourShader, &camera);
-		float terrainHeight = terrain.getHeight(camera.getPosition());
+		float terrainHeight = terrain.getHeight(player.GetCamera()->getPosition());
 
 		float Xchange = speed.x + speedSide.x;
 
-		player.changePositionX(Xchange);
+		player.GetPhysicalObj()->changePositionX(Xchange);
 
-		if(player.getPosition().y < terrainHeight) {
-			float diff = terrainHeight - player.getPosition().y;
+		if(player.GetPhysicalObj()->getPosition().y < terrainHeight) {
+			float diff = terrainHeight - player.GetPhysicalObj()->getPosition().y;
 			if(diff > VCAP) {
-				player.changePositionY(diff * VCAP);
-				player.acceleration.y = 0.0f;
-				player.velocity.y = 0.0f;
+				player.GetPhysicalObj()->changePositionY(diff * VCAP);
+				player.GetPhysicalObj()->acceleration.y = 0.0f;
+				player.GetPhysicalObj()->velocity.y = 0.0f;
 			} else {
-				player.setPositionY(terrainHeight);
+				player.GetPhysicalObj()->setPositionY(terrainHeight);
 			}
-			player.acceleration.y = 0.0f;
-		} else if(player.getPosition().y > terrainHeight + 0.1) {
-			player.acceleration.y = -9.81f;
+			player.GetPhysicalObj()->acceleration.y = 0.0f;
+		} else if(player.GetPhysicalObj()->getPosition().y > terrainHeight + 0.1) {
+			player.GetPhysicalObj()->acceleration.y = -9.81f;
 		} else {
-			player.acceleration.y = 0;
+			player.GetPhysicalObj()->acceleration.y = 0;
 		}
 
 		float Ychange = speed.y + speedSide.y;
 
-		player.changePositionZ(Ychange);
+		player.GetPhysicalObj()->changePositionZ(Ychange);
 
-		if(player.getPosition().y < terrainHeight) {
-			float diff = terrainHeight - player.getPosition().y;
+		if(player.GetPhysicalObj()->getPosition().y < terrainHeight) {
+			float diff = terrainHeight - player.GetPhysicalObj()->getPosition().y;
 			if(diff > VCAP) {
-				player.changePositionY(VCAP * diff);
-				player.acceleration.y = 0.0f;
-				player.velocity.y = 0.0f;
+				player.GetPhysicalObj()->changePositionY(VCAP * diff);
+				player.GetPhysicalObj()->acceleration.y = 0.0f;
+				player.GetPhysicalObj()->velocity.y = 0.0f;
 			} else {
-				player.setPositionY(terrainHeight);
+				player.GetPhysicalObj()->setPositionY(terrainHeight);
 			}
-			player.acceleration.y = 0.0f;
-		} else if(player.getPosition().y > terrainHeight + 0.1) {
-			player.acceleration.y = -9.81f;
+			player.GetPhysicalObj()->acceleration.y = 0.0f;
+		} else if(player.GetPhysicalObj()->getPosition().y > terrainHeight + 0.1) {
+			player.GetPhysicalObj()->acceleration.y = -9.81f;
 		} else {
-			player.acceleration.y = 0;
+			player.GetPhysicalObj()->acceleration.y = 0;
+		}
+
+		terrainHeight = terrain.getHeight(player.GetCamera()->getPosition());
+
+		if(player.GetPhysicalObj()->getPosition().y > terrainHeight) {
+			player.GetPhysicalObj()->setOnGround(false);
+		} else {
+			player.GetPhysicalObj()->setOnGround(true);
 		}
 
 		plane.draw(ourShader, &camera);
 
 
-		player.update();
-		camera.setPosition(player.getPosition());
+		player.GetPhysicalObj()->update();
+		player.GetCamera()->setPosition(player.GetPhysicalObj()->getPosition());
 
 		//plane2.draw(ourShader, &camera);
-		plane.changeRotationX(3.0f);
-		plane.changeRotationY(1.0f);
-		plane.changeRotationZ(1.0f);
+		plane.changeRotationX(9.0f);
+		plane.changeRotationY(3.0f);
+		plane.changeRotationZ(3.0f);
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
@@ -215,8 +226,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-		speed.x = -sin(glm::radians(-camera.getRotation().y)) * velocity;
-		speed.y = -cos(glm::radians(-camera.getRotation().y)) * velocity;
+		speed.x = -sin(glm::radians(-player.GetCamera()->getRotation().y)) * velocity;
+		speed.y = -cos(glm::radians(-player.GetCamera()->getRotation().y)) * velocity;
 		direction = 1;
 	}
 	if (key == GLFW_KEY_W && action == GLFW_RELEASE && direction > 0) {
@@ -224,8 +235,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speed.y = 0.0f;
 	}
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-		speed.x = sin(glm::radians(-camera.getRotation().y)) * velocity;
-		speed.y = cos(glm::radians(-camera.getRotation().y)) * velocity;
+		speed.x = sin(glm::radians(-player.GetCamera()->getRotation().y)) * velocity;
+		speed.y = cos(glm::radians(-player.GetCamera()->getRotation().y)) * velocity;
 		direction = -1;
 	}
 	if (key == GLFW_KEY_S && action == GLFW_RELEASE && direction < 0) {
@@ -233,8 +244,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speed.y = 0.0f;
 	}
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-		speedSide.x = sin(glm::radians(-(camera.getRotation().y + 90.0f))) * velocity;
-		speedSide.y = cos(glm::radians(-(camera.getRotation().y + 90.0f))) * velocity;
+		speedSide.x = sin(glm::radians(-(player.GetCamera()->getRotation().y + 90.0f))) * velocity;
+		speedSide.y = cos(glm::radians(-(player.GetCamera()->getRotation().y + 90.0f))) * velocity;
 		directionSide = -90.0f;
 	}
 	if (key == GLFW_KEY_A && action == GLFW_RELEASE && directionSide < 0.0f) {
@@ -242,8 +253,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speedSide.y = 0.0f;
 	}
 	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-		speedSide.x = sin(glm::radians(-(camera.getRotation().y - 90.0f))) * velocity;
-		speedSide.y = cos(glm::radians(-(camera.getRotation().y - 90.0f))) * velocity;
+		speedSide.x = sin(glm::radians(-(player.GetCamera()->getRotation().y - 90.0f))) * velocity;
+		speedSide.y = cos(glm::radians(-(player.GetCamera()->getRotation().y - 90.0f))) * velocity;
 		directionSide = 90.0f;
 	}
 	if (key == GLFW_KEY_D && action == GLFW_RELEASE && directionSide > 0.0f) {
@@ -251,14 +262,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speedSide.y = 0.0f;
 	}
 	if (key == GLFW_KEY_E) {
-		camera.changePositionY(0.1f);
+		player.GetCamera()->changePositionY(0.1f);
 	}
 
 	if (key == GLFW_KEY_Q) {
-		camera.changePositionY(-0.1f);
+		player.GetCamera()->changePositionY(-0.1f);
 	}
 
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-		player.velocity.y = 10.0f;
+		player.GetPhysicalObj()->jump();//velocity.y = 10.0f;
 	}
 }

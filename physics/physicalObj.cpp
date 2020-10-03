@@ -6,6 +6,7 @@ PhysicalObj::PhysicalObj(glm::vec3 position) {
 	this->position = position;
 	this->velocity = glm::vec3(0.0f);
 	this->acceleration = glm::vec3(0.0f);
+	this->onGround = true;
 }
 
 PhysicalObj::PhysicalObj(Mesh mesh, bool isActive, bool isVisible, bool isTransparent, glm::vec3 position, glm::vec3 rotation, string name) {
@@ -20,6 +21,7 @@ PhysicalObj::PhysicalObj(Mesh mesh, bool isActive, bool isVisible, bool isTransp
 	this->velocity = glm::vec3(0.0f);
 	this->acceleration = glm::vec3(0.0f);
 	this->mesh.init(this);
+	this->onGround = true;
 }
 
 void PhysicalObj::draw(Shader shader, Camera* camera) {
@@ -131,4 +133,18 @@ void PhysicalObj::changeRotationZ(float delta) {
 
 string PhysicalObj::getName() {
 	return this->name;
+}
+
+void PhysicalObj::jump() {
+	if(this->onGround) {
+		this->velocity.y = 10.0f;
+	}
+}
+
+void PhysicalObj::setOnGround(bool value) {
+	this->onGround = value;
+}
+
+bool PhysicalObj::getOnGround() {
+	return this->onGround;
 }
