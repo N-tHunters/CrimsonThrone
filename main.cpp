@@ -27,7 +27,7 @@
 //#include "boundary.h"
 #include "physics/terrain.h"
 
-#include "sound/filesound.h"
+#include <irrklang/IrrKlang.h>
 
 #include <math.h>
 #include <time.h>
@@ -67,10 +67,6 @@ int main()
 	lastXPos = 0.0;
 	lastYPos = 0.0;
 	srand(time(0));
-
-
-	FileSound holysound("resources/sounds/holyword.wav", true);
-	holysound.Play(SoundEngine);
 
 	// Init GLFW
 	glfwInit();
@@ -114,11 +110,14 @@ int main()
 	//PhysicalObj plane2 = PhysicalObj(Mesh("resources/textures/rock.png", &planeModel), false, true, false, glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	// Create transformations
+	SoundEngine->play2D("resources/sounds/holyword.wav", true);
+
 
 	// Game loop    
 
 	while (!glfwWindowShouldClose(window))
 	{
+		
 		lastXPos = xpos;
 		lastYPos = ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
