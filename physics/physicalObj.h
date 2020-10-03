@@ -14,6 +14,7 @@ class PhysicalObj {
 	bool isTransparent;
 	glm::vec3 position;
 	glm::vec3 rotation;
+	bool onGround;
 public:
 	string name;
 	glm::vec3 velocity;
@@ -55,6 +56,11 @@ public:
 	void update();
 
 	string getName();
+
+	void jump();
+
+	void setOnGround(bool);
+	bool getOnGround();
 };
 
 #endif
