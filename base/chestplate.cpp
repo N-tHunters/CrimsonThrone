@@ -13,6 +13,6 @@ void Chestplate::Wear(Actor * target) {
   target->WearChestplate(this);
 }
 
-std::stringstream Chestplate::Save(Saver * saver) {
+std::stringstream * Chestplate::Save(Saver * saver) {
   return Armor::Save(saver, ENTRY_CHESTPLATE);
 }

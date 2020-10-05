@@ -97,6 +97,6 @@ class Actor {
   StackableItem * FindCompatibleItem(Item *);
   int GetItemIndex(Item *);
 
-  std::stringstream Save(Saver *);
+  std::stringstream * Save(Saver *);
 };
 #endif

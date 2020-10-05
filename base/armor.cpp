@@ -25,12 +25,12 @@ bool Armor::IsWearable() {
   return true;
 }
 
-std::stringstream Armor::Save(Saver * saver, int entry) {
-  std::stringstream ss = Item::Save(saver, entry);
-  saver->SaveInt(&ss, this->defence);
+std::stringstream * Armor::Save(Saver * saver, int entry) {
+  std::stringstream * ss = Item::Save(saver, entry);
+  saver->SaveInt(ss, this->defence);
   return ss;
 }
 
-std::stringstream Armor::Save(Saver * saver) {
+std::stringstream * Armor::Save(Saver * saver) {
   return this->Save(saver, ENTRY_ARMOR);
 }

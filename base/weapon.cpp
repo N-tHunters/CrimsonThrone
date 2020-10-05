@@ -29,13 +29,13 @@ void Weapon::SetRange(int range) {
   this->range = range;
 }
 
-std::stringstream Weapon::Save(Saver * saver, int entry) {
-  std::stringstream ss = Item::Save(saver, entry);
-  saver->SaveInt(&ss, this->damage);
-  saver->SaveInt(&ss, this->range);
+std::stringstream * Weapon::Save(Saver * saver, int entry) {
+  std::stringstream * ss = Item::Save(saver, entry);
+  saver->SaveInt(ss, this->damage);
+  saver->SaveInt(ss, this->range);
   return ss;
 }
 
-std::stringstream Weapon::Save(Saver * saver) {
+std::stringstream * Weapon::Save(Saver * saver) {
   return this->Save(saver, ENTRY_WEAPON);
 }

@@ -22,12 +22,18 @@
 #include "render/shaderLoader.h"
 #include "render/constants.h"
 #include "render/model.h"
+
 #include "physics/physicalObj.h"
 //#include "boundary.h"
 #include "physics/terrain.h"
+
+#include "sound/filesound.h"
+
 #include <math.h>
 #include <time.h>
 #include "base/player.h"
+
+#include <stdio.h>
 
 glm::vec2 normalize(glm::vec2 vec) {
 	float d = sqrt(vec.x * vec.x + vec.y * vec.y);
@@ -39,6 +45,8 @@ glm::vec2 normalize(glm::vec2 vec) {
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
+
+// Global variabels
 glm::vec2 speed = glm::vec2(0.0f, 0.0f);
 
 float VCAP = 0.1f;
@@ -52,6 +60,8 @@ int direction = 1;
 float directionSide = 0;
 float velocity = 0.1f;
 
+//irrklang::ISoundEngine *SoundEngine = irrklang::createIrrKlangDevice();
+
 // The MAIN function, from here we start the application and run the game loop
 int main()
 {
@@ -61,6 +71,7 @@ int main()
 	lastXPos = 0.0;
 	lastYPos = 0.0;
 	srand(time(0));
+
 	// Init GLFW
 	glfwInit();
 	// Set all the required options for GLFW
@@ -96,7 +107,7 @@ int main()
 	Model planeModel = Model((char*)"resources/models/frog.obj");
 
 	//Mesh plane = Mesh("resources/textures/stone.jpg", Plane.vertices, Plane.indices, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -2.0f, 0.0f));
-
+	
 	Terrain terrain(100, 0.5f);
 	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel), false, true, false, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "frog");
 
@@ -104,11 +115,15 @@ int main()
 	//PhysicalObj plane2 = PhysicalObj(Mesh("resources/textures/rock.png", &planeModel), false, true, false, glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	// Create transformations
+	//	FileSound holysound("resources/sounds/holyword.wav");
+	//	holysound.Play(SoundEngine);
 
-	// Game loop
+
+	// Game loop    
 
 	while (!glfwWindowShouldClose(window))
 	{
+		
 		lastXPos = xpos;
 		lastYPos = ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
