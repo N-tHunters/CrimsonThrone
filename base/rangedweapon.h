@@ -15,7 +15,7 @@ class RangedWeapon : public Weapon {
   void SetMissle(Missle *);
   void UseMissle(Actor *);
 
-  std::stringstream Save(Saver *);
+  std::stringstream * Save(Saver *);
 };
 
 #endif

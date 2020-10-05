@@ -1,4 +1,4 @@
-CFLAGS := -std=c++11 -Werror -Isrc -Iinclude
+CFLAGS := -std=c++11 -Werror -Isrc -Iinclude -g -m64 
 CXFLAGS := -Iinclude
 TARGET := main
 
@@ -23,11 +23,11 @@ OBJS := $(patsubst %.cpp,%.o,$(SRCS))
 # OS specific
 ifeq ($(OS),Windows_NT)
 	RM := rm
-	LFLAGS := -L ./lib -lgdi32 -lglu32 -lglew32 -lassimp -lzlib1 -lopengl32 -lglfw3 -lirrKlang
-	SFLAGS :=  #-Wl,--subsystem,windows 
+	LFLAGS := -static-libgcc -static-libstdc++ -L ./lib -lgdi32 -lglu32 -lglew32 -lzlib1 -lopengl32 -lglfw3 -lirrKlang -lassimp
+	SFLAGS := -Wl,--subsystem,windows
 
-	CC := mingw32-g++
-	CCX := mingw32-gcc
+	CC := x86_64-w64-mingw32-g++
+	CCX := x86_64-w64-mingw32-gcc
 else
 	RM := rm
 	LFLAGS := -lGL -ldl -lglfw -lGLEW -lX11 -lpthread -lassimp
@@ -49,7 +49,7 @@ $(TARGET): main.o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUN
 	$(CCX) $(CXFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(TARGET) $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) main.o main.exe main
+	$(RM) $(TARGET) $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) main.o main.exe main
 
 .PHONY: all clean
 

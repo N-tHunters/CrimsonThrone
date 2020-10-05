@@ -6,7 +6,7 @@
 
 class Missle : public StackableItem {
 public:
-  std::stringstream Save(Saver *);
+  std::stringstream * Save(Saver *);
 };
 
 #endif

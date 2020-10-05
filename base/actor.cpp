@@ -242,22 +242,22 @@ int Actor::GetItemIndex(Item * item) {
 }
 
 
-std::stringstream Actor::Save(Saver * saver) {
-  std::stringstream ss;
+std::stringstream * Actor::Save(Saver * saver) {
+  std::stringstream * ss = new std::stringstream();
 
-  saver->SaveString(&ss, this->name);
-  saver->SaveInt(&ss, health);
-  saver->SaveInt(&ss, max_health);
+  saver->SaveString(ss, this->name);
+  saver->SaveInt(ss, health);
+  saver->SaveInt(ss, max_health);
   for(int i = 0; i < INVENTORY_SIZE; i++) {
-    saver->SaveItem(&ss, this->inventory[i]);
+    saver->SaveItem(ss, this->inventory[i]);
   }
 
-  saver->SaveItem(&ss, this->weapon);
-  saver->SaveItem(&ss, this->helmet);
-  saver->SaveItem(&ss, this->boots);
-  saver->SaveItem(&ss, this->gloves);
-  saver->SaveItem(&ss, this->chestplate);
-  saver->SaveItem(&ss, this->leggins);
+  saver->SaveItem(ss, this->weapon);
+  saver->SaveItem(ss, this->helmet);
+  saver->SaveItem(ss, this->boots);
+  saver->SaveItem(ss, this->gloves);
+  saver->SaveItem(ss, this->chestplate);
+  saver->SaveItem(ss, this->leggins);
 
   return ss;
 }

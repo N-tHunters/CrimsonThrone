@@ -60,7 +60,7 @@ int direction = 1;
 float directionSide = 0;
 float velocity = 0.1f;
 
-irrklang::ISoundEngine *SoundEngine = irrklang::createIrrKlangDevice();
+//irrklang::ISoundEngine *SoundEngine = irrklang::createIrrKlangDevice();
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -115,8 +115,8 @@ int main()
 	//PhysicalObj plane2 = PhysicalObj(Mesh("resources/textures/rock.png", &planeModel), false, true, false, glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 
 	// Create transformations
-	FileSound holysound("resources/sounds/holyword.wav");
-	holysound.Play(SoundEngine);
+	//	FileSound holysound("resources/sounds/holyword.wav");
+	//	holysound.Play(SoundEngine);
 
 
 	// Game loop    

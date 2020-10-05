@@ -21,8 +21,8 @@ class Armor : public Item {
 
   bool IsWearable();
 
-  virtual std::stringstream Save(Saver *, int);
-  virtual std::stringstream Save(Saver *);
+  virtual std::stringstream * Save(Saver *, int);
+  virtual std::stringstream * Save(Saver *);
 };
 
 #endif

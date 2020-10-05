@@ -14,7 +14,7 @@ public:
   Gloves(std::string, int);
   void Wear(Actor *);
 
-  std::stringstream Save(Saver *);
+  std::stringstream * Save(Saver *);
 };
 
 #endif

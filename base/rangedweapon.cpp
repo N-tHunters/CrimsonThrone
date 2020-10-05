@@ -15,8 +15,8 @@ void RangedWeapon::UseMissle(Actor * target) {
   this->missle->Use(target);
 }
 
-std::stringstream RangedWeapon::Save(Saver * saver) {
-  std::stringstream ss = Weapon::Save(saver, ENTRY_RANGED);
-  saver->SaveItem(&ss, this->missle);
+std::stringstream * RangedWeapon::Save(Saver * saver) {
+  std::stringstream * ss = Weapon::Save(saver, ENTRY_RANGED);
+  saver->SaveItem(ss, this->missle);
   return ss;
 }
