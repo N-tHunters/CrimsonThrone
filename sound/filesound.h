@@ -8,7 +8,6 @@ class FileSound : public Sound {
   std::string filename;
  public:
   FileSound(std::string);
-  void Play(irrklang::ISoundEngine *);
 };
 
 #endif

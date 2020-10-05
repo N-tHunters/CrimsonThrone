@@ -1,4 +1,4 @@
-CFLAGS := -std=c++11 -Werror -Isrc -Iinclude -g -m64 
+CFLAGS := -std=c++17 -Werror -Isrc -Iinclude -g -m64 
 CXFLAGS := -Iinclude
 TARGET := main
 
@@ -23,7 +23,7 @@ OBJS := $(patsubst %.cpp,%.o,$(SRCS))
 # OS specific
 ifeq ($(OS),Windows_NT)
 	RM := rm
-	LFLAGS := -static-libgcc -static-libstdc++ -L ./lib -lgdi32 -lglu32 -lglew32 -lzlib1 -lopengl32 -lglfw3 -lirrKlang -lassimp
+	LFLAGS := -static-libgcc -static-libstdc++ -L ./lib -lgdi32 -lglu32 -lglew32 -lzlib1 -lopengl32 -lglfw3 -lassimp -lOpenAL32
 	SFLAGS := -Wl,--subsystem,windows
 
 	CC := x86_64-w64-mingw32-g++
