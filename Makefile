@@ -24,7 +24,7 @@ OBJS := $(patsubst %.cpp,%.o,$(SRCS))
 ifeq ($(OS),Windows_NT)
 	RM := rm
 	LFLAGS := -static-libgcc -static-libstdc++ -L ./lib -lgdi32 -lglu32 -lglew32 -lzlib1 -lopengl32 -lglfw3 -lassimp -lOpenAL32
-	SFLAGS := -Wl,--subsystem,windows
+	SFLAGS := #-Wl,--subsystem,windows
 
 	CC := x86_64-w64-mingw32-g++
 	CCX := x86_64-w64-mingw32-gcc

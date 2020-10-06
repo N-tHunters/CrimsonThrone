@@ -34,6 +34,7 @@
 #include <stdio.h>
 
 #include "sound/soundengine.h"
+#include "sound/filesound.h"
 
 glm::vec2 normalize(glm::vec2 vec) {
 	float d = sqrt(vec.x * vec.x + vec.y * vec.y);
@@ -60,6 +61,7 @@ int direction = 1;
 float directionSide = 0;
 float velocity = 0.1f;
 
+SoundEngine sound_engine;
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -70,6 +72,18 @@ int main()
 	lastXPos = 0.0;
 	lastYPos = 0.0;
 	srand(time(0));
+
+	// Check openAL
+	ALuint source;
+	alGenSources(1, &source);
+	alSourcef(source, AL_PITCH, 1);
+	alSourcef(source, AL_GAIN, 1);
+	alSource3f(source, AL_POSITION, 0, 0, 0);
+	alSource3f(source, AL_VELOCITY, 0, 0, 0);
+	alSourcei(source, AL_LOOPING, AL_TRUE);
+
+	FileSound sound(&sound_engine, &source, "resources/sounds/running.wav");
+	sound.Play();
 
 	// Init GLFW
 	glfwInit();
