@@ -99,7 +99,7 @@ Mesh::Mesh(string texturePath, std::vector<GLfloat> vertices, std::vector<unsign
 
 }
 
-void Mesh::draw(Shader shader, Camera* camera) {
+void Mesh::draw(Shader shader, Camera* camera, GLuint width, GLuint height) {
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 cameraRot = glm::mat4(1.0f);
@@ -112,7 +112,7 @@ void Mesh::draw(Shader shader, Camera* camera) {
 	cameraRot = glm::rotate(cameraRot, glm::radians(camera->getRotation().y), glm::vec3(0.0f, 1.0f, 0.0f));
 	cameraRot = glm::rotate(cameraRot, glm::radians(camera->getRotation().z), glm::vec3(0.0f, 0.0f, 1.0f));
 	view = glm::translate(view, this->obj->getPosition() - cameraPosition);
-	projection = glm::perspective(glm::radians(45.0f), (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
+	projection = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);
 	GLint modelLoc = glGetUniformLocation(shader.Program, "model");
 	GLint viewLoc = glGetUniformLocation(shader.Program, "view");
 	GLint projLoc = glGetUniformLocation(shader.Program, "projection");

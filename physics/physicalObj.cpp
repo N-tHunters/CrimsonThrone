@@ -24,9 +24,9 @@ PhysicalObj::PhysicalObj(Mesh mesh, bool isActive, bool isVisible, bool isTransp
 	this->onGround = true;
 }
 
-void PhysicalObj::draw(Shader shader, Camera* camera) {
+void PhysicalObj::draw(Shader shader, Camera* camera, GLuint width, GLuint height) {
 	if(this->isVisible) {
-		this->mesh.draw(shader, camera);
+		this->mesh.draw(shader, camera, width, height);
 	}
 }
 

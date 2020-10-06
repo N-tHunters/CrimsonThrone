@@ -1,6 +1,6 @@
 #version 330 core
 in vec2 TexCoord;
-in float visibility;
+//in float visibility;
 
 out vec4 color;
 

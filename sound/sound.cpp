@@ -1,3 +1,24 @@
 #include "sound.h"
 
-void Sound::Play(irrklang::ISoundEngine * engine){}
+Sound::Sound(SoundEngine * engine, ALuint * source) {
+  this->engine = engine;
+  this->source = source;
+}
+
+void Sound::Play() {}
+
+SoundEngine * Sound::GetEngine() {
+  return this->engine;
+}
+
+ALuint Sound::GetBuffer() {
+  return this->buffer;
+}
+
+ALuint * Sound::GetBufferPtr() {
+  return &this->buffer;
+}
+
+ALuint Sound::GetSource() {
+  return *this->source;
+}

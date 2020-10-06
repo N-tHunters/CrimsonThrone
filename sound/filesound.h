@@ -5,10 +5,11 @@
 #include <string>
 
 class FileSound : public Sound {
+private:
   std::string filename;
  public:
-  FileSound(std::string);
-  void Play(irrklang::ISoundEngine *);
+  FileSound(SoundEngine*, ALuint *, std::string);
+  void Play();
 };
 
 #endif

@@ -27,13 +27,15 @@
 //#include "boundary.h"
 #include "physics/terrain.h"
 
-#include "sound/filesound.h"
-
 #include <math.h>
 #include <time.h>
+#include <ctime>
 #include "base/player.h"
 
 #include <stdio.h>
+
+#include "sound/soundengine.h"
+#include "sound/filesound.h"
 
 glm::vec2 normalize(glm::vec2 vec) {
 	float d = sqrt(vec.x * vec.x + vec.y * vec.y);
@@ -60,7 +62,7 @@ int direction = 1;
 float directionSide = 0;
 float velocity = 0.1f;
 
-//irrklang::ISoundEngine *SoundEngine = irrklang::createIrrKlangDevice();
+SoundEngine sound_engine;
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -71,6 +73,18 @@ int main()
 	lastXPos = 0.0;
 	lastYPos = 0.0;
 	srand(time(0));
+
+	// Check openAL
+	ALuint source;
+	alGenSources(1, &source);
+	alSourcef(source, AL_PITCH, 1);
+	alSourcef(source, AL_GAIN, 1);
+	alSource3f(source, AL_POSITION, 0, 0, 0);
+	alSource3f(source, AL_VELOCITY, 0, 0, 0);
+	alSourcei(source, AL_LOOPING, AL_TRUE);
+
+	FileSound sound(&sound_engine, &source, "resources/sounds/running.wav");
+	sound.Play();
 
 	// Init GLFW
 	glfwInit();
@@ -83,9 +97,16 @@ int main()
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
 	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "3O/\\0TAR >|<AbKA", nullptr, nullptr);
+
+	//printf("%i\n", m_viewport[1]);
+
+//	GLuint width, height = 
+
 	glfwMakeContextCurrent(window);
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Set the required callback functions
 	glfwSetKeyCallback(window, key_callback);
@@ -94,9 +115,12 @@ int main()
 	glewExperimental = GL_TRUE;
 	// Initialize GLEW to setup the OpenGL Function pointers
 	glewInit();
+	
+	int width, height;
+	glfwGetWindowSize(window, &width, &height);
 
 	// Define the viewport dimensions
-	glViewport(0, 0, WIDTH, HEIGHT);
+	glViewport(0, 0, width, height);
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
@@ -106,20 +130,42 @@ int main()
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	Model planeModel = Model((char*)"resources/models/frog.obj");
 
-	//Mesh plane = Mesh("resources/textures/stone.jpg", Plane.vertices, Plane.indices, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -2.0f, 0.0f));
-	
 	Terrain terrain(100, 0.5f);
 	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel), false, true, false, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "frog");
 
+	// TEST CODE START
 
-	//PhysicalObj plane2 = PhysicalObj(Mesh("resources/textures/rock.png", &planeModel), false, true, false, glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	Shader GUIShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/GUI_fragment_shader.glsl");
 
-	// Create transformations
-	//	FileSound holysound("resources/sounds/holyword.wav");
-	//	holysound.Play(SoundEngine);
+	std::vector<float> menuBox = {-0.9f,  0.9f, 0.0f,
+								  -0.9f, -0.9f, 0.0f,
+								   0.9f,  0.9f, 0.0f,
+								   0.9f, -0.9f, 0.0f};
+	std::vector<int> menuIndices = {0, 1, 2,
+									1, 2, 3};
 
+	GLuint VBO2, VAO2, EBO2;
 
-	// Game loop    
+	glGenVertexArrays(1, &VAO2);
+	glGenBuffers(1, &VBO2);
+	glGenBuffers(1, &EBO2);
+
+	glBindVertexArray(VAO2);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(menuBox[0]) * menuBox.size(), &(menuBox[0]), GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO2);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(menuIndices[0]) * menuIndices.size(), &(menuIndices[0]), GL_STATIC_DRAW);
+
+	// Position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindVertexArray(0);
+
+	// TEST CODE END
+
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -151,7 +197,7 @@ int main()
 		// Clear the color buffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		terrain.draw(ourShader, &camera);
+		terrain.draw(ourShader, &camera, width, height);
 		float terrainHeight = terrain.getHeight(player.GetCamera()->getPosition());
 
 		float Xchange = speed.x + speedSide.x;
@@ -202,7 +248,19 @@ int main()
 			player.GetPhysicalObj()->setOnGround(true);
 		}
 
-		plane.draw(ourShader, &camera);
+		plane.draw(ourShader, &camera, width, height);
+
+
+
+		GLint k = glGetUniformLocation(GUIShader.Program, "time");
+		
+		GUIShader.Use();
+		
+		glUniform1f(k, clock() / 10000.0f);
+
+		glBindVertexArray(VAO2);
+		glDrawElements(GL_TRIANGLES, menuIndices.size(), GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
 
 
 		player.GetPhysicalObj()->update();
@@ -273,3 +331,4 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		player.GetPhysicalObj()->jump();//velocity.y = 10.0f;
 	}
 }
+

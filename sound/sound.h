@@ -1,11 +1,21 @@
 #ifndef CT_SOUND_H
 #define CT_SOUND_H
 
-#include <irrklang/IrrKlang.h>
+#include "soundengine.h"
 
 class Sound {
+private:
+  SoundEngine * engine;
+  ALuint * source;
+  ALuint buffer;
  public:
-  virtual void Play(irrklang::ISoundEngine *);
+  Sound(SoundEngine *, ALuint *);
+  virtual void Play();
+  SoundEngine * GetEngine();
+  ALuint GetBuffer();
+  ALuint * GetBufferPtr();
+  ALuint GetSource();
+  
 };
 
 #endif
