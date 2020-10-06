@@ -17,9 +17,9 @@ void main()
 {
     gl_Position = projection * cameraRot * view * model * vec4(position, 1.0f);
     //gl_Position = projection * vec4(position, 1.0f);
-    float distance = length(gl_Position.xyz);
-    float visibility = exp(-pow(distance * density, gradient));
-    visibility = clamp(visibility, 0.0, 1.0);
+    //float distance = length(gl_Position.xyz);
+    //float visibility = exp(-pow(distance * density, gradient));
+    //visibility = clamp(visibility, 0.0, 1.0);
 
     TexCoord = vec2(texCoord.x, 1.0 - texCoord.y);
 }

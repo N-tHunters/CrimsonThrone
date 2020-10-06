@@ -11,6 +11,6 @@ class Terrain {
 	PhysicalObj* obj;
 public:
 	Terrain(int, float);
-	void draw(Shader, Camera*);
+	void draw(Shader, Camera*, GLuint, GLuint);
 	float getHeight(glm::vec3);
 };
