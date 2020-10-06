@@ -30,7 +30,7 @@ ifeq ($(OS),Windows_NT)
 	CCX := x86_64-w64-mingw32-gcc
 else
 	RM := rm
-	LFLAGS := -lGL -ldl -lglfw -lGLEW -lX11 -lpthread -lassimp
+	LFLAGS := -lGL -ldl -lglfw -lGLEW -lX11 -lpthread -lassimp -lopenal
 	SFLAGS :=
 
 	CC := g++

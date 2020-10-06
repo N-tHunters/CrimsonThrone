@@ -83,7 +83,7 @@ int main()
 	alSource3f(source, AL_VELOCITY, 0, 0, 0);
 	alSourcei(source, AL_LOOPING, AL_TRUE);
 
-	FileSound sound(&sound_engine, &source, "resources/sounds/running.wav");
+	FileSound sound(&sound_engine, &source, "resources/sounds/cursedword.wav");
 	sound.Play();
 
 	// Init GLFW
