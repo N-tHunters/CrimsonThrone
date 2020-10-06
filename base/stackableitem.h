@@ -17,8 +17,8 @@ class StackableItem : public Item {
   void Use(Actor *);
   void Stack(StackableItem *);
 
-  std::stringstream Save(Saver *);
-  std::stringstream Save(Saver *, int);
+  std::stringstream * Save(Saver *);
+  std::stringstream * Save(Saver *, int);
 };
 
 #endif

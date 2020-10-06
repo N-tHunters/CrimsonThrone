@@ -22,13 +22,20 @@
 #include "render/shaderLoader.h"
 #include "render/constants.h"
 #include "render/model.h"
+
 #include "physics/physicalObj.h"
 //#include "boundary.h"
 #include "physics/terrain.h"
+
 #include <math.h>
 #include <time.h>
 #include <ctime>
 #include "base/player.h"
+
+#include <stdio.h>
+
+#include "sound/soundengine.h"
+#include "sound/filesound.h"
 
 glm::vec2 normalize(glm::vec2 vec) {
 	float d = sqrt(vec.x * vec.x + vec.y * vec.y);
@@ -40,6 +47,8 @@ glm::vec2 normalize(glm::vec2 vec) {
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
+
+// Global variabels
 glm::vec2 speed = glm::vec2(0.0f, 0.0f);
 
 float VCAP = 0.1f;
@@ -53,6 +62,8 @@ int direction = 1;
 float directionSide = 0;
 float velocity = 0.1f;
 
+SoundEngine sound_engine;
+
 // The MAIN function, from here we start the application and run the game loop
 int main()
 {
@@ -62,6 +73,19 @@ int main()
 	lastXPos = 0.0;
 	lastYPos = 0.0;
 	srand(time(0));
+
+	// Check openAL
+	ALuint source;
+	alGenSources(1, &source);
+	alSourcef(source, AL_PITCH, 1);
+	alSourcef(source, AL_GAIN, 1);
+	alSource3f(source, AL_POSITION, 0, 0, 0);
+	alSource3f(source, AL_VELOCITY, 0, 0, 0);
+	alSourcei(source, AL_LOOPING, AL_TRUE);
+
+	FileSound sound(&sound_engine, &source, "resources/sounds/running.wav");
+	sound.Play();
+
 	// Init GLFW
 	glfwInit();
 	// Set all the required options for GLFW
@@ -145,6 +169,7 @@ int main()
 
 	while (!glfwWindowShouldClose(window))
 	{
+		
 		lastXPos = xpos;
 		lastYPos = ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
@@ -306,3 +331,4 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		player.GetPhysicalObj()->jump();//velocity.y = 10.0f;
 	}
 }
+

@@ -21,8 +21,8 @@ public:
   void SetDamage(int);
   void SetRange(int);
 
-  virtual std::stringstream Save(Saver *);
-  std::stringstream Save(Saver *, int);
+  virtual std::stringstream * Save(Saver *);
+  std::stringstream * Save(Saver *, int);
 };
 
 #endif

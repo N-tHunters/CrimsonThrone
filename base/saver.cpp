@@ -56,23 +56,27 @@ void Saver::Save() {
     this->item2index[(*this->items).at(i)] = i;
   
   for(unsigned int i = 0; i < this->items->size(); i++) {
-    std::stringstream item_ss = this->items->at(i)->Save(this);
+    std::stringstream * item_ss = this->items->at(i)->Save(this);
 
-    item_ss.seekg(0, std::ios::end);
-    this->SaveInt(&fs, item_ss.tellg());
-    item_ss.seekg(0, std::ios::beg);
+    item_ss->seekg(0, std::ios::end);
+    this->SaveInt(&fs, item_ss->tellg());
+    item_ss->seekg(0, std::ios::beg);
     
-    fs << item_ss.rdbuf();
+    fs << item_ss->rdbuf();
+
+    delete item_ss;
   }
 
   for(unsigned int i = 0; i < this->actors->size(); i++) {
-    std::stringstream actor_ss = this->actors->at(i)->Save(this);
+    std::stringstream * actor_ss = this->actors->at(i)->Save(this);
 
-    actor_ss.seekg(0, std::ios::end);
-    this->SaveInt(&fs, actor_ss.tellg());
-    actor_ss.seekg(0, std::ios::beg);
+    actor_ss->seekg(0, std::ios::end);
+    this->SaveInt(&fs, actor_ss->tellg());
+    actor_ss->seekg(0, std::ios::beg);
 
-    fs << actor_ss.rdbuf();
+    fs << actor_ss->rdbuf();
+
+    delete actor_ss;
   }
   
   fs.close();

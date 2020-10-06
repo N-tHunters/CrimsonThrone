@@ -45,15 +45,15 @@ void Item::Use(Actor *) {}
 void Item::Wear(Actor *) {}
 
 
-std::stringstream Item::Save(Saver * saver) {
+std::stringstream * Item::Save(Saver * saver) {
   return this->Save(saver, ENTRY_ITEM);
 }
 
-std::stringstream Item::Save(Saver * saver, int entry) {
-  std::stringstream ss;
+std::stringstream * Item::Save(Saver * saver, int entry) {
+  std::stringstream * ss = new std::stringstream();
   
-  saver->SaveInt(&ss, entry);
-  saver->SaveString(&ss, this->name);
+  saver->SaveInt(ss, entry);
+  saver->SaveString(ss, this->name);
   
   return ss;
 }

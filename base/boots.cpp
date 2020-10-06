@@ -12,6 +12,6 @@ void Boots::Wear(Actor * target) {
   target->WearBoots(this);
 }
 
-std::stringstream Boots::Save(Saver * saver) {
+std::stringstream * Boots::Save(Saver * saver) {
   return Armor::Save(saver, ENTRY_BOOTS);
 }
