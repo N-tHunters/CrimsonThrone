@@ -52,7 +52,7 @@ public:
 	void changeRotationY(float);
 	void changeRotationZ(float);
 
-	void draw(Shader, Camera*);
+	void draw(Shader, Camera*, GLuint, GLuint);
 	void update();
 
 	string getName();
