@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include "../render/camera.h"
 #include "../render/shaderLoader.h"
+#include "terrain.h"
 
 class PhysicalObj {
 	Mesh mesh;
@@ -52,7 +53,7 @@ public:
 	void changeRotationY(float);
 	void changeRotationZ(float);
 
-	void draw(Shader, Camera*, GLuint, GLuint);
+	void draw(Shader*, Camera*, GLuint, GLuint);
 	void update();
 
 	string getName();
@@ -61,6 +62,7 @@ public:
 
 	void setOnGround(bool);
 	bool getOnGround();
+	void collideTerrain(Terrain*, glm::vec2, float);
 };
 
 #endif

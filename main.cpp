@@ -83,7 +83,7 @@ int main()
 	alSource3f(source, AL_VELOCITY, 0, 0, 0);
 	alSourcei(source, AL_LOOPING, AL_TRUE);
 
-	FileSound sound(&sound_engine, &source, "resources/sounds/cursedword.wav");
+	FileSound sound(&sound_engine, &source, "resources/sounds/happierburial.wav");
 	sound.Play();
 
 	// Init GLFW
@@ -96,7 +96,7 @@ int main()
 	glfwWindowHint(GLFW_MAXIMIZED, GL_TRUE);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "3O/\\0TAR >|<AbKA", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crimson Throne", nullptr, nullptr);
 
 	//printf("%i\n", m_viewport[1]);
 
@@ -197,79 +197,28 @@ int main()
 		// Clear the color buffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		terrain.draw(ourShader, &camera, width, height);
-		float terrainHeight = terrain.getHeight(player.GetCamera()->getPosition());
+		
+		player.GetPhysicalObj()->collideTerrain(&terrain, speed + speedSide, VCAP);
 
-		float Xchange = speed.x + speedSide.x;
+		terrain.draw(&ourShader, &camera, width, height);
 
-		player.GetPhysicalObj()->changePositionX(Xchange);
-
-		if(player.GetPhysicalObj()->getPosition().y < terrainHeight) {
-			float diff = terrainHeight - player.GetPhysicalObj()->getPosition().y;
-			if(diff > VCAP) {
-				player.GetPhysicalObj()->changePositionY(diff * VCAP);
-				player.GetPhysicalObj()->acceleration.y = 0.0f;
-				player.GetPhysicalObj()->velocity.y = 0.0f;
-			} else {
-				player.GetPhysicalObj()->setPositionY(terrainHeight);
-			}
-			player.GetPhysicalObj()->acceleration.y = 0.0f;
-		} else if(player.GetPhysicalObj()->getPosition().y > terrainHeight + 0.1) {
-			player.GetPhysicalObj()->acceleration.y = -9.81f;
-		} else {
-			player.GetPhysicalObj()->acceleration.y = 0;
-		}
-
-		float Ychange = speed.y + speedSide.y;
-
-		player.GetPhysicalObj()->changePositionZ(Ychange);
-
-		if(player.GetPhysicalObj()->getPosition().y < terrainHeight) {
-			float diff = terrainHeight - player.GetPhysicalObj()->getPosition().y;
-			if(diff > VCAP) {
-				player.GetPhysicalObj()->changePositionY(VCAP * diff);
-				player.GetPhysicalObj()->acceleration.y = 0.0f;
-				player.GetPhysicalObj()->velocity.y = 0.0f;
-			} else {
-				player.GetPhysicalObj()->setPositionY(terrainHeight);
-			}
-			player.GetPhysicalObj()->acceleration.y = 0.0f;
-		} else if(player.GetPhysicalObj()->getPosition().y > terrainHeight + 0.1) {
-			player.GetPhysicalObj()->acceleration.y = -9.81f;
-		} else {
-			player.GetPhysicalObj()->acceleration.y = 0;
-		}
-
-		terrainHeight = terrain.getHeight(player.GetCamera()->getPosition());
-
-		if(player.GetPhysicalObj()->getPosition().y > terrainHeight) {
-			player.GetPhysicalObj()->setOnGround(false);
-		} else {
-			player.GetPhysicalObj()->setOnGround(true);
-		}
-
-		plane.draw(ourShader, &camera, width, height);
-
-
-
-		GLint k = glGetUniformLocation(GUIShader.Program, "time");
+		plane.draw(&ourShader, &camera, width, height);
 		
 		GUIShader.Use();
-		
-		glUniform1f(k, clock() / 10000.0f);
 
 		glBindVertexArray(VAO2);
 		glDrawElements(GL_TRIANGLES, menuIndices.size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
-
 		player.GetPhysicalObj()->update();
 		player.GetCamera()->setPosition(player.GetPhysicalObj()->getPosition());
 
+		printf("%f\n", player.GetPhysicalObj()->getPositionX());
+
 		//plane2.draw(ourShader, &camera);
-		plane.changeRotationX(9.0f);
-		plane.changeRotationY(3.0f);
-		plane.changeRotationZ(3.0f);
+		//plane.changeRotationX(9.0f);
+		//plane.changeRotationY(3.0f);
+		//plane.changeRotationZ(3.0f);
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
