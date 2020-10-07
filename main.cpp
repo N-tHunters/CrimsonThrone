@@ -31,11 +31,13 @@
 #include <time.h>
 #include <ctime>
 #include "base/player.h"
+#include "base/npc.h"
 
 #include <stdio.h>
 
 #include "sound/soundengine.h"
 #include "sound/filesound.h"
+#include "sound/voice.h"
 
 glm::vec2 normalize(glm::vec2 vec) {
 	float d = sqrt(vec.x * vec.x + vec.y * vec.y);
@@ -55,7 +57,7 @@ float VCAP = 0.1f;
 
 Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 //PhysicalObj player = PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f));
-Player player("player", 10, PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f)), &camera);
+Player player("player", 10, new PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f)), &camera);
 
 glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 int direction = 1;
@@ -83,7 +85,7 @@ int main()
 	alSource3f(source, AL_VELOCITY, 0, 0, 0);
 	alSourcei(source, AL_LOOPING, AL_TRUE);
 
-	FileSound sound(&sound_engine, &source, "resources/sounds/running.wav");
+	FileSound sound(&sound_engine, &source, "resources/sounds/happierburial.wav");
 	sound.Play();
 
 	// Init GLFW
@@ -130,8 +132,15 @@ int main()
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	Model planeModel = Model((char*)"resources/models/frog.obj");
 
-	Terrain terrain(100, 0.5f);
-	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel), false, true, false, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "frog");
+        NPC test_npc("test_npc", 10,
+                     new PhysicalObj(Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
+                     false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
+                     glm::vec3(0.0f, 0.0f, 0.0f), "frock"));
+
+	Terrain terrain(100, 1.0f);
+	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel),
+                                        false, true, false, glm::vec3(0.0f, 0.0f, 0.0f),
+                                        glm::vec3(0.0f, 0.0f, 0.0f), "frog");
 
 	// TEST CODE START
 
@@ -249,8 +258,7 @@ int main()
 		}
 
 		plane.draw(ourShader, &camera, width, height);
-
-
+                test_npc.GetPhysicalObj()->draw(ourShader, &camera, width, height);
 
 		GLint k = glGetUniformLocation(GUIShader.Program, "time");
 		
@@ -271,6 +279,21 @@ int main()
 		plane.changeRotationY(3.0f);
 		plane.changeRotationZ(3.0f);
 
+		glm::vec3 player_stalk_vec(0.0f, 0.0f, 0.0f);
+
+		glm::vec3 player_pos = player.GetPhysicalObj()->getPosition();
+		glm::vec3 stalker_pos = test_npc.GetPhysicalObj()->getPosition();
+
+		player_stalk_vec = player_pos - stalker_pos;
+		player_stalk_vec = normalize(player_stalk_vec);
+		// if(player_pos.x > stalker_pos.x) player_stalk_vec.x = 1.0f;
+		// if(player_pos.x < stalker_pos.x) player_stalk_vec.x = -1.0f;
+		// if(player_pos.y > stalker_pos.y) player_stalk_vec.y = 1.0f;
+		// if(player_pos.y < stalker_pos.y) player_stalk_vec.y = -1.0f;
+		// if(player_pos.z > stalker_pos.z) player_stalk_vec.z = 1.0f;
+		// if(player_pos.z < stalker_pos.z) player_stalk_vec.z = -1.0f;
+
+		test_npc.GetPhysicalObj()->changePosition(player_stalk_vec * 10.0f);
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
 	}

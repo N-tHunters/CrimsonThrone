@@ -119,6 +119,7 @@ void Mesh::draw(Shader shader, Camera* camera, GLuint width, GLuint height) {
 	GLint camRotLoc = glGetUniformLocation(shader.Program, "cameraRot");
 	GLint skyColor = glGetUniformLocation(shader.Program, "skyColor");
 
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glUniform1i(glGetUniformLocation(shader.Program, "ourTexture"), 0);

@@ -10,7 +10,9 @@ private:
   ALuint buffer;
  public:
   Sound(SoundEngine *, ALuint *);
+  Sound();
   virtual void Play();
+  virtual void PlayToEnd();
   SoundEngine * GetEngine();
   ALuint GetBuffer();
   ALuint * GetBufferPtr();
