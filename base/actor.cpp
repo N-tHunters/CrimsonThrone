@@ -18,7 +18,7 @@ Actor::Actor() {
   }
 }
 
-Actor::Actor(std::string name, int max_health, PhysicalObj obj) : Actor() {
+Actor::Actor(std::string name, int max_health, PhysicalObj * obj) : Actor() {
   this->name = name;
   this->max_health = max_health;
   this->health = max_health;
@@ -63,7 +63,7 @@ Chestplate* Actor::GetChestplate() {
 }
 
 PhysicalObj* Actor::GetPhysicalObj() {
-  return &this->obj;
+  return this->obj;
 }
 
 // Setters
@@ -103,7 +103,7 @@ void Actor::SetLeggins(Leggins* leggins) {
   this->leggins = leggins;
 }
 
-void Actor::SetPhysicalObj(PhysicalObj obj) {
+void Actor::SetPhysicalObj(PhysicalObj* obj) {
   this->obj = obj;
 }
 

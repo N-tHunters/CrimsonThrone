@@ -9,7 +9,7 @@ private:
   Camera * camera;
 public:
   Player();
-  Player(std::string, int, PhysicalObj, Camera *);
+  Player(std::string, int, PhysicalObj *, Camera *);
 
   void Update();
 

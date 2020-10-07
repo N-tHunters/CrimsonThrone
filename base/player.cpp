@@ -2,7 +2,7 @@
 
 Player::Player() : Actor() {}
 
-Player::Player(std::string name, int max_health, PhysicalObj obj, Camera * camera) :
+Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * camera) :
   Actor(name, max_health, obj)
 {
   this->camera = camera;
