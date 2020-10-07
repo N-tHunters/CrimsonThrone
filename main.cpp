@@ -36,6 +36,7 @@
 
 #include "sound/soundengine.h"
 #include "sound/filesound.h"
+#include "sound/voice.h"
 
 glm::vec2 normalize(glm::vec2 vec) {
 	float d = sqrt(vec.x * vec.x + vec.y * vec.y);
@@ -83,7 +84,7 @@ int main()
 	alSource3f(source, AL_VELOCITY, 0, 0, 0);
 	alSourcei(source, AL_LOOPING, AL_TRUE);
 
-	FileSound sound(&sound_engine, &source, "resources/sounds/running.wav");
+	FileSound sound(&sound_engine, &source, "resources/sounds/happyburial.wav");
 	sound.Play();
 
 	// Init GLFW
