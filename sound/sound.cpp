@@ -5,7 +5,10 @@ Sound::Sound(SoundEngine * engine, ALuint * source) {
   this->source = source;
 }
 
+Sound::Sound() {}
+
 void Sound::Play() {}
+void Sound::PlayToEnd() {}
 
 SoundEngine * Sound::GetEngine() {
   return this->engine;

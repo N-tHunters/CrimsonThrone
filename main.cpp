@@ -31,11 +31,13 @@
 #include <time.h>
 #include <ctime>
 #include "base/player.h"
+#include "base/npc.h"
 
 #include <stdio.h>
 
 #include "sound/soundengine.h"
 #include "sound/filesound.h"
+#include "sound/voice.h"
 
 glm::vec2 normalize(glm::vec2 vec) {
 	float d = sqrt(vec.x * vec.x + vec.y * vec.y);
@@ -55,7 +57,7 @@ float VCAP = 0.1f;
 
 Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 //PhysicalObj player = PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f));
-Player player("player", 10, PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f)), &camera);
+Player player("player", 10, new PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f)), &camera);
 
 glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 int direction = 1;
@@ -130,8 +132,15 @@ int main()
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	Model planeModel = Model((char*)"resources/models/frog.obj");
 
-	Terrain terrain(100, 0.5f);
-	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel), false, true, false, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "frog");
+        NPC test_npc("test_npc", 10,
+                     new PhysicalObj(Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
+                     false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
+                     glm::vec3(0.0f, 0.0f, 0.0f), "frock"));
+
+	Terrain terrain(100, 1.0f);
+	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel),
+                                        false, true, false, glm::vec3(0.0f, 0.0f, 0.0f),
+                                        glm::vec3(0.0f, 0.0f, 0.0f), "frog");
 
 	// TEST CODE START
 
@@ -197,10 +206,66 @@ int main()
 		// Clear the color buffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+<<<<<<< HEAD
 		
 		player.GetPhysicalObj()->collideTerrain(&terrain, speed + speedSide, VCAP);
 
 		terrain.draw(&ourShader, &camera, width, height);
+=======
+		terrain.draw(ourShader, &camera, width, height);
+		float terrainHeight = terrain.getHeight(player.GetCamera()->getPosition());
+
+		float Xchange = speed.x + speedSide.x;
+
+		player.GetPhysicalObj()->changePositionX(Xchange);
+
+		if(player.GetPhysicalObj()->getPosition().y < terrainHeight) {
+			float diff = terrainHeight - player.GetPhysicalObj()->getPosition().y;
+			if(diff > VCAP) {
+				player.GetPhysicalObj()->changePositionY(diff * VCAP);
+				player.GetPhysicalObj()->acceleration.y = 0.0f;
+				player.GetPhysicalObj()->velocity.y = 0.0f;
+			} else {
+				player.GetPhysicalObj()->setPositionY(terrainHeight);
+			}
+			player.GetPhysicalObj()->acceleration.y = 0.0f;
+		} else if(player.GetPhysicalObj()->getPosition().y > terrainHeight + 0.1) {
+			player.GetPhysicalObj()->acceleration.y = -9.81f;
+		} else {
+			player.GetPhysicalObj()->acceleration.y = 0;
+		}
+
+		float Ychange = speed.y + speedSide.y;
+
+		player.GetPhysicalObj()->changePositionZ(Ychange);
+
+		if(player.GetPhysicalObj()->getPosition().y < terrainHeight) {
+			float diff = terrainHeight - player.GetPhysicalObj()->getPosition().y;
+			if(diff > VCAP) {
+				player.GetPhysicalObj()->changePositionY(VCAP * diff);
+				player.GetPhysicalObj()->acceleration.y = 0.0f;
+				player.GetPhysicalObj()->velocity.y = 0.0f;
+			} else {
+				player.GetPhysicalObj()->setPositionY(terrainHeight);
+			}
+			player.GetPhysicalObj()->acceleration.y = 0.0f;
+		} else if(player.GetPhysicalObj()->getPosition().y > terrainHeight + 0.1) {
+			player.GetPhysicalObj()->acceleration.y = -9.81f;
+		} else {
+			player.GetPhysicalObj()->acceleration.y = 0;
+		}
+
+		terrainHeight = terrain.getHeight(player.GetCamera()->getPosition());
+
+		if(player.GetPhysicalObj()->getPosition().y > terrainHeight) {
+			player.GetPhysicalObj()->setOnGround(false);
+		} else {
+			player.GetPhysicalObj()->setOnGround(true);
+		}
+
+		plane.draw(ourShader, &camera, width, height);
+                test_npc.GetPhysicalObj()->draw(ourShader, &camera, width, height);
+>>>>>>> ee0cdbed15f516a824f9ca01ef7f65636bbd8981
 
 		plane.draw(&ourShader, &camera, width, height);
 		
@@ -220,6 +285,21 @@ int main()
 		//plane.changeRotationY(3.0f);
 		//plane.changeRotationZ(3.0f);
 
+		glm::vec3 player_stalk_vec(0.0f, 0.0f, 0.0f);
+
+		glm::vec3 player_pos = player.GetPhysicalObj()->getPosition();
+		glm::vec3 stalker_pos = test_npc.GetPhysicalObj()->getPosition();
+
+		player_stalk_vec = player_pos - stalker_pos;
+		player_stalk_vec = normalize(player_stalk_vec);
+		// if(player_pos.x > stalker_pos.x) player_stalk_vec.x = 1.0f;
+		// if(player_pos.x < stalker_pos.x) player_stalk_vec.x = -1.0f;
+		// if(player_pos.y > stalker_pos.y) player_stalk_vec.y = 1.0f;
+		// if(player_pos.y < stalker_pos.y) player_stalk_vec.y = -1.0f;
+		// if(player_pos.z > stalker_pos.z) player_stalk_vec.z = 1.0f;
+		// if(player_pos.z < stalker_pos.z) player_stalk_vec.z = -1.0f;
+
+		test_npc.GetPhysicalObj()->changePosition(player_stalk_vec * 10.0f);
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
 	}

@@ -9,7 +9,9 @@ private:
   std::string filename;
  public:
   FileSound(SoundEngine*, ALuint *, std::string);
+  FileSound();
   void Play();
+  void PlayToEnd();
 };
 
 #endif
