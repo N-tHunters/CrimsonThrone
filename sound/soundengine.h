@@ -15,6 +15,7 @@ class SoundEngine {
   ALCcontext *openALContext;
  public:
   SoundEngine();
+  ~SoundEngine();
 };
 
 #endif
