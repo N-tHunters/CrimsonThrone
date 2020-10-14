@@ -1,3 +1,6 @@
+#ifndef TERRAIN_H
+#define TERRAIN_H
+
 #include "physicalObj.h"
 #include "../render/shaderLoader.h"
 #include "../render/camera.h"
@@ -11,6 +14,8 @@ class Terrain {
 	PhysicalObj* obj;
 public:
 	Terrain(int, float);
-	void draw(Shader, Camera*, GLuint, GLuint);
+	void draw(Shader*, Camera*, GLuint, GLuint);
 	float getHeight(glm::vec3);
 };
+
+#endif

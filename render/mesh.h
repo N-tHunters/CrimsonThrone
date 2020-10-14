@@ -35,7 +35,7 @@ public:
 
 	void init(PhysicalObj*);
 
-	void draw(Shader, Camera*, GLuint, GLuint);
+	void draw(Shader*, Camera*, GLuint, GLuint);
 
 	void rotate(glm::vec3);
 

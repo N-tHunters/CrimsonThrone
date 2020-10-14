@@ -39,10 +39,20 @@
 #include "sound/filesound.h"
 #include "sound/voice.h"
 
+#include "UI/frame.h"
+
 glm::vec2 normalize(glm::vec2 vec) {
 	float d = sqrt(vec.x * vec.x + vec.y * vec.y);
 	vec.x /= d;
 	vec.y /= d;
+	return vec;
+}
+
+glm::vec3 normalize(glm::vec3 vec) {
+	float d = sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+	vec.x /= d;
+	vec.y /= d;
+	vec.z /= d;
 	return vec;
 }
 
@@ -98,7 +108,7 @@ int main()
 	glfwWindowHint(GLFW_MAXIMIZED, GL_TRUE);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "3O/\\0TAR >|<AbKA", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crimson Throne", nullptr, nullptr);
 
 	//printf("%i\n", m_viewport[1]);
 
@@ -128,53 +138,26 @@ int main()
 
 	// Build and compile our shader program
 	Shader ourShader("resources/shaders/vertex_shader.glsl", "resources/shaders/fragment_shader.glsl");
+	Shader GUIShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/GUI_fragment_shader.glsl");
+
 
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	Model planeModel = Model((char*)"resources/models/frog.obj");
 
-        NPC test_npc("test_npc", 10,
-                     new PhysicalObj(Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
-                     false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
-                     glm::vec3(0.0f, 0.0f, 0.0f), "frock"));
+    NPC test_npc("test_npc", 10,
+                 new PhysicalObj(Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
+                 false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
+                 glm::vec3(0.0f, 0.0f, 0.0f), "frock"));
 
 	Terrain terrain(100, 1.0f);
 	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel),
                                         false, true, false, glm::vec3(0.0f, 0.0f, 0.0f),
                                         glm::vec3(0.0f, 0.0f, 0.0f), "frog");
 
-	// TEST CODE START
+	float last_frame = clock();
+	float dt = 0.0f;
 
-	Shader GUIShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/GUI_fragment_shader.glsl");
-
-	std::vector<float> menuBox = {-0.9f,  0.9f, 0.0f,
-								  -0.9f, -0.9f, 0.0f,
-								   0.9f,  0.9f, 0.0f,
-								   0.9f, -0.9f, 0.0f};
-	std::vector<int> menuIndices = {0, 1, 2,
-									1, 2, 3};
-
-	GLuint VBO2, VAO2, EBO2;
-
-	glGenVertexArrays(1, &VAO2);
-	glGenBuffers(1, &VBO2);
-	glGenBuffers(1, &EBO2);
-
-	glBindVertexArray(VAO2);
-
-	glBindBuffer(GL_ARRAY_BUFFER, VBO2);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(menuBox[0]) * menuBox.size(), &(menuBox[0]), GL_STATIC_DRAW);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO2);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(menuIndices[0]) * menuIndices.size(), &(menuIndices[0]), GL_STATIC_DRAW);
-
-	// Position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-
-	glBindVertexArray(0);
-
-	// TEST CODE END
-
+	Frame test_frame(-0.9f, -0.9f, 1.8f, 1.8f, "resources/textures/frog.jpg");
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -206,96 +189,45 @@ int main()
 		// Clear the color buffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		terrain.draw(ourShader, &camera, width, height);
-		float terrainHeight = terrain.getHeight(player.GetCamera()->getPosition());
-
-		float Xchange = speed.x + speedSide.x;
-
-		player.GetPhysicalObj()->changePositionX(Xchange);
-
-		if(player.GetPhysicalObj()->getPosition().y < terrainHeight) {
-			float diff = terrainHeight - player.GetPhysicalObj()->getPosition().y;
-			if(diff > VCAP) {
-				player.GetPhysicalObj()->changePositionY(diff * VCAP);
-				player.GetPhysicalObj()->acceleration.y = 0.0f;
-				player.GetPhysicalObj()->velocity.y = 0.0f;
-			} else {
-				player.GetPhysicalObj()->setPositionY(terrainHeight);
-			}
-			player.GetPhysicalObj()->acceleration.y = 0.0f;
-		} else if(player.GetPhysicalObj()->getPosition().y > terrainHeight + 0.1) {
-			player.GetPhysicalObj()->acceleration.y = -9.81f;
-		} else {
-			player.GetPhysicalObj()->acceleration.y = 0;
-		}
-
-		float Ychange = speed.y + speedSide.y;
-
-		player.GetPhysicalObj()->changePositionZ(Ychange);
-
-		if(player.GetPhysicalObj()->getPosition().y < terrainHeight) {
-			float diff = terrainHeight - player.GetPhysicalObj()->getPosition().y;
-			if(diff > VCAP) {
-				player.GetPhysicalObj()->changePositionY(VCAP * diff);
-				player.GetPhysicalObj()->acceleration.y = 0.0f;
-				player.GetPhysicalObj()->velocity.y = 0.0f;
-			} else {
-				player.GetPhysicalObj()->setPositionY(terrainHeight);
-			}
-			player.GetPhysicalObj()->acceleration.y = 0.0f;
-		} else if(player.GetPhysicalObj()->getPosition().y > terrainHeight + 0.1) {
-			player.GetPhysicalObj()->acceleration.y = -9.81f;
-		} else {
-			player.GetPhysicalObj()->acceleration.y = 0;
-		}
-
-		terrainHeight = terrain.getHeight(player.GetCamera()->getPosition());
-
-		if(player.GetPhysicalObj()->getPosition().y > terrainHeight) {
-			player.GetPhysicalObj()->setOnGround(false);
-		} else {
-			player.GetPhysicalObj()->setOnGround(true);
-		}
-
-		plane.draw(ourShader, &camera, width, height);
-                test_npc.GetPhysicalObj()->draw(ourShader, &camera, width, height);
-
-		GLint k = glGetUniformLocation(GUIShader.Program, "time");
 		
-		GUIShader.Use();
-		
-		glUniform1f(k, clock() / 10000.0f);
+		player.GetPhysicalObj()->collideTerrain(&terrain, speed + speedSide, VCAP);
 
-		glBindVertexArray(VAO2);
-		glDrawElements(GL_TRIANGLES, menuIndices.size(), GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
+		terrain.draw(&ourShader, &camera, width, height);
 
+		plane.draw(&ourShader, &camera, width, height);
 
-		player.GetPhysicalObj()->update();
-		player.GetCamera()->setPosition(player.GetPhysicalObj()->getPosition());
+		test_npc.GetPhysicalObj()->draw(&ourShader, &camera, width, height);
+
+		test_frame.draw(&GUIShader);
+
+		//player.GetPhysicalObj()->update(0.01f);
+		plane.collideTerrain(&terrain, glm::vec2(0.0f, 0.0f), VCAP);
+		player.Update(dt);
+		plane.update(dt);
+		//player.GetCamera()->setPosition(player.GetPhysicalObj()->getPosition());
 
 		//plane2.draw(ourShader, &camera);
-		plane.changeRotationX(9.0f);
-		plane.changeRotationY(3.0f);
-		plane.changeRotationZ(3.0f);
+		//plane.changeRotationX(9.0f);
+		//plane.changeRotationY(3.0f);
+		//plane.changeRotationZ(3.0f);
 
-		glm::vec3 player_stalk_vec(0.0f, 0.0f, 0.0f);
+		glm::vec2 player_stalk_vec(0.0f, 0.0f);
 
 		glm::vec3 player_pos = player.GetPhysicalObj()->getPosition();
 		glm::vec3 stalker_pos = test_npc.GetPhysicalObj()->getPosition();
 
-		player_stalk_vec = player_pos - stalker_pos;
+		player_stalk_vec = glm::vec2(player_pos.x - stalker_pos.x, player_pos.z - stalker_pos.z);
 		player_stalk_vec = normalize(player_stalk_vec);
-		// if(player_pos.x > stalker_pos.x) player_stalk_vec.x = 1.0f;
-		// if(player_pos.x < stalker_pos.x) player_stalk_vec.x = -1.0f;
-		// if(player_pos.y > stalker_pos.y) player_stalk_vec.y = 1.0f;
-		// if(player_pos.y < stalker_pos.y) player_stalk_vec.y = -1.0f;
-		// if(player_pos.z > stalker_pos.z) player_stalk_vec.z = 1.0f;
-		// if(player_pos.z < stalker_pos.z) player_stalk_vec.z = -1.0f;
 
-		test_npc.GetPhysicalObj()->changePosition(player_stalk_vec * 10.0f);
+		test_npc.GetPhysicalObj()->collideTerrain(&terrain, player_stalk_vec * 0.03f, VCAP);
+		test_npc.GetPhysicalObj()->update(dt);
+
+		//test_npc.GetPhysicalObj()->changePosition(player_stalk_vec * 0.1f);
+
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
+		dt = (clock() - last_frame) / CLOCKS_PER_SEC * 10;
+		last_frame = clock();
 	}
 	glfwTerminate();
 	return 0;

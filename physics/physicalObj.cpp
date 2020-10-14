@@ -1,4 +1,5 @@
 #include "physicalObj.h"
+#include "terrain.h"
 
 PhysicalObj::PhysicalObj() {}
 
@@ -24,15 +25,15 @@ PhysicalObj::PhysicalObj(Mesh mesh, bool isActive, bool isVisible, bool isTransp
 	this->onGround = true;
 }
 
-void PhysicalObj::draw(Shader shader, Camera* camera, GLuint width, GLuint height) {
+void PhysicalObj::draw(Shader* shader, Camera* camera, GLuint width, GLuint height) {
 	if(this->isVisible) {
 		this->mesh.draw(shader, camera, width, height);
 	}
 }
 
-void PhysicalObj::update() {
-	this->position += this->velocity * 0.01f;
-	this->velocity += this->acceleration * 0.01f;
+void PhysicalObj::update(float dt) {
+	this->position += this->velocity * dt;
+	this->velocity += this->acceleration * dt;
 }
 
 glm::vec3 PhysicalObj::getPosition() {
@@ -147,4 +148,59 @@ void PhysicalObj::setOnGround(bool value) {
 
 bool PhysicalObj::getOnGround() {
 	return this->onGround;
+}
+
+void PhysicalObj::collideTerrain(Terrain* terrain, glm::vec2 movement, float VCAP) {
+
+	float terrainHeight = terrain->getHeight(this->getPosition());
+
+	float Xchange = movement.x;
+
+	this->changePositionX(Xchange);
+
+	if(this->getPosition().y < terrainHeight) {
+		float diff = terrainHeight - this->getPosition().y;
+		if(diff > VCAP) {
+			this->changePositionY(diff * VCAP);
+			this->acceleration.y = 0.0f;
+			this->velocity.y = 0.0f;
+			//this->changePositionX(-Xchange);
+		} else {
+			this->setPositionY(terrainHeight);
+		}
+		this->acceleration.y = 0.0f;
+	} else if(this->getPosition().y > terrainHeight + 0.1) {
+		this->acceleration.y = -9.81f;
+	} else {
+		this->acceleration.y = 0;
+	}
+
+	float Ychange = movement.y;
+
+	this->changePositionZ(Ychange);
+
+	if(this->getPosition().y < terrainHeight) {
+		float diff = terrainHeight - this->getPosition().y;
+		if(diff > VCAP) {
+			this->changePositionY(VCAP * diff);
+			this->acceleration.y = 0.0f;
+			this->velocity.y = 0.0f;
+			//this->changePositionZ(-Ychange);
+		} else {
+			this->setPositionY(terrainHeight);
+		}
+		this->acceleration.y = 0.0f;
+	} else if(this->getPosition().y > terrainHeight + 0.1) {
+		this->acceleration.y = -9.81f;
+	} else {
+		this->acceleration.y = 0;
+	}
+
+	terrainHeight = terrain->getHeight(this->getPosition());
+
+	if(this->getPosition().y > terrainHeight) {
+		this->setOnGround(false);
+	} else {
+		this->setOnGround(true);
+	}
 }

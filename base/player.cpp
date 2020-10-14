@@ -9,8 +9,8 @@ Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * cam
 }
 
 
-void Player::Update() {
-  this->GetPhysicalObj()->update();
+void Player::Update(float dt) {
+  this->GetPhysicalObj()->update(dt);
   this->camera->setPosition(this->GetPhysicalObj()->getPosition());
 }
 
