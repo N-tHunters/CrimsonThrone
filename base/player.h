@@ -11,7 +11,7 @@ public:
   Player();
   Player(std::string, int, PhysicalObj *, Camera *);
 
-  void Update();
+  void Update(float);
 
   void SetCamera(Camera *);
   Camera * GetCamera();

@@ -1,6 +1,5 @@
 #include "mesh.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "imageLoader.h"
 #include <assimp/Importer.hpp>
 #include "model.h"
 #include "../physics/physicalObj.h"
@@ -23,11 +22,10 @@ Mesh::Mesh(string texturePath, Model* model) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	// Load, create texture and generate mipmaps
 	int width, height;
-	int channels;
-	unsigned char* image = stbi_load(texturePath.c_str(), &width, &height, &channels, STBI_rgb);
+	unsigned char* image = loadImage(texturePath, &width, &height);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	glGenerateMipmap(GL_TEXTURE_2D);
-	stbi_image_free(image);
+	freeImage(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	// Vertices
@@ -67,11 +65,10 @@ Mesh::Mesh(string texturePath, std::vector<GLfloat> vertices, std::vector<unsign
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	// Load, create texture and generate mipmaps
 	int width, height;
-	int channels;
-	unsigned char* image = stbi_load(texturePath.c_str(), &width, &height, &channels, STBI_rgb);
+	unsigned char* image = loadImage(texturePath, &width, &height);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	glGenerateMipmap(GL_TEXTURE_2D);
-	stbi_image_free(image);
+	freeImage(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	// Vertices

@@ -1,4 +1,5 @@
 #include "physicalObj.h"
+#include "terrain.h"
 
 PhysicalObj::PhysicalObj() {}
 
@@ -30,9 +31,9 @@ void PhysicalObj::draw(Shader* shader, Camera* camera, GLuint width, GLuint heig
 	}
 }
 
-void PhysicalObj::update() {
-	this->position += this->velocity * 0.01f;
-	this->velocity += this->acceleration * 0.01f;
+void PhysicalObj::update(float dt) {
+	this->position += this->velocity * dt;
+	this->velocity += this->acceleration * dt;
 }
 
 glm::vec3 PhysicalObj::getPosition() {
@@ -151,9 +152,6 @@ bool PhysicalObj::getOnGround() {
 
 void PhysicalObj::collideTerrain(Terrain* terrain, glm::vec2 movement, float VCAP) {
 
-	printf("X: %f\n", movement.x);
-	printf("Y: %f\n", movement.y);
-
 	float terrainHeight = terrain->getHeight(this->getPosition());
 
 	float Xchange = movement.x;
@@ -166,6 +164,7 @@ void PhysicalObj::collideTerrain(Terrain* terrain, glm::vec2 movement, float VCA
 			this->changePositionY(diff * VCAP);
 			this->acceleration.y = 0.0f;
 			this->velocity.y = 0.0f;
+			//this->changePositionX(-Xchange);
 		} else {
 			this->setPositionY(terrainHeight);
 		}
@@ -186,6 +185,7 @@ void PhysicalObj::collideTerrain(Terrain* terrain, glm::vec2 movement, float VCA
 			this->changePositionY(VCAP * diff);
 			this->acceleration.y = 0.0f;
 			this->velocity.y = 0.0f;
+			//this->changePositionZ(-Ychange);
 		} else {
 			this->setPositionY(terrainHeight);
 		}
@@ -203,9 +203,4 @@ void PhysicalObj::collideTerrain(Terrain* terrain, glm::vec2 movement, float VCA
 	} else {
 		this->setOnGround(true);
 	}
-
-	printf("X pos: %f\n", this->getPositionX());
-	printf("Y pos: %f\n", this->getPositionY());
-	printf("Z pos: %f\n", this->getPositionZ());
-	printf("-----------------\n");
 }

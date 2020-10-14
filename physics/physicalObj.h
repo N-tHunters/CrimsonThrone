@@ -6,7 +6,9 @@
 #include <glm/glm.hpp>
 #include "../render/camera.h"
 #include "../render/shaderLoader.h"
-#include "terrain.h"
+//#include "terrain.h"
+
+class Terrain;
 
 class PhysicalObj {
 	Mesh mesh;
@@ -54,7 +56,7 @@ public:
 	void changeRotationZ(float);
 
 	void draw(Shader*, Camera*, GLuint, GLuint);
-	void update();
+	void update(float);
 
 	string getName();
 

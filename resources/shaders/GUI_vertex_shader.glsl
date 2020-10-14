@@ -1,8 +1,8 @@
 #version 330 core
 layout (location = 0) in vec3 position;
-//layout (location = 2) in vec2 texCoord;
+layout (location = 2) in vec2 texCoord;
 
-//out vec2 TexCoord;
+out vec2 TexCoord;
 
 void main()
 {
@@ -11,5 +11,5 @@ void main()
     //float visibility = exp(-pow(distance * density, gradient));
     //visibility = clamp(visibility, 0.0, 1.0);
 
-    //TexCoord = vec2(texCoord.x, 1.0 - texCoord.y);
+    TexCoord = vec2(texCoord.x, 1.0 - texCoord.y);
 }

@@ -1,4 +1,4 @@
-CFLAGS := -std=c++17 -Werror -Isrc -Iinclude -g -m64 
+CFLAGS := -std=c++17 -Werror -Isrc -Iinclude -g -m64
 CXFLAGS := -Iinclude
 TARGET := main
 
@@ -14,6 +14,9 @@ PHYSICS_OBJS=$(patsubst %.cpp,%.o,$(PHYSICS_SRCS))
 SOUND_SRCS=$(wildcard sound/*.cpp)
 SOUND_OBJS=$(patsubst %.cpp,%.o,$(SOUND_SRCS))
 
+UI_SRCS=$(wildcard UI/*.cpp)
+UI_OBJS=$(patsubst %.cpp,%.o,$(UI_SRCS))
+
 OTH_SRCS=$(wildcard src/*.c)
 OTH_OBJS=$(patsubst %.c,%.o,$(OTH_SRCS))
 
@@ -28,10 +31,15 @@ ifeq ($(OS),Windows_NT)
 
 	CC := x86_64-w64-mingw32-g++
 	CCX := x86_64-w64-mingw32-gcc
+
+	REMOVABLE := $(TARGET).exe
+
 else
 	RM := rm
 	LFLAGS := -lGL -ldl -lglfw -lGLEW -lX11 -lpthread -lassimp -lopenal
 	SFLAGS :=
+
+	REMOVABLE := $(TARGET)
 
 	CC := g++
 	CCX := gcc
@@ -39,7 +47,7 @@ endif
 
 all: $(TARGET)
 
-$(TARGET): main.o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS)
+$(TARGET): main.o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(UI_OBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(LFLAGS) $(SFLAGS)
 
 %.o: %.cpp
@@ -49,7 +57,7 @@ $(TARGET): main.o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUN
 	$(CCX) $(CXFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(TARGET) $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) main.o main.exe main
+	$(RM) $(TARGET) $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(TARGET).o $(REMOVABLE)
 
 .PHONY: all clean
 
