@@ -18,3 +18,9 @@ SoundEngine::SoundEngine() {
     return;
   }
 }
+
+SoundEngine::~SoundEngine() {
+  alcMakeContextCurrent(this->openALContext);
+  alcDestroyContext(this->openALContext);
+  alcCloseDevice(this->openALDevice);
+}
