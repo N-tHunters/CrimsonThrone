@@ -34,8 +34,8 @@ public:
   virtual void Wear(Actor *);
   virtual void Use(Actor *);
 
-  virtual std::stringstream Save(Saver *);
-  virtual std::stringstream Save(Saver *, int);
+  virtual std::stringstream * Save(Saver *);
+  virtual std::stringstream * Save(Saver *, int);
 };
 
 #endif

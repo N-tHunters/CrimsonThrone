@@ -17,6 +17,6 @@ class HealPotion : public StackableItem {
 
   bool IsUsable();
 
-  std::stringstream Save(Saver *);
+  std::stringstream * Save(Saver *);
 };
 #endif

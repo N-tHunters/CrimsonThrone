@@ -13,6 +13,6 @@ void Gloves::Wear(Actor * target) {
   target->WearGloves(this);
 }
 
-std::stringstream Gloves::Save(Saver * saver) {
+std::stringstream * Gloves::Save(Saver * saver) {
   return Armor::Save(saver, ENTRY_GLOVES);
 }

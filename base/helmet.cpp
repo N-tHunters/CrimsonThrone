@@ -13,6 +13,6 @@ void Helmet::Wear(Actor * target) {
 }
 
 
-std::stringstream Helmet::Save(Saver * saver) {
+std::stringstream * Helmet::Save(Saver * saver) {
   return Armor::Save(saver, ENTRY_HELMET);
 }

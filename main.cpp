@@ -22,12 +22,24 @@
 #include "render/shaderLoader.h"
 #include "render/constants.h"
 #include "render/model.h"
+
 #include "physics/physicalObj.h"
 //#include "boundary.h"
 #include "physics/terrain.h"
+
 #include <math.h>
 #include <time.h>
+#include <ctime>
 #include "base/player.h"
+#include "base/npc.h"
+
+#include <stdio.h>
+
+#include "sound/soundengine.h"
+#include "sound/filesound.h"
+#include "sound/voice.h"
+
+#include "UI/frame.h"
 
 glm::vec2 normalize(glm::vec2 vec) {
 	float d = sqrt(vec.x * vec.x + vec.y * vec.y);
@@ -36,21 +48,33 @@ glm::vec2 normalize(glm::vec2 vec) {
 	return vec;
 }
 
+glm::vec3 normalize(glm::vec3 vec) {
+	float d = sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
+	vec.x /= d;
+	vec.y /= d;
+	vec.z /= d;
+	return vec;
+}
+
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
+
+// Global variabels
 glm::vec2 speed = glm::vec2(0.0f, 0.0f);
 
 float VCAP = 0.1f;
 
 Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 //PhysicalObj player = PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f));
-Player player("player", 10, PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f)), &camera);
+Player player("player", 10, new PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f)), &camera);
 
 glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 int direction = 1;
 float directionSide = 0;
 float velocity = 0.1f;
+
+SoundEngine sound_engine;
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -61,6 +85,19 @@ int main()
 	lastXPos = 0.0;
 	lastYPos = 0.0;
 	srand(time(0));
+
+	// Check openAL
+	ALuint source;
+	alGenSources(1, &source);
+	alSourcef(source, AL_PITCH, 1);
+	alSourcef(source, AL_GAIN, 1);
+	alSource3f(source, AL_POSITION, 0, 0, 0);
+	alSource3f(source, AL_VELOCITY, 0, 0, 0);
+	alSourcei(source, AL_LOOPING, AL_TRUE);
+
+	FileSound sound(&sound_engine, &source, "resources/sounds/happierburial.wav");
+	sound.Play();
+
 	// Init GLFW
 	glfwInit();
 	// Set all the required options for GLFW
@@ -71,10 +108,17 @@ int main()
 	glfwWindowHint(GLFW_MAXIMIZED, GL_TRUE);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "3O/\\0TAR >|<AbKA", nullptr, nullptr);
+	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crimson Throne", nullptr, nullptr);
+
+	//printf("%i\n", m_viewport[1]);
+
+//	GLuint width, height = 
+
 	glfwMakeContextCurrent(window);
 
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	// Set the required callback functions
 	glfwSetKeyCallback(window, key_callback);
@@ -83,32 +127,41 @@ int main()
 	glewExperimental = GL_TRUE;
 	// Initialize GLEW to setup the OpenGL Function pointers
 	glewInit();
+	
+	int width, height;
+	glfwGetWindowSize(window, &width, &height);
 
 	// Define the viewport dimensions
-	glViewport(0, 0, WIDTH, HEIGHT);
+	glViewport(0, 0, width, height);
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// Build and compile our shader program
 	Shader ourShader("resources/shaders/vertex_shader.glsl", "resources/shaders/fragment_shader.glsl");
+	Shader GUIShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/GUI_fragment_shader.glsl");
+
 
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	Model planeModel = Model((char*)"resources/models/frog.obj");
 
-	//Mesh plane = Mesh("resources/textures/stone.jpg", Plane.vertices, Plane.indices, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, -2.0f, 0.0f));
+    NPC test_npc("test_npc", 10,
+                 new PhysicalObj(Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
+                 false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
+                 glm::vec3(0.0f, 0.0f, 0.0f), "frock"));
 
-	Terrain terrain(100, 0.5f);
-	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel), false, true, false, glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "frog");
+	Terrain terrain(100, 1.0f);
+	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel),
+                                        false, true, false, glm::vec3(0.0f, 0.0f, 0.0f),
+                                        glm::vec3(0.0f, 0.0f, 0.0f), "frog");
 
+	float last_frame = clock();
+	float dt = 0.0f;
 
-	//PhysicalObj plane2 = PhysicalObj(Mesh("resources/textures/rock.png", &planeModel), false, true, false, glm::vec3(3.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-
-	// Create transformations
-
-	// Game loop
+	Frame test_frame(-0.9f, -0.9f, 1.8f, 1.8f, "resources/textures/frog.jpg");
 
 	while (!glfwWindowShouldClose(window))
 	{
+		
 		lastXPos = xpos;
 		lastYPos = ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
@@ -136,70 +189,45 @@ int main()
 		// Clear the color buffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		terrain.draw(ourShader, &camera);
-		float terrainHeight = terrain.getHeight(player.GetCamera()->getPosition());
+		
+		player.GetPhysicalObj()->collideTerrain(&terrain, speed + speedSide, VCAP);
 
-		float Xchange = speed.x + speedSide.x;
+		terrain.draw(&ourShader, &camera, width, height);
 
-		player.GetPhysicalObj()->changePositionX(Xchange);
+		plane.draw(&ourShader, &camera, width, height);
 
-		if(player.GetPhysicalObj()->getPosition().y < terrainHeight) {
-			float diff = terrainHeight - player.GetPhysicalObj()->getPosition().y;
-			if(diff > VCAP) {
-				player.GetPhysicalObj()->changePositionY(diff * VCAP);
-				player.GetPhysicalObj()->acceleration.y = 0.0f;
-				player.GetPhysicalObj()->velocity.y = 0.0f;
-			} else {
-				player.GetPhysicalObj()->setPositionY(terrainHeight);
-			}
-			player.GetPhysicalObj()->acceleration.y = 0.0f;
-		} else if(player.GetPhysicalObj()->getPosition().y > terrainHeight + 0.1) {
-			player.GetPhysicalObj()->acceleration.y = -9.81f;
-		} else {
-			player.GetPhysicalObj()->acceleration.y = 0;
-		}
+		test_npc.GetPhysicalObj()->draw(&ourShader, &camera, width, height);
 
-		float Ychange = speed.y + speedSide.y;
+		test_frame.draw(&GUIShader);
 
-		player.GetPhysicalObj()->changePositionZ(Ychange);
-
-		if(player.GetPhysicalObj()->getPosition().y < terrainHeight) {
-			float diff = terrainHeight - player.GetPhysicalObj()->getPosition().y;
-			if(diff > VCAP) {
-				player.GetPhysicalObj()->changePositionY(VCAP * diff);
-				player.GetPhysicalObj()->acceleration.y = 0.0f;
-				player.GetPhysicalObj()->velocity.y = 0.0f;
-			} else {
-				player.GetPhysicalObj()->setPositionY(terrainHeight);
-			}
-			player.GetPhysicalObj()->acceleration.y = 0.0f;
-		} else if(player.GetPhysicalObj()->getPosition().y > terrainHeight + 0.1) {
-			player.GetPhysicalObj()->acceleration.y = -9.81f;
-		} else {
-			player.GetPhysicalObj()->acceleration.y = 0;
-		}
-
-		terrainHeight = terrain.getHeight(player.GetCamera()->getPosition());
-
-		if(player.GetPhysicalObj()->getPosition().y > terrainHeight) {
-			player.GetPhysicalObj()->setOnGround(false);
-		} else {
-			player.GetPhysicalObj()->setOnGround(true);
-		}
-
-		plane.draw(ourShader, &camera);
-
-
-		player.GetPhysicalObj()->update();
-		player.GetCamera()->setPosition(player.GetPhysicalObj()->getPosition());
+		//player.GetPhysicalObj()->update(0.01f);
+		plane.collideTerrain(&terrain, glm::vec2(0.0f, 0.0f), VCAP);
+		player.Update(dt);
+		plane.update(dt);
+		//player.GetCamera()->setPosition(player.GetPhysicalObj()->getPosition());
 
 		//plane2.draw(ourShader, &camera);
-		plane.changeRotationX(9.0f);
-		plane.changeRotationY(3.0f);
-		plane.changeRotationZ(3.0f);
+		//plane.changeRotationX(9.0f);
+		//plane.changeRotationY(3.0f);
+		//plane.changeRotationZ(3.0f);
+
+		glm::vec2 player_stalk_vec(0.0f, 0.0f);
+
+		glm::vec3 player_pos = player.GetPhysicalObj()->getPosition();
+		glm::vec3 stalker_pos = test_npc.GetPhysicalObj()->getPosition();
+
+		player_stalk_vec = glm::vec2(player_pos.x - stalker_pos.x, player_pos.z - stalker_pos.z);
+		player_stalk_vec = normalize(player_stalk_vec);
+
+		test_npc.GetPhysicalObj()->collideTerrain(&terrain, player_stalk_vec * 0.03f, VCAP);
+		test_npc.GetPhysicalObj()->update(dt);
+
+		//test_npc.GetPhysicalObj()->changePosition(player_stalk_vec * 0.1f);
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
+		dt = (clock() - last_frame) / CLOCKS_PER_SEC * 10;
+		last_frame = clock();
 	}
 	glfwTerminate();
 	return 0;
@@ -258,3 +286,4 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		player.GetPhysicalObj()->jump();//velocity.y = 10.0f;
 	}
 }
+

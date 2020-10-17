@@ -20,8 +20,8 @@ bool HealPotion::IsUsable() {
   return true;
 }
 
-std::stringstream HealPotion::Save(Saver * saver) {
-  std::stringstream ss = StackableItem::Save(saver, ENTRY_HEALPOTION);
-  saver->SaveInt(&ss, this->heal_amount);
+std::stringstream * HealPotion::Save(Saver * saver) {
+  std::stringstream * ss = StackableItem::Save(saver, ENTRY_HEALPOTION);
+  saver->SaveInt(ss, this->heal_amount);
   return ss;
 }

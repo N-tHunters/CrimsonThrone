@@ -36,7 +36,7 @@ class Actor {
 
   std::string name;
 
-  PhysicalObj obj;
+  PhysicalObj * obj;
 
   
   // Helper functions
@@ -44,7 +44,7 @@ class Actor {
 
  public:
   Actor();
-  Actor(std::string, int, PhysicalObj);
+  Actor(std::string, int, PhysicalObj *);
   // Getters
   int GetHealth();
   int GetMaxHealth();
@@ -73,7 +73,7 @@ class Actor {
   void SetBoots(Boots*);
   void SetLeggins(Leggins*);
 
-  void SetPhysicalObj(PhysicalObj);
+  void SetPhysicalObj(PhysicalObj *);
 
   void WearWeapon(Weapon*);
   void WearHelmet(Helmet*);
@@ -97,6 +97,6 @@ class Actor {
   StackableItem * FindCompatibleItem(Item *);
   int GetItemIndex(Item *);
 
-  std::stringstream Save(Saver *);
+  std::stringstream * Save(Saver *);
 };
 #endif

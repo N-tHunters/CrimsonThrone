@@ -25,13 +25,13 @@ void StackableItem::Stack(StackableItem * item) {
   item->SetCount(0);
 }
 
-std::stringstream StackableItem::Save(Saver * saver, int entry) {
-  std::stringstream ss = Item::Save(saver, entry);
-  saver->SaveInt(&ss, this->count);
+std::stringstream * StackableItem::Save(Saver * saver, int entry) {
+  std::stringstream * ss = Item::Save(saver, entry);
+  saver->SaveInt(ss, this->count);
 
   return ss;
 }
 
-std::stringstream StackableItem::Save(Saver * saver) {
+std::stringstream * StackableItem::Save(Saver * saver) {
   return this->Save(saver, ENTRY_STACKABLE);
 }

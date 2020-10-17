@@ -18,7 +18,7 @@ Actor::Actor() {
   }
 }
 
-Actor::Actor(std::string name, int max_health, PhysicalObj obj) : Actor() {
+Actor::Actor(std::string name, int max_health, PhysicalObj * obj) : Actor() {
   this->name = name;
   this->max_health = max_health;
   this->health = max_health;
@@ -63,7 +63,7 @@ Chestplate* Actor::GetChestplate() {
 }
 
 PhysicalObj* Actor::GetPhysicalObj() {
-  return &this->obj;
+  return this->obj;
 }
 
 // Setters
@@ -103,7 +103,7 @@ void Actor::SetLeggins(Leggins* leggins) {
   this->leggins = leggins;
 }
 
-void Actor::SetPhysicalObj(PhysicalObj obj) {
+void Actor::SetPhysicalObj(PhysicalObj* obj) {
   this->obj = obj;
 }
 
@@ -242,22 +242,22 @@ int Actor::GetItemIndex(Item * item) {
 }
 
 
-std::stringstream Actor::Save(Saver * saver) {
-  std::stringstream ss;
+std::stringstream * Actor::Save(Saver * saver) {
+  std::stringstream * ss = new std::stringstream();
 
-  saver->SaveString(&ss, this->name);
-  saver->SaveInt(&ss, health);
-  saver->SaveInt(&ss, max_health);
+  saver->SaveString(ss, this->name);
+  saver->SaveInt(ss, health);
+  saver->SaveInt(ss, max_health);
   for(int i = 0; i < INVENTORY_SIZE; i++) {
-    saver->SaveItem(&ss, this->inventory[i]);
+    saver->SaveItem(ss, this->inventory[i]);
   }
 
-  saver->SaveItem(&ss, this->weapon);
-  saver->SaveItem(&ss, this->helmet);
-  saver->SaveItem(&ss, this->boots);
-  saver->SaveItem(&ss, this->gloves);
-  saver->SaveItem(&ss, this->chestplate);
-  saver->SaveItem(&ss, this->leggins);
+  saver->SaveItem(ss, this->weapon);
+  saver->SaveItem(ss, this->helmet);
+  saver->SaveItem(ss, this->boots);
+  saver->SaveItem(ss, this->gloves);
+  saver->SaveItem(ss, this->chestplate);
+  saver->SaveItem(ss, this->leggins);
 
   return ss;
 }

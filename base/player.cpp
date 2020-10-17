@@ -2,15 +2,15 @@
 
 Player::Player() : Actor() {}
 
-Player::Player(std::string name, int max_health, PhysicalObj obj, Camera * camera) :
+Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * camera) :
   Actor(name, max_health, obj)
 {
   this->camera = camera;
 }
 
 
-void Player::Update() {
-  this->GetPhysicalObj()->update();
+void Player::Update(float dt) {
+  this->GetPhysicalObj()->update(dt);
   this->camera->setPosition(this->GetPhysicalObj()->getPosition());
 }
 
