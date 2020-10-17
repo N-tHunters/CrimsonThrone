@@ -48,6 +48,8 @@ class Actor {
   // Getters
   int GetHealth();
   int GetMaxHealth();
+  int * GetHealthPtr();
+  int * GetMaxHealthPtr();
 
   std::string GetName();
 

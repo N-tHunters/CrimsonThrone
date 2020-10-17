@@ -34,8 +34,16 @@ int Actor::GetHealth() {
   return this->health;
 }
 
+int * Actor::GetHealthPtr() {
+  reteurn &this->health;
+}
+
 int Actor::GetMaxHealth() {
   return this->max_health;
+}
+
+int * Actor::GetMaxHealthPtr() {
+  return &this->max_health;
 }
 
 Weapon* Actor::GetWeapon() {
