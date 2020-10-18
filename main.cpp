@@ -156,8 +156,12 @@ int main()
 
 	float last_frame = clock();
 	float dt = 0.0f;
+	int maxDt = 1;
 
-	Frame test_frame(-0.9f, -0.9f, 1.8f, 1.8f, "resources/textures/frog.jpg");
+	int hp = player.GetHealth();
+	int maxHp = player.GetMaxHealth();
+
+	Bar test_frame(glm::vec4(-0.9f, -0.9f, 0.5f, 0.1f), &hp, &maxHp, glm::vec3(255, 0, 0));
 
 	while (!glfwWindowShouldClose(window))
 	{

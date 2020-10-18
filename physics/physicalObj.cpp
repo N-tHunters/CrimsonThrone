@@ -198,7 +198,7 @@ void PhysicalObj::collideTerrain(Terrain* terrain, glm::vec2 movement, float VCA
 
 	terrainHeight = terrain->getHeight(this->getPosition());
 
-	if(this->getPosition().y > terrainHeight) {
+	if(this->getPosition().y - 0.1f > terrainHeight) {
 		this->setOnGround(false);
 	} else {
 		this->setOnGround(true);

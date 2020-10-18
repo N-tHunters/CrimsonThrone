@@ -20,26 +20,26 @@ class Saver;
 
 class Actor {
  private:
-  int health;
-  int max_health;
+	int health;
+	int max_health;
 
   std::vector<Item *> inventory;
 
-  Weapon* weapon;
+	Weapon* weapon;
 
-  Helmet* helmet;
-  Boots* boots;
-  Gloves* gloves;
-  Chestplate* chestplate;
-  Leggins* leggins;
+	Helmet* helmet;
+	Boots* boots;
+	Gloves* gloves;
+	Chestplate* chestplate;
+	Leggins* leggins;
 
-  std::string name;
+	std::string name;
 
-  PhysicalObj * obj;
+	PhysicalObj * obj;
 
-  
-  // Helper functions
-  void JustifyHealth(); // Check if health is over max_health and justify it
+	
+	// Helper functions
+	void JustifyHealth(); // Check if health is over max_health and justify it
 
  public:
   Actor();
