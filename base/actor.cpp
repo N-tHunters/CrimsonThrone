@@ -12,11 +12,7 @@
 #include "saver.h"
 
 
-Actor::Actor() {
-  for(int i = 0; i < INVENTORY_SIZE; i++) {
-    this->inventory[i] = nullptr;
-  }
-}
+Actor::Actor() {}
 
 Actor::Actor(std::string name, int max_health, PhysicalObj * obj) : Actor() {
   this->name = name;
@@ -34,8 +30,16 @@ int Actor::GetHealth() {
   return this->health;
 }
 
+int * Actor::GetHealthPtr() {
+  return &this->health;
+}
+
 int Actor::GetMaxHealth() {
   return this->max_health;
+}
+
+int * Actor::GetMaxHealthPtr() {
+  return &this->max_health;
 }
 
 Weapon* Actor::GetWeapon() {
@@ -170,7 +174,7 @@ void Actor::DealDamage(int amount) {
 Item * Actor::GetItemAt(int index) {
   if (index < 0)
     return nullptr;
-  if (index >= INVENTORY_SIZE)
+  if (index >= this->GetInventorySize())
     return nullptr;
   return this->inventory[index];
 }
@@ -179,14 +183,14 @@ Item * Actor::GetItemAt(int index) {
 void Actor::SetItemAt(int index, Item * item) {
   if (index < 0)
     return;
-  if (index >= INVENTORY_SIZE)
+  if (index >= this->GetInventorySize())
     return;
   this->inventory[index] = item;
 }
 
 // Get first empty cell of inventory or -1 if inventory is full
 int Actor::GetEmptyCell() {
-  for(int i = 0; i < INVENTORY_SIZE; i++) {
+  for(int i = 0; i < this->GetInventorySize(); i++) {
     if(this->inventory[i] == nullptr) {
       return i;
     }
@@ -196,7 +200,7 @@ int Actor::GetEmptyCell() {
 
 // Find item can be stacked with supplied
 StackableItem * Actor::FindCompatibleItem(Item * item) {
-  for(int i = 0; i < INVENTORY_SIZE; i++) {
+  for(int i = 0; i < this->GetInventorySize(); i++) {
     if(this->inventory[i] != nullptr &&
        this->inventory[i]->IsStackable() &&
        this->inventory[i]->GetName() == item->GetName())
@@ -217,23 +221,31 @@ bool Actor::PickupItem(Item * item) {
     }
   }
   int index = this->GetEmptyCell();
-  if (index < 0)
-    return false;
-  this->SetItemAt(index, item);
+  if (index < 0) {
+    this->inventory.push_back(item);
+  } else 
+    this->SetItemAt(index, item);
   return true;
+}
+
+int Actor::GetInventorySize() {
+  return this->inventory.size();
 }
 
 // Delete item from inventory
 void Actor::DeleteItem(Item * item) {
   int index = this->GetItemIndex(item);
-  if (index != -1)
-    this->inventory[index] = nullptr;
+  if (index >= this->GetInventorySize())
+    return;
+  if (index < 0)
+    return;
+  this->inventory.erase(this->inventory.begin() + index);
 }
 
 
 // Get index of item or -1
 int Actor::GetItemIndex(Item * item) {
-  for(int i = 0; i < INVENTORY_SIZE; i ++) {
+  for(int i = 0; i < this->GetInventorySize(); i ++) {
     if(this->inventory[i] == item) {
       return i;
     }
@@ -248,8 +260,9 @@ std::stringstream * Actor::Save(Saver * saver) {
   saver->SaveString(ss, this->name);
   saver->SaveInt(ss, health);
   saver->SaveInt(ss, max_health);
-  for(int i = 0; i < INVENTORY_SIZE; i++) {
-    saver->SaveItem(ss, this->inventory[i]);
+  for(int i = 0; i < this->GetInventorySize(); i++) {
+    if (this->inventory[i] != nullptr)
+      saver->SaveItem(ss, this->inventory[i]);
   }
 
   saver->SaveItem(ss, this->weapon);

@@ -1,10 +1,9 @@
 #ifndef ACTOR_H
 #define ACTOR_H
 
-#define INVENTORY_SIZE 100
-
 #include <string>
 #include <sstream>
+#include <vector>
 
 #include "../physics/physicalObj.h"
 
@@ -21,26 +20,26 @@ class Saver;
 
 class Actor {
  private:
-  int health;
-  int max_health;
+	int health;
+	int max_health;
 
-  Item* inventory[INVENTORY_SIZE];
+  std::vector<Item *> inventory;
 
-  Weapon* weapon;
+	Weapon* weapon;
 
-  Helmet* helmet;
-  Boots* boots;
-  Gloves* gloves;
-  Chestplate* chestplate;
-  Leggins* leggins;
+	Helmet* helmet;
+	Boots* boots;
+	Gloves* gloves;
+	Chestplate* chestplate;
+	Leggins* leggins;
 
-  std::string name;
+	std::string name;
 
-  PhysicalObj * obj;
+	PhysicalObj * obj;
 
-  
-  // Helper functions
-  void JustifyHealth(); // Check if health is over max_health and justify it
+	
+	// Helper functions
+	void JustifyHealth(); // Check if health is over max_health and justify it
 
  public:
   Actor();
@@ -48,6 +47,8 @@ class Actor {
   // Getters
   int GetHealth();
   int GetMaxHealth();
+  int * GetHealthPtr();
+  int * GetMaxHealthPtr();
 
   std::string GetName();
 
@@ -88,6 +89,7 @@ class Actor {
   void Heal(int); // Add health maximum to max_health
 
   // Functions to work with Inventory
+  int GetInventorySize();
   Item * GetItemAt(int);
   void SetItemAt(int, Item *);
   int GetEmptyCell();
