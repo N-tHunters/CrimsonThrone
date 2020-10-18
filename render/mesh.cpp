@@ -114,7 +114,6 @@ void Mesh::draw(Shader* shader, Camera* camera, GLuint width, GLuint height) {
 	GLint viewLoc = glGetUniformLocation(shader->Program, "view");
 	GLint projLoc = glGetUniformLocation(shader->Program, "projection");
 	GLint camRotLoc = glGetUniformLocation(shader->Program, "cameraRot");
-	GLint skyColor = glGetUniformLocation(shader->Program, "skyColor");
 
 
 	glActiveTexture(GL_TEXTURE0);
@@ -126,7 +125,6 @@ void Mesh::draw(Shader* shader, Camera* camera, GLuint width, GLuint height) {
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(camRotLoc, 1, GL_FALSE, glm::value_ptr(cameraRot));
-	glUniformMatrix4fv(skyColor, 1, GL_FALSE, glm::value_ptr(glm::vec3(1.0f, 0.0f, 0.0f)));
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
