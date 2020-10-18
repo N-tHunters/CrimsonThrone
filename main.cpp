@@ -204,16 +204,10 @@ int main()
 
 		test_frame.draw(&GUIShader);
 
-		//player.GetPhysicalObj()->update(0.01f);
 		plane.collideTerrain(&terrain, glm::vec2(0.0f, 0.0f), VCAP);
+		
 		player.Update(dt);
 		plane.update(dt);
-		//player.GetCamera()->setPosition(player.GetPhysicalObj()->getPosition());
-
-		//plane2.draw(ourShader, &camera);
-		//plane.changeRotationX(9.0f);
-		//plane.changeRotationY(3.0f);
-		//plane.changeRotationZ(3.0f);
 
 		glm::vec2 player_stalk_vec(0.0f, 0.0f);
 
@@ -225,8 +219,6 @@ int main()
 
 		test_npc.GetPhysicalObj()->collideTerrain(&terrain, player_stalk_vec * 0.03f, VCAP);
 		test_npc.GetPhysicalObj()->update(dt);
-
-		//test_npc.GetPhysicalObj()->changePosition(player_stalk_vec * 0.1f);
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);

@@ -222,6 +222,7 @@ Bar::Bar(glm::vec4 rect, int* value, int* maxValue, glm::vec3 color) : Frame(rec
 }
 
 void Bar::draw(Shader* shader) {
+	glClear(GL_DEPTH_BUFFER_BIT);
 
 	this->vertices[10] = this->rect.x + this->rect.z * (*this->value / *this->maxValue);
 	this->vertices[15] = this->rect.x + this->rect.z * (*this->value / *this->maxValue);
@@ -242,6 +243,8 @@ void Bar::draw(Shader* shader) {
 }
 
 Container::Container(glm::vec4 rect, Frame* frame, std::string texturePath): Frame(rect) {
+
+	this->frame = frame;
 
 	vertices = {rect.x,     	 rect.y + rect.w, 0.0f, 0.0f, 1.0f,
 				rect.x,     	 rect.y,     	  0.0f, 0.0f, 0.0f,
@@ -290,6 +293,7 @@ Container::Container(glm::vec4 rect, Frame* frame, std::string texturePath): Fra
 }
 
 void Container::draw(Shader* shader) {
+	glClear(GL_DEPTH_BUFFER_BIT);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -300,4 +304,8 @@ void Container::draw(Shader* shader) {
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+
+	this->frame.draw(shader);
 }
+
+List::List(glm::vec4 rect, std::vector<T*>, std::string, int, int)
