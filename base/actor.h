@@ -1,10 +1,9 @@
 #ifndef ACTOR_H
 #define ACTOR_H
 
-#define INVENTORY_SIZE 100
-
 #include <string>
 #include <sstream>
+#include <vector>
 
 #include "../physics/physicalObj.h"
 
@@ -24,7 +23,7 @@ class Actor {
   int health;
   int max_health;
 
-  Item* inventory[INVENTORY_SIZE];
+  std::vector<Item *> inventory;
 
   Weapon* weapon;
 
@@ -90,6 +89,7 @@ class Actor {
   void Heal(int); // Add health maximum to max_health
 
   // Functions to work with Inventory
+  int GetInventorySize();
   Item * GetItemAt(int);
   void SetItemAt(int, Item *);
   int GetEmptyCell();
