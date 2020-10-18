@@ -1,10 +1,9 @@
 #ifndef ACTOR_H
 #define ACTOR_H
 
-#define INVENTORY_SIZE 100
-
 #include <string>
 #include <sstream>
+#include <vector>
 
 #include "../physics/physicalObj.h"
 
@@ -24,7 +23,7 @@ class Actor {
 	int health;
 	int max_health;
 
-	Item* inventory[INVENTORY_SIZE];
+  std::vector<Item *> inventory;
 
 	Weapon* weapon;
 
@@ -43,60 +42,63 @@ class Actor {
 	void JustifyHealth(); // Check if health is over max_health and justify it
 
  public:
-	Actor();
-	Actor(std::string, int, PhysicalObj *);
-	// Getters
-	int GetHealth();
-	int GetMaxHealth();
+  Actor();
+  Actor(std::string, int, PhysicalObj *);
+  // Getters
+  int GetHealth();
+  int GetMaxHealth();
+  int * GetHealthPtr();
+  int * GetMaxHealthPtr();
 
-	std::string GetName();
+  std::string GetName();
 
-	Weapon* GetWeapon();
-	Helmet* GetHelmet();
-	Gloves* GetGloves();
-	Chestplate* GetChestplate();
-	Boots* GetBoots();
-	Leggins* GetLeggins();
+  Weapon* GetWeapon();
+  Helmet* GetHelmet();
+  Gloves* GetGloves();
+  Chestplate* GetChestplate();
+  Boots* GetBoots();
+  Leggins* GetLeggins();
 
-	PhysicalObj* GetPhysicalObj();
+  PhysicalObj* GetPhysicalObj();
 
-	// Setters
-	void SetHealth(int);
-	void SetMaxHealth(int);
-	
-	void SetName(std::string);
+  // Setters
+  void SetHealth(int);
+  void SetMaxHealth(int);
+  
+  void SetName(std::string);
 
-	void SetWeapon(Weapon*);
-	void SetHelmet(Helmet*);
-	void SetGloves(Gloves*);
-	void SetChestplate(Chestplate*);
-	void SetBoots(Boots*);
-	void SetLeggins(Leggins*);
+  void SetWeapon(Weapon*);
+  void SetHelmet(Helmet*);
+  void SetGloves(Gloves*);
+  void SetChestplate(Chestplate*);
+  void SetBoots(Boots*);
+  void SetLeggins(Leggins*);
 
-	void SetPhysicalObj(PhysicalObj *);
+  void SetPhysicalObj(PhysicalObj *);
 
-	void WearWeapon(Weapon*);
-	void WearHelmet(Helmet*);
-	void WearGloves(Gloves*);
-	void WearChestplate(Chestplate*);
-	void WearBoots(Boots*);
-	void WearLeggins(Leggins*);
+  void WearWeapon(Weapon*);
+  void WearHelmet(Helmet*);
+  void WearGloves(Gloves*);
+  void WearChestplate(Chestplate*);
+  void WearBoots(Boots*);
+  void WearLeggins(Leggins*);
 
-	int GetDefence(); // Get summary defence of all armor
-	int GetDamage(); // Get damage (shortcut for .GetWeapon().GetDamage)
-	void DealDamage(int); // Substract health
-	void Heal(int); // Add health maximum to max_health
+  int GetDefence(); // Get summary defence of all armor
+  int GetDamage(); // Get damage (shortcut for .GetWeapon().GetDamage)
+  void DealDamage(int); // Substract health
+  void Heal(int); // Add health maximum to max_health
 
-	// Functions to work with Inventory
-	Item * GetItemAt(int);
-	void SetItemAt(int, Item *);
-	int GetEmptyCell();
-	bool PickupItem(Item *);
-	void DeleteItem(Item *);
+  // Functions to work with Inventory
+  int GetInventorySize();
+  Item * GetItemAt(int);
+  void SetItemAt(int, Item *);
+  int GetEmptyCell();
+  bool PickupItem(Item *);
+  void DeleteItem(Item *);
 
-	StackableItem * FindCompatibleItem(Item *);
-	int GetItemIndex(Item *);
+  StackableItem * FindCompatibleItem(Item *);
+  int GetItemIndex(Item *);
 
-	std::stringstream * Save(Saver *);
+  std::stringstream * Save(Saver *);
 };
 #endif
