@@ -57,3 +57,10 @@ std::stringstream * Item::Save(Saver * saver, int entry) {
   
   return ss;
 }
+
+std::vector<std::string *> * Item::Describe() {
+  std::vector<std::string *> * description;
+  description->push_back(new std::string("Item"));
+  description->push_back(&this->name);
+  return description;
+}

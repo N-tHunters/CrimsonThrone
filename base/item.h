@@ -15,8 +15,6 @@ private:
 
   PhysicalObj obj;
 
-  std::string LogDescribe();
-
 public:
   Item(std::string, PhysicalObj);
   Item(std::string);
@@ -36,6 +34,8 @@ public:
 
   virtual std::stringstream * Save(Saver *);
   virtual std::stringstream * Save(Saver *, int);
+
+  std::vector<std::string *> * Describe();
 };
 
 #endif
