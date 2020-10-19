@@ -7,13 +7,13 @@
 
 
 
-Item::Item(std::string name, PhysicalObj obj) {
+Item::Item(std::string name, PhysicalObj * obj) {
   this->name = name;
   this->obj = obj;
 }
 
 Item::Item(std::string name) :
-  Item(name, PhysicalObj()) {};
+  Item(name, new PhysicalObj()) {};
 
 Item::Item() {}
 
@@ -22,7 +22,7 @@ std::string Item::GetName() {
 }
 
 PhysicalObj* Item::GetPhysicalObj() {
-  return &this->obj;
+  return this->obj;
 }
 
 void Item::SetName(std::string name) {
