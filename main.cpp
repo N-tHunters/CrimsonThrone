@@ -32,6 +32,7 @@
 #include <ctime>
 #include "base/player.h"
 #include "base/npc.h"
+#include "base/item.h"
 
 #include <stdio.h>
 
@@ -73,6 +74,9 @@ glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 int direction = 1;
 float directionSide = 0;
 float velocity = 0.1f;
+
+Model hammer = Model((char*)"resources/models/hammah.obj");
+Item hammah = Item("test_item", PhysicalObj(Mesh("resources/textures/rock.png", &hammer), false, true, false, glm::vec3(10.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "hammah!"));
 
 SoundEngine sound_engine;
 
@@ -145,7 +149,7 @@ int main()
 	Model planeModel = Model((char*)"resources/models/frog.obj");
 
     NPC test_npc("test_npc", 10,
-                 new PhysicalObj(Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
+                 new PhysicalObj(Mesh("resources/textures/stone.jpg", &planeModel),
                  false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
                  glm::vec3(0.0f, 0.0f, 0.0f), "frock"));
 
@@ -153,6 +157,8 @@ int main()
 	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel),
                                         false, true, false, glm::vec3(0.0f, 0.0f, 0.0f),
                                         glm::vec3(0.0f, 0.0f, 0.0f), "frog");
+
+
 
 	float last_frame = clock();
 	float dt = 0.0f;
@@ -201,6 +207,8 @@ int main()
 		plane.draw(&ourShader, &camera, width, height);
 
 		test_npc.GetPhysicalObj()->draw(&ourShader, &camera, width, height);
+
+		hammah.GetPhysicalObj()->draw(&ourShader, &camera, width, height);
 
 		test_frame.draw(&GUIShader);
 
@@ -261,15 +269,18 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speedSide.x = 0.0f;
 		speedSide.y = 0.0f;
 	}
+
 	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
 		speedSide.x = sin(glm::radians(-(player.GetCamera()->getRotation().y - 90.0f))) * velocity;
 		speedSide.y = cos(glm::radians(-(player.GetCamera()->getRotation().y - 90.0f))) * velocity;
 		directionSide = 90.0f;
 	}
+
 	if (key == GLFW_KEY_D && action == GLFW_RELEASE && directionSide > 0.0f) {
 		speedSide.x = 0.0f;
 		speedSide.y = 0.0f;
 	}
+
 	if (key == GLFW_KEY_E) {
 		player.GetCamera()->changePositionY(0.1f);
 	}
@@ -280,6 +291,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
 		player.GetPhysicalObj()->jump();//velocity.y = 10.0f;
+	}
+
+	if (key == GLFW_KEY_P) {
+		player.PickupItem(&hammah);
 	}
 }
 
