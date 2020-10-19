@@ -144,10 +144,10 @@ int main()
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	Model planeModel = Model((char*)"resources/models/frog.obj");
 
-    NPC test_npc("test_npc", 10,
-                 new PhysicalObj(Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
-                 false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
-                 glm::vec3(0.0f, 0.0f, 0.0f), "frock"));
+	NPC test_npc("test_npc", 10,
+		     new PhysicalObj(Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
+				     false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
+				     glm::vec3(0.0f, 0.0f, 0.0f), "frock"));
 
 	Terrain terrain(100, 1.0f);
 	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel),

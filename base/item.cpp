@@ -7,13 +7,13 @@
 
 
 
-Item::Item(std::string name, PhysicalObj obj) {
+Item::Item(std::string name, PhysicalObj * obj) {
   this->name = name;
   this->obj = obj;
 }
 
 Item::Item(std::string name) :
-  Item(name, PhysicalObj()) {};
+  Item(name, new PhysicalObj()) {};
 
 Item::Item() {}
 
@@ -22,7 +22,7 @@ std::string Item::GetName() {
 }
 
 PhysicalObj* Item::GetPhysicalObj() {
-  return &this->obj;
+  return this->obj;
 }
 
 void Item::SetName(std::string name) {
@@ -56,4 +56,11 @@ std::stringstream * Item::Save(Saver * saver, int entry) {
   saver->SaveString(ss, this->name);
   
   return ss;
+}
+
+std::vector<std::string *> * Item::Describe() {
+  std::vector<std::string *> * description;
+  description->push_back(new std::string("Item"));
+  description->push_back(&this->name);
+  return description;
 }
