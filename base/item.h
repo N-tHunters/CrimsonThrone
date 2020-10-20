@@ -13,12 +13,10 @@ class Item {
 private:
   std::string name;
 
-  PhysicalObj obj;
-
-  std::string LogDescribe();
+  PhysicalObj * obj;
 
 public:
-  Item(std::string, PhysicalObj);
+  Item(std::string, PhysicalObj *);
   Item(std::string);
   Item();
   
@@ -36,6 +34,8 @@ public:
 
   virtual std::stringstream * Save(Saver *);
   virtual std::stringstream * Save(Saver *, int);
+
+  std::vector<std::string *> * Describe();
 };
 
 #endif
