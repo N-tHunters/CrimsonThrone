@@ -11,7 +11,7 @@ class Actor;
 
 class Helmet : public Armor {
 public:
-  Helmet(std::string, PhysicalObj, int);
+  Helmet(std::string, PhysicalObj *, int);
   Helmet(std::string, int);
   void Wear(Actor *);
 

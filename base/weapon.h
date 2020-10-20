@@ -12,7 +12,7 @@ private:
   int range;
 
 public:
-  Weapon(std::string, PhysicalObj, int, int);
+  Weapon(std::string, PhysicalObj *, int, int);
   Weapon(std::string, int, int);
   Weapon();
   int GetDamage();
