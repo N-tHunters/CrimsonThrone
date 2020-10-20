@@ -12,7 +12,7 @@ class Armor : public Item {
   int defence;
 
  public:
-  Armor(std::string, PhysicalObj, int);
+  Armor(std::string, PhysicalObj *, int);
   Armor(std::string, int);
   Armor();
   int GetDefence();
