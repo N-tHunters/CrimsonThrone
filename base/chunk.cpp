@@ -58,5 +58,6 @@ void Chunk::Update(float dt) {
 }
 
 void Chunk::Render(Shader * shader, Camera * camera, int width, int height) {
-  
+  for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++)
+    this->actors[actor_i]->GetPhysicalObj()->draw(shader, camera, width, height);
 }

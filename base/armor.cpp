@@ -3,13 +3,13 @@
 #include "entries.h"
 #include <string>
 
-Armor::Armor(std::string name, PhysicalObj obj, int defence) :
+Armor::Armor(std::string name, PhysicalObj  * obj, int defence) :
   Item(name, obj) {
   this->defence = defence;
 }
 
 Armor::Armor(std::string name, int defence) :
-  Armor(name, PhysicalObj(), defence) {}
+  Armor(name, new PhysicalObj(), defence) {}
 
 Armor::Armor() {}
 
