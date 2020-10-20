@@ -75,7 +75,7 @@ int direction = 1;
 float directionSide = 0;
 float velocity = 0.1f;
 
-Model hammer = Model((char*)"resources/models/hammah.obj");
+Model hammer = Model((char*)"resources/models/hammah.obj");  
 Item hammah = Item("test_item", PhysicalObj(Mesh("resources/textures/rock.png", &hammer), false, true, false, glm::vec3(10.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "hammah!"));
 
 SoundEngine sound_engine;
