@@ -10,7 +10,7 @@ class Actor;
 
 class Chestplate : public Armor {
 public:
-  Chestplate(std::string, PhysicalObj, int);
+  Chestplate(std::string, PhysicalObj *, int);
   Chestplate(std::string, int);
   void Wear(Actor *);
 

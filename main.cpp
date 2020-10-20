@@ -75,14 +75,14 @@ int direction = 1;
 float directionSide = 0;
 float velocity = 0.1f;
 
-Model hammer = Model((char*)"resources/models/hammah.obj");  
-Item hammah = Item("test_item", PhysicalObj(Mesh("resources/textures/rock.png", &hammer), false, true, false, glm::vec3(10.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "hammah!"));
+Item hammah;
 
 SoundEngine sound_engine;
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
 {
+
 	double xpos, ypos;
 	double lastXPos, lastYPos;
 	float sensivity = 0.1f;
@@ -160,6 +160,10 @@ int main()
 
 
 
+	
+	Model hammer = Model((char*)"resources/models/hammah.obj");
+	hammah = Item("test_item", new PhysicalObj(Mesh("resources/textures/rock.png", &hammer), false, true, false, glm::vec3(10.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "hammah!"));
+	
 	float last_frame = clock();
 	float dt = 0.0f;
 	int maxDt = 1;
