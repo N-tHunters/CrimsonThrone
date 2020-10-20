@@ -49,8 +49,8 @@ class List: public Frame {
 	int index;
 
 public:
-	List(glm::vec4, std::vector<T*>, std::string, int, int);
+	List(glm::vec4, std::vector<T*>, std::string, int);
 	void draw(Shader*);
-}
+};
 
 #endif

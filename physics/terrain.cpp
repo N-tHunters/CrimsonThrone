@@ -9,9 +9,9 @@ Terrain::Terrain(int size, float scale) {
 	for(int i = 0; i < size; i ++) {
 		v.clear();
 		for(int j = 0; j < size; j ++) {
-			v.push_back((float)(sin(i / 10.0f) + cos(j / 10.0f)) * 5.0f);
+			//v.push_back((float)(sin(i / 10.0f) + cos(j / 10.0f)) * 5.0f);
 			//v.push_back((float)(((i - size / 2) * (i - size / 2) + (j - size / 2) * (j - size / 2) - 4)));
-			//v.push_back(0.0f);
+			v.push_back(0.0f);
 		}
 		this->height.push_back(v);
 	}
