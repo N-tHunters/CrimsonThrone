@@ -90,6 +90,7 @@ class Actor {
 
   // Functions to work with Inventory
   int GetInventorySize();
+  std::vector<Item*>* GetInventoryPointer();
   Item * GetItemAt(int);
   void SetItemAt(int, Item *);
   int GetEmptyCell();

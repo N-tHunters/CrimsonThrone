@@ -232,6 +232,10 @@ int Actor::GetInventorySize() {
   return this->inventory.size();
 }
 
+std::vector<Item*>* Actor::GetInventoryPointer() {
+  return &(this->inventory);
+}
+
 // Delete item from inventory
 void Actor::DeleteItem(Item * item) {
   int index = this->GetItemIndex(item);

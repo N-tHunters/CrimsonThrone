@@ -1,4 +1,4 @@
-CFLAGS := -std=c++17 -Werror -Isrc -Iinclude -g -m64
+CFLAGS := -std=c++17 -Werror -Isrc -Iinclude -I/usr/include/freetype2 -g -m64
 CXFLAGS := -Iinclude
 TARGET := main
 
@@ -36,7 +36,7 @@ ifeq ($(OS),Windows_NT)
 
 else
 	RM := rm
-	LFLAGS := -lGL -ldl -lglfw -lGLEW -lX11 -lpthread -lassimp -lopenal
+	LFLAGS := -lGL -ldl -lglfw -lGLEW -lX11 -lpthread -lassimp -lopenal -lfreetype
 	SFLAGS :=
 
 	REMOVABLE := $(TARGET)
@@ -56,9 +56,21 @@ $(TARGET): main.o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUN
 %.o: %.c
 	$(CCX) $(CXFLAGS) -c $< -o $@
 
-clean:
-	$(RM) $(TARGET) $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(TARGET).o $(REMOVABLE)
+cleanAll:
+	$(RM) $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(TARGET).o $(REMOVABLE)
 
-.PHONY: all clean
+cleanRender:
+	$(RM) $(RENDER_OBJS) $(TARGET).o $(REMOVABLE)
+
+cleanPhysics:
+	$(RM) $(PHYSICS_OBJS) $(TARGET).o $(REMOVABLE)
+
+cleanSound:
+	$(RM) $(SOUND_OBJS) $(TARGET).o $(REMOVABLE)
+
+cleanUI:
+	$(RM) $(UI_OBJS) $(TARGET).o $(REMOVABLE)
+
+.PHONY: all cleanAll
 
 
