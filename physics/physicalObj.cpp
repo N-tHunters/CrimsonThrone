@@ -32,6 +32,11 @@ void PhysicalObj::draw(Shader* shader, Camera* camera, GLuint width, GLuint heig
 }
 
 void PhysicalObj::update(float dt) {
+	if(this->name == "Player" && this->velocity.y != 0.0f)
+		printf("Vx: %f Vy: %f Vz: %f - %f %f %f - %f %f %f - %f\n", 
+			this->velocity.x, this->velocity.y, this->velocity.z,
+			this->acceleration.x, this->acceleration.y, this->acceleration.z,
+			this->position.x, this->position.y, this->position.z, dt);
 	this->position += this->velocity * dt;
 	this->velocity += this->acceleration * dt;
 }
@@ -170,7 +175,7 @@ void PhysicalObj::collideTerrain(Terrain* terrain, glm::vec2 movement, float VCA
 		}
 		this->acceleration.y = 0.0f;
 	} else if(this->getPosition().y > terrainHeight + 0.1) {
-		this->acceleration.y = -9.81f;
+		this->acceleration.y = -G;
 	} else {
 		this->acceleration.y = 0;
 	}
@@ -191,7 +196,7 @@ void PhysicalObj::collideTerrain(Terrain* terrain, glm::vec2 movement, float VCA
 		}
 		this->acceleration.y = 0.0f;
 	} else if(this->getPosition().y > terrainHeight + 0.1) {
-		this->acceleration.y = -9.81f;
+		this->acceleration.y = -G;
 	} else {
 		this->acceleration.y = 0;
 	}

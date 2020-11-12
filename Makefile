@@ -1,4 +1,4 @@
-CFLAGS := -std=c++17 -Werror -Isrc -Iinclude -I/usr/include/freetype2 -g -m64
+CFLAGS := -std=c++17 -Werror -Isrc -Iinclude -I/usr/include/freetype2 -g -m64 -s -O3
 CXFLAGS := -Iinclude
 TARGET := main
 

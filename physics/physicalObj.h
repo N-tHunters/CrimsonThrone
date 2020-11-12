@@ -19,7 +19,7 @@ class PhysicalObj {
 	glm::vec3 rotation;
 	bool onGround;
 public:
-	string name;
+	std::string name;
 	glm::vec3 velocity;
 	glm::vec3 acceleration;
 	PhysicalObj();

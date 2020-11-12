@@ -2,16 +2,15 @@
 #define LIST_H
 
 #include "frame.h"
+#include "column.h"
 
-template <class T>
 class List: public Frame {
-	std::vector<T>* list;
+	std::vector<Column*>* columns;
 	glm::vec4 rect;
 	int maxCount;
-	int index;
 
 public:
-	List(glm::vec4, std::vector<T>*, std::string, int);
+	List(glm::vec4, std::vector<Column*>*, std::string, int);
 	void draw(Shader*);
 };
 

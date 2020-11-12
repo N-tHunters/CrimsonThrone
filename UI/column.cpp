@@ -1,6 +1,7 @@
-#include "list.h"
+#include "column.h"
 
-List::List(glm::vec4 rect, std::vector<T>* list, std::string texturePath, int maxCount): Frame(rect) {
+template <Item>
+Column::Column(glm::vec4 rect, std::vector<T>* list, std::string texturePath, int maxCount): Frame(rect) {
 	this->rect = rect;
 	this->maxCount = maxCount;
 	this->index = 0;
@@ -78,7 +79,7 @@ List::List(glm::vec4 rect, std::vector<T>* list, std::string texturePath, int ma
 	glBindVertexArray(0);
 }
 
-void List::draw(Shader* shader) {
+void Column::draw(Shader* shader) {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	glActiveTexture(GL_TEXTURE0);
