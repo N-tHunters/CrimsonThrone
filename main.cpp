@@ -1,4 +1,10 @@
 #include <iostream>
+#include <math.h>
+#include <time.h>
+#include <ctime>
+#include <stdio.h>
+#include <map>
+#include <unistd.h>
 
 #define GLFW_INCLUDE_NONE
 #define GLFW_DLL
@@ -22,25 +28,28 @@
 #include "render/shaderLoader.h"
 #include "render/constants.h"
 #include "render/model.h"
+#include "render/shaders.h"
 
 #include "physics/physicalObj.h"
 //#include "boundary.h"
 #include "physics/terrain.h"
 
-#include <math.h>
-#include <time.h>
-#include <ctime>
 #include "base/player.h"
 #include "base/npc.h"
 #include "base/item.h"
-
-#include <stdio.h>
 
 #include "sound/soundengine.h"
 #include "sound/filesound.h"
 #include "sound/voice.h"
 
 #include "UI/frame.h"
+#include "UI/list.h"
+#include "UI/container.h"
+#include "UI/bar.h"
+#include "UI/text.h"
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
 
 glm::vec2 normalize(glm::vec2 vec) {
 	float d = sqrt(vec.x * vec.x + vec.y * vec.y);
@@ -79,6 +88,8 @@ Item hammah;
 
 SoundEngine sound_engine;
 
+std::map<GLchar, Character> Characters;
+
 // The MAIN function, from here we start the application and run the game loop
 int main()
 {
@@ -114,10 +125,6 @@ int main()
 	// Create a GLFWwindow object that we can use for GLFW's functions
 	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crimson Throne", nullptr, nullptr);
 
-	//printf("%i\n", m_viewport[1]);
-
-//	GLuint width, height = 
-
 	glfwMakeContextCurrent(window);
 
 	glEnable(GL_DEPTH_TEST);
@@ -140,38 +147,102 @@ int main()
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
+	FT_Library ft;
+	if (FT_Init_FreeType(&ft))
+		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+	FT_Face face;
+	if (FT_New_Face(ft, "resources/fonts/hamburger.ttf", 0, &face))
+		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+
+
+	FT_Set_Pixel_Sizes(face, 0, 48);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
+	
+	for (GLubyte c = 0; c < 128; c++)
+	{
+	    // Load character glyph
+	    if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+	    {
+	        std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+	        continue;
+	    }
+	    // Generate texture
+	    GLuint texture;
+	    glGenTextures(1, &texture);
+	    glBindTexture(GL_TEXTURE_2D, texture);
+	    glTexImage2D(
+	        GL_TEXTURE_2D,
+	        0,
+	        GL_RED,
+	        face->glyph->bitmap.width,
+	        face->glyph->bitmap.rows,
+	        0,
+	        GL_RED,
+	        GL_UNSIGNED_BYTE,
+	        face->glyph->bitmap.buffer
+	    );
+	    // Set texture options
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	    // Now store character for later use
+	    Character character = {
+	        texture,
+	        glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+	        glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+	        (GLuint)face->glyph->advance.x
+	    };
+	    Characters.insert(std::pair<GLchar, Character>(c, character));
+	    // Characters[c] = character;
+	}
+
+	FT_Done_Face(face);   // Завершение работы с шрифтом face
+	FT_Done_FreeType(ft); // Завершение работы FreeType
+
 	// Build and compile our shader program
 	Shader ourShader("resources/shaders/vertex_shader.glsl", "resources/shaders/fragment_shader.glsl");
 	Shader GUIShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/GUI_fragment_shader.glsl");
+	Shader textShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/text_fragment_shader.glsl");
 
 
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	Model planeModel = Model((char*)"resources/models/frog.obj");
 
 	NPC test_npc("test_npc", 10,
-		     new PhysicalObj(Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
-				     false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
-				     glm::vec3(0.0f, 0.0f, 0.0f), "frock"));
+			 new PhysicalObj(Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
+					 false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
+					 glm::vec3(0.0f, 0.0f, 0.0f), "frock"));
 
 	Terrain terrain(100, 1.0f);
 	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel),
-                                        false, true, false, glm::vec3(0.0f, 0.0f, 0.0f),
-                                        glm::vec3(0.0f, 0.0f, 0.0f), "frog");
+										false, true, false, glm::vec3(0.0f, 0.0f, 0.0f),
+										glm::vec3(0.0f, 0.0f, 0.0f), "frog");
 
 
 
 	
 	Model hammer = Model((char*)"resources/models/hammah.obj");
-	hammah = Item("test_item", new PhysicalObj(Mesh("resources/textures/rock.png", &hammer), false, true, false, glm::vec3(10.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "hammah!"));
+
+	hammah = Item("test_item", new PhysicalObj(Mesh("resources/textures/stone.jpg", &hammer), false, true, false, glm::vec3(10.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "hammah!"));
 	
-	float last_frame = clock();
+	List<Item*> inventory(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), player.GetInventoryPointer(), std::string("resources/textures/list.png"), 10);
+	Text* text = new Text("LMAO Bottom text", glm::vec4(-0.9f, -0.9f, 0.0f, 0.0f), Characters, 32.0f / (float)width / 16.0f, glm::vec3(0, 255, 0));
+	//Container test_con(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), text, "resources/textures/stone.jpg");
+
+	float last_frame = glfwGetTime(),
+	      current_frame = glfwGetTime();
+
 	float dt = 0.0f;
 	int maxDt = 1;
 
 	int hp = player.GetHealth();
 	int maxHp = player.GetMaxHealth();
 
-	Bar test_frame(glm::vec4(-0.9f, -0.9f, 0.5f, 0.1f), &hp, &maxHp, glm::vec3(255, 0, 0));
+	player.GetPhysicalObj()->name = "Player";
+
+	Bar test_frame(glm::vec4(-0.9f, 0.9f, 0.5f, 0.1f), &hp, &maxHp, glm::vec3(255, 0, 0));
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -205,6 +276,8 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		player.GetPhysicalObj()->collideTerrain(&terrain, speed + speedSide, VCAP);
+		
+		hammah.GetPhysicalObj()->collideTerrain(&terrain, glm::vec2(0.0f, 0.0f), VCAP);
 
 		terrain.draw(&ourShader, &camera, width, height);
 
@@ -213,14 +286,13 @@ int main()
 		test_npc.GetPhysicalObj()->draw(&ourShader, &camera, width, height);
 
 		hammah.GetPhysicalObj()->draw(&ourShader, &camera, width, height);
+		hammah.GetPhysicalObj()->update(dt); 
 
 		test_frame.draw(&GUIShader);
+		text->draw(&textShader);
+		inventory.draw(&GUIShader);
 
 		plane.collideTerrain(&terrain, glm::vec2(0.0f, 0.0f), VCAP);
-		
-		player.Update(dt);
-		plane.update(dt);
-
 		glm::vec2 player_stalk_vec(0.0f, 0.0f);
 
 		glm::vec3 player_pos = player.GetPhysicalObj()->getPosition();
@@ -230,12 +302,17 @@ int main()
 		player_stalk_vec = normalize(player_stalk_vec);
 
 		test_npc.GetPhysicalObj()->collideTerrain(&terrain, player_stalk_vec * 0.03f, VCAP);
-		test_npc.GetPhysicalObj()->update(dt);
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
-		dt = (clock() - last_frame) / CLOCKS_PER_SEC * 10;
-		last_frame = clock();
+		current_frame = glfwGetTime();
+		dt = (current_frame - last_frame);
+		last_frame = current_frame;
+		
+		player.Update(dt);
+		plane.update(dt);
+		test_npc.GetPhysicalObj()->update(dt);
+
 	}
 	glfwTerminate();
 	return 0;
@@ -297,8 +374,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		player.GetPhysicalObj()->jump();//velocity.y = 10.0f;
 	}
 
-	if (key == GLFW_KEY_P) {
+	if (key == GLFW_KEY_P && action == GLFW_PRESS) {
 		player.PickupItem(&hammah);
 	}
 }
-
