@@ -10,7 +10,7 @@ class Gloves;
 
 class Gloves : public Armor {
 public:
-  Gloves(std::string, PhysicalObj, int);
+  Gloves(std::string, PhysicalObj *, int);
   Gloves(std::string, int);
   void Wear(Actor *);
 
