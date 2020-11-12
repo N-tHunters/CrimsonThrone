@@ -1,4 +1,4 @@
-CFLAGS := -std=c++17 -Werror -Isrc -Iinclude -I/usr/include/freetype2 -g -m64 -s -O3
+CFLAGS := -std=c++17 -Werror -Isrc -Iinclude -g -m64 -s -O3
 CXFLAGS := -Iinclude
 TARGET := main
 
@@ -29,7 +29,7 @@ OBJS := $(patsubst %.cpp,%.o,$(SRCS))
 # OS specific
 ifeq ($(OS),Windows_NT)
 	RM := rm
-	LFLAGS := -static-libgcc -static-libstdc++ -L ./lib -lgdi32 -lglu32 -lglew32 -lzlib1 -lopengl32 -lglfw3 -lassimp -lOpenAL32
+	LFLAGS := -static-libgcc -static-libstdc++ -L ./lib -lgdi32 -lglu32 -lglew32 -lzlib1 -lopengl32 -lglfw3 -lassimp -lOpenAL32 -lfreetype
 	SFLAGS := #-Wl,--subsystem,windows
 
 	CC := x86_64-w64-mingw32-g++
