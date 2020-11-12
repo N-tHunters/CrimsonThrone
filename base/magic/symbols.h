@@ -1,7 +1,10 @@
 #ifndef SYMBOLS_H
 #define SYMBOLS_H
 
-enum SYMBOL_VALUES {
+#include <map>
+#include <string>
+
+enum SYMBOL {
 		    INCREASE_CURRENT_CELL,
 		    DECREASE_CURRENT_CELL,
 		    ZERO_CURRENT_CELL,
@@ -9,6 +12,7 @@ enum SYMBOL_VALUES {
 		    MOVE_NEXT_CELL,
 		    MOVE_PREVIOUS_CELL,
 		    MOVE_ZERO_CELL,
+		    MOVE_LAST_CELL,
 
 		    PUT_CELL_TO_STACK,
 		    GET_CELL_FROM_STACK,
@@ -27,6 +31,25 @@ enum SYMBOL_VALUES {
 
 		    JMP,
 		    JMP_IF,
+
+		    MARK,
+
+		    TRAMPLINE,
+		    HALT,
+
+		    DUP,
+		    DUP2,
+		    SWAP,
+
+		    INCREASE_STACK_TOP,
+		    DECREASE_STACK_TOP,
+
+		    SWITCH_STACK,
+
+		    INTERRACT
 };
 
+void init_translators();
+std::string prog_to_pseudo(SYMBOL * prog, int len);
+void pseudo_to_prog(std::string, SYMBOL *);
 #endif

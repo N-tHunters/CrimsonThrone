@@ -11,6 +11,7 @@ class Chunk {
   Terrain * terrain;
   std::vector<Item *>items;
   std::vector<Actor *>actors;
+  std::vector<PhysicalObj *>objects;
 
  public:
   Chunk();
@@ -18,15 +19,19 @@ class Chunk {
 
   int GetItemsCount();
   int GetActorsCount();
+  int GetObjectsCount();
 
   void AddItem(Item *);
   void AddActor(Actor *);
+  void AddObject(PhysicalObj *);
 
   Item * GetItem(int);
   Actor * GetActor(int);
+  PhysicalObj * GetObject(int);
 
   void DeleteItem(int);
   void DeleteActor(int);
+  void DeleteObject(int);
 
   void Update(float);
   
