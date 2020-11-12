@@ -5,6 +5,9 @@ TARGET := main
 BASE_SRCS = $(wildcard base/*.cpp)
 BASE_OBJS = $(patsubst %.cpp,%.o,$(BASE_SRCS))
 
+MAGIC_SRCS = $(wildcard base/magic/*.cpp)
+MAGIC_OBJS = $(patsubst %.cpp,%.o,$(MAGIC_SRCS))
+
 RENDER_SRCS=$(wildcard render/*.cpp)
 RENDER_OBJS=$(patsubst %.cpp,%.o,$(RENDER_SRCS))
 
@@ -47,7 +50,7 @@ endif
 
 all: $(TARGET)
 
-$(TARGET): main.o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(UI_OBJS)
+$(TARGET): $(TARGET).o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(UI_OBJS) $(MAGIC_OBJS)
 	$(CC) -o $@ $^ $(CFLAGS) $(LFLAGS) $(SFLAGS)
 
 %.o: %.cpp
@@ -56,8 +59,8 @@ $(TARGET): main.o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUN
 %.o: %.c
 	$(CCX) $(CXFLAGS) -c $< -o $@
 
-cleanAll:
-	$(RM) $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(TARGET).o $(REMOVABLE)
+clean:
+	$(RM) $(BASE_OBJS) $(MAGIC_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(TARGET).o $(REMOVABLE)
 
 cleanRender:
 	$(RM) $(RENDER_OBJS) $(TARGET).o $(REMOVABLE)

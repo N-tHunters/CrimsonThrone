@@ -14,12 +14,20 @@ int Chunk::GetActorsCount() {
   return this->actors.size();
 }
 
+int Chunk::GetObjectsCount() {
+  return this->objects.size();
+}
+
 void Chunk::AddItem(Item * item) {
   this->items.push_back(item);
 }
 
 void Chunk::AddActor(Actor * actor) {
   this->actors.push_back(actor);
+}
+
+void Chunk::AddObject(PhysicalObj * object) {
+  this->objects.push_back(object);
 }
 
 Item * Chunk::GetItem(int index) {
@@ -34,6 +42,12 @@ Actor * Chunk::GetActor(int index) {
   return this->actors[index];
 }
 
+PhysicalObj * Chunk::GetObject(int index) {
+  if (index < 0 || index >= this->GetObjectsCount())
+    return nullptr;
+  return this->objects[index];
+}
+
 void Chunk::DeleteItem(int index) {
   if (index < 0 || index >= this->GetItemsCount())
     return;
@@ -44,6 +58,12 @@ void Chunk::DeleteActor(int index) {
   if (index < 0 || index >= this->GetActorsCount())
     return;
   this->actors.erase(this->actors.begin() + index);
+}
+
+void Chunk::DeleteObject(int index) {
+  if (index < 0 || index >= this->GetObjectsCount())
+    return;
+  this->objects.erase(this->objects.begin() + index);
 }
 
 void Chunk::Update(float dt) {

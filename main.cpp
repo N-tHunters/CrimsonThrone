@@ -84,8 +84,6 @@ int direction = 1;
 float directionSide = 0;
 float velocity = 0.1f;
 
-int FPS = 24000;
-
 Item hammah;
 
 SoundEngine sound_engine;
@@ -226,6 +224,7 @@ int main()
 
 	
 	Model hammer = Model((char*)"resources/models/hammah.obj");
+
 	hammah = Item("test_item", new PhysicalObj(Mesh("resources/textures/stone.jpg", &hammer), false, true, false, glm::vec3(10.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "hammah!"));
 	
 	List<Item*> inventory(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), player.GetInventoryPointer(), std::string("resources/textures/list.png"), 10);
@@ -234,6 +233,7 @@ int main()
 
 	float last_frame = glfwGetTime(),
 	      current_frame = glfwGetTime();
+
 	float dt = 0.0f;
 	int maxDt = 1;
 
