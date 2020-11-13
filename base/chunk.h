@@ -38,8 +38,6 @@ class Chunk {
   void DeleteObject(int);
 
   void Update(float);
-  
-  void Render(Shader *, Camera *, int, int);
 };
 
 #endif

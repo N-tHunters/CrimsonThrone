@@ -79,17 +79,14 @@ float VCAP = 0.1f;
 Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 //PhysicalObj player = PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f));
 Player player("player", 10, new PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f)), &camera);
+SoundEngine sound_engine;
 
-Chunk chunk1(new Terrain(100, 1.0f));
+
 
 glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 int direction = 1;
 float directionSide = 0;
 float velocity = 0.1f;
-
-Item hammah;
-
-SoundEngine sound_engine;
 
 std::map<GLchar, Character> Characters;
 
@@ -208,6 +205,11 @@ int main()
   Shader ourShader("resources/shaders/vertex_shader.glsl", "resources/shaders/fragment_shader.glsl");
   Shader GUIShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/GUI_fragment_shader.glsl");
   Shader textShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/text_fragment_shader.glsl");
+
+
+  // ----------------------------------------------- CODE ------------------------------------------
+
+  Chunk chunk1(new Terrain(100, 1.0f));
 
 
   // Set up vertex data (and buffer(s)) and attribute pointers

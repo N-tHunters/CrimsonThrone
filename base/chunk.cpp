@@ -6,6 +6,7 @@ Chunk::Chunk() {}
 
 Chunk::Chunk(Terrain * terrain) {
   this->terrain = terrain;
+  printf("Chunk was created\n");
 }
 
 Terrain * Chunk::GetTerrain() {
@@ -13,6 +14,7 @@ Terrain * Chunk::GetTerrain() {
 }
 
 void Chunk::Draw(Shader * shader, Camera * camera, int width, int height) {
+  this->terrain->draw(shader, camera, width, height);
   for(int i = 0; i <  this->GetObjectsCount(); i ++) {
     this->objects[i]->draw(shader, camera, width, height);
   }
@@ -93,9 +95,4 @@ void Chunk::Update(float dt) {
 
   for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++)
     this->actors[actor_i]->GetPhysicalObj()->update(dt);
-}
-
-void Chunk::Render(Shader * shader, Camera * camera, int width, int height) {
-  for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++)
-    this->actors[actor_i]->GetPhysicalObj()->draw(shader, camera, width, height);
 }
