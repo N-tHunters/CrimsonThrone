@@ -1,9 +1,11 @@
 #include "column.h"
 
-Column::Column(glm::vec4 rect, std::vector<Item>* list, std::string texturePath, int maxCount): Frame(rect) {
+
+Column::Column(glm::vec4 rect, std::vector<AbstractListElement*>* list, std::string texturePath, std::string header, int maxCount, std::map<GLchar, Character> Characters): Frame(rect) {
 	this->rect = rect;
 	this->maxCount = maxCount;
 	this->index = 0;
+	this->header = header;
 
 	for(int i = 0; i < maxCount; i ++) {
 		this->vertices.push_back(rect.x);
@@ -76,6 +78,10 @@ Column::Column(glm::vec4 rect, std::vector<Item>* list, std::string texturePath,
 	glEnableVertexAttribArray(2);
 
 	glBindVertexArray(0);
+
+	for(int i = 0; i < list.size(); i ++) {
+		//this->column.push_back(Text(list[i].))
+	}
 }
 
 void Column::draw(ShaderHolder* shaderHolder) {
