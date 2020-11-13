@@ -1,9 +1,27 @@
 #include "chunk.h"
 
+#define VCAP 0.1f;
+
 Chunk::Chunk() {}
 
 Chunk::Chunk(Terrain * terrain) {
   this->terrain = terrain;
+}
+
+Terrain * Chunk::GetTerrain() {
+  return this->terrain;
+}
+
+void Chunk::Draw(Shader * shader, Camera * camera, int width, int height) {
+  for(int i = 0; i <  this->GetObjectsCount(); i ++) {
+    this->objects[i]->draw(shader, camera, width, height);
+  }
+  for(int i = 0; i <  this->GetActorsCount(); i ++) {
+    this->actors[i]->GetPhysicalObj()->draw(shader, camera, width, height);
+  }
+  for(int i = 0; i <  this->GetItemsCount(); i ++) {
+    this->items[i]->GetPhysicalObj()->draw(shader, camera, width, height);
+  }
 }
 
 int Chunk::GetItemsCount() {

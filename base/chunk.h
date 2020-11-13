@@ -17,6 +17,10 @@ class Chunk {
   Chunk();
   Chunk(Terrain *);
 
+  Terrain * GetTerrain();
+
+  void Draw(Shader *, Camera *, int, int);
+
   int GetItemsCount();
   int GetActorsCount();
   int GetObjectsCount();

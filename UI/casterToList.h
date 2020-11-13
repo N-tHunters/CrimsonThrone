@@ -6,6 +6,6 @@ template <class T>
 class AbstractListObject {
 public:
 	AbstractListObject(T*);
-}
+};
 
 #endif

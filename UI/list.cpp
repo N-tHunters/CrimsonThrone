@@ -1,6 +1,6 @@
 #include "list.h"
 
-List::List(glm::vec4 rect, std::vector<T>* list, std::string texturePath, int maxCount): Frame(rect) {
+List::List(glm::vec4 rect, std::vector<Column*>* list, std::string texturePath, int maxCount): Frame(rect) {
 	this->rect = rect;
 	this->maxCount = maxCount;
 	this->index = 0;

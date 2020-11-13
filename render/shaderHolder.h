@@ -4,7 +4,9 @@
 #include "shaderLoader.h"
 
 class ShaderHolder {
-	Shader* shader3D, shaderGUI, shaderText;
+  Shader* shader3D;
+  Shader * shaderGUI;
+  Shader * shaderText;
 
 public:
 	ShaderHolder(Shader*, Shader*, Shader*);
