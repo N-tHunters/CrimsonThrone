@@ -79,8 +79,10 @@ Column::Column(glm::vec4 rect, std::vector<AbstractListElement*>* list, std::str
 
 	glBindVertexArray(0);
 
-	for(int i = 0; i < list.size(); i ++) {
-		this->column.push_back(Text(list[i].getValues[number], rect, Characters, 0.001f, glm::vec3(255, 255, 0)));
+	int number = 0;
+
+	for(int i = 0; i < list->size(); i ++) {
+		this->column.push_back(&Text(list->at(i)->getValues()->at(number), rect, Characters, 0.001f, glm::vec3(255, 255, 0)));
 	}
 }
 

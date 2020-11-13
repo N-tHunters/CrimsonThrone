@@ -1,3 +1,3 @@
 #include "abstractListElement.h"
 
-AbstractListElement::AbstractListElement()
+AbstractListElement::AbstractListElement() {}

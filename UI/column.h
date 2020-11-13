@@ -7,12 +7,13 @@
 
 class Column: public Frame {
 	std::vector<Frame*> column;
-	//glm::vec4 rect;
+	glm::vec4 rect;
 	int maxCount;
 	std::string header;
+	int index;
 
 public:
-	Column(std::vector<AbstractListElement*>*, std::string, std::string, int, std::map<GLchar, Character>);
+	Column(glm::vec4, std::vector<AbstractListElement*>*, std::string, std::string, int, std::map<GLchar, Character>);
 	void draw(ShaderHolder*);
 };
 

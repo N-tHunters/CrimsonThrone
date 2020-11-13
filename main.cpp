@@ -200,11 +200,6 @@ int main()
   FT_Done_Face(face);   // Завершение работы с шрифтом face
   FT_Done_FreeType(ft); // Завершение работы FreeType
 
-  // Build and compile our shader program
-  Shader ourShader("resources/shaders/vertex_shader.glsl", "resources/shaders/fragment_shader.glsl");
-  Shader GUIShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/GUI_fragment_shader.glsl");
-  Shader textShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/text_fragment_shader.glsl");
-
 
   // ----------------------------------------------- CODE ------------------------------------------
 
@@ -232,7 +227,7 @@ int main()
 
 	// Create ShaderHolder
 
-	ShaderHolder shaderHolder(ourShader, GUIShader, textShader);
+	ShaderHolder shaderHolder(&ourShader, &GUIShader, &textShader);
 	
 	chunk1.AddItem(new Item("test_item", new PhysicalObj(new Mesh("resources/textures/stone.jpg", new Model((char*)"resources/models/hammah.obj")), false, true, false, glm::vec3(10.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "hammah!")));
 
@@ -269,13 +264,9 @@ int main()
       glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-      chunk1.Draw(&ourShader, &camera, width, height);
+      chunk1.Draw(&shaderHolder, &camera, width, height);
 
       player.GetPhysicalObj()->collideTerrain(chunk1.GetTerrain(), speed + speedSide, VCAP);
-
-      hammah.GetPhysicalObj()->collideTerrain(&terrain, glm::vec2(0.0f, 0.0f), VCAP);
-
-      terrain.draw(&ourShader, &camera, width, height);
 
 	float last_frame = glfwGetTime(),
 		current_frame = glfwGetTime();
