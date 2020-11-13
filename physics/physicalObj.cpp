@@ -32,11 +32,6 @@ void PhysicalObj::draw(Shader* shader, Camera* camera, GLuint width, GLuint heig
 }
 
 void PhysicalObj::update(float dt) {
-	if(this->name == "Player" && this->velocity.y != 0.0f)
-		printf("Vx: %f Vy: %f Vz: %f - %f %f %f - %f %f %f - %f\n", 
-			this->velocity.x, this->velocity.y, this->velocity.z,
-			this->acceleration.x, this->acceleration.y, this->acceleration.z,
-			this->position.x, this->position.y, this->position.z, dt);
 	this->position += this->velocity * dt;
 	this->velocity += this->acceleration * dt;
 }

@@ -8,6 +8,7 @@ class List: public Frame {
 	std::vector<Column*>* columns;
 	glm::vec4 rect;
 	int maxCount;
+  int index;
 
 public:
 	List(glm::vec4, std::vector<Column*>*, std::string, int);
