@@ -127,7 +127,7 @@ int main()
 
   glfwMakeContextCurrent(window);
 
-  glfwSwapInterval(1);
+  glfwSwapInterval(-1);
 
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_BLEND);
