@@ -76,9 +76,9 @@ glm::vec2 speed = glm::vec2(0.0f, 0.0f);
 
 float VCAP = 0.1f;
 
-Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+Camera* camera;
 //PhysicalObj player = PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f));
-Player player("player", 10, new PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f)), &camera);
+Player* player;
 SoundEngine sound_engine;
 
 
@@ -93,7 +93,8 @@ std::map<GLchar, Character> Characters;
 // The MAIN function, from here we start the application and run the game loop
 int main()
 {
-
+	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	player = new Player("player", 10, new PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f)), camera);
 	double xpos, ypos;
 	double lastXPos, lastYPos;
 	float sensivity = 0.1f;
@@ -227,7 +228,7 @@ int main()
 
 
 	
-	//List<Item*> inventory(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), player.GetInventoryPointer(), std::string("resources/textures/list.png"), 10);
+	//List<Item*> inventory(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), player->GetInventoryPointer(), std::string("resources/textures/list.png"), 10);
 	Text* text = new Text("LMAO Bottom text", glm::vec4(-0.9f, -0.9f, 0.0f, 0.0f), Characters, 32.0f / (float)width / 16.0f, glm::vec3(0, 255, 0));
 	//Container test_con(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), text, "resources/textures/stone.jpg");
 
@@ -237,15 +238,15 @@ int main()
 	float dt = 0.0f;
 	int maxDt = 1;
 
-	int hp = player.GetHealth();
-	int maxHp = player.GetMaxHealth();
+	int hp = player->GetHealth();
+	int maxHp = player->GetMaxHealth();
 
 	/*NPC* test2 = new NPC("test_npc", 10,
 				new PhysicalObj(new Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
 						false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
 						glm::vec3(0.0f, 0.0f, 0.0f), "frock"));*/
 
-	player.GetPhysicalObj()->name = "Player";
+	player->GetPhysicalObj()->name = "Player";
 
 	Bar test_frame(glm::vec4(-0.9f, 0.9f, 0.5f, 0.1f), &hp, &maxHp, glm::vec3(255, 0, 0));
 
@@ -258,20 +259,20 @@ int main()
 		glm::vec2 cursorMotion = glm::vec2(lastXPos - xpos, lastYPos - ypos);
 		if(cursorMotion.x != 0 || cursorMotion.y != 0) {
 			if(speed.x != 0 || speed.y != 0) {
-				speed.x = -sin(glm::radians(-player.GetCamera()->getRotation().y)) * velocity * direction;
-				speed.y = -cos(glm::radians(-player.GetCamera()->getRotation().y)) * velocity * direction;
+				speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
+				speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
 			}
 			if(speedSide.x != 0 || speedSide.y != 0) {
-				speedSide.x = -sin(glm::radians(-(player.GetCamera()->getRotation().y + directionSide))) * velocity;
-				speedSide.y = -cos(glm::radians(-(player.GetCamera()->getRotation().y + directionSide))) * velocity;
+				speedSide.x = -sin(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
+				speedSide.y = -cos(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
 			}
 			cursorMotion *= sensivity;
-			player.GetCamera()->changeRotationX(-cursorMotion.y);
-			player.GetCamera()->changeRotationY(-cursorMotion.x);
-			if(player.GetCamera()->getRotation().x < -90.0f)
-				player.GetCamera()->setRotationX(-90.0f);
-			if(player.GetCamera()->getRotation().x > 90.0f)
-				player.GetCamera()->setRotationX(90.0f);
+			player->GetCamera()->changeRotationX(-cursorMotion.y);
+			player->GetCamera()->changeRotationY(-cursorMotion.x);
+			if(player->GetCamera()->getRotation().x < -90.0f)
+				player->GetCamera()->setRotationX(-90.0f);
+			if(player->GetCamera()->getRotation().x > 90.0f)
+				player->GetCamera()->setRotationX(90.0f);
 		}
 		// Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
@@ -280,9 +281,9 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		player.GetPhysicalObj()->collideTerrain(chunk1.GetTerrain(), speed + speedSide, VCAP);
+		player->GetPhysicalObj()->collideTerrain(chunk1.GetTerrain(), speed + speedSide, VCAP);
 
-		chunk1.Draw(&ourShader, &camera, width, height);
+		chunk1.Draw(&ourShader, camera, width, height);
 
 		//test2->GetPhysicalObj()->draw(&ourShader, &camera, width, height);
 
@@ -296,8 +297,8 @@ int main()
 		dt = (current_frame - last_frame);
 		last_frame = current_frame;
 	
-		player.Update(dt);
-		//chunk1.Update(dt);
+		player->Update(dt);
+		chunk1.Update(dt);
 	}
 	glfwTerminate();
 	return 0;
@@ -309,8 +310,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-		speed.x = -sin(glm::radians(-player.GetCamera()->getRotation().y)) * velocity;
-		speed.y = -cos(glm::radians(-player.GetCamera()->getRotation().y)) * velocity;
+		speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
+		speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
 		direction = 1;
 	}
 	if (key == GLFW_KEY_W && action == GLFW_RELEASE && direction > 0) {
@@ -318,8 +319,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speed.y = 0.0f;
 	}
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-		speed.x = sin(glm::radians(-player.GetCamera()->getRotation().y)) * velocity;
-		speed.y = cos(glm::radians(-player.GetCamera()->getRotation().y)) * velocity;
+		speed.x = sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
+		speed.y = cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
 		direction = -1;
 	}
 	if (key == GLFW_KEY_S && action == GLFW_RELEASE && direction < 0) {
@@ -327,8 +328,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speed.y = 0.0f;
 	}
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-		speedSide.x = sin(glm::radians(-(player.GetCamera()->getRotation().y + 90.0f))) * velocity;
-		speedSide.y = cos(glm::radians(-(player.GetCamera()->getRotation().y + 90.0f))) * velocity;
+		speedSide.x = sin(glm::radians(-(player->GetCamera()->getRotation().y + 90.0f))) * velocity;
+		speedSide.y = cos(glm::radians(-(player->GetCamera()->getRotation().y + 90.0f))) * velocity;
 		directionSide = -90.0f;
 	}
 	if (key == GLFW_KEY_A && action == GLFW_RELEASE && directionSide < 0.0f) {
@@ -337,8 +338,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 
 	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-		speedSide.x = sin(glm::radians(-(player.GetCamera()->getRotation().y - 90.0f))) * velocity;
-		speedSide.y = cos(glm::radians(-(player.GetCamera()->getRotation().y - 90.0f))) * velocity;
+		speedSide.x = sin(glm::radians(-(player->GetCamera()->getRotation().y - 90.0f))) * velocity;
+		speedSide.y = cos(glm::radians(-(player->GetCamera()->getRotation().y - 90.0f))) * velocity;
 		directionSide = 90.0f;
 	}
 
@@ -348,10 +349,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-		player.GetPhysicalObj()->jump();//velocity.y = 10.0f;
+		player->GetPhysicalObj()->jump();//velocity.y = 10.0f;
 	}
 
 	if (key == GLFW_KEY_P && action == GLFW_PRESS) {
-		//    player.PickupItem(&hammah);
+		//    player->PickupItem(&hammah);
 	}
 }

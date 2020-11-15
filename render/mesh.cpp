@@ -3,6 +3,7 @@
 #include <assimp/Importer.hpp>
 #include "model.h"
 #include "../physics/physicalObj.h"
+#include "../debug.h"
 
 void Mesh::init(PhysicalObj* obj) {
 	this->obj = obj;
@@ -11,6 +12,7 @@ void Mesh::init(PhysicalObj* obj) {
 Mesh::Mesh() {};
 
 Mesh::Mesh(string texturePath, Model* model) {
+	this->obj = nullptr;
 	this->size = model->indices.size();
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
@@ -54,6 +56,7 @@ Mesh::Mesh(string texturePath, Model* model) {
 }
 
 Mesh::Mesh(string texturePath, std::vector<GLfloat> vertices, std::vector<unsigned int> indices) {
+	this->obj = nullptr;
 	this->size = indices.size();
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
@@ -101,7 +104,7 @@ void Mesh::draw(Shader* shader, Camera* camera, GLuint width, GLuint height) {
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 cameraRot = glm::mat4(1.0f);
 	glm::mat4 projection;
-	glm::vec3 cameraPosition = glm::vec3(camera->getPosition().x, camera->getPosition().y + 0.5, camera->getPosition().z);
+	glm::vec3 cameraPosition = glm::vec3(camera->getPosition().x, camera->getPosition().y, camera->getPosition().z);
 	model = glm::rotate(model, glm::radians(this->obj->getRotationX()), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(this->obj->getRotationY()), glm::vec3(0.0f, 1.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(this->obj->getRotationZ()), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -115,7 +118,6 @@ void Mesh::draw(Shader* shader, Camera* camera, GLuint width, GLuint height) {
 	GLint projLoc = glGetUniformLocation(shader->Program, "projection");
 	GLint camRotLoc = glGetUniformLocation(shader->Program, "cameraRot");
 
-
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glUniform1i(glGetUniformLocation(shader->Program, "ourTexture"), 0);
@@ -126,7 +128,7 @@ void Mesh::draw(Shader* shader, Camera* camera, GLuint width, GLuint height) {
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(camRotLoc, 1, GL_FALSE, glm::value_ptr(cameraRot));
 
-	glBindVertexArray(VAO);
+	glBindVertexArray(this->VAO);
 	glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
