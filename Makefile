@@ -1,4 +1,4 @@
-CFLAGS := -std=c++17 -Werror -Isrc -Iinclude -g -m64 -s -O3
+CFLAGS := -std=c++17 -Werror -Isrc -Iinclude -g -m64 -O0
 CXFLAGS := -Iinclude
 TARGET := main
 
@@ -44,8 +44,8 @@ else
 
 	REMOVABLE := $(TARGET)
 
-	CC := g++
-	CCX := gcc
+	CC := g++-10
+	CCX := gcc-10
 endif
 
 all: $(TARGET)

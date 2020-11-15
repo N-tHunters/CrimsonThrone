@@ -7,6 +7,7 @@
 class ElementMagicCore : public ProtoMagicCore {
   virtual ProtoMagicCore * CreateElement(glm::vec3);
  public:
+ 	ElementMagicCore();
   char CallCreateElement(char, AbstractCore *);
   char Call(char, char, AbstractCore *);
 };

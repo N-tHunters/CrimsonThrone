@@ -10,7 +10,7 @@ PhysicalObj::PhysicalObj(glm::vec3 position) {
 	this->onGround = true;
 }
 
-PhysicalObj::PhysicalObj(Mesh mesh, bool isActive, bool isVisible, bool isTransparent, glm::vec3 position, glm::vec3 rotation, string name) {
+PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, glm::vec3 position, glm::vec3 rotation, string name) {
 	this->name = name;
 	this->mesh = mesh;
 	this->position = position;
@@ -21,13 +21,13 @@ PhysicalObj::PhysicalObj(Mesh mesh, bool isActive, bool isVisible, bool isTransp
 	this->isTransparent = isTransparent;
 	this->velocity = glm::vec3(0.0f);
 	this->acceleration = glm::vec3(0.0f);
-	this->mesh.init(this);
+	this->mesh->init(this);
 	this->onGround = true;
 }
 
 void PhysicalObj::draw(Shader* shader, Camera* camera, GLuint width, GLuint height) {
 	if(this->isVisible) {
-		this->mesh.draw(shader, camera, width, height);
+		this->mesh->draw(shader, camera, width, height);
 	}
 }
 
