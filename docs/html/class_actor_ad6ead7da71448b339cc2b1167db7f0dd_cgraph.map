@@ -1,0 +1,12 @@
+<map id="Actor::PickupItem" name="Actor::PickupItem">
+<area shape="rect" id="node1" title=" " alt="" coords="5,107,132,133"/>
+<area shape="rect" id="node2" href="$class_actor.html#aac89b17809a23516894f3962d3eb7081" title=" " alt="" coords="180,157,356,184"/>
+<area shape="rect" id="node5" href="$class_actor.html#a93205b5385b21c3a99fd9331661e5a32" title=" " alt="" coords="197,56,339,83"/>
+<area shape="rect" id="node6" href="$class_item.html#a249ecb3573eaaefd04c270b1c3aaa408" title=" " alt="" coords="207,107,329,133"/>
+<area shape="rect" id="node7" href="$class_actor.html#a805d85f56d510542d90c785e54b4b616" title=" " alt="" coords="209,5,327,32"/>
+<area shape="rect" id="node8" href="$class_stackable_item.html#a4996430f010b66aa2c3278e7dfeed71d" title=" " alt="" coords="195,208,341,235"/>
+<area shape="rect" id="node3" href="$class_actor.html#ae086b1de771ce6d6a52645a55749a69d" title=" " alt="" coords="409,56,567,83"/>
+<area shape="rect" id="node4" href="$class_item.html#ab800803f7bc80dd464d83b85e4bf9229" title=" " alt="" coords="433,157,543,184"/>
+<area shape="rect" id="node9" href="$class_stackable_item.html#ae91c1266b156a889c3282a2b2b59d35c" title=" " alt="" coords="404,208,572,235"/>
+<area shape="rect" id="node10" href="$class_stackable_item.html#aed99bab01be20e65519992a69f71f3b9" title=" " alt="" coords="405,259,571,285"/>
+</map>

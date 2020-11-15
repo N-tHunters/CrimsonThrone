@@ -1,0 +1,12 @@
+<map id="Item::Save" name="Item::Save">
+<area shape="rect" id="node1" title=" " alt="" coords="363,183,445,209"/>
+<area shape="rect" id="node2" href="$class_armor.html#a97d65365610bbeff332a5ce12b81e0af" title=" " alt="" coords="197,132,291,159"/>
+<area shape="rect" id="node9" href="$class_stackable_item.html#a7da9974f60b5ac448530e869cd0f5d67" title=" " alt="" coords="173,183,315,209"/>
+<area shape="rect" id="node10" href="$class_weapon.html#a975fea5ca40776468f0f39f69506cf5f" title=" " alt="" coords="191,233,297,260"/>
+<area shape="rect" id="node3" href="$class_armor.html#a37004e1727e0c51a44c509deedbb5e93" title=" " alt="" coords="19,5,112,32"/>
+<area shape="rect" id="node4" href="$class_boots.html#a4118ae57f38ab4dcbce2af0396cb2ed8" title=" " alt="" coords="19,56,111,83"/>
+<area shape="rect" id="node5" href="$class_chestplate.html#aee4783cdbce7ff600158c677b097630f" title=" " alt="" coords="5,107,125,133"/>
+<area shape="rect" id="node6" href="$class_gloves.html#a95bda69ac7c1204e05b4e43b90ee0051" title=" " alt="" coords="17,157,114,184"/>
+<area shape="rect" id="node7" href="$class_helmet.html#a5b70c2ce671fc0331cf3540702969281" title=" " alt="" coords="16,208,115,235"/>
+<area shape="rect" id="node8" href="$class_leggins.html#a48589c1dd3ba24757841fc5e109a672d" title=" " alt="" coords="14,259,117,285"/>
+</map>

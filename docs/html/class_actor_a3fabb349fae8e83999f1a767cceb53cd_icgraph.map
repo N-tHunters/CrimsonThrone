@@ -1,0 +1,5 @@
+<map id="Actor::SetChestplate" name="Actor::SetChestplate">
+<area shape="rect" id="node1" title=" " alt="" coords="379,5,521,32"/>
+<area shape="rect" id="node2" href="$class_actor.html#a08c0cd0a065748ae219fbc2713b5a0f3" title=" " alt="" coords="176,5,331,32"/>
+<area shape="rect" id="node3" href="$class_chestplate.html#ac9fa9e3ea4c4da8cd6ee58245aa7a8c1" title=" " alt="" coords="5,5,128,32"/>
+</map>

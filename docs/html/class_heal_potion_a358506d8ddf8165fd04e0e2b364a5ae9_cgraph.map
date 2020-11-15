@@ -1,0 +1,9 @@
+<map id="HealPotion::Use" name="HealPotion::Use">
+<area shape="rect" id="node1" title=" " alt="" coords="5,56,121,83"/>
+<area shape="rect" id="node2" href="$class_heal_potion.html#ac3fae0436aa793631d30245c99001cb1" title=" " alt="" coords="169,5,355,32"/>
+<area shape="rect" id="node3" href="$class_actor.html#aca28023d0a45a065b3d51ee9e251e06b" title=" " alt="" coords="219,56,305,83"/>
+<area shape="rect" id="node4" href="$class_stackable_item.html#ab1ce53c28dab063cafa4447aa7131062" title=" " alt="" coords="194,107,330,133"/>
+<area shape="rect" id="node5" href="$class_actor.html#a06e02cff023ba7a0ea71d3a301a20641" title=" " alt="" coords="403,107,525,133"/>
+<area shape="rect" id="node6" href="$class_actor.html#ae086b1de771ce6d6a52645a55749a69d" title=" " alt="" coords="760,107,919,133"/>
+<area shape="rect" id="node7" href="$class_actor.html#a8d6a67ad97f11796b4a98ccffe5f62f4" title=" " alt="" coords="573,132,712,159"/>
+</map>

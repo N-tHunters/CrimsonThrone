@@ -1,0 +1,6 @@
+<map id="Player::Update" name="Player::Update">
+<area shape="rect" id="node1" title=" " alt="" coords="5,56,113,83"/>
+<area shape="rect" id="node2" href="$class_actor.html#a6636c9487e1dea9955756b2291bb97c1" title=" " alt="" coords="161,5,313,32"/>
+<area shape="rect" id="node3" href="$class_camera.html#aa3f79bd7dbe7a3356595adddc481613c" title=" " alt="" coords="167,56,307,83"/>
+<area shape="rect" id="node4" href="$class_physical_obj.html#afe649de0673cbd821afb4e9d2e724ed1" title=" " alt="" coords="168,107,307,133"/>
+</map>

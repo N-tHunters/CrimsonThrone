@@ -1,0 +1,5 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$class_actor.html" title="Game actor class." alt="" coords="5,31,59,57"/>
+<area shape="rect" id="node2" href="$class_n_p_c.html" title=" " alt="" coords="111,5,161,32"/>
+<area shape="rect" id="node3" href="$class_player.html" title="Human controlled game character Player is a human controlled game character. It uses camera to render..." alt="" coords="107,56,165,83"/>
+</map>

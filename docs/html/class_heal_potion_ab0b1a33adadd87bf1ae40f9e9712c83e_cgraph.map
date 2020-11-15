@@ -1,0 +1,5 @@
+<map id="HealPotion::Save" name="HealPotion::Save">
+<area shape="rect" id="node1" title=" " alt="" coords="5,31,127,57"/>
+<area shape="rect" id="node2" href="$class_stackable_item.html#a35cf0e12dc97f89b5450d6a19936ab1a" title=" " alt="" coords="175,5,316,32"/>
+<area shape="rect" id="node3" href="$class_saver.html#a6dead08988136d1db03a06ffc14f0ca9" title=" " alt="" coords="193,56,297,83"/>
+</map>

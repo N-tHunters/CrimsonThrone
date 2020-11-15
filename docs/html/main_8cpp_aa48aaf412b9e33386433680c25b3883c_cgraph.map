@@ -1,0 +1,7 @@
+<map id="key_callback" name="key_callback">
+<area shape="rect" id="node1" title=" " alt="" coords="5,81,104,108"/>
+<area shape="rect" id="node2" href="$class_player.html#a8139400899b60c731b252439e1fa2f88" title=" " alt="" coords="161,5,295,32"/>
+<area shape="rect" id="node3" href="$class_actor.html#a6636c9487e1dea9955756b2291bb97c1" title=" " alt="" coords="152,56,304,83"/>
+<area shape="rect" id="node4" href="$class_camera.html#afb383989c8c6a4481e59edabfa0a2244" title=" " alt="" coords="157,107,299,133"/>
+<area shape="rect" id="node5" href="$class_physical_obj.html#aa233174688151641365deca687b430f7" title=" " alt="" coords="164,157,292,184"/>
+</map>

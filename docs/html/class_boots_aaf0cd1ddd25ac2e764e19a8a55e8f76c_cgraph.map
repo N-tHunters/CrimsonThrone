@@ -1,0 +1,5 @@
+<map id="Boots::Wear" name="Boots::Wear">
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,100,32"/>
+<area shape="rect" id="node2" href="$class_actor.html#ac1eaf32f5f668738946d4af41d0e4023" title=" " alt="" coords="148,5,275,32"/>
+<area shape="rect" id="node3" href="$class_actor.html#ae3768947ab9d1ce21a0ac2fb874ca5cf" title=" " alt="" coords="323,5,437,32"/>
+</map>

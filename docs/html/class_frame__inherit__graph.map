@@ -1,0 +1,9 @@
+<map id="Frame" name="Frame">
+<area shape="rect" id="node1" title=" " alt="" coords="217,5,276,32"/>
+<area shape="rect" id="node2" href="$class_bar.html" title=" " alt="" coords="5,80,48,107"/>
+<area shape="rect" id="node3" href="$class_column.html" title=" " alt="" coords="72,80,139,107"/>
+<area shape="rect" id="node4" href="$class_container.html" title=" " alt="" coords="163,80,240,107"/>
+<area shape="rect" id="node5" href="$class_image.html" title=" " alt="" coords="265,80,322,107"/>
+<area shape="rect" id="node6" href="$class_list.html" title=" " alt="" coords="347,80,389,107"/>
+<area shape="rect" id="node7" href="$class_text.html" title=" " alt="" coords="414,80,461,107"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="base/chestplate.h" name="base/chestplate.h">
+<area shape="rect" id="node1" title=" " alt="" coords="145,5,270,32"/>
+<area shape="rect" id="node2" href="$actor_8cpp.html" title="Actor implementation." alt="" coords="5,80,113,107"/>
+<area shape="rect" id="node3" href="$chestplate_8cpp.html" title=" " alt="" coords="138,80,277,107"/>
+<area shape="rect" id="node4" href="$loader_8cpp.html" title=" " alt="" coords="301,80,415,107"/>
+</map>

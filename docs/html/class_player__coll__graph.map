@@ -1,0 +1,4 @@
+<map id="Player" name="Player">
+<area shape="rect" id="node1" title="Human controlled game character Player is a human controlled game character. It uses camera to render..." alt="" coords="5,80,64,107"/>
+<area shape="rect" id="node2" href="$class_actor.html" title="Game actor class." alt="" coords="8,5,61,32"/>
+</map>
