@@ -28,7 +28,7 @@
 #include "render/shaderLoader.h"
 #include "render/constants.h"
 #include "render/model.h"
-#include "render/shaders.h"
+//#include "render/shaders.h"
 
 #include "physics/physicalObj.h"
 //#include "boundary.h"
@@ -37,13 +37,14 @@
 #include "base/player.h"
 #include "base/npc.h"
 #include "base/item.h"
+#include "base/chunk.h"
 
 #include "sound/soundengine.h"
 #include "sound/filesound.h"
 #include "sound/voice.h"
 
 #include "UI/frame.h"
-#include "UI/list.h"
+//#include "UI/list.h"
 #include "UI/container.h"
 #include "UI/bar.h"
 #include "UI/text.h"
@@ -75,25 +76,25 @@ glm::vec2 speed = glm::vec2(0.0f, 0.0f);
 
 float VCAP = 0.1f;
 
-Camera camera = Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+Camera* camera;
 //PhysicalObj player = PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f));
-Player player("player", 10, new PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f)), &camera);
+Player* player;
+SoundEngine sound_engine;
+
+
 
 glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 int direction = 1;
 float directionSide = 0;
 float velocity = 0.1f;
 
-Item hammah;
-
-SoundEngine sound_engine;
-
 std::map<GLchar, Character> Characters;
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
 {
-
+	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	player = new Player("player", 10, new PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f)), camera);
 	double xpos, ypos;
 	double lastXPos, lastYPos;
 	float sensivity = 0.1f;
@@ -160,43 +161,43 @@ int main()
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 	
 	for (GLubyte c = 0; c < 128; c++)
+		{
+			// Load character glyph
+			if (FT_Load_Char(face, c, FT_LOAD_RENDER))
 	{
-	    // Load character glyph
-	    if (FT_Load_Char(face, c, FT_LOAD_RENDER))
-	    {
-	        std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
-	        continue;
-	    }
-	    // Generate texture
-	    GLuint texture;
-	    glGenTextures(1, &texture);
-	    glBindTexture(GL_TEXTURE_2D, texture);
-	    glTexImage2D(
-	        GL_TEXTURE_2D,
-	        0,
-	        GL_RED,
-	        face->glyph->bitmap.width,
-	        face->glyph->bitmap.rows,
-	        0,
-	        GL_RED,
-	        GL_UNSIGNED_BYTE,
-	        face->glyph->bitmap.buffer
-	    );
-	    // Set texture options
-	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	    // Now store character for later use
-	    Character character = {
-	        texture,
-	        glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-	        glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-	        (GLuint)face->glyph->advance.x
-	    };
-	    Characters.insert(std::pair<GLchar, Character>(c, character));
-	    // Characters[c] = character;
+		std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+		continue;
 	}
+			// Generate texture
+			GLuint texture;
+			glGenTextures(1, &texture);
+			glBindTexture(GL_TEXTURE_2D, texture);
+			glTexImage2D(
+			 GL_TEXTURE_2D,
+			 0,
+			 GL_RED,
+			 face->glyph->bitmap.width,
+			 face->glyph->bitmap.rows,
+			 0,
+			 GL_RED,
+			 GL_UNSIGNED_BYTE,
+			 face->glyph->bitmap.buffer
+			 );
+			// Set texture options
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			// Now store character for later use
+			Character character = {
+					 texture,
+					 glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+					 glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+					 (GLuint)face->glyph->advance.x
+			};
+			Characters.insert(std::pair<GLchar, Character>(c, character));
+			// Characters[c] = character;
+		}
 
 	FT_Done_Face(face);   // Завершение работы с шрифтом face
 	FT_Done_FreeType(ft); // Завершение работы FreeType
@@ -207,40 +208,45 @@ int main()
 	Shader textShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/text_fragment_shader.glsl");
 
 
+	// ----------------------------------------------- CODE ------------------------------------------
+
+	Chunk chunk1(new Terrain(100, 1.0f));
+
+
 	// Set up vertex data (and buffer(s)) and attribute pointers
-	Model planeModel = Model((char*)"resources/models/frog.obj");
+	chunk1.AddActor((Actor*)
+			new NPC("test_npc", 10,
+				new PhysicalObj(new Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
+						false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
+						glm::vec3(0.0f, 0.0f, 0.0f), "frock")));
 
-	NPC test_npc("test_npc", 10,
-			 new PhysicalObj(Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
-					 false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
-					 glm::vec3(0.0f, 0.0f, 0.0f), "frock"));
-
-	Terrain terrain(100, 1.0f);
-	PhysicalObj plane = PhysicalObj(Mesh("resources/textures/frog.jpg", &planeModel),
-										false, true, false, glm::vec3(0.0f, 0.0f, 0.0f),
-										glm::vec3(0.0f, 0.0f, 0.0f), "frog");
-
+	chunk1.AddObject(new PhysicalObj(new Mesh("resources/textures/frog.jpg", new Model((char *) "resources/models/frog.obj")),
+					 false, true, false, glm::vec3(0.0f, 0.0f, 0.0f),
+					 glm::vec3(0.0f, 0.0f, 0.0f), "frog"));
+	
+	chunk1.AddItem(new Item("test_item", new PhysicalObj(new Mesh("resources/textures/stone.jpg", new Model((char*)"resources/models/hammah.obj")), false, true, false, glm::vec3(10.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "hammah!")));
 
 
 	
-	Model hammer = Model((char*)"resources/models/hammah.obj");
-
-	hammah = Item("test_item", new PhysicalObj(Mesh("resources/textures/stone.jpg", &hammer), false, true, false, glm::vec3(10.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "hammah!"));
-	
-	List<Item*> inventory(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), player.GetInventoryPointer(), std::string("resources/textures/list.png"), 10);
+	//List<Item*> inventory(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), player->GetInventoryPointer(), std::string("resources/textures/list.png"), 10);
 	Text* text = new Text("LMAO Bottom text", glm::vec4(-0.9f, -0.9f, 0.0f, 0.0f), Characters, 32.0f / (float)width / 16.0f, glm::vec3(0, 255, 0));
 	//Container test_con(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), text, "resources/textures/stone.jpg");
 
 	float last_frame = glfwGetTime(),
-	      current_frame = glfwGetTime();
+		current_frame = glfwGetTime();
 
 	float dt = 0.0f;
 	int maxDt = 1;
 
-	int hp = player.GetHealth();
-	int maxHp = player.GetMaxHealth();
+	int hp = player->GetHealth();
+	int maxHp = player->GetMaxHealth();
 
-	player.GetPhysicalObj()->name = "Player";
+	/*NPC* test2 = new NPC("test_npc", 10,
+				new PhysicalObj(new Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
+						false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
+						glm::vec3(0.0f, 0.0f, 0.0f), "frock"));*/
+
+	player->GetPhysicalObj()->name = "Player";
 
 	Bar test_frame(glm::vec4(-0.9f, 0.9f, 0.5f, 0.1f), &hp, &maxHp, glm::vec3(255, 0, 0));
 
@@ -253,20 +259,20 @@ int main()
 		glm::vec2 cursorMotion = glm::vec2(lastXPos - xpos, lastYPos - ypos);
 		if(cursorMotion.x != 0 || cursorMotion.y != 0) {
 			if(speed.x != 0 || speed.y != 0) {
-				speed.x = -sin(glm::radians(-player.GetCamera()->getRotation().y)) * velocity * direction;
-				speed.y = -cos(glm::radians(-player.GetCamera()->getRotation().y)) * velocity * direction;
+				speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
+				speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
 			}
 			if(speedSide.x != 0 || speedSide.y != 0) {
-				speedSide.x = -sin(glm::radians(-(player.GetCamera()->getRotation().y + directionSide))) * velocity;
-				speedSide.y = -cos(glm::radians(-(player.GetCamera()->getRotation().y + directionSide))) * velocity;
+				speedSide.x = -sin(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
+				speedSide.y = -cos(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
 			}
 			cursorMotion *= sensivity;
-			player.GetCamera()->changeRotationX(-cursorMotion.y);
-			player.GetCamera()->changeRotationY(-cursorMotion.x);
-			if(player.GetCamera()->getRotation().x < -90.0f)
-				player.GetCamera()->setRotationX(-90.0f);
-			if(player.GetCamera()->getRotation().x > 90.0f)
-				player.GetCamera()->setRotationX(90.0f);
+			player->GetCamera()->changeRotationX(-cursorMotion.y);
+			player->GetCamera()->changeRotationY(-cursorMotion.x);
+			if(player->GetCamera()->getRotation().x < -90.0f)
+				player->GetCamera()->setRotationX(-90.0f);
+			if(player->GetCamera()->getRotation().x > 90.0f)
+				player->GetCamera()->setRotationX(90.0f);
 		}
 		// Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
@@ -274,45 +280,25 @@ int main()
 		// Clear the color buffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
-		player.GetPhysicalObj()->collideTerrain(&terrain, speed + speedSide, VCAP);
-		
-		hammah.GetPhysicalObj()->collideTerrain(&terrain, glm::vec2(0.0f, 0.0f), VCAP);
 
-		terrain.draw(&ourShader, &camera, width, height);
+		player->GetPhysicalObj()->collideTerrain(chunk1.GetTerrain(), speed + speedSide, VCAP);
 
-		plane.draw(&ourShader, &camera, width, height);
+		chunk1.Draw(&ourShader, camera, width, height);
 
-		test_npc.GetPhysicalObj()->draw(&ourShader, &camera, width, height);
-
-		hammah.GetPhysicalObj()->draw(&ourShader, &camera, width, height);
-		hammah.GetPhysicalObj()->update(dt); 
+		//test2->GetPhysicalObj()->draw(&ourShader, &camera, width, height);
 
 		test_frame.draw(&GUIShader);
 		text->draw(&textShader);
-		inventory.draw(&GUIShader);
-
-		plane.collideTerrain(&terrain, glm::vec2(0.0f, 0.0f), VCAP);
-		glm::vec2 player_stalk_vec(0.0f, 0.0f);
-
-		glm::vec3 player_pos = player.GetPhysicalObj()->getPosition();
-		glm::vec3 stalker_pos = test_npc.GetPhysicalObj()->getPosition();
-
-		player_stalk_vec = glm::vec2(player_pos.x - stalker_pos.x, player_pos.z - stalker_pos.z);
-		player_stalk_vec = normalize(player_stalk_vec);
-
-		test_npc.GetPhysicalObj()->collideTerrain(&terrain, player_stalk_vec * 0.03f, VCAP);
+		// inventory.draw(&GUIShader)
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
 		current_frame = glfwGetTime();
 		dt = (current_frame - last_frame);
 		last_frame = current_frame;
-		
-		player.Update(dt);
-		plane.update(dt);
-		test_npc.GetPhysicalObj()->update(dt);
-
+	
+		player->Update(dt);
+		chunk1.Update(dt);
 	}
 	glfwTerminate();
 	return 0;
@@ -324,8 +310,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-		speed.x = -sin(glm::radians(-player.GetCamera()->getRotation().y)) * velocity;
-		speed.y = -cos(glm::radians(-player.GetCamera()->getRotation().y)) * velocity;
+		speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
+		speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
 		direction = 1;
 	}
 	if (key == GLFW_KEY_W && action == GLFW_RELEASE && direction > 0) {
@@ -333,8 +319,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speed.y = 0.0f;
 	}
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-		speed.x = sin(glm::radians(-player.GetCamera()->getRotation().y)) * velocity;
-		speed.y = cos(glm::radians(-player.GetCamera()->getRotation().y)) * velocity;
+		speed.x = sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
+		speed.y = cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
 		direction = -1;
 	}
 	if (key == GLFW_KEY_S && action == GLFW_RELEASE && direction < 0) {
@@ -342,8 +328,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speed.y = 0.0f;
 	}
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-		speedSide.x = sin(glm::radians(-(player.GetCamera()->getRotation().y + 90.0f))) * velocity;
-		speedSide.y = cos(glm::radians(-(player.GetCamera()->getRotation().y + 90.0f))) * velocity;
+		speedSide.x = sin(glm::radians(-(player->GetCamera()->getRotation().y + 90.0f))) * velocity;
+		speedSide.y = cos(glm::radians(-(player->GetCamera()->getRotation().y + 90.0f))) * velocity;
 		directionSide = -90.0f;
 	}
 	if (key == GLFW_KEY_A && action == GLFW_RELEASE && directionSide < 0.0f) {
@@ -352,8 +338,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 
 	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-		speedSide.x = sin(glm::radians(-(player.GetCamera()->getRotation().y - 90.0f))) * velocity;
-		speedSide.y = cos(glm::radians(-(player.GetCamera()->getRotation().y - 90.0f))) * velocity;
+		speedSide.x = sin(glm::radians(-(player->GetCamera()->getRotation().y - 90.0f))) * velocity;
+		speedSide.y = cos(glm::radians(-(player->GetCamera()->getRotation().y - 90.0f))) * velocity;
 		directionSide = 90.0f;
 	}
 
@@ -362,19 +348,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speedSide.y = 0.0f;
 	}
 
-	if (key == GLFW_KEY_E) {
-		player.GetCamera()->changePositionY(0.1f);
-	}
-
-	if (key == GLFW_KEY_Q) {
-		player.GetCamera()->changePositionY(-0.1f);
-	}
-
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-		player.GetPhysicalObj()->jump();//velocity.y = 10.0f;
+		player->GetPhysicalObj()->jump();//velocity.y = 10.0f;
 	}
 
 	if (key == GLFW_KEY_P && action == GLFW_PRESS) {
-		player.PickupItem(&hammah);
+		//    player->PickupItem(&hammah);
 	}
 }

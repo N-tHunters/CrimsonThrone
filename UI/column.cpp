@@ -1,7 +1,6 @@
 #include "column.h"
 
-template <Item>
-Column::Column(glm::vec4 rect, std::vector<T>* list, std::string texturePath, int maxCount): Frame(rect) {
+Column::Column(glm::vec4 rect, std::vector<Item>* list, std::string texturePath, int maxCount): Frame(rect) {
 	this->rect = rect;
 	this->maxCount = maxCount;
 	this->index = 0;

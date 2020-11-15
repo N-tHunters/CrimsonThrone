@@ -1,9 +1,28 @@
 #include "chunk.h"
 
+#define VCAP 0.1f
+
 Chunk::Chunk() {}
 
 Chunk::Chunk(Terrain * terrain) {
   this->terrain = terrain;
+}
+
+Terrain * Chunk::GetTerrain() {
+  return this->terrain;
+}
+
+void Chunk::Draw(Shader * shader, Camera * camera, int width, int height) {
+  this->terrain->draw(shader, camera, width, height);
+  for(int i = 0; i <  this->GetObjectsCount(); i ++) {
+    this->objects[i]->draw(shader, camera, width, height);
+  }
+  for(int i = 0; i <  this->GetActorsCount(); i ++) {
+    this->actors[i]->GetPhysicalObj()->draw(shader, camera, width, height);
+  }
+  for(int i = 0; i <  this->GetItemsCount(); i ++) {
+    this->items[i]->GetPhysicalObj()->draw(shader, camera, width, height);
+  }
 }
 
 int Chunk::GetItemsCount() {
@@ -70,14 +89,26 @@ void Chunk::Update(float dt) {
   for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
     this->actors[actor_i]->
       GetPhysicalObj()->
-      collideTerrain(this->terrain, glm::vec2(0.0f, 0.0f), 0.1);
+      collideTerrain(this->terrain, glm::vec2(0.0f, 0.0f), VCAP);
+  }
+
+  for(int object_i = 0; object_i < this->GetObjectsCount(); object_i++) {
+    this->objects[object_i]->
+      collideTerrain(this->terrain, glm::vec2(0.0f, 0.0f), VCAP);
+  }
+  
+  for(int item_i = 0; item_i < this->GetItemsCount(); item_i++) {
+    this->items[item_i]->
+      GetPhysicalObj()->
+      collideTerrain(this->terrain, glm::vec2(0.0f, 0.0f), VCAP);
   }
 
   for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++)
     this->actors[actor_i]->GetPhysicalObj()->update(dt);
-}
 
-void Chunk::Render(Shader * shader, Camera * camera, int width, int height) {
-  for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++)
-    this->actors[actor_i]->GetPhysicalObj()->draw(shader, camera, width, height);
+  for(int object_i = 0; object_i < this->GetObjectsCount(); object_i++)
+    this->objects[object_i]->update(dt);
+  
+  for(int item_i = 0; item_i < this->GetItemsCount(); item_i++)
+    this->items[item_i]->GetPhysicalObj()->update(dt);
 }

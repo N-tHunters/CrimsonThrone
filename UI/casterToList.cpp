@@ -3,4 +3,4 @@
 
 template <class T>
 
-AbstractListObject<T>::AbstractListObject(T*)
+AbstractListObject<T>::AbstractListObject(T*) {}

@@ -17,6 +17,10 @@ class Chunk {
   Chunk();
   Chunk(Terrain *);
 
+  Terrain * GetTerrain();
+
+  void Draw(Shader *, Camera *, int, int);
+
   int GetItemsCount();
   int GetActorsCount();
   int GetObjectsCount();
@@ -34,8 +38,6 @@ class Chunk {
   void DeleteObject(int);
 
   void Update(float);
-  
-  void Render(Shader *, Camera *, int, int);
 };
 
 #endif

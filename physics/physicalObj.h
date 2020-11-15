@@ -11,7 +11,7 @@
 class Terrain;
 
 class PhysicalObj {
-	Mesh mesh;
+	Mesh* mesh;
 	bool isActive;
 	bool isVisible;
 	bool isTransparent;
@@ -24,7 +24,7 @@ public:
 	glm::vec3 acceleration;
 	PhysicalObj();
 	PhysicalObj(glm::vec3);
-	PhysicalObj(Mesh, bool, bool, bool, glm::vec3, glm::vec3, string);
+	PhysicalObj(Mesh*, bool, bool, bool, glm::vec3, glm::vec3, string);
 	glm::vec3 getRotation();
 	float getPositionX();
 	float getPositionY();
