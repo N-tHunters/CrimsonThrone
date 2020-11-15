@@ -2,7 +2,9 @@
 
 ElementMagicCore::ElementMagicCore() {}
 
-ProtoMagicCore *ElementMagicCore::CreateElement(glm::vec3 x) {return nullptr;}  
+ProtoMagicCore * ElementMagicCore::CreateElement(glm::vec3) {
+  return nullptr;
+}
 
 char ElementMagicCore::CallCreateElement(char arg, AbstractCore * core) {
   switch(arg) {
