@@ -1,4 +1,4 @@
-CFLAGS := -std=c++17 -Werror -Isrc -Iinclude -g -m64 -s -O3
+CFLAGS := -std=c++17 -Werror -Isrc -Iinclude -s -m64 -O3
 CXFLAGS := -Iinclude
 TARGET := main
 
@@ -44,13 +44,13 @@ else
 
 	REMOVABLE := $(TARGET)
 
-	CC := g++
-	CCX := gcc
+	CC := g++-10
+	CCX := gcc-10
 endif
 
 all: $(TARGET)
 
-$(TARGET): $(TARGET).o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(UI_OBJS) $(MAGIC_OBJS)
+$(TARGET): $(TARGET).o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(UI_OBJS) $(MAGIC_OBJS) debug.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LFLAGS) $(SFLAGS)
 
 %.o: %.cpp

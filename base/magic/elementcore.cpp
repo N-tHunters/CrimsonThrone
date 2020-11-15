@@ -1,5 +1,11 @@
 #include "elementcore.h"
 
+ElementMagicCore::ElementMagicCore() {}
+
+ProtoMagicCore * ElementMagicCore::CreateElement(glm::vec3) {
+  return nullptr;
+}
+
 char ElementMagicCore::CallCreateElement(char arg, AbstractCore * core) {
   switch(arg) {
   case 0:
