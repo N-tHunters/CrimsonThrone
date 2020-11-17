@@ -1,6 +1,6 @@
 #include "casterToList.h"
 
 
-template <class T>
+AbstractListObject::AbstractListObject() {
 
-AbstractListObject<T>::AbstractListObject(T*) {}
+}

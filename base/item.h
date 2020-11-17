@@ -1,3 +1,7 @@
+/**
+ * \file
+ * \brief This file declares Item class
+ */
 #ifndef ITEM_H
 #define ITEM_H
 
@@ -5,11 +9,18 @@
 #include <sstream>
 
 #include "../physics/physicalObj.h"
+#include "../UI/casterToList.h"
 
 class Actor;
 class Saver;
 
-class Item {
+/**
+ * \brief This class represent base for pickable and usable game objects. (Like HealPotion or Weapon).
+ * \author ArturLukianov
+ * 
+ * This class represent base for pickable and usable game objects like HealPotion and Weapon. Inherit it or it's child objects to implement new type of game item
+ */
+class Item : public AbstractListObject {
 private:
   std::string name;
 
