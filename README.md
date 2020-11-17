@@ -1,4 +1,3 @@
 # CrimsonThrone
 
-## Диаграмма классов
-![Классы](docs/classes.svg)
+CrimsonThrone - это 3D-RPG с генерируемым миром.
