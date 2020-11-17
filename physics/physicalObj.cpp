@@ -3,6 +3,9 @@
 
 PhysicalObj::PhysicalObj() {}
 
+
+// 
+
 PhysicalObj::PhysicalObj(glm::vec3 position) {
 	this->position = position;
 	this->velocity = glm::vec3(0.0f);
