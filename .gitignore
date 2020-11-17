@@ -37,3 +37,7 @@
 
 main
 main.exe
+
+# Doxygen documentation
+docs/html
+docs/html/*

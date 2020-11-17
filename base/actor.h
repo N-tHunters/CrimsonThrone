@@ -1,3 +1,7 @@
+/**
+ * \file
+ * \brief Contains Actor class declaration
+ */
 #ifndef ACTOR_H
 #define ACTOR_H
 
@@ -18,33 +22,39 @@ class Boots;
 
 class Saver;
 
+/**
+ * \brief Game actor class
+ * \author ArturLukianov
+ * 
+ * This class represents base of every game character. It serves as a parent class for Player, NPC, etc.
+ */
+
 class Actor {
- private:
-	int health;
-	int max_health;
+private:
+  int health;
+  int max_health;
 
   std::vector<Item *> inventory;
 
-	Weapon* weapon;
+  Weapon* weapon;
 
-	Helmet* helmet;
-	Boots* boots;
-	Gloves* gloves;
-	Chestplate* chestplate;
-	Leggins* leggins;
+  Helmet* helmet;
+  Boots* boots;
+  Gloves* gloves;
+  Chestplate* chestplate;
+  Leggins* leggins;
 
-	std::string name;
+  std::string name;
 
-	PhysicalObj * obj;
+  PhysicalObj * obj;
 
 	
-	// Helper functions
-	void JustifyHealth(); // Check if health is over max_health and justify it
+  void JustifyHealth();
 
- public:
+public:
   Actor();
   Actor(std::string, int, PhysicalObj *);
-  // Getters
+
   int GetHealth();
   int GetMaxHealth();
   int * GetHealthPtr();
@@ -83,12 +93,11 @@ class Actor {
   void WearBoots(Boots*);
   void WearLeggins(Leggins*);
 
-  int GetDefence(); // Get summary defence of all armor
-  int GetDamage(); // Get damage (shortcut for .GetWeapon().GetDamage)
-  void DealDamage(int); // Substract health
-  void Heal(int); // Add health maximum to max_health
+  int GetDefence();
+  int GetDamage();
+  void DealDamage(int);
+  void Heal(int);
 
-  // Functions to work with Inventory
   int GetInventorySize();
   std::vector<Item*>* GetInventoryPointer();
   Item * GetItemAt(int);
