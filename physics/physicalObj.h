@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include "../render/camera.h"
 #include "../render/shaderLoader.h"
+#include "../render/shaderHolder.h"
 //#include "terrain.h"
 
 class Terrain;
@@ -55,7 +56,7 @@ public:
 	void changeRotationY(float);
 	void changeRotationZ(float);
 
-	void draw(Shader*, Camera*, GLuint, GLuint);
+	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
 	void update(float);
 
 	string getName();

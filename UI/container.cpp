@@ -50,14 +50,14 @@ Container::Container(glm::vec4 rect, Frame* frame, std::string texturePath): Fra
 	glBindVertexArray(0);
 }
 
-void Container::draw(Shader* shader, Shader* textShader, std::map<GLchar, Character> characters) {
+void Container::draw(ShaderHolder* shaderHolder, std::map<GLchar, Character> characters) {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glUniform1i(glGetUniformLocation(shader->Program, "ourTexture"), 0);
+	glUniform1i(glGetUniformLocation(shaderHolder->getGUI()->Program, "ourTexture"), 0);
 
-	shader->Use();
+	shaderHolder->getGUI()->Use();
 
 	glBindVertexArray(VAO);
 	//glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
@@ -65,5 +65,5 @@ void Container::draw(Shader* shader, Shader* textShader, std::map<GLchar, Charac
 	
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	this->frame->draw(textShader, characters);
+	this->frame->draw(shaderHolder, characters);
 }

@@ -10,8 +10,8 @@ class Column: public Frame {
 	int maxCount;
 
 public:
-	void draw(Shader*);
-  	Column(glm::vec4, std::vector<Item>*, std::string, int);
+	List(std::vector<Frame*>*, std::string, int);
+	void draw(ShaderHolder*);
 };
 
 #endif

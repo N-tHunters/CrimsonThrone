@@ -4,6 +4,7 @@
 #include "physicalObj.h"
 #include "../render/shaderLoader.h"
 #include "../render/camera.h"
+#include "../render/shaderHolder.h"
 
 class Terrain {
 	int size;
@@ -14,7 +15,7 @@ class Terrain {
 	PhysicalObj* obj;
 public:
 	Terrain(int, float);
-	void draw(Shader*, Camera*, GLuint, GLuint);
+	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
 	float getHeight(glm::vec3);
 };
 

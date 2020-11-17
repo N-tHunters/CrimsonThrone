@@ -28,6 +28,7 @@
 #include "render/shaderLoader.h"
 #include "render/constants.h"
 #include "render/model.h"
+#include "render/shaderHolder.h"
 //#include "render/shaders.h"
 
 #include "physics/physicalObj.h"
@@ -67,17 +68,13 @@ glm::vec3 normalize(glm::vec3 vec) {
 	return vec;
 }
 
-// Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
-
-// Global variabels
 glm::vec2 speed = glm::vec2(0.0f, 0.0f);
 
 float VCAP = 0.1f;
 
 Camera* camera;
-//PhysicalObj player = PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f));
 Player* player;
 SoundEngine sound_engine;
 
@@ -90,7 +87,6 @@ float velocity = 0.1f;
 
 std::map<GLchar, Character> Characters;
 
-// The MAIN function, from here we start the application and run the game loop
 int main()
 {
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -170,90 +166,124 @@ int main()
 		std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
 		continue;
 	}
-			// Generate texture
-			GLuint texture;
-			glGenTextures(1, &texture);
-			glBindTexture(GL_TEXTURE_2D, texture);
-			glTexImage2D(
-			 GL_TEXTURE_2D,
-			 0,
-			 GL_RED,
-			 face->glyph->bitmap.width,
-			 face->glyph->bitmap.rows,
-			 0,
-			 GL_RED,
-			 GL_UNSIGNED_BYTE,
-			 face->glyph->bitmap.buffer
-			 );
-			// Set texture options
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			// Now store character for later use
-			Character character = {
-					 texture,
-					 glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-					 glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-					 (GLuint)face->glyph->advance.x
-			};
-			Characters.insert(std::pair<GLchar, Character>(c, character));
-			// Characters[c] = character;
-		}
+      // Generate texture
+      GLuint texture;
+      glGenTextures(1, &texture);
+      glBindTexture(GL_TEXTURE_2D, texture);
+      glTexImage2D(
+		   GL_TEXTURE_2D,
+		   0,
+		   GL_RED,
+		   face->glyph->bitmap.width,
+		   face->glyph->bitmap.rows,
+		   0,
+		   GL_RED,
+		   GL_UNSIGNED_BYTE,
+		   face->glyph->bitmap.buffer
+		   );
+      // Set texture options
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      // Now store character for later use
+      Character character = {
+			     texture,
+			     glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+			     glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+			     (GLuint)face->glyph->advance.x
+      };
+      Characters.insert(std::pair<GLchar, Character>(c, character));
+      // Characters[c] = character;
+    }
 
-	FT_Done_Face(face);   // Завершение работы с шрифтом face
-	FT_Done_FreeType(ft); // Завершение работы FreeType
+  FT_Done_Face(face);   // Завершение работы с шрифтом face
+  FT_Done_FreeType(ft); // Завершение работы FreeType
+
+  // Build and compile our shader program
+  Shader ourShader("resources/shaders/vertex_shader.glsl", "resources/shaders/fragment_shader.glsl");
+  Shader GUIShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/GUI_fragment_shader.glsl");
+  Shader textShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/text_fragment_shader.glsl");
+
+
+  // ----------------------------------------------- CODE ------------------------------------------
+
+  Chunk chunk1(new Terrain(100, 1.0f));
+
+
+  // Set up vertex data (and buffer(s)) and attribute pointers
+  chunk1.AddActor((Actor*)
+		  new NPC("test_npc", 10,
+			  new PhysicalObj(Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
+					  false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
+					  glm::vec3(0.0f, 0.0f, 0.0f), "frock")));
+
+  chunk1.AddObject(new PhysicalObj(Mesh("resources/textures/frog.jpg", new Model((char *) "resources/models/frog.obj")),
+				   false, true, false, glm::vec3(0.0f, 0.0f, 0.0f),
+				   glm::vec3(0.0f, 0.0f, 0.0f), "frog"));
+
+	FT_Done_Face(face);
+	FT_Done_FreeType(ft);
 
 	// Build and compile our shader program
 	Shader ourShader("resources/shaders/vertex_shader.glsl", "resources/shaders/fragment_shader.glsl");
 	Shader GUIShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/GUI_fragment_shader.glsl");
 	Shader textShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/text_fragment_shader.glsl");
 
+	// Create ShaderHolder
 
-	// ----------------------------------------------- CODE ------------------------------------------
-
-	Chunk chunk1(new Terrain(100, 1.0f));
-
-
-	// Set up vertex data (and buffer(s)) and attribute pointers
-	chunk1.AddActor((Actor*)
-			new NPC("test_npc", 10,
-				new PhysicalObj(new Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
-						false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
-						glm::vec3(0.0f, 0.0f, 0.0f), "frock")));
-
-	chunk1.AddObject(new PhysicalObj(new Mesh("resources/textures/frog.jpg", new Model((char *) "resources/models/frog.obj")),
-					 false, true, false, glm::vec3(0.0f, 0.0f, 0.0f),
-					 glm::vec3(0.0f, 0.0f, 0.0f), "frog"));
+	ShaderHolder shaderHolder(ourShader, GUIShader, textShader);
 	
 	chunk1.AddItem(new Item("test_item", new PhysicalObj(new Mesh("resources/textures/stone.jpg", new Model((char*)"resources/models/hammah.obj")), false, true, false, glm::vec3(10.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "hammah!")));
 
+  Bar test_frame(glm::vec4(-0.9f, 0.9f, 0.5f, 0.1f), &hp, &maxHp, glm::vec3(255, 0, 0));
 
-	
-	//List<Item*> inventory(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), player->GetInventoryPointer(), std::string("resources/textures/list.png"), 10);
-	Text* text = new Text("LMAO Bottom text", glm::vec4(-0.9f, -0.9f, 0.0f, 0.0f), Characters, 32.0f / (float)width / 16.0f, glm::vec3(0, 255, 0));
-	//Container test_con(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), text, "resources/textures/stone.jpg");
+  while (!glfwWindowShouldClose(window))
+    {
+		
+      lastXPos = xpos;
+      lastYPos = ypos;
+      glfwGetCursorPos(window, &xpos, &ypos);
+      glm::vec2 cursorMotion = glm::vec2(lastXPos - xpos, lastYPos - ypos);
+      if(cursorMotion.x != 0 || cursorMotion.y != 0) {
+	if(speed.x != 0 || speed.y != 0) {
+	  speed.x = -sin(glm::radians(-player.GetCamera()->getRotation().y)) * velocity * direction;
+	  speed.y = -cos(glm::radians(-player.GetCamera()->getRotation().y)) * velocity * direction;
+	}
+	if(speedSide.x != 0 || speedSide.y != 0) {
+	  speedSide.x = -sin(glm::radians(-(player.GetCamera()->getRotation().y + directionSide))) * velocity;
+	  speedSide.y = -cos(glm::radians(-(player.GetCamera()->getRotation().y + directionSide))) * velocity;
+	}
+	cursorMotion *= sensivity;
+	player.GetCamera()->changeRotationX(-cursorMotion.y);
+	player.GetCamera()->changeRotationY(-cursorMotion.x);
+	if(player.GetCamera()->getRotation().x < -90.0f)
+	  player.GetCamera()->setRotationX(-90.0f);
+	if(player.GetCamera()->getRotation().x > 90.0f)
+	  player.GetCamera()->setRotationX(90.0f);
+      }
+      // Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
+      glfwPollEvents();
+      // Render
+      // Clear the color buffer
+      glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+      chunk1.Draw(&ourShader, &camera, width, height);
+
+      player.GetPhysicalObj()->collideTerrain(chunk1.GetTerrain(), speed + speedSide, VCAP);
+
+      hammah.GetPhysicalObj()->collideTerrain(&terrain, glm::vec2(0.0f, 0.0f), VCAP);
+
+      terrain.draw(&ourShader, &camera, width, height);
 
 	float last_frame = glfwGetTime(),
 		current_frame = glfwGetTime();
-
-	float dt = 0.0f;
-	int maxDt = 1;
-
-	int hp = player->GetHealth();
-	int maxHp = player->GetMaxHealth();
-
-	/*NPC* test2 = new NPC("test_npc", 10,
-				new PhysicalObj(new Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
-						false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
-						glm::vec3(0.0f, 0.0f, 0.0f), "frock"));*/
-
-	player->GetPhysicalObj()->name = "Player";
-
-	Bar test_frame(glm::vec4(-0.9f, 0.9f, 0.5f, 0.1f), &hp, &maxHp, glm::vec3(255, 0, 0));
-
-	while (!glfwWindowShouldClose(window))
-	{
+      // Swap the screen buffers
+      glfwSwapBuffers(window);
+      current_frame = glfwGetTime();
+      dt = (current_frame - last_frame);
+      last_frame = current_frame;
 		
 		lastXPos = xpos;
 		lastYPos = ypos;

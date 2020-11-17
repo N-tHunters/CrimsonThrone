@@ -8,7 +8,7 @@ class Container: public Frame {
 
 public:
 	Container(glm::vec4, Frame*, std::string);
-	void draw(Shader*, Shader*, std::map<GLchar, Character>);
+	void draw(ShaderHolder*, std::map<GLchar, Character>);
 };
 
 #endif

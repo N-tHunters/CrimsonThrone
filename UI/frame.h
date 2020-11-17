@@ -10,6 +10,7 @@
 // Render includes
 #include "../render/shaderLoader.h"
 #include "../render/imageLoader.h"
+#include "../render/shaderHolder.h"
 
 // Base includes
 #include "../base/item.h"
@@ -25,8 +26,8 @@ protected:
 
 public:
 	Frame(glm::vec4);
-	void draw(Shader*);
-	virtual void draw(Shader*, std::map<GLchar, Character>);
+	void draw(ShaderHolder*);
+	virtual void draw(ShaderHolder*, std::map<GLchar, Character>);
 };
 
 #endif

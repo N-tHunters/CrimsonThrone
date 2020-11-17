@@ -74,8 +74,8 @@ Terrain::Terrain(int size, float scale) {
 	this->obj = new PhysicalObj(new Mesh("resources/textures/rock.png", this->vertices, this->indices), false, true, false, glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
 }
 
-void Terrain::draw(Shader* shader, Camera* camera, GLuint width, GLuint height) {
-	this->obj->draw(shader, camera, width, height);
+void Terrain::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height) {
+	this->obj->draw(shaderHolder, camera, width, height);
 }
 
 

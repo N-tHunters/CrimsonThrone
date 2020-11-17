@@ -12,7 +12,7 @@ class List: public Frame {
 
 public:
 	List(glm::vec4, std::vector<Column*>*, std::string, int);
-	void draw(Shader*);
+	void draw(ShaderHolder*);
 };
 
 #endif

@@ -1,5 +1,5 @@
 #ifndef MESH_H
-#define MESH_H // holds all OpenGL type declarations
+#define MESH_H
 
 #ifndef GLAD_MATRIX_INCLUDED
 #define GLAD_MATRIX_INCLUDED
@@ -10,13 +10,15 @@
 #include <glm/gtc/type_ptr.hpp>
 #endif
 
+// Render includes
+
 #include "shaderLoader.h"
+#include "shaderHolder.h"
+#include "constants.h"
+#include "camera.h"
 
 #include <string>
 #include <vector>
-
-#include "constants.h"
-#include "camera.h"
 
 using namespace std;
 
@@ -32,13 +34,9 @@ public:
 	Mesh(string, Model*);
 	Mesh(string, std::vector<GLfloat>, std::vector<unsigned int>);
 	Mesh();
-
 	void init(PhysicalObj*);
-
-	void draw(Shader*, Camera*, GLuint, GLuint);
-
+	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
 	void rotate(glm::vec3);
-
 	void load(std::string);
 };
 #endif

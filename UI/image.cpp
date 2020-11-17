@@ -80,15 +80,15 @@ Image::Image(glm::vec4 rect, GLuint textureID): Frame(rect) {
 	glBindVertexArray(0);
 }
 
-void Image::draw(Shader* shader) {
+void Image::draw(ShaderHolder* shaderHolder) {
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glUniform1i(glGetUniformLocation(shader->Program, "text"), 0);
+	glUniform1i(glGetUniformLocation(shaderHolder->getGUI()->Program, "text"), 0);
 
-	shader->Use();
+	shaderHolder->getGUI()->Use();
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
@@ -96,16 +96,16 @@ void Image::draw(Shader* shader) {
 
 }
 
-void Image::draw(Shader* shader, glm::vec3 color) {
+void Image::draw(ShaderHolder* shaderHolder, glm::vec3 color) {
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glUniform1i(glGetUniformLocation(shader->Program, "text"), 0);
-	glUniform3f(glGetUniformLocation(shader->Program, "textColor"), color.x, color.y, color.z);
+	glUniform1i(glGetUniformLocation(shaderHolder->getText()->Program, "text"), 0);
+	glUniform3f(glGetUniformLocation(shaderHolder->getText()->Program, "textColor"), color.x, color.y, color.z);
 
-	shader->Use();
+	shaderHolder->getText()->Use();
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);

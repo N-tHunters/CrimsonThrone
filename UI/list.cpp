@@ -78,14 +78,14 @@ List::List(glm::vec4 rect, std::vector<Column*>* list, std::string texturePath, 
 	glBindVertexArray(0);
 }
 
-void List::draw(Shader* shader) {
+void List::draw(ShaderHolder* shaderHolder) {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glUniform1i(glGetUniformLocation(shader->Program, "ourTexture"), 0);
+	glUniform1i(glGetUniformLocation(shaderHolder->getGUI()->Program, "ourTexture"), 0);
 
-	shader->Use();
+	shaderHolder->getGUI()->Use();
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
