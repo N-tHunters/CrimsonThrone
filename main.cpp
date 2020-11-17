@@ -124,8 +124,8 @@ int main()
 
 	glfwMakeContextCurrent(window);
 
-  glfwSwapInterval(-1);
-  
+	glfwSwapInterval(-1);
+	
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -133,49 +133,6 @@ int main()
 	// Set the required callback functions
 	glfwSetKeyCallback(window, key_callback);
 
-<<<<<<< HEAD
-=======
-	double xpos, ypos;
-	double lastXPos, lastYPos;
-	float sensivity = 0.1f;
-	lastXPos = 0.0;
-	lastYPos = 0.0;
-	srand(time(0));
-
-	// Check openAL
-	ALuint source;
-	alGenSources(1, &source);
-	alSourcef(source, AL_PITCH, 1);
-	alSourcef(source, AL_GAIN, 1);
-	alSource3f(source, AL_POSITION, 0, 0, 0);
-	alSource3f(source, AL_VELOCITY, 0, 0, 0);
-	alSourcei(source, AL_LOOPING, AL_TRUE);
-
-	FileSound sound(&sound_engine, &source, "resources/sounds/happierburial.wav");
-	sound.Play();
-
-	// Init GLFW
-	glfwInit();
-	// Set all the required options for GLFW
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	glfwWindowHint(GLFW_MAXIMIZED, GL_TRUE);
-
-	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crimson Throne", nullptr, nullptr);
-
-	glfwMakeContextCurrent(window);
-
-	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	// Set the required callback functions
-	glfwSetKeyCallback(window, key_callback);
-
->>>>>>> Fixed something
 	// Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
 	glewExperimental = GL_TRUE;
 	// Initialize GLEW to setup the OpenGL Function pointers
@@ -202,13 +159,13 @@ int main()
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 	
 	for (GLubyte c = 0; c < 128; c++)
-		{
-			// Load character glyph
-			if (FT_Load_Char(face, c, FT_LOAD_RENDER))
 	{
-		std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
-		continue;
-	}
+		// Load character glyph
+		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+		{
+			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+			continue;
+		}
 			// Generate texture
 			GLuint texture;
 			glGenTextures(1, &texture);
@@ -252,11 +209,11 @@ int main()
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	chunk1.AddActor((Actor*)
 			new NPC("test_npc", 10,
-				new PhysicalObj(Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
+				new PhysicalObj(new Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
 						false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
 						glm::vec3(0.0f, 0.0f, 0.0f), "frock")));
 
-	chunk1.AddObject(new PhysicalObj(Mesh("resources/textures/frog.jpg", new Model((char *) "resources/models/frog.obj")),
+	chunk1.AddObject(new PhysicalObj(new Mesh("resources/textures/frog.jpg", new Model((char *) "resources/models/frog.obj")),
 					 false, true, false, glm::vec3(0.0f, 0.0f, 0.0f),
 					 glm::vec3(0.0f, 0.0f, 0.0f), "frog"));
 
@@ -276,7 +233,7 @@ int main()
 
 
 	
-	List inventory(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), player.GetInventoryPointer(), std::string("resources/textures/list.png"), 10);
+	//List inventory(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), player->GetInventoryPointer(), std::string("resources/textures/list.png"), 10);
 	Text* text = new Text("LMAO Bottom text", glm::vec4(-0.9f, -0.9f, 0.0f, 0.0f), Characters, 32.0f / (float)width / 16.0f, glm::vec3(0, 255, 0));
 	//Container test_con(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), text, "resources/textures/stone.jpg");
 
@@ -286,10 +243,10 @@ int main()
 	float dt = 0.0f;
 	int maxDt = 1;
 
-	int hp = player.GetHealth();
-	int maxHp = player.GetMaxHealth();
+	int hp = player->GetHealth();
+	int maxHp = player->GetMaxHealth();
 
-	player.GetPhysicalObj()->name = "Player";
+	player->GetPhysicalObj()->name = "Player";
 
 	Bar test_frame(glm::vec4(-0.9f, 0.9f, 0.5f, 0.1f), &hp, &maxHp, glm::vec3(255, 0, 0));
 
@@ -302,20 +259,20 @@ int main()
 			glm::vec2 cursorMotion = glm::vec2(lastXPos - xpos, lastYPos - ypos);
 			if(cursorMotion.x != 0 || cursorMotion.y != 0) {
 	if(speed.x != 0 || speed.y != 0) {
-		speed.x = -sin(glm::radians(-player.GetCamera()->getRotation().y)) * velocity * direction;
-		speed.y = -cos(glm::radians(-player.GetCamera()->getRotation().y)) * velocity * direction;
+		speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
+		speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
 	}
 	if(speedSide.x != 0 || speedSide.y != 0) {
-		speedSide.x = -sin(glm::radians(-(player.GetCamera()->getRotation().y + directionSide))) * velocity;
-		speedSide.y = -cos(glm::radians(-(player.GetCamera()->getRotation().y + directionSide))) * velocity;
+		speedSide.x = -sin(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
+		speedSide.y = -cos(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
 	}
 	cursorMotion *= sensivity;
-	player.GetCamera()->changeRotationX(-cursorMotion.y);
-	player.GetCamera()->changeRotationY(-cursorMotion.x);
-	if(player.GetCamera()->getRotation().x < -90.0f)
-		player.GetCamera()->setRotationX(-90.0f);
-	if(player.GetCamera()->getRotation().x > 90.0f)
-		player.GetCamera()->setRotationX(90.0f);
+	player->GetCamera()->changeRotationX(-cursorMotion.y);
+	player->GetCamera()->changeRotationY(-cursorMotion.x);
+	if(player->GetCamera()->getRotation().x < -90.0f)
+		player->GetCamera()->setRotationX(-90.0f);
+	if(player->GetCamera()->getRotation().x > 90.0f)
+		player->GetCamera()->setRotationX(90.0f);
 			}
 			// Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
 			glfwPollEvents();
@@ -324,40 +281,19 @@ int main()
 			glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-			chunk1.Draw(&shaderHolder, &camera, width, height);
+			chunk1.Draw(&shaderHolder, camera, width, height);
 
-			player.GetPhysicalObj()->collideTerrain(chunk1.GetTerrain(), speed + speedSide, VCAP);
-
-<<<<<<< HEAD
+			player->GetPhysicalObj()->collideTerrain(chunk1.GetTerrain(), speed + speedSide, VCAP);
 	float last_frame = glfwGetTime(),
 		current_frame = glfwGetTime();
-      // Swap the screen buffers
-      glfwSwapBuffers(window);
-      current_frame = glfwGetTime();
-      dt = (current_frame - last_frame);
-      last_frame = current_frame;
+			// Swap the screen buffers
+			glfwSwapBuffers(window);
+			current_frame = glfwGetTime();
+			dt = (current_frame - last_frame);
+			last_frame = current_frame;
 		
 		lastXPos = xpos;
 		lastYPos = ypos;
-		glfwGetCursorPos(window, &xpos, &ypos);
-		glm::vec2 cursorMotion = glm::vec2(lastXPos - xpos, lastYPos - ypos);
-		if(cursorMotion.x != 0 || cursorMotion.y != 0) {
-			if(speed.x != 0 || speed.y != 0) {
-				speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
-				speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
-			}
-			if(speedSide.x != 0 || speedSide.y != 0) {
-				speedSide.x = -sin(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
-				speedSide.y = -cos(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
-			}
-			cursorMotion *= sensivity;
-			player->GetCamera()->changeRotationX(-cursorMotion.y);
-			player->GetCamera()->changeRotationY(-cursorMotion.x);
-			if(player->GetCamera()->getRotation().x < -90.0f)
-				player->GetCamera()->setRotationX(-90.0f);
-			if(player->GetCamera()->getRotation().x > 90.0f)
-				player->GetCamera()->setRotationX(90.0f);
-		}
 		// Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
 		// Render
@@ -367,12 +303,12 @@ int main()
 
 		player->GetPhysicalObj()->collideTerrain(chunk1.GetTerrain(), speed + speedSide, VCAP);
 
-		chunk1.Draw(&ourShader, camera, width, height);
+		chunk1.Draw(&shaderHolder, camera, width, height);
 
 		//test2->GetPhysicalObj()->draw(&ourShader, &camera, width, height);
 
-		test_frame.draw(&GUIShader);
-		text->draw(&textShader);
+		test_frame.draw(&shaderHolder);
+		text->draw(&shaderHolder);
 		// inventory.draw(&GUIShader)
 
 		// Swap the screen buffers
@@ -384,29 +320,6 @@ int main()
 		player->Update(dt);
 		chunk1.Update(dt);
 	}
-=======
-			/*
-			hammah.GetPhysicalObj()->collideTerrain(&terrain, glm::vec2(0.0f, 0.0f), VCAP);
-
-			terrain.draw(&ourShader, &camera, width, height);
-
-			plane.draw(&ourShader, &camera, width, height);
-			*/
-
-			test_frame.draw(&shaderHolder);
-			text->draw(&shaderHolder);
-			// inventory.draw(&GUIShader);
-
-			// Swap the screen buffers
-			glfwSwapBuffers(window);
-			current_frame = glfwGetTime();
-			dt = (current_frame - last_frame);
-			last_frame = current_frame;
-		
-			player.Update(dt);
-			chunk1.Update(dt);
-		}
->>>>>>> Fixed something
 	glfwTerminate();
 	return 0;
 }
@@ -417,13 +330,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-<<<<<<< HEAD
 		speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
 		speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
-=======
-		speed.x = -sin(glm::radians(-player.GetCamera()->getRotation().y)) * velocity;
-		speed.y = -cos(glm::radians(-player.GetCamera()->getRotation().y)) * velocity;
->>>>>>> Fixed something
 		direction = 1;
 	}
 	if (key == GLFW_KEY_W && action == GLFW_RELEASE && direction > 0) {
@@ -431,13 +339,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speed.y = 0.0f;
 	}
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-<<<<<<< HEAD
 		speed.x = sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
 		speed.y = cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
-=======
-		speed.x = sin(glm::radians(-player.GetCamera()->getRotation().y)) * velocity;
-		speed.y = cos(glm::radians(-player.GetCamera()->getRotation().y)) * velocity;
->>>>>>> Fixed something
 		direction = -1;
 	}
 	if (key == GLFW_KEY_S && action == GLFW_RELEASE && direction < 0) {
@@ -445,13 +348,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		speed.y = 0.0f;
 	}
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-<<<<<<< HEAD
 		speedSide.x = sin(glm::radians(-(player->GetCamera()->getRotation().y + 90.0f))) * velocity;
 		speedSide.y = cos(glm::radians(-(player->GetCamera()->getRotation().y + 90.0f))) * velocity;
-=======
-		speedSide.x = sin(glm::radians(-(player.GetCamera()->getRotation().y + 90.0f))) * velocity;
-		speedSide.y = cos(glm::radians(-(player.GetCamera()->getRotation().y + 90.0f))) * velocity;
->>>>>>> Fixed something
 		directionSide = -90.0f;
 	}
 	if (key == GLFW_KEY_A && action == GLFW_RELEASE && directionSide < 0.0f) {
@@ -460,13 +358,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 
 	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-<<<<<<< HEAD
 		speedSide.x = sin(glm::radians(-(player->GetCamera()->getRotation().y - 90.0f))) * velocity;
 		speedSide.y = cos(glm::radians(-(player->GetCamera()->getRotation().y - 90.0f))) * velocity;
-=======
-		speedSide.x = sin(glm::radians(-(player.GetCamera()->getRotation().y - 90.0f))) * velocity;
-		speedSide.y = cos(glm::radians(-(player.GetCamera()->getRotation().y - 90.0f))) * velocity;
->>>>>>> Fixed something
 		directionSide = 90.0f;
 	}
 
@@ -476,18 +369,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-<<<<<<< HEAD
 		player->GetPhysicalObj()->jump();//velocity.y = 10.0f;
 	}
 
 	if (key == GLFW_KEY_P && action == GLFW_PRESS) {
-		//    player->PickupItem(&hammah);
-=======
-		player.GetPhysicalObj()->jump();//velocity.y = 10.0f;
-	}
-
-	if (key == GLFW_KEY_P && action == GLFW_PRESS) {
-		//    player.PickupItem(&hammah);
->>>>>>> Fixed something
 	}
 }
