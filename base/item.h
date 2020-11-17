@@ -45,8 +45,6 @@ public:
 
   virtual std::stringstream * Save(Saver *);
   virtual std::stringstream * Save(Saver *, int);
-
-  std::vector<std::string *> * Describe();
 };
 
 #endif
