@@ -1,3 +1,7 @@
+/**
+ * \file
+ * \brief Actor implementation
+ */
 #include <string>
 
 #include "actor.h"
@@ -12,8 +16,17 @@
 #include "saver.h"
 
 
+/**
+ * Empty constructor
+ */
 Actor::Actor() {}
 
+/**
+ * Basic constructor
+ * \param name Actor Name
+ * \param max_health Maximum health
+ * \param obj Physical object (body)
+ */
 Actor::Actor(std::string name, int max_health, PhysicalObj * obj) : Actor() {
   this->name = name;
   this->max_health = max_health;
@@ -22,74 +35,146 @@ Actor::Actor(std::string name, int max_health, PhysicalObj * obj) : Actor() {
 }
 
 // Getters
+
+/**
+ * Get name
+ * \return Name
+ */
 std::string Actor::GetName() {
   return this->name;
 }
 
+/**
+ * Get current health
+ * \return Current health
+ */
 int Actor::GetHealth() {
   return this->health;
 }
 
+/**
+ * Get pointer to current health
+ * \note Useful for UI
+ * \return &health Pointer to current health
+ */
 int * Actor::GetHealthPtr() {
   return &this->health;
 }
 
+/**
+ * Get maximum health
+ * \return_health Maximum health
+ */
 int Actor::GetMaxHealth() {
   return this->max_health;
 }
 
+/**
+ * Get pointer to maximum health
+ * \note Useful for UI
+ * \return &max_health Pointer to maxium health
+ */
 int * Actor::GetMaxHealthPtr() {
   return &this->max_health;
 }
 
+/**
+ * Get pointer to weapon used by this actor
+ * \return Pointer to weapon used by this actor
+ */
 Weapon* Actor::GetWeapon() {
   return this->weapon;
 }
 
+/**
+ * Get pointer to helmet used by this actor
+ * \return Pointer to helmet used by this actor
+ */
 Helmet* Actor::GetHelmet() {
   return this->helmet;
 }
 
+/**
+ * Get pointer to boots used by this actor
+ * \return Pointer to boots used by this actor
+ */
 Boots* Actor::GetBoots() {
   return this->boots;
 }
 
+/**
+ * Get pointer to leggins used by this actor
+ * \return Pointer to leggins used by this actor
+ */
 Leggins* Actor::GetLeggins() {
   return this->leggins;
 }
 
+/**
+ * Get pointer to gloves used by this actor
+ * \return Pointer to gloves used by this actor 
+ */
 Gloves* Actor::GetGloves() {
   return this->gloves;
 }
 
+/**
+ * Get pointer to chestplate used by this actor
+ * \return Pointer to chestplate used by this actor
+ */
 Chestplate* Actor::GetChestplate() {
   return this->chestplate;
 }
 
+/**
+ * Get pointer to physical object (body) used by this actor
+ * \return Pointer to physical object used by this actor
+ */
 PhysicalObj* Actor::GetPhysicalObj() {
   return this->obj;
 }
 
-// Setters
+
+/**
+ * Set name to this actor
+ * \param name New name
+ */
 void Actor::SetName(std::string name) {
   this->name = name;
 }
 
+/**
+ * Set current health to this actor
+ * \param health New value of health
+ */
 void Actor::SetHealth(int health) {
   this->health = health;
 }
 
+/**
+ * Set maximum health to this actor
+ * \param max_health New value of maximum health
+ */
 void Actor::SetMaxHealth(int max_health) {
   this->max_health = max_health;
 }
 
+/**
+ * Set weapon to use
+ * \param weapon New weapon to use
+ */
 void Actor::SetWeapon(Weapon* weapon) {
   this->weapon = weapon;
 }
 
+/**
+ * Set helmet to use
+ * \param helmet New helmet to use
+ */
 void Actor::SetHelmet(Helmet* helmet) {
   this->helmet = helmet;
 }
+
 
 void Actor::SetBoots(Boots* boots) {
   this->boots = boots;
