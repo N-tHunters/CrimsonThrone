@@ -119,3 +119,14 @@ std::stringstream * Item::Save(Saver * saver, int entry) {
   return ss;
 }
 
+std::vector<std::string>* Item::getHeaders() {
+  std::vector<std::string> * headers = new std::vector<std::string>();
+  headers->push_back("Name");
+  return headers;
+}
+
+std::vector<std::string>* Item::getValues() {
+  std::vector<std::string> * values = new std::vector<std::string>();
+  values->push_back(this->name);
+  return values;
+}
