@@ -1,9 +1,11 @@
 #include "column.h"
 
-Column::Column(glm::vec4 rect, std::vector<Item>* list, std::string texturePath, int maxCount): Frame(rect) {
+
+Column::Column(glm::vec4 rect, std::vector<AbstractListElement*>* list, std::string texturePath, std::string header, int maxCount, std::map<GLchar, Character> Characters): Frame(rect) {
 	this->rect = rect;
 	this->maxCount = maxCount;
 	this->index = 0;
+	this->header = header;
 
 	for(int i = 0; i < maxCount; i ++) {
 		this->vertices.push_back(rect.x);
@@ -76,18 +78,28 @@ Column::Column(glm::vec4 rect, std::vector<Item>* list, std::string texturePath,
 	glEnableVertexAttribArray(2);
 
 	glBindVertexArray(0);
+
+	int number = 0;
+
+	for(int i = 0; i < list->size(); i ++) {
+		this->column.push_back(&Text(list->at(i)->getValues()->at(number), rect, Characters, 0.001f, glm::vec3(255, 255, 0)));
+	}
 }
 
-void Column::draw(Shader* shader) {
+void Column::draw(ShaderHolder* shaderHolder) {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glUniform1i(glGetUniformLocation(shader->Program, "ourTexture"), 0);
+	glUniform1i(glGetUniformLocation(shaderHolder->getGUI()->Program, "ourTexture"), 0);
 
-	shader->Use();
+	shaderHolder->getGUI()->Use();
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
+
+	for(int i = 0; i < this->column.size(); i ++) {
+		this->column[i].draw(shaderHolder);
+	}
 }

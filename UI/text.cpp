@@ -25,8 +25,8 @@ Text::Text(std::string text, glm::vec4 rect, std::map<GLchar, Character> Charact
 	}
 }
 
-void Text::draw(Shader* shader) {
+void Text::draw(ShaderHolder* shaderHolder) {
 	for(int i = 0; i < this->letters.size(); i ++) {
-		this->letters[i]->draw(shader, this->color);
+		this->letters[i]->draw(shaderHolder, this->color);
 	}
 }

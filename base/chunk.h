@@ -2,6 +2,7 @@
 #define CHUNK_H
 
 #include "../physics/terrain.h"
+#include "../render/shaderHolder.h"
 #include "item.h"
 #include "actor.h"
 #include <vector>
@@ -19,7 +20,7 @@ class Chunk {
 
   Terrain * GetTerrain();
 
-  void Draw(Shader *, Camera *, int, int);
+  void Draw(ShaderHolder *, Camera *, int, int);
 
   int GetItemsCount();
   int GetActorsCount();

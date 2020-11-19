@@ -9,7 +9,7 @@ class Bar: public Frame {
 	glm::vec4 rect;
 public:
 	Bar(glm::vec4, int*, int*, glm::vec3);
-	void draw(Shader*);
+	void draw(ShaderHolder*);
 };
 
 #endif
