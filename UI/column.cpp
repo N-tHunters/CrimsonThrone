@@ -82,7 +82,7 @@ Column::Column(glm::vec4 rect, std::vector<AbstractListElement*>* list, std::str
 	int number = 0;
 
 	for(int i = 0; i < list->size(); i ++) {
-		this->column.push_back(&Text(list->at(i)->getValues()->at(number), rect, Characters, 0.001f, glm::vec3(255, 255, 0)));
+	  this->column.push_back(new Text(list->at(i)->getValues()->at(number), rect, Characters, 0.001f, glm::vec3(255, 255, 0)));
 	}
 }
 
@@ -100,6 +100,6 @@ void Column::draw(ShaderHolder* shaderHolder) {
 	glBindVertexArray(0);
 
 	for(int i = 0; i < this->column.size(); i ++) {
-		this->column[i].draw(shaderHolder);
+		this->column[i]->draw(shaderHolder);
 	}
 }
