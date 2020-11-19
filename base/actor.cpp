@@ -72,7 +72,7 @@ int Actor::GetMaxHealth() {
 /**
  * Get pointer to maximum health
  * \note Useful for UI
- * \return &max_health Pointer to maxium health
+ * \return Pointer to maxium health
  */
 int * Actor::GetMaxHealthPtr() {
   return &this->max_health;
@@ -161,7 +161,7 @@ void Actor::SetMaxHealth(int max_health) {
 
 /**
  * Set weapon to use
- * \param weapon New weapon to use
+ * \param weapon Pointer to new weapon to use
  */
 void Actor::SetWeapon(Weapon* weapon) {
   this->weapon = weapon;
@@ -169,65 +169,110 @@ void Actor::SetWeapon(Weapon* weapon) {
 
 /**
  * Set helmet to use
- * \param helmet New helmet to use
+ * \param helmet Pointer to new helmet to use
  */
 void Actor::SetHelmet(Helmet* helmet) {
   this->helmet = helmet;
 }
 
-
+/**
+ * Set boots to use
+ * \param boots Pointer to new boots to use
+ */
 void Actor::SetBoots(Boots* boots) {
   this->boots = boots;
 }
 
+/**
+ * Set gloves to use
+ * \param gloves Pointer to new gloves to use
+ */
 void Actor::SetGloves(Gloves* gloves) {
   this->gloves = gloves;
 }
 
+/**
+ * Set chestplate to use
+ * \param chestplate Pointer to new gloves to use
+ */
 void Actor::SetChestplate(Chestplate* chestplate) {
   this->chestplate = chestplate;
 }
 
+/**
+ * Set leggins to use
+ * \param leggins Pointer to new leggins to use
+ */
 void Actor::SetLeggins(Leggins* leggins) {
   this->leggins = leggins;
 }
 
+/**
+ * Set physical object
+ * \param obj Pointer to new physical object
+ */
 void Actor::SetPhysicalObj(PhysicalObj* obj) {
   this->obj = obj;
 }
 
-// Wear functions
-
+/**
+ * Wear weapon (Same as Set* functions)
+ * \param weapon Pointer to weapon to wear
+ */
 void Actor::WearWeapon(Weapon* weapon) {
   this->SetWeapon(weapon);
 }
 
+/**
+ * Wear gloves (Same as Set* functions)
+ * \param gloves Pointer to gloves to wear
+ */
 void Actor::WearHelmet(Helmet* helmet) {
   this->SetHelmet(helmet);
 }
 
+/**
+ * Wear weapon (Same as Set* functions)
+ * \param weapon Pointer to weapon to wear
+ */
 void Actor::WearGloves(Gloves* gloves) {
   this->SetGloves(gloves);
 }
 
+/**
+ * Wear boots (Same as Set* functions)
+ * \param boots Pointer to boots to wear
+ */
 void Actor::WearBoots(Boots* boots) {
   this->SetBoots(boots);
 }
 
+/**
+ * Wear chestplate (Same as Set* functions)
+ * \param chestplate Pointer to chestplate to wear
+ */
 void Actor::WearChestplate(Chestplate* chestplate) {
   this->SetChestplate(chestplate);
 }
 
+/**
+ * Wear leggins (Same as Set* functions)
+ * \param leggins Pointer to leggins to wear
+ */
 void Actor::WearLeggins(Leggins* leggins) {
   this->SetLeggins(leggins);
 }
 
-// Helper functions
+
+/**
+ * Set health to maximum, if above
+ */
 void Actor::JustifyHealth() {
   this->health = std::min(this->health, this->max_health);
 }
-
-// Get sumary defence of all armor on Actor
+/**
+ * Get sumary defence of all armor
+ */
 int Actor::GetDefence() {
   return this->helmet->GetDefence() +
     this->boots->GetDefence() +
@@ -236,26 +281,34 @@ int Actor::GetDefence() {
     this->leggins->GetDefence();
 }
 
-// Get damage can be dealt by actor
+/**
+ * Get damage can be dealt by weapon
+ */
 int Actor::GetDamage() {
   return this->weapon->GetDamage();
 }
 
-// Add some amount of health
+/**
+ * Add some amount of health
+ * \param amount Amount of health to restore
+ */
 void Actor::Heal(int amount) {
   this->health += amount;
   this->JustifyHealth();
 }
 
-// Substract some amount of health
+/**
+ * Substract some amount of health
+ * \param amount Amount of health to substract
+ */
 void Actor::DealDamage(int amount) {
   this->health -= amount;
 }
 
-
-// Functions to work with inventory
-
-// Get item at position
+/**
+ * Get item at position
+ * \param index Position of item (from 0 to inventory size)
+ */
 Item * Actor::GetItemAt(int index) {
   if (index < 0)
     return nullptr;
@@ -264,7 +317,11 @@ Item * Actor::GetItemAt(int index) {
   return this->inventory[index];
 }
 
-// Set item at position
+/**
+ * Set item at position
+ * \param index Position of item that will be replaced
+ * \param item Pointer to item that will be placed at index
+ */
 void Actor::SetItemAt(int index, Item * item) {
   if (index < 0)
     return;
@@ -273,7 +330,9 @@ void Actor::SetItemAt(int index, Item * item) {
   this->inventory[index] = item;
 }
 
-// Get first empty cell of inventory or -1 if inventory is full
+/**
+ * Get first empty cell of inventory or -1 if inventory is full
+ */
 int Actor::GetEmptyCell() {
   for(int i = 0; i < this->GetInventorySize(); i++) {
     if(this->inventory[i] == nullptr) {
@@ -283,7 +342,10 @@ int Actor::GetEmptyCell() {
   return -1;
 }
 
-// Find item can be stacked with supplied
+/**
+ * Find item can be stacked with supplied exemplar
+ * \param item Exemplar
+ */
 StackableItem * Actor::FindCompatibleItem(Item * item) {
   for(int i = 0; i < this->GetInventorySize(); i++) {
     if(this->inventory[i] != nullptr &&
@@ -296,7 +358,10 @@ StackableItem * Actor::FindCompatibleItem(Item * item) {
   return nullptr;
 }
 
-// Put item in empty cell if exists, if not return false
+/**
+ * Put item in empty cell if exists, if not return false
+ * \param item Pointer to item to pick up
+ */
 bool Actor::PickupItem(Item * item) {
   if(item->IsStackable()) {
     StackableItem * compatible = this->FindCompatibleItem(item);
@@ -313,15 +378,26 @@ bool Actor::PickupItem(Item * item) {
   return true;
 }
 
+/**
+ * Get current inventory size
+ * \returns Size of inventory
+ */
 int Actor::GetInventorySize() {
   return this->inventory.size();
 }
 
+/**
+ * Get pointer to inventory
+ * \note Useful for UI
+ */
 std::vector<Item*>* Actor::GetInventoryPointer() {
   return &(this->inventory);
 }
 
-// Delete item from inventory
+/**
+ * Delete item from inventory
+ * \param item Pointer to item to delete
+ */
 void Actor::DeleteItem(Item * item) {
   int index = this->GetItemIndex(item);
   if (index >= this->GetInventorySize())
@@ -332,7 +408,11 @@ void Actor::DeleteItem(Item * item) {
 }
 
 
-// Get index of item or -1
+/**
+ * Get index of item or -1 if item is not in inventory
+ * \param item poinrter to item to find in inventory
+ * \return -1 if item is not in inventory or index of that item
+ */
 int Actor::GetItemIndex(Item * item) {
   for(int i = 0; i < this->GetInventorySize(); i ++) {
     if(this->inventory[i] == item) {
@@ -343,6 +423,12 @@ int Actor::GetItemIndex(Item * item) {
 }
 
 
+/**
+ * Convert Actor to binary stream
+ * Saves name, health, maximum health, inventory, weapon and armor
+ * \param saver Serializer object
+ * \return Binary stream representing object
+ */
 std::stringstream * Actor::Save(Saver * saver) {
   std::stringstream * ss = new std::stringstream();
 
