@@ -1,7 +1,0 @@
-<map id="Actor::Save" name="Actor::Save">
-<area shape="rect" id="node1" title=" " alt="" coords="5,81,95,108"/>
-<area shape="rect" id="node2" href="$class_actor.html#ae086b1de771ce6d6a52645a55749a69d" title=" " alt="" coords="143,5,301,32"/>
-<area shape="rect" id="node3" href="$class_saver.html#a6dead08988136d1db03a06ffc14f0ca9" title=" " alt="" coords="349,81,453,108"/>
-<area shape="rect" id="node4" href="$class_saver.html#ab3a73150fc5094456b18c8212dad5450" title=" " alt="" coords="165,107,279,133"/>
-<area shape="rect" id="node5" href="$class_saver.html#ab2be0af612e2a1d4f35da81ce7901408" title=" " alt="" coords="160,157,284,184"/>
-</map>

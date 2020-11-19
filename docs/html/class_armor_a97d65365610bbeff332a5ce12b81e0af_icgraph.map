@@ -1,9 +1,0 @@
-<map id="Armor::Save" name="Armor::Save">
-<area shape="rect" id="node1" title=" " alt="" coords="173,132,267,159"/>
-<area shape="rect" id="node2" href="$class_armor.html#a37004e1727e0c51a44c509deedbb5e93" title=" " alt="" coords="19,5,112,32"/>
-<area shape="rect" id="node3" href="$class_boots.html#a4118ae57f38ab4dcbce2af0396cb2ed8" title=" " alt="" coords="19,56,111,83"/>
-<area shape="rect" id="node4" href="$class_chestplate.html#aee4783cdbce7ff600158c677b097630f" title=" " alt="" coords="5,107,125,133"/>
-<area shape="rect" id="node5" href="$class_gloves.html#a95bda69ac7c1204e05b4e43b90ee0051" title=" " alt="" coords="17,157,114,184"/>
-<area shape="rect" id="node6" href="$class_helmet.html#a5b70c2ce671fc0331cf3540702969281" title=" " alt="" coords="16,208,115,235"/>
-<area shape="rect" id="node7" href="$class_leggins.html#a48589c1dd3ba24757841fc5e109a672d" title=" " alt="" coords="14,259,117,285"/>
-</map>

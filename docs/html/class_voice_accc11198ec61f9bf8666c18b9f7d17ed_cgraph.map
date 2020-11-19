@@ -1,7 +1,0 @@
-<map id="Voice::Say" name="Voice::Say">
-<area shape="rect" id="node1" title=" " alt="" coords="5,31,92,57"/>
-<area shape="rect" id="node2" href="$class_file_sound.html#a9d1812cb422b3cbf6e92e752690867de" title=" " alt="" coords="140,31,291,57"/>
-<area shape="rect" id="node3" href="$class_sound.html#a699f64edc6acd0ba54fc0694c8129e3c" title=" " alt="" coords="501,5,631,32"/>
-<area shape="rect" id="node4" href="$class_file_sound.html#af0b9be729e3553ef0e1c293d22585f1e" title=" " alt="" coords="339,56,453,83"/>
-<area shape="rect" id="node5" href="$class_sound.html#a17861258d21538bf97ae8429a8e3288b" title=" " alt="" coords="505,56,627,83"/>
-</map>
