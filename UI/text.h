@@ -15,7 +15,7 @@ class Text: public Frame {
 
 public:
 	Text(std::string, glm::vec4, std::map<GLchar, Character>, float, glm::vec3);
-	void draw(Shader*);
+	void draw(ShaderHolder*);
 };
 
 #endif

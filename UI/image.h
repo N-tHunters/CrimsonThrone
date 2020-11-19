@@ -8,8 +8,8 @@ public:
 	Image(glm::vec4, std::string);
 	Image(glm::vec4, GLuint);
 
-	void draw(Shader*);
-	void draw(Shader*, glm::vec3);
+	void draw(ShaderHolder*);
+	void draw(ShaderHolder*, glm::vec3);
 };
 
 #endif

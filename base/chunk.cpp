@@ -12,16 +12,16 @@ Terrain * Chunk::GetTerrain() {
   return this->terrain;
 }
 
-void Chunk::Draw(Shader * shader, Camera * camera, int width, int height) {
-  this->terrain->draw(shader, camera, width, height);
+void Chunk::Draw(ShaderHolder * shaderHolder, Camera * camera, int width, int height) {
+  this->terrain->draw(shaderHolder, camera, width, height);
   for(int i = 0; i <  this->GetObjectsCount(); i ++) {
-    this->objects[i]->draw(shader, camera, width, height);
+    this->objects[i]->draw(shaderHolder, camera, width, height);
   }
   for(int i = 0; i <  this->GetActorsCount(); i ++) {
-    this->actors[i]->GetPhysicalObj()->draw(shader, camera, width, height);
+    this->actors[i]->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
   }
   for(int i = 0; i <  this->GetItemsCount(); i ++) {
-    this->items[i]->GetPhysicalObj()->draw(shader, camera, width, height);
+    this->items[i]->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
   }
 }
 
