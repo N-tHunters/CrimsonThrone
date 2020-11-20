@@ -1,3 +1,7 @@
+/**
+ * \file
+ * \brief This file contains implementation of Armor
+ */
 #include "armor.h"
 #include "item.h"
 #include "entries.h"
