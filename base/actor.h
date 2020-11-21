@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Contains Actor class declaration
+ * \brief This file contains declaration of Actor
  */
 #ifndef ACTOR_H
 #define ACTOR_H

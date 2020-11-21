@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief This file declares Chestplate
+ * \brief This file contains declaration of Chestplate
  */
 #ifndef CHESTPLATE_H
 #define CHESTPLATE_H

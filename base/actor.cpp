@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Actor implementation
+ * \brief This file contains implementation of Actor
  */
 #include <string>
 
