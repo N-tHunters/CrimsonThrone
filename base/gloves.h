@@ -1,3 +1,7 @@
+/**
+ * \file
+ * \brief This file contains declaration of Gloves
+ */
 #ifndef GLOVES_H
 #define GLOVES_H
 
@@ -8,6 +12,9 @@
 
 class Gloves;
 
+/**
+ * \brief Gloves are piece of Armor worn on hands
+ */
 class Gloves : public Armor {
 public:
   Gloves(std::string, PhysicalObj *, int);
