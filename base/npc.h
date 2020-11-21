@@ -1,3 +1,4 @@
+
 /**
  * \file
  * \brief This file contains declaration of NPC
@@ -8,7 +9,7 @@
 #include "actor.h"
 
 /**
- * NPC represents non-playable character (Characters created to interact with player, making the game more 'live')
+ * \brief NPC represents non-playable character (Characters created to interact with player, making the game more 'live')
  */
 class NPC : public Actor {
  private:

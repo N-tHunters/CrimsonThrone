@@ -1,3 +1,7 @@
+/**
+ * \file
+ * \brief This file contains declaration of Weapon
+ */
 #ifndef WEAPON_H
 #define WEAPON_H
 
@@ -6,6 +10,9 @@
 #include "../physics/physicalObj.h"
 #include <sstream>
 
+/**
+ * \brief Weapon is Item dedicated to deal damage by hitting the target
+ */
 class Weapon : public Item {
 private:
   int damage;

@@ -1,3 +1,7 @@
+/**
+ * \file
+ * \brief This file contains declaration of Saver
+ */
 #ifndef SAVER_H
 #define SAVER_H
 
@@ -10,6 +14,9 @@
 class Actor;
 class Item;
 
+/**
+ * \brief Saver serves as serializer for objects and saves binary representation of game objects to file
+ */
 class Saver {
   std::string path;
   std::vector<Actor*>*actors;

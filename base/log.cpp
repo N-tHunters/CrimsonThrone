@@ -6,6 +6,12 @@
 
 #include "options.h"
 
+/**
+ * Log message with facility
+ * \param facility Facility of message
+ * \param format Format of message (like in printf)
+ * \param ... Arguments for format (like in printf)
+ */
 void Log(int facility, const char * format, ...) {
 #ifdef LOGGING
   if (facility < min_facility) return;

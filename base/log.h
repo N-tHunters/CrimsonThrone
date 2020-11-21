@@ -1,3 +1,7 @@
+/**
+ * \file
+ * \brief This file contains declaration of logging functions - not currently used
+ */
 #ifndef CT_LOG_H
 #define CT_LOG_H
 

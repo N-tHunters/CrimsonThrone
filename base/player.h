@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Declaration of Player
+ * \brief This file contains declaration of Player
  */
 #ifndef PLAYER_H
 #define PLAYER_H
