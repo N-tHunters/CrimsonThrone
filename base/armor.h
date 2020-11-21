@@ -12,7 +12,7 @@
 #include <string>
 
 /**
- * Armor is an Item used to raise Actor's defence
+ * \brief Armor is an Item used to raise Actor's defence
  */
 class Armor : public Item {
  private:

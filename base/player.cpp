@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Contains implementation for Player
+ * \brief This file contains implementation of Player
  */
 #include "player.h"
 

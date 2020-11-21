@@ -1,3 +1,8 @@
+/**
+ * \file
+ * \brief This file contains values for entries used to identify binary streams
+ * \todo Refactor to enum
+ */
 #ifndef ENTRIES_H
 #define ENTRIES_H
 

@@ -30,6 +30,7 @@ void Boots::Wear(Actor * target) {
 /**
  * Convert object to binary stream. The same as in Armor, except entry.
  * \param saver Serializer object
+ * \return Binary stream representing this object
  */
 std::stringstream * Boots::Save(Saver * saver) {
   return Armor::Save(saver, ENTRY_BOOTS);

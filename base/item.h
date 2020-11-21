@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief This file declares Item class
+ * \brief This file contains declaration of Item
  */
 #ifndef ITEM_H
 #define ITEM_H
