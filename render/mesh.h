@@ -25,6 +25,10 @@ using namespace std;
 class PhysicalObj;
 class Model;
 
+/**
+ * \brief Object with vertices and textures
+ */
+
 class Mesh {
 	GLuint texture;
 	GLuint VBO, VAO, EBO;

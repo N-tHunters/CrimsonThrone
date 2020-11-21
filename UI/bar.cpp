@@ -6,13 +6,15 @@ Bar::Bar(glm::vec4 rect, int* value, int* maxValue, glm::vec3 color) : Frame(rec
 	this->rect = rect;
 
 	vertices = {rect.x,     	 rect.y + rect.w, 0.0f, 0.0f, 1.0f,
-				rect.x,     	 rect.y,     	  0.0f, 0.0f, 0.0f,
-				rect.x + rect.z, rect.y + rect.w, 0.0f, 1.0f, 1.0f,
-				rect.x + rect.z, rect.y,     	  0.0f, 1.0f, 0.0f};
+	            rect.x,     	 rect.y,     	  0.0f, 0.0f, 0.0f,
+	            rect.x + rect.z, rect.y + rect.w, 0.0f, 1.0f, 1.0f,
+	            rect.x + rect.z, rect.y,     	  0.0f, 1.0f, 0.0f
+	           };
 	indices = {0, 1, 2,
-			   1, 2, 3};
+	           1, 2, 3
+	          };
 
-	
+
 
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object

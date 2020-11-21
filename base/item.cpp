@@ -120,16 +120,6 @@ std::stringstream * Item::Save(Saver * saver, int entry) {
 }
 
 /**
- * Get names of main item fields that will be shown in UI/List
- * \return Pointer to vector of field names
- */
-std::vector<std::string>* Item::getHeaders() {
-  std::vector<std::string> * headers = new std::vector<std::string>();
-  headers->push_back("Name");
-  return headers;
-}
-
-/**
  * Get values to be shown in list
  * \return Pointer to vector of values casted to string
  */

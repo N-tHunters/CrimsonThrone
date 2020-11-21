@@ -12,7 +12,7 @@ Text::Text(std::string text, glm::vec4 rect, std::map<GLchar, Character> Charact
 	float ypos = 0;
 	float w, h;
 
-	for(int c = 0; c < text.size(); c ++) {
+	for (int c = 0; c < text.size(); c ++) {
 		Character ch = Characters[text[c]];
 
 		xpos = x + ch.Bearing.x * scale;
@@ -26,7 +26,7 @@ Text::Text(std::string text, glm::vec4 rect, std::map<GLchar, Character> Charact
 }
 
 void Text::draw(ShaderHolder* shaderHolder) {
-	for(int i = 0; i < this->letters.size(); i ++) {
+	for (int i = 0; i < this->letters.size(); i ++) {
 		this->letters[i]->draw(shaderHolder, this->color);
 	}
 }

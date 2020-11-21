@@ -4,16 +4,34 @@
 #include "frame.h"
 #include "column.h"
 #include "abstractListElement.h"
+#include "../base/item.h"
 
+template <class Element>
 class List: public Frame {
-	std::vector<Column*> columns;
+	std::vector<Column<Element>*> columns;
 	glm::vec4 rect;
 	int maxCount;
-  int index;
+	int index;
 
 public:
-	List(glm::vec4, std::vector<AbstractListElement*>*, std::string, int, std::map<GLchar, Character>);
-	void draw(ShaderHolder*);
+	List(glm::vec4 rect, std::vector<Element*>* list, std::string texturePath, int maxCount, std::map<GLchar, Character> Characters, std::vector<std::string>* headers): Frame(rect) {
+		this->rect = rect;
+		this->maxCount = maxCount;
+		this->index = 0;
+
+		for (int i = 0; i < headers->size(); i ++) {
+			this->columns.push_back(new Column<Element>(glm::vec4(rect.x + rect.z / (float)headers->size() * i,
+			                        rect.y, rect.z / (float)headers->size(), rect.w), list, texturePath, 10, Characters, headers->at(i)));
+		}
+
+	}
+	void draw(ShaderHolder* shaderHolder) {
+
+		for (int i = 0; i < this->columns.size(); i ++) {
+			this->columns.at(i)->draw(shaderHolder);
+		}
+
+	}
 };
 
 #endif
