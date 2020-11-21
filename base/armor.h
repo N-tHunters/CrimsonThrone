@@ -1,3 +1,7 @@
+/**
+ * \file
+ * \brief This file contains declaration of Armor
+ */
 #ifndef ARMOR_H
 #define ARMOR_H
 
@@ -7,6 +11,9 @@
 #include <sstream>
 #include <string>
 
+/**
+ * Armor is an Item used to raise Actor's defence
+ */
 class Armor : public Item {
  private:
   int defence;
