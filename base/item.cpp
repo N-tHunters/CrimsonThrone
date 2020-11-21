@@ -1,6 +1,6 @@
 /**
  * \file
- * \brief Item class implementation
+ * \brief This file contains implementation of Item
  */
 #include <string>
 

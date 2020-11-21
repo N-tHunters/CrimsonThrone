@@ -1,3 +1,7 @@
+/**
+ * \file
+ * \brief This file contains implementation of Loader
+ */
 #include "loader.h"
 #include "weapon.h"
 #include "armor.h"
@@ -8,24 +12,45 @@
 #include "leggins.h"
 #include "boots.h"
 
+/**
+ * Basic constructor
+ * \param path Path to save file to load
+ * \param[out] actors Pointer to vector where to load
+ * \param[out] items Pointer to vector where to load
+ */
 Loader::Loader(std::string path, std::vector<Actor *>* actors, std::vector<Item *>* items) {
   this->path = path;
   this->actors = actors;
   this->items = items;
 }
 
+/**
+ * Load integer from binary stream (std::ifstream)
+ * \param ss Pointer to stream where to load from
+ * \return Parsed int
+ */
 int Loader::LoadInt(std::ifstream *ss) {
   int value;
   ss->read((char *)&value, sizeof(int));
   return value;
 }
 
+/**
+ * Load int from binary stream (std::stringstream)
+ * \param ss Pointer to stream to load from
+ * \return Parsed int
+ */
 int Loader::LoadInt(std::stringstream* ss) {
   int value;
   ss->read((char *)&value, sizeof(int));
   return value;
 }
 
+/**
+ * Load string from binary stream (std::ifstream)
+ * \param ss Pointer to stream to load from
+ * \return Parsed string
+ */
 std::string Loader::LoadString(std::ifstream *ss) {
   int length = this->LoadInt(ss);
   char cstr[256];
@@ -36,6 +61,11 @@ std::string Loader::LoadString(std::ifstream *ss) {
   return std::string(cstr);
 }
 
+/**
+ * Load string from binary stream (std::stringstream)
+ * \param ss Pointer to stream to load from
+ * \return Parsed string
+ */
 std::string Loader::LoadString(std::stringstream* ss) {
   int length = this->LoadInt(ss);
   char cstr[256];
@@ -46,6 +76,12 @@ std::string Loader::LoadString(std::stringstream* ss) {
   return std::string(cstr);
 }
 
+/**
+ * Load Item from binary stream (std::ifstream)
+ * \param ss Pointer to stream to load from
+ * \param entry_size Size of binary representation of object (embedded into header)
+ * \return Parsed item
+ */
 Item * Loader::LoadItem(std::ifstream *ss, int entry_size) {
   const int entry_type = this->LoadInt(ss);
 
@@ -100,6 +136,11 @@ Item * Loader::LoadItem(std::ifstream *ss, int entry_size) {
   return nullptr;
 }
 
+/**
+ * Load entire file
+ * \todo Finish actor loading
+ * \todo Finish loading of nested items
+ */
 void Loader::Load() {
   std::ifstream stream(this->path, std::ifstream::binary);
 

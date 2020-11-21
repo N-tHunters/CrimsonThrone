@@ -1,3 +1,7 @@
+/**
+ * \file
+ * \brief This file contains implementation of logging - not currently used
+ */
 #include "log.h"
 
 #include "options.h"

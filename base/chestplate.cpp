@@ -6,7 +6,6 @@
 #include "actor.h"
 #include "entries.h"
 
-
 /**
  * Basic constructor implemented from Armor. Just the same.
  */
