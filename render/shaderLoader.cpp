@@ -2,6 +2,12 @@
 
 Shader::Shader() {}
 
+/**
+ * @brief      Constructs a new instance of Shader
+ *
+ * @param[in]  vertexPath    The vertex shader path
+ * @param[in]  fragmentPath  The fragment shader path
+ */
 Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
 {
 	// 1. Retrieve the vertex/fragment source code from filePath

@@ -46,7 +46,6 @@ public:
   virtual std::stringstream * Save(Saver *);
   virtual std::stringstream * Save(Saver *, int);
 
-  virtual std::vector<std::string>* getHeaders();
   virtual std::vector<std::string>* getValues();
 };
 

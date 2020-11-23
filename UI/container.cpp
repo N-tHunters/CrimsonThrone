@@ -4,6 +4,7 @@ Container::Container(glm::vec4 rect, Frame* frame, std::string texturePath): Fra
 
 	this->frame = frame;
 
+	// Generate vertices coordinates for rectangle
 	vertices = {rect.x,     	 rect.y + rect.w, 0.0f, 0.0f, 1.0f,
 				rect.x,     	 rect.y,     	  0.0f, 0.0f, 0.0f,
 				rect.x + rect.z, rect.y + rect.w, 0.0f, 1.0f, 1.0f,
@@ -12,16 +13,20 @@ Container::Container(glm::vec4 rect, Frame* frame, std::string texturePath): Fra
 			   1, 2, 3};
 
 	glGenTextures(1, &texture);
-	glBindTexture(GL_TEXTURE_2D, texture); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
+	glBindTexture(GL_TEXTURE_2D, texture);
+	
 	// Set our texture parameters
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	
 	// Set texture filtering
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	
 	// Load, create texture and generate mipmaps
 	int width, height;
 	unsigned char* image = loadImage(texturePath, &width, &height);
+
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	freeImage(image);
@@ -50,7 +55,7 @@ Container::Container(glm::vec4 rect, Frame* frame, std::string texturePath): Fra
 	glBindVertexArray(0);
 }
 
-void Container::draw(ShaderHolder* shaderHolder, std::map<GLchar, Character> characters) {
+void Container::draw(ShaderHolder* shaderHolder) {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	glActiveTexture(GL_TEXTURE0);
@@ -65,5 +70,5 @@ void Container::draw(ShaderHolder* shaderHolder, std::map<GLchar, Character> cha
 	
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	this->frame->draw(shaderHolder, characters);
+	this->frame->draw(shaderHolder);
 }

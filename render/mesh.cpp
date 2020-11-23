@@ -5,12 +5,26 @@
 #include "../physics/physicalObj.h"
 #include "../debug.h"
 
+/**
+ * @brief      Initializes the given object.
+ *
+ * @param      obj   The object
+ */
 void Mesh::init(PhysicalObj* obj) {
 	this->obj = obj;
 }
 
+/**
+ * @brief      Constructs a new instance.
+ */
 Mesh::Mesh() {};
 
+/**
+ * @brief      Constructs a new instance.
+ *
+ * @param[in]  texturePath  The texture path
+ * @param      model        The model
+ */
 Mesh::Mesh(string texturePath, Model* model) {
 	this->obj = nullptr;
 	this->size = model->indices.size();
@@ -55,6 +69,13 @@ Mesh::Mesh(string texturePath, Model* model) {
 
 }
 
+/**
+ * @brief      Constructs a new instance.
+ *
+ * @param[in]  texturePath  The texture path
+ * @param[in]  vertices     The vertices
+ * @param[in]  indices      The indices
+ */
 Mesh::Mesh(string texturePath, std::vector<GLfloat> vertices, std::vector<unsigned int> indices) {
 	this->obj = nullptr;
 	this->size = indices.size();
@@ -99,6 +120,13 @@ Mesh::Mesh(string texturePath, std::vector<GLfloat> vertices, std::vector<unsign
 
 }
 
+/**
+ * \brief Function that draw mesh
+ * \param shaderHolder A holder for all the shaders
+ * \param camera Player camera
+ * \param width Screen width
+ * \param height Screen height
+ */
 void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height) {
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
