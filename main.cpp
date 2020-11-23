@@ -218,11 +218,11 @@ int main()
 
 
 	// Set up vertex data (and buffer(s)) and attribute pointers
-	chunk1->AddActor((Actor*)
+	chunk1->AddActor(static_cast<Actor*>(
 	                 new NPC("test_npc", 10,
 	                         new PhysicalObj(new Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
 	                                 false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
-	                                 glm::vec3(0.0f, 0.0f, 0.0f), "frock")));
+	                                 glm::vec3(0.0f, 0.0f, 0.0f), "frock"))));
 
 	chunk1->AddObject(new PhysicalObj(new Mesh("resources/textures/frog.jpg", new Model((char *) "resources/models/frog.obj")),
 	                                  false, true, false, glm::vec3(0.0f, 0.0f, 0.0f),
@@ -235,15 +235,13 @@ int main()
 
 	std::vector<std::string> headers = {"name"};
 
-	List<Item>* inventory = new List<Item>(glm::vec4(-0.9f, 0.9f, -0.7f, 0.0f), player->GetInventoryPointer(), std::string("resources/textures/list.png"), 10, Characters, &headers);
-	Text* text = new Text("LMAO Bottom text", glm::vec4(-0.9f, -0.9f, 0.0f, 0.0f), Characters, 32.0f / (float)width / 16.0f, glm::vec3(0, 255, 0));
+	printf("%li\n", player->GetInventoryPointer()->size());
+
+	List<Item>* inventory = new List<Item>(glm::vec4(-0.9f, -0.9f, 0.7f, 1.0f), player->GetInventoryPointer(), std::string("resources/textures/list.png"), 10, Characters, &headers);
+	//Text* text = new Text("LMAO Bottom text", glm::vec4(-0.9f, -0.9f, 0.0f, 0.0f), Characters, 32.0f / (float)width / 16.0f, glm::vec3(0, 255, 0));
 	//Container test_con(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), text, "resources/textures/stone.jpg");
 
-	float last_frame = glfwGetTime(),
-	      current_frame = glfwGetTime();
-
-	float dt = 0.0f;
-	int maxDt = 1;
+	float last_frame = glfwGetTime();
 
 	int hp = player->GetHealth();
 	int maxHp = player->GetMaxHealth();
@@ -254,7 +252,8 @@ int main()
 
 	while (!glfwWindowShouldClose(window))
 	{
-
+		float dt;
+		float current_frame;
 		lastXPos = xpos;
 		lastYPos = ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
@@ -290,8 +289,10 @@ int main()
 		//test2->GetPhysicalObj()->draw(&ourShader, &camera, width, height);
 
 		test_frame.draw(&shaderHolder);
-		text->draw(&shaderHolder);
+		//text->draw(&shaderHolder);
+		printf("%s\n", "---");
 		inventory->draw(&shaderHolder);
+		printf("%s\n", "---");
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);

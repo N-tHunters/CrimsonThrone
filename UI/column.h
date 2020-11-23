@@ -94,24 +94,23 @@ public:
 		glBindVertexArray(0);
 
 		// Creating header for this column
-		this->column.push_back(new Text(header,
-		                                rect,
-		                                Characters,
-		                                0.001f,
-		                                glm::vec3(255, 0, 0)));
 
 		// Inserting valuse one by one
 		for (int i = 0; i < list->size(); i ++) {
 			this->column.push_back(new Text(list->at(i)->getValues()->at(index),
-			                                rect,
+		                                	glm::vec4(rect.x, rect.y + rect.w / (float)maxCount * (i + 1), rect.z, rect.w / (float)maxCount),
 			                                Characters,
 			                                0.001f,
 			                                glm::vec3(255, 255, 0)));
 		}
+		this->column.push_back(new Text(header,
+		                                glm::vec4(rect.x, rect.y, rect.z, rect.w / (float)maxCount),
+		                                Characters,
+		                                0.001f,
+		                                glm::vec3(0, 255, 0)));
 	}
 
 	void draw(ShaderHolder* shaderHolder) {
-		printf("%li\n", this->column.size());
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		glActiveTexture(GL_TEXTURE0);

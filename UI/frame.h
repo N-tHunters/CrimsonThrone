@@ -26,8 +26,7 @@ protected:
 
 public:
 	Frame(glm::vec4);
-	void draw(ShaderHolder*);
-	virtual void draw(ShaderHolder*, std::map<GLchar, Character>);
+	virtual void draw(ShaderHolder*);
 };
 
 #endif

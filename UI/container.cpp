@@ -55,7 +55,7 @@ Container::Container(glm::vec4 rect, Frame* frame, std::string texturePath): Fra
 	glBindVertexArray(0);
 }
 
-void Container::draw(ShaderHolder* shaderHolder, std::map<GLchar, Character> characters) {
+void Container::draw(ShaderHolder* shaderHolder) {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	glActiveTexture(GL_TEXTURE0);
@@ -70,5 +70,5 @@ void Container::draw(ShaderHolder* shaderHolder, std::map<GLchar, Character> cha
 	
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	this->frame->draw(shaderHolder, characters);
+	this->frame->draw(shaderHolder);
 }
