@@ -67,7 +67,7 @@ Chunk * Location::GetChunk(int x, int y) {
  * \param y Y coord
  * \return Pointer to chunk at this position
  */
-Chunk * Location::GetCurrentChunk(int x, int y) {
+Chunk * Location::GetCurrentChunk(float x, float y) {
   int xp = (x + this->width / 2.0f * this->chunk_width) / this->chunk_width;
   int yp = (y + this->height / 2.0f * this->chunk_height) / this->chunk_height;
 
@@ -83,14 +83,14 @@ Chunk * Location::GetCurrentChunk(int x, int y) {
  * \param xp X coordinate of current position
  * \param yp Y coordinate of current position
  */
-void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_width, int screen_height, int xp, int yp) {
+void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_width, int screen_height, float xp, float yp) {
   int x = (xp + this->width / 2.0f * this->chunk_width) / this->chunk_width;
   int y = (yp + this->height / 2.0f * this->chunk_height) / this->chunk_height;
 
-  int lx = max(x - 1, 0); // Most left row
-  int uy = max(y - 1, 0); // Most up column
-  int rx = min(x + 1, this->width - 1); // Most right row
-  int dy = min(y + 1, this->height - 1); // Most down column
+  int lx = max(x - 2, 0); // Most left row
+  int uy = max(y - 2, 0); // Most up column
+  int rx = min(x + 2, this->width - 1); // Most right row
+  int dy = min(y + 2, this->height - 1); // Most down column
 
   
   for(int ix = lx; ix <= rx; ix++) {

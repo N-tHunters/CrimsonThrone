@@ -226,8 +226,10 @@ int main()
 
 
 	// ----------------------------------------------- CODE ------------------------------------------
-	Location * location = new Location(10, 10, 10, 10);
+	Location * location = new Location(10, 10, 30, 30);
 	location->FillEmptyChunks();
+	printf("Location created\n");
+	
 	
 	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
 
@@ -282,8 +284,13 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		player->GetPhysicalObj()->collideTerrain(location->GetCurrentChunk(player->GetPhysicalObj()->getPositionX(),
-										   player->GetPhysicalObj()->getPositionZ())->GetTerrain(),
+		Chunk * chunk_ptr = location->GetCurrentChunk(player->GetPhysicalObj()->getPositionX(),
+							      player->GetPhysicalObj()->getPositionZ());
+
+		if(chunk_ptr == nullptr)
+		  chunk_ptr = location->GetCurrentChunk(0, 0);
+
+		player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(),
 							 speed + speedSide, VCAP);
 
 		location->Draw(&shaderHolder, camera, width, height, player->GetPhysicalObj()->getPositionX(), player->GetPhysicalObj()->getPositionZ());
