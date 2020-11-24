@@ -41,6 +41,7 @@
 #include "base/npc.h"
 #include "base/item.h"
 #include "base/chunk.h"
+#include "base/location.h"
 
 #include "sound/soundengine.h"
 #include "sound/filesound.h"
@@ -225,28 +226,9 @@ int main()
 
 
 	// ----------------------------------------------- CODE ------------------------------------------
-
-	Chunk* chunk1 = new Chunk(new Terrain(100, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f)));
-
-
-	// Set up vertex data (and buffer(s)) and attribute pointers
-	chunk1->AddActor(static_cast<Actor*>(
-	                     new NPC("test_npc", 10,
-	                             new PhysicalObj(new Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
-	                                     false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
-	                                     glm::vec3(0.0f, 0.0f, 0.0f), "frock"))));
-
-	for (int i = 0; i < 10; i ++) {
-		chunk1->AddObject(new PhysicalObj(new Mesh("resources/textures/frog.jpg", new Model((char *) "resources/models/frog.obj")),
-		                                  false, true, false, glm::vec3(0.0f + i * 2.0f, 0.0f, 0.0f),
-		                                  glm::vec3(0.0f, 0.0f + i * 45.0f, 0.0f), "frog"));
-	}
-
-	chunk1->AddItem(new Item("test_item", new PhysicalObj(new Mesh("resources/textures/stone.jpg", new Model((char*)"resources/models/hammah.obj")), false, true, false, glm::vec3(10.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "hammah!")));
-
-
-	player->PickupItem(chunk1->GetItem(0));
-
+	Location * location = new Location(10, 10, 10, 10);
+	location->FillEmptyChunks();
+	
 	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
 
 	std::vector<std::string> headers = {"name"};
@@ -300,9 +282,11 @@ int main()
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		player->GetPhysicalObj()->collideTerrain(chunk1->GetTerrain(), speed + speedSide, VCAP);
+		player->GetPhysicalObj()->collideTerrain(location->GetCurrentChunk(player->GetPhysicalObj()->getPositionX(),
+										   player->GetPhysicalObj()->getPositionZ())->GetTerrain(),
+							 speed + speedSide, VCAP);
 
-		chunk1->Draw(&shaderHolder, camera, width, height);
+		location->Draw(&shaderHolder, camera, width, height, player->GetPhysicalObj()->getPositionX(), player->GetPhysicalObj()->getPositionZ());
 
 		//test2->GetPhysicalObj()->draw(&ourShader, &camera, width, height);
 
@@ -327,7 +311,7 @@ int main()
 		}
 
 		player->Update(dt);
-		chunk1->Update(dt);
+		//		chunk1->Update(dt);
 	}
 	glfwTerminate();
 	return 0;

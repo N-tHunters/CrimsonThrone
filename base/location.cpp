@@ -33,7 +33,9 @@ void Location::FillEmptyChunks() {
   for(int i = 0; i < this->height; i++) {
     for(int j = 0; j < this->width; j++) {
       if(this->chunks[i][j] == nullptr) {
-	this->chunks[i][j] = new Chunk(new Terrain(chunk_width, 0.1f));
+	this->chunks[i][j] = new Chunk(new Terrain(chunk_width + 1, 1.0f, glm::vec3(this->chunk_width / 2.0f + this->chunk_width * i - this->width / 2.0f * this->chunk_width,
+										-1.0f,
+										this->chunk_height / 2.0f + this->chunk_height * j - this->height / 2.0f * this->chunk_height)));
       }
     }
   }
@@ -60,6 +62,19 @@ Chunk * Location::GetChunk(int x, int y) {
 }
 
 /**
+ * Get current chunk by physical position
+ * \param x X coord
+ * \param y Y coord
+ * \return Pointer to chunk at this position
+ */
+Chunk * Location::GetCurrentChunk(int x, int y) {
+  int xp = (x + this->width / 2.0f * this->chunk_width) / this->chunk_width;
+  int yp = (y + this->height / 2.0f * this->chunk_height) / this->chunk_height;
+
+  return this->chunks[xp][yp];
+}
+
+/**
  * Draw all chunks around current chunk
  * \param shaderHolder Pointer to all shaders
  * \param camera Pointer to camer
@@ -69,16 +84,17 @@ Chunk * Location::GetChunk(int x, int y) {
  * \param yp Y coordinate of current position
  */
 void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_width, int screen_height, int xp, int yp) {
-  int x = xp / this->chunk_width;
-  int y = yp / this->chunk_height;
+  int x = (xp + this->width / 2.0f * this->chunk_width) / this->chunk_width;
+  int y = (yp + this->height / 2.0f * this->chunk_height) / this->chunk_height;
 
   int lx = max(x - 1, 0); // Most left row
   int uy = max(y - 1, 0); // Most up column
   int rx = min(x + 1, this->width - 1); // Most right row
   int dy = min(y + 1, this->height - 1); // Most down column
+
   
   for(int ix = lx; ix <= rx; ix++) {
-    for(int iy = uy; iy <= dy; uy++) {
+    for(int iy = uy; iy <= dy; iy++) {
       if(this->chunks[ix][iy] != nullptr)
 	this->chunks[ix][iy]->Draw(shaderHolder, camera, screen_width, screen_height);
     }

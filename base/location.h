@@ -21,7 +21,7 @@ class Location {
   void FillEmptyChunks();
   void SetChunk(int, int, Chunk *);
   Chunk * GetChunk(int, int);
-  void GetCurrentChunk(int, int);
+  Chunk * GetCurrentChunk(int, int);
 
   void Draw(ShaderHolder *, Camera *, int, int, int, int);
 };
