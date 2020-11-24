@@ -101,8 +101,7 @@ void Image::draw(ShaderHolder* shaderHolder) {
 }
 
 void Image::draw(ShaderHolder* shaderHolder, glm::vec3 color) {
-
-  //	printf("%f %f %f\n", color.x, color.y, color.z);
+	//printf("%f %f %f\n", color.x, color.y, color.z);
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 

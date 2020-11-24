@@ -2,9 +2,11 @@
 #include <random>
 #include <math.h>
 
-Terrain::Terrain(int size, float scale) {
+Terrain::Terrain(int size, float scale, glm::vec3 position) {
 	this->size = size;
 	this->scale = scale;
+	this->position = position;
+
 	std::vector<float> v;
 	for(int i = 0; i < size; i ++) {
 		v.clear();
@@ -71,13 +73,16 @@ Terrain::Terrain(int size, float scale) {
 			this->indices.push_back(i * (size - 1) * 6  + j * 6 + 5);
 		}
 	}
-	this->obj = new PhysicalObj(new Mesh("resources/textures/rock.png", this->vertices, this->indices), false, true, false, glm::vec3(0.0f, -1.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
+	this->obj = new PhysicalObj(new Mesh("resources/textures/rock.png", this->vertices, this->indices), false, true, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
 }
 
 void Terrain::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height) {
 	this->obj->draw(shaderHolder, camera, width, height);
 }
 
+glm::vec3 Terrain::getPosition() {
+	return this->position;
+}
 
 float barrycentric(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec2 pos) {
 	float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
@@ -110,5 +115,5 @@ float Terrain::getHeight(glm::vec3 position) {
 							  glm::vec3(0, this->height[tileX][tileY + 1], 0),
 							  glm::vec2(xCoord, yCoord));
 	}
-	return answer * this->scale;
+	return answer * this->scale + this->position.y;
 }
