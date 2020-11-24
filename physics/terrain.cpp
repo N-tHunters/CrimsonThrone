@@ -80,6 +80,9 @@ void Terrain::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLu
 	this->obj->draw(shaderHolder, camera, width, height);
 }
 
+glm::vec3 Terrain::getPosition() {
+	return this->position;
+}
 
 float barrycentric(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec2 pos) {
 	float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
