@@ -1,3 +1,7 @@
+/**
+ * \file
+ * \brief This file contains declaration of Chunk
+ */
 #ifndef CHUNK_H
 #define CHUNK_H
 
@@ -7,6 +11,10 @@
 #include "actor.h"
 #include <vector>
 
+/**
+ * \brief Chunk is a piece of location for optiming rendering and processing.
+ * Chunks are heavily used to interact with player with enviroment. \warning Consider that player is not part of chunk, it's separate object.
+ */
 class Chunk {
  private:
   Terrain * terrain;

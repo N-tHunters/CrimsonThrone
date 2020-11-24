@@ -1,3 +1,7 @@
+/**
+ * \file
+ * \brief This file contains declaration of Helmet
+ */
 #ifndef HELMET_H
 #define HELMET_H
 
@@ -9,6 +13,9 @@
 
 class Actor;
 
+/**
+ * \brief Helmet is a piece of Armor worn on head
+ */
 class Helmet : public Armor {
 public:
   Helmet(std::string, PhysicalObj *, int);

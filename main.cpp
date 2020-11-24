@@ -5,6 +5,9 @@
 #include <stdio.h>
 #include <map>
 #include <unistd.h>
+#ifdef _WIN32
+#include <windows.h>
+#endif
 
 #define GLFW_INCLUDE_NONE
 #define GLFW_DLL
@@ -128,7 +131,16 @@ int main()
 
 	glfwMakeContextCurrent(window);
 
-	glfwSwapInterval(-1);
+#ifdef _WIN32
+	// Turn on vertical screen sync under Windows.
+	// (I.e. it uses the WGL_EXT_swap_control extension)
+	typedef BOOL (WINAPI *PFNWGLSWAPINTERVALEXTPROC)(int interval);
+	PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = NULL;
+	wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
+	if(wglSwapIntervalEXT){
+	  wglSwapIntervalEXT(0);
+	}
+#endif
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
@@ -300,12 +312,15 @@ int main()
 		inventory->draw(&shaderHolder);
 		fps_counter->draw(&shaderHolder);
 		//printf("%s\n", "---");
+    
+		glFinish();
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
 		current_frame = glfwGetTime();
 		dt = (current_frame - last_frame);
 		last_frame = current_frame;
+
 		if (glfwGetTime() - fps_change_last > 0.1) {
 			fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
 			fps_change_last = glfwGetTime();
