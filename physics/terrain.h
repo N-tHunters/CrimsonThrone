@@ -13,8 +13,9 @@ class Terrain {
 	std::vector<unsigned int> indices;
 	std::vector<std::vector<float>> height;
 	PhysicalObj* obj;
+	glm::vec3 position;
 public:
-	Terrain(int, float);
+	Terrain(int, float, glm::vec3);
 	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
 	float getHeight(glm::vec3);
 };

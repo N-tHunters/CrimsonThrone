@@ -214,28 +214,32 @@ int main()
 
 	// ----------------------------------------------- CODE ------------------------------------------
 
-	Chunk* chunk1 = new Chunk(new Terrain(100, 1.0f));
+	Chunk* chunk1 = new Chunk(new Terrain(100, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f)));
 
 
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	chunk1->AddActor(static_cast<Actor*>(
-	                 new NPC("test_npc", 10,
-	                         new PhysicalObj(new Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
-	                                 false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
-	                                 glm::vec3(0.0f, 0.0f, 0.0f), "frock"))));
+	                     new NPC("test_npc", 10,
+	                             new PhysicalObj(new Mesh("resources/textures/stone.jpg", new Model((char *) "resources/models/frog.obj")),
+	                                     false, true, false, glm::vec3(3.0f, 3.0f, 3.0f),
+	                                     glm::vec3(0.0f, 0.0f, 0.0f), "frock"))));
 
-	chunk1->AddObject(new PhysicalObj(new Mesh("resources/textures/frog.jpg", new Model((char *) "resources/models/frog.obj")),
-	                                  false, true, false, glm::vec3(0.0f, 0.0f, 0.0f),
-	                                  glm::vec3(0.0f, 0.0f, 0.0f), "frog"));
+	for (int i = 0; i < 10; i ++) {
+		chunk1->AddObject(new PhysicalObj(new Mesh("resources/textures/frog.jpg", new Model((char *) "resources/models/frog.obj")),
+		                                  false, true, false, glm::vec3(0.0f + i * 2.0f, 0.0f, 0.0f),
+		                                  glm::vec3(0.0f, 0.0f + i * 45.0f, 0.0f), "frog"));
+	}
 
 	chunk1->AddItem(new Item("test_item", new PhysicalObj(new Mesh("resources/textures/stone.jpg", new Model((char*)"resources/models/hammah.obj")), false, true, false, glm::vec3(10.0f, 10.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f), "hammah!")));
 
 
 	player->PickupItem(chunk1->GetItem(0));
 
+	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
+
 	std::vector<std::string> headers = {"name"};
 
-	printf("%li\n", player->GetInventoryPointer()->size());
+	//printf("%li\n", player->GetInventoryPointer()->size());
 
 	List<Item>* inventory = new List<Item>(glm::vec4(-0.9f, -0.9f, 0.7f, 1.0f), player->GetInventoryPointer(), std::string("resources/textures/list.png"), 10, Characters, &headers);
 	//Text* text = new Text("LMAO Bottom text", glm::vec4(-0.9f, -0.9f, 0.0f, 0.0f), Characters, 32.0f / (float)width / 16.0f, glm::vec3(0, 255, 0));
@@ -249,6 +253,8 @@ int main()
 	player->GetPhysicalObj()->name = "Player";
 
 	Bar test_frame(glm::vec4(-0.9f, 0.9f, 0.5f, 0.1f), &hp, &maxHp, glm::vec3(255, 0, 0));
+
+	float fps_change_last = 0.0f;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -290,15 +296,20 @@ int main()
 
 		test_frame.draw(&shaderHolder);
 		//text->draw(&shaderHolder);
-		printf("%s\n", "---");
+		//printf("%s\n", "---");
 		inventory->draw(&shaderHolder);
-		printf("%s\n", "---");
+		fps_counter->draw(&shaderHolder);
+		//printf("%s\n", "---");
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
 		current_frame = glfwGetTime();
 		dt = (current_frame - last_frame);
 		last_frame = current_frame;
+		if (glfwGetTime() - fps_change_last > 0.1) {
+			fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
+			fps_change_last = glfwGetTime();
+		}
 
 		player->Update(dt);
 		chunk1->Update(dt);
