@@ -33,9 +33,9 @@ void Location::FillEmptyChunks() {
   for(int i = 0; i < this->height; i++) {
     for(int j = 0; j < this->width; j++) {
       if(this->chunks[i][j] == nullptr) {
-	this->chunks[i][j] = new Chunk(new Terrain(this->chunk_width, 11, glm::vec3(this->chunk_width * i + this->chunk_width * 0.5f,
+	this->chunks[i][j] = new Chunk(new Terrain(this->chunk_width, 11, glm::vec3(this->chunk_width * i,
 										    -1.0f,
-										    this->chunk_height * j + this->chunk_height * 0.5f)));
+										    this->chunk_height * j)));
       }
     }
   }
@@ -84,8 +84,8 @@ Chunk * Location::GetCurrentChunk(float x, float y) {
  * \param yp Y coordinate of current position
  */
 void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_width, int screen_height, float xp, float yp) {
-  int x = (xp + this->chunk_width / 2.0f) / this->chunk_width;
-  int y = (yp + this->chunk_height / 2.0f) / this->chunk_height;
+  int x = xp / this->chunk_width;
+  int y = yp / this->chunk_height;
 
   int lx = max(x - 2, 0); // Most left row
   int uy = max(y - 2, 0); // Most up column
