@@ -98,7 +98,7 @@ std::map<GLchar, Character> Characters;
 int main()
 {
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-	player = new Player("player", 10, new PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f)), camera);
+	player = new Player("player", 10, new PhysicalObj(glm::vec3(1.0f, 10.0f, 1.0f)), camera);
 	double xpos, ypos;
 	double lastXPos, lastYPos;
 	float sensivity = 0.1f;
@@ -297,6 +297,7 @@ int main()
 
 		//test2->GetPhysicalObj()->draw(&ourShader, &camera, width, height);
 
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		test_frame.draw(&shaderHolder);
 		//text->draw(&shaderHolder);
 		//printf("%s\n", "---");
