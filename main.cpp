@@ -74,27 +74,21 @@ glm::vec3 normalize(glm::vec3 vec) {
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
-
 // Global variabels
 glm::vec2 speed = glm::vec2(0.0f, 0.0f);
+glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 
 float VCAP = 0.1f;
-
 Camera* camera;
-//PhysicalObj player = PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f));
 Player* player;
 SoundEngine sound_engine;
 
-
-
-glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 int direction = 1;
 float directionSide = 0;
 float velocity = 0.1f;
 
 std::map<GLchar, Character> Characters;
 
-// The MAIN function, from here we start the application and run the game loop
 int main()
 {
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -120,7 +114,6 @@ int main()
 
 	// Init GLFW
 	glfwInit();
-	// Set all the required options for GLFW
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -224,22 +217,15 @@ int main()
 
 	ShaderHolder shaderHolder(&ourShader, &GUIShader, &textShader);
 
-
 	// ----------------------------------------------- CODE ------------------------------------------
 	Location * location = new Location(10, 10, 30, 30);
 	location->FillEmptyChunks();
-	printf("Location created\n");
-	
 	
 	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
 
 	std::vector<std::string> headers = {"name"};
 
-	//printf("%li\n", player->GetInventoryPointer()->size());
-
 	List<Item>* inventory = new List<Item>(glm::vec4(-0.9f, -0.9f, 0.7f, 1.0f), player->GetInventoryPointer(), std::string("resources/textures/list.png"), 10, Characters, &headers);
-	//Text* text = new Text("LMAO Bottom text", glm::vec4(-0.9f, -0.9f, 0.0f, 0.0f), Characters, 32.0f / (float)width / 16.0f, glm::vec3(0, 255, 0));
-	//Container test_con(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), text, "resources/textures/stone.jpg");
 
 	float last_frame = glfwGetTime();
 
@@ -277,9 +263,10 @@ int main()
 			if (player->GetCamera()->getRotation().x > 90.0f)
 				player->GetCamera()->setRotationX(90.0f);
 		}
+
 		// Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
-		// Render
+
 		// Clear the color buffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -295,16 +282,11 @@ int main()
 
 		location->Draw(&shaderHolder, camera, width, height, player->GetPhysicalObj()->getPositionX(), player->GetPhysicalObj()->getPositionZ());
 
-		//test2->GetPhysicalObj()->draw(&ourShader, &camera, width, height);
-
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		test_frame.draw(&shaderHolder);
-		//text->draw(&shaderHolder);
-		//printf("%s\n", "---");
 		inventory->draw(&shaderHolder);
 		fps_counter->draw(&shaderHolder);
-		//printf("%s\n", "---");
-    
+
 		glFinish();
 
 		// Swap the screen buffers
@@ -319,7 +301,6 @@ int main()
 		}
 
 		player->Update(dt);
-		//		chunk1->Update(dt);
 	}
 	glfwTerminate();
 	return 0;
