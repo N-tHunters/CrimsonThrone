@@ -282,6 +282,7 @@ int main()
 
 		location->Draw(&shaderHolder, camera, width, height, player->GetPhysicalObj()->getPositionX(), player->GetPhysicalObj()->getPositionZ());
 
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		test_frame.draw(&shaderHolder);
 		inventory->draw(&shaderHolder);
 		fps_counter->draw(&shaderHolder);
