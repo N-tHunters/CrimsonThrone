@@ -132,7 +132,7 @@ void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 cameraRot = glm::mat4(1.0f);
 	glm::mat4 projection;
-	glm::vec3 cameraPosition = glm::vec3(camera->getPosition().x, camera->getPosition().y + 1, camera->getPosition().z);
+	glm::vec3 cameraPosition = glm::vec3(camera->getPosition().x, camera->getPosition().y + 2.f, camera->getPosition().z);
 	model = glm::rotate(model, glm::radians(this->obj->getRotationX()), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(this->obj->getRotationY()), glm::vec3(0.0f, 1.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(this->obj->getRotationZ()), glm::vec3(0.0f, 0.0f, 1.0f));

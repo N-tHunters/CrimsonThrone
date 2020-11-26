@@ -57,16 +57,19 @@ public:
 	void changeRotationZ(float);
 
 	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
-	void update(float);
+	virtual void update(float);
 
 	string getName();
 
 	void jump();
 
+	void setSpeed(glm::vec2 speed);
+
 	void setOnGround(bool);
 	bool getOnGround();
 	float detectCollision(Terrain* terrain);
-	//void collideTerrain(Terrain*, glm::vec2, float);
+
+	void collideTerrain(Terrain*);
 };
 
 #endif

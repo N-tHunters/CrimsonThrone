@@ -169,18 +169,18 @@ void Chunk::Update(float dt) {
   for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
     this->actors[actor_i]->
       GetPhysicalObj()->
-      collideTerrain(this->terrain, glm::vec2(0.0f, 0.0f), VCAP);
+      collideTerrain(this->terrain);
   }
 
   for(int object_i = 0; object_i < this->GetObjectsCount(); object_i++) {
     this->objects[object_i]->
-      collideTerrain(this->terrain, glm::vec2(0.0f, 0.0f), VCAP);
+      collideTerrain(this->terrain);
   }
   
   for(int item_i = 0; item_i < this->GetItemsCount(); item_i++) {
     this->items[item_i]->
       GetPhysicalObj()->
-      collideTerrain(this->terrain, glm::vec2(0.0f, 0.0f), VCAP);
+      collideTerrain(this->terrain);
   }
 
   for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++)

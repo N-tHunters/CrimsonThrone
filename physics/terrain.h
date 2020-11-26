@@ -20,6 +20,7 @@ public:
 	glm::vec3 getPosition();
 	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
 	float getHeight(glm::vec3);
+	glm::vec3 getOutVector(glm::vec3);
 };
 
 #endif

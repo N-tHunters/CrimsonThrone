@@ -154,8 +154,30 @@ bool PhysicalObj::getOnGround() {
 	return this->onGround;
 }
 
+void PhysicalObj::setSpeed(glm::vec2 speed) {
+	this->velocity.x = speed.x;
+	this->velocity.z = speed.y;
+}
+
 float PhysicalObj::detectCollision(Terrain* terrain) {
 	return terrain->getHeight(this->getPosition()) - this->getPositionY();
+}
+
+void PhysicalObj::collideTerrain(Terrain* terrain) {
+	float height = this->detectCollision(terrain);
+	if(height > 0.0f) {
+		//this->setPositionY(terrain->getHeight(this->getPosition()));
+		this->acceleration.y = 0.0f;
+		this->velocity.y = 0.0f;
+		this->setOnGround(true);
+		this->changePosition(heightterrain->getOutVector(this->getPosition()));
+	} else if(height > -0.1f) {
+		this->setOnGround(true);
+		this->acceleration.y = 0.0f;
+	} else {
+		this->setOnGround(false);
+		this->acceleration.y = -G;
+	}
 }
 
 /*

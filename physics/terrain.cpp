@@ -16,10 +16,10 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 	this->tile_width = size / (vertices_number - 1);
 
 	std::vector<float> v;
-	for(int i = 0; i < size; i ++) {
+	for(int i = 0; i < vertices_number; i ++) {
 		v.clear();
-		for(int j = 0; j < size; j ++) {
-			v.push_back(0.0f);
+		for(int j = 0; j < vertices_number; j ++) {
+			v.push_back((float)((i - vertices_number / 2) * (i - vertices_number / 2) + (j - vertices_number / 2) * (j - vertices_number / 2)) / 10.0f);
 		}
 		this->height.push_back(v);
 	}
@@ -120,4 +120,23 @@ float Terrain::getHeight(glm::vec3 position) {
 							  glm::vec2(xCoord, yCoord));
 	}
 	return answer * this->tile_width + this->position.y;
+}
+
+glm::vec3 Terrain::getOutVector(glm::vec3 position) {
+	float terrainX = position.x - this->position.x;
+	float terrainY = position.z - this->position.z;
+	float tileSize = this->tile_width;
+	float tileX = floor(terrainX / tileSize);
+	float tileY = floor(terrainY / tileSize);
+	float xCoord = (terrainX - tileSize * tileX) / tileSize;
+	float yCoord = (terrainY - tileSize * tileY) / tileSize;
+	if(tileX >= this->size - 1 || tileY >= this->size - 1 || tileX < 0 || tileY < 0) {
+		return glm::vec3(0.0f, 0.0f, 0.0f);
+	}
+	float h = (this->height[tileX][tileY] +
+						this->height[tileX][tileY + 1] +
+						this->height[tileX + 1][tileY] +
+						this->height[tileX + 1][tileY + 1]) / 4.0f;
+	glm::vec3 center = glm::vec3(this->tile_width / 2.0f, h, this->tile_width / 2.0f);
+	return center - glm::vec3(xCoord, position.y, yCoord);
 }
