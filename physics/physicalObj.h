@@ -65,7 +65,8 @@ public:
 
 	void setOnGround(bool);
 	bool getOnGround();
-	void collideTerrain(Terrain*, glm::vec2, float);
+	float detectCollision(Terrain* terrain);
+	//void collideTerrain(Terrain*, glm::vec2, float);
 };
 
 #endif

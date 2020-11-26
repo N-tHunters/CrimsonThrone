@@ -154,6 +154,11 @@ bool PhysicalObj::getOnGround() {
 	return this->onGround;
 }
 
+float PhysicalObj::detectCollision(Terrain* terrain) {
+	return terrain->getHeight(this->getPosition()) - this->getPositionY();
+}
+
+/*
 void PhysicalObj::collideTerrain(Terrain* terrain, glm::vec2 movement, float VCAP) {
 
 	float terrainHeight = terrain->getHeight(this->getPosition());
@@ -208,3 +213,4 @@ void PhysicalObj::collideTerrain(Terrain* terrain, glm::vec2 movement, float VCA
 		this->setOnGround(true);
 	}
 }
+*/
