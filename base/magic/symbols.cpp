@@ -53,4 +53,5 @@ void pseudo_to_prog(std::string pseudo, SYMBOL * prog) {
   for(int i = 0; i < pseudo.size(); i++) {
     prog[i] = pseudo2sym[pseudo[i]];
   }
+  prog[pseudo.size()] = HALT;
 }

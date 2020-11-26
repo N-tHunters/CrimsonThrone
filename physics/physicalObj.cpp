@@ -3,17 +3,18 @@
 
 PhysicalObj::PhysicalObj() {}
 
-
-// 
-
 PhysicalObj::PhysicalObj(glm::vec3 position) {
 	this->position = position;
 	this->velocity = glm::vec3(0.0f);
 	this->acceleration = glm::vec3(0.0f);
 	this->onGround = true;
+	this->mesh = nullptr;
+	this->isActive = true;
+	this->isVisible = true;
+	this->isTransparent = true;
 }
 
-PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, glm::vec3 position, glm::vec3 rotation, string name) {
+PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, glm::vec3 position, glm::vec3 rotation, std::string name) {
 	this->name = name;
 	this->mesh = mesh;
 	this->position = position;

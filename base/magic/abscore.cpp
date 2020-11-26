@@ -1,5 +1,6 @@
 #include "abscore.h"
 #include "protocore.h"
+#include "../location.h"
 
 AbstractCore::AbstractCore() {
   for(int i = 0; i < 256; i++)
@@ -27,6 +28,10 @@ char AbstractCore::AddChildProtoCore(ProtoMagicCore * new_child_core) {
 
 void AbstractCore::SetParent(AbstractCore * parent_core) {
   this->parent_core = parent_core;
+}
+
+void AbstractCore::SetPhysicalObj(PhysicalObj * obj) {
+  this->physical_obj = obj;
 }
 
 PhysicalObj * AbstractCore::GetPhysicalObj() {
