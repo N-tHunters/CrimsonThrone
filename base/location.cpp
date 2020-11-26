@@ -24,6 +24,9 @@ Location::Location(int width, int height, int chunk_width, int chunk_height) {
     }
     this->chunks.push_back(row);
   }
+
+  this->current_x = 0;
+  this->current_y = 0;
 }
 
 /**
@@ -52,7 +55,7 @@ void Location::SetChunk(int x, int y, Chunk * chunk) {
 }
 
 /**
- * Get chunk at position
+ * Get chunk at indexes
  * \param x Row
  * \param y Column
  * \return Pointer to chunk at this position
@@ -62,35 +65,44 @@ Chunk * Location::GetChunk(int x, int y) {
 }
 
 /**
- * Get current chunk by physical position
+ * Get current chunk (Position of current chunk is taken from Location::UpdatePosition())
+ * \return Pointer to chunk
+ */
+Chunk * Location::GetCurrentChunk() {
+  return this->chunks[this->current_x][this->current_y];
+}
+
+/**
+ * Get chunk by position
  * \param x X coord
  * \param y Y coord
- * \return Pointer to chunk at this position
+ * \return Pointer to chunk at position
  */
-Chunk * Location::GetCurrentChunk(float x, float y) {
+Chunk * Location::GetChunkByPosition(float x, float y) {
   int xp = x / this->chunk_width;
   int yp = y / this->chunk_height;
 
   return this->chunks[xp][yp];
 }
 
+void Location::UpdatePosition(glm::vec3 pos) {
+  this->current_x = pos.x / this->chunk_width;
+  this->current_y = pos.z / this->chunk_height;
+}
+
 /**
- * Draw all chunks around current chunk
+ * Draw all chunks around current chunk (Position of current chunk
+ * is taken from Location::UpdatePosition())
  * \param shaderHolder Pointer to all shaders
  * \param camera Pointer to camer
  * \param screen_width Width of screen
  * \param screen_height Height of screen
- * \param xp X coordinate of current position
- * \param yp Y coordinate of current position
  */
-void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_width, int screen_height, float xp, float yp) {
-  int x = xp / this->chunk_width;
-  int y = yp / this->chunk_height;
-
-  int lx = max(x - 2, 0); // Most left row
-  int uy = max(y - 2, 0); // Most up column
-  int rx = min(x + 2, this->width - 1); // Most right row
-  int dy = min(y + 2, this->height - 1); // Most down column
+void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_width, int screen_height) {
+  int lx = max(this->current_x - 2, 0); // Most left row
+  int uy = max(this->current_y - 2, 0); // Most up column
+  int rx = min(this->current_x + 2, this->width - 1); // Most right row
+  int dy = min(this->current_y + 2, this->height - 1); // Most down column
 
   
   for(int ix = lx; ix <= rx; ix++) {
@@ -99,4 +111,16 @@ void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_wid
 	this->chunks[ix][iy]->Draw(shaderHolder, camera, screen_width, screen_height);
     }
   }
+}
+
+// Global functions and objects
+
+Location * current_location;
+
+Location * GetCurrentLocation() {
+  return current_location;
+}
+
+void SetCurrentLocation(Location *loc) {
+  current_location = loc;
 }

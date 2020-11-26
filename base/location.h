@@ -16,14 +16,22 @@ class Location {
   int chunk_width, chunk_height;
   int width, height;
   vector<vector<Chunk *>> chunks;
+  int current_x, current_y;
+  
  public:
   Location(int, int, int, int);
   void FillEmptyChunks();
   void SetChunk(int, int, Chunk *);
   Chunk * GetChunk(int, int);
-  Chunk * GetCurrentChunk(float, float);
+  Chunk * GetChunkByPosition(float, float);
+  Chunk * GetCurrentChunk();
+  void UpdatePosition(glm::vec3);
 
-  void Draw(ShaderHolder *, Camera *, int, int, float, float);
+  void Draw(ShaderHolder *, Camera *, int, int);
 };
+
+
+Location * GetCurrentLocation();
+void SetCurrentLocation(Location *);
 
 #endif

@@ -16,6 +16,7 @@ class AbstractCore {
   AbstractCore();
   AbstractCore(PhysicalObj *);
   virtual PhysicalObj * GetPhysicalObj();
+  void SetPhysicalObj(PhysicalObj *);
   char AddChildProtoCore(ProtoMagicCore *);
   void SetParent(AbstractCore *);
 };

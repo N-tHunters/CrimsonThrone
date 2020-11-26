@@ -10,7 +10,10 @@ char ElementMagicCore::CallCreateElement(char arg, AbstractCore * core) {
   switch(arg) {
   case 0:
     PhysicalObj * core_obj = core->GetPhysicalObj();
-    ProtoMagicCore * element_core = this->CreateElement(core_obj->getPosition());
+    glm::vec3 position(0.0f, 0.0f, 0.0f);
+    if(core_obj != nullptr)
+      position = core_obj->getPosition();
+    ProtoMagicCore * element_core = this->CreateElement(position);
     return core->AddChildProtoCore(element_core);
   }
 

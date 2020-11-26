@@ -3,7 +3,7 @@
 MagicCore::MagicCore() : AbstractCore() {
   this->state = STOPPED_OK;
   this->error = ERROR_OK;
-  this->debug = false;
+  this->debug = true;
   this->flag = false;
 }
 
@@ -66,7 +66,7 @@ void MagicCore::Step() {
   }
   
   SYMBOL cmd = static_cast<SYMBOL>(this->cell_tape[this->ip]);
-  char a, b;
+  char a, b, c;
   int i1, i2;
 
   switch(cmd) {
@@ -214,6 +214,13 @@ void MagicCore::Step() {
     
   case SWITCH_STACK:
     this->sp = !this->sp;
+    break;
+
+  case INTERRACT:
+    a = this->PopStack();
+    b = this->PopStack();
+    c = this->PopStack();
+    proto_call(a, b, c, this);
     break;
   }
   
