@@ -379,7 +379,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	  
 	  pseudo_to_prog(pseudo, prog);
 	  
-	  otc->LoadProgram(prog, pseudo.length());
+	  otc->LoadProgram(prog, pseudo.length() + 1);
 	  while(otc->GetState() == RUNNING)
 	    otc->Step();
 	}

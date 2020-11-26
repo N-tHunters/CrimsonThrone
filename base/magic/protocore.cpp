@@ -12,7 +12,6 @@ char ProtoMagicCore::Call(char id, char arg, AbstractCore *core) {
 }
 
 char proto_call(char proto_id, char call_id, char arg, AbstractCore *core) {
-  printf("Protocall %d %d %d", proto_id, call_id, arg);
   ProtoMagicCore * protocore = protocores[proto_id];
   if(protocore == nullptr) {
     return 0;
