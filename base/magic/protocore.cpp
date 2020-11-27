@@ -1,6 +1,7 @@
 #include "protocore.h"
 #include "worldcore.h"
 #include "firecore.h"
+#include "voidcore.h"
 
 std::map<char, ProtoMagicCore *> protocores;
 
@@ -23,5 +24,6 @@ char proto_call(char proto_id, char call_id, char arg, AbstractCore *core) {
 void init_protocores() {
   protocores[CORE_ID_WORLD] = new WorldMagicCore();
   protocores[CORE_ID_FIRE] = new FireMagicCore();
+  protocores[CORE_ID_VOID] = new VoidMagicCore();
 }
 

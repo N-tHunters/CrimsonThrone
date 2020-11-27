@@ -6,7 +6,7 @@
 class ElementPiece : public PhysicalObj {
  public:
   ElementPiece(Mesh*, bool, bool, bool, glm::vec3, glm::vec3, std::string);
-
+  void update(float dt);
 };
 
 #endif

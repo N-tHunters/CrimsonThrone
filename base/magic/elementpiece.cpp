@@ -4,3 +4,9 @@ ElementPiece::ElementPiece(Mesh* mesh, bool isActive, bool isVisible, bool isTra
   PhysicalObj(mesh, isActive, isVisible, isTransparent, position, rotation, name) {
 
 }
+
+
+void ElementPiece::update(float dt) {
+  PhysicalObj::update(dt);
+  this->changeRotation(glm::vec3(1.0f, 1.0f, 1.0f));
+}

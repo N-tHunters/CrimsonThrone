@@ -70,6 +70,7 @@ float VCAP = 0.1f;
 Camera* camera;
 Player* player;
 SoundEngine sound_engine;
+MagicCore * player_core;
 
 int direction = 1;
 float directionSide = 0;
@@ -81,6 +82,8 @@ int main()
 {
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 	player = new Player("player", 10, new PhysicalObj(glm::vec3(1.0f, 10.0f, 1.0f)), camera);
+	player_core = new MagicCore();
+	player_core->SetPhysicalObj(player->GetPhysicalObj());
 
 	init_translators();
 	init_protocores();
@@ -299,6 +302,7 @@ int main()
 
 		chunk_ptr->Update(dt);
 		player->Update(dt);
+		player_core->Step();
 	}
 	glfwTerminate();
 	return 0;
@@ -359,16 +363,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_Q && action == GLFW_PRESS) {
 	  std::string pseudo;
 	  std::cin>>pseudo;
-	  
-	  MagicCore* otc = new MagicCore();
-	  otc->SetPhysicalObj(player->GetPhysicalObj());
-	  
+	  	  
 	  SYMBOL prog[1024];
 	  
 	  pseudo_to_prog(pseudo, prog);
 	  
-	  otc->LoadProgram(prog, pseudo.length() + 1);
-	  while(otc->GetState() == RUNNING)
-	    otc->Step();
+	  player_core->LoadProgram(prog, pseudo.length() + 1);
 	}
 }

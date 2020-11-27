@@ -35,6 +35,7 @@ class MagicCore : public AbstractCore{
   char PopStack();
   int FindMark(int);
   int GetCycleBegin(int);
+  void JustifyStack();
   
  public:
   MagicCore();
