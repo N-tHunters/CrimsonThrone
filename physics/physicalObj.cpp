@@ -170,7 +170,7 @@ void PhysicalObj::collideTerrain(Terrain* terrain) {
 		this->acceleration.y = 0.0f;
 		this->velocity.y = 0.0f;
 		this->setOnGround(true);
-		this->changePosition(heightterrain->getOutVector(this->getPosition()));
+		this->changePosition(height * terrain->getOutVector(this->getPosition()));
 	} else if(height > -0.1f) {
 		this->setOnGround(true);
 		this->acceleration.y = 0.0f;

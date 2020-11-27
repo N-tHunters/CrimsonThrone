@@ -220,9 +220,33 @@ void MagicCore::Step() {
     a = this->PopStack();
     b = this->PopStack();
     c = this->PopStack();
-    proto_call(a, b, c, this);
+    this->core_stack[this->sp].push(proto_call(a, b, c, this));
+    break;
+
+  case INTERRACT_CHILD:
+    a = this->PopStack();
+    b = this->PopStack();
+    c = this->PopStack();
+
+    printf("Child call %d %d %d\n", a, b, c);
+
+    ProtoMagicCore * child_core = (ProtoMagicCore*) this->GetChildCore(a);
+
+    if(child_core == nullptr) {
+      printf("error: Child core not exists\n");
+      this->core_stack[this->sp].push(-1);
+    } else 
+      this->core_stack[this->sp].push(child_core->Call(b, c, this));
     break;
   }
   
   this->ip ++;
+
+  JustifyStack();
+}
+
+void MagicCore::JustifyStack() {
+  if(this->core_stack[this->sp].size() > 64)
+    while(!this->core_stack[this->sp].empty())
+      this->core_stack[this->sp].pop();
 }

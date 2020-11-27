@@ -3,13 +3,11 @@
 
 #include "protocore.h"
 #include "elementpiece.h"
+#include "objectcontrolcore.h"
 
-class ElementPieceCore : public ProtoMagicCore {
- private:
+class ElementPieceCore : public ObjectControlCore {
  public:
   ElementPieceCore(ElementPiece *);
-  char SetVelocity(char arg, AbstractCore *core);
-  char Call(char id, char arg, AbstractCore *core);
 };
 
 #endif

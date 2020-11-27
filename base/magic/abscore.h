@@ -19,6 +19,8 @@ class AbstractCore {
   void SetPhysicalObj(PhysicalObj *);
   char AddChildProtoCore(ProtoMagicCore *);
   void SetParent(AbstractCore *);
+  
+  AbstractCore * GetChildCore(int);
 };
 
 #endif
