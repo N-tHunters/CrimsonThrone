@@ -59,21 +59,6 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-glm::vec2 normalize(glm::vec2 vec) {
-	float d = sqrt(vec.x * vec.x + vec.y * vec.y);
-	vec.x /= d;
-	vec.y /= d;
-	return vec;
-}
-
-glm::vec3 normalize(glm::vec3 vec) {
-	float d = sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
-	vec.x /= d;
-	vec.y /= d;
-	vec.z /= d;
-	return vec;
-}
-
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
@@ -288,8 +273,8 @@ int main()
 		  chunk_ptr = location->GetChunkByPosition(0, 0);
 
 		player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain());
-		
 		player->GetPhysicalObj()->setSpeed(speed + speedSide);
+
 
 		location->Draw(&shaderHolder, camera, width, height);
 
@@ -310,6 +295,7 @@ int main()
 			fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
 			fps_change_last = glfwGetTime();
 		}
+
 
 		chunk_ptr->Update(dt);
 		player->Update(dt);

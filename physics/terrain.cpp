@@ -1,6 +1,4 @@
 #include "terrain.h"
-#include <random>
-#include <math.h>
 
 /**
  * @brief      Constructs a new instance.
@@ -130,13 +128,25 @@ glm::vec3 Terrain::getOutVector(glm::vec3 position) {
 	float tileY = floor(terrainY / tileSize);
 	float xCoord = (terrainX - tileSize * tileX) / tileSize;
 	float yCoord = (terrainY - tileSize * tileY) / tileSize;
+	glm::vec3 answer;
 	if(tileX >= this->size - 1 || tileY >= this->size - 1 || tileX < 0 || tileY < 0) {
 		return glm::vec3(0.0f, 0.0f, 0.0f);
 	}
+	if (xCoord <= (1-yCoord)) {
+		answer = get_normal(glm::vec3(0, this->height[tileX][tileY], 0),
+							  glm::vec3(1, this->height[tileX + 1][tileY], 0),
+							  glm::vec3(0, this->height[tileX][tileY + 1], 1));
+	} else {
+		answer = get_normal(glm::vec3(1, this->height[tileX + 1][tileY], 0),
+							  glm::vec3(1, this->height[tileX + 1][tileY + 1], 1),
+							  glm::vec3(0, this->height[tileX][tileY + 1], 0));
+	}
+	return answer;
+	/*
 	float h = (this->height[tileX][tileY] +
 						this->height[tileX][tileY + 1] +
 						this->height[tileX + 1][tileY] +
 						this->height[tileX + 1][tileY + 1]) / 4.0f;
 	glm::vec3 center = glm::vec3(this->tile_width / 2.0f, h, this->tile_width / 2.0f);
-	return center - glm::vec3(xCoord, position.y, yCoord);
+	return center - glm::vec3(xCoord, position.y, yCoord);*/
 }

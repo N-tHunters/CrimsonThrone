@@ -1,10 +1,16 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
 
+#include <random>
+#include <math.h>
+
 #include "physicalObj.h"
+
 #include "../render/shaderLoader.h"
 #include "../render/camera.h"
 #include "../render/shaderHolder.h"
+
+#include "../math/vectors.h"
 
 class Terrain {
 	float size;
