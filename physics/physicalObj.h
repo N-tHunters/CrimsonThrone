@@ -16,6 +16,7 @@ class PhysicalObj {
 	bool isActive;
 	bool isVisible;
 	bool isTransparent;
+	bool isFlying;
 	glm::vec3 position;
 	glm::vec3 rotation;
 	bool onGround;
@@ -25,13 +26,16 @@ public:
 	glm::vec3 acceleration;
 	PhysicalObj();
 	PhysicalObj(glm::vec3);
-	PhysicalObj(Mesh*, bool, bool, bool, glm::vec3, glm::vec3, string);
-	glm::vec3 getRotation();
+	PhysicalObj(Mesh*, bool, bool, bool, bool, glm::vec3, glm::vec3, std::string);
+
+	// Getters and setters for position and rotation
+
+	glm::vec3 getPosition();
 	float getPositionX();
 	float getPositionY();
 	float getPositionZ();
 
-	glm::vec3 getPosition();
+	glm::vec3 getRotation();
 	float getRotationX();
 	float getRotationY();
 	float getRotationZ();
@@ -56,20 +60,18 @@ public:
 	void changeRotationY(float);
 	void changeRotationZ(float);
 
-	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
+	std::string getName();
+
 	virtual void update(float);
-
-	string getName();
-
 	void jump();
-
 	void setSpeed(glm::vec2 speed);
-
+	void setSpeed(glm::vec3 speed);
 	void setOnGround(bool);
 	bool getOnGround();
 	float detectCollision(Terrain* terrain);
-
 	void collideTerrain(Terrain*);
+
+	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
 };
 
 #endif

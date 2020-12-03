@@ -14,15 +14,15 @@ PhysicalObj::PhysicalObj(glm::vec3 position) {
 	this->isTransparent = true;
 }
 
-PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, glm::vec3 position, glm::vec3 rotation, std::string name) {
+PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, bool isFlying, glm::vec3 position, glm::vec3 rotation, std::string name) {
 	this->name = name;
 	this->mesh = mesh;
 	this->position = position;
 	this->rotation = rotation;
-	//this->boundary = boundary;
 	this->isActive = isActive;
 	this->isVisible = isVisible;
 	this->isTransparent = isTransparent;
+	this->isFlying = isFlying;
 	this->velocity = glm::vec3(0.0f);
 	this->acceleration = glm::vec3(0.0f);
 	this->mesh->init(this);
@@ -157,6 +157,10 @@ bool PhysicalObj::getOnGround() {
 void PhysicalObj::setSpeed(glm::vec2 speed) {
 	this->velocity.x = speed.x;
 	this->velocity.z = speed.y;
+}
+
+void PhysicalObj::setSpeed(glm::vec3 speed) {
+	this->velocity = speed;
 }
 
 float PhysicalObj::detectCollision(Terrain* terrain) {
