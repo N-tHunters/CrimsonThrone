@@ -2,7 +2,6 @@
 
 ElementPiece::ElementPiece(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, bool isFlying, glm::vec3 position, glm::vec3 rotation, std::string name) :
   PhysicalObj(mesh, isActive, isVisible, isTransparent, isFlying, position, rotation, name) {
-
 }
 
 
