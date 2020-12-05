@@ -144,7 +144,7 @@ void PhysicalObj::jump() {
 	if(this->onGround) {
 		this->velocity.y = 10.0f;
 	}
-}
+}	
 
 void PhysicalObj::setOnGround(bool value) {
 	this->onGround = value;
@@ -167,7 +167,7 @@ float PhysicalObj::detectCollision(Terrain* terrain) {
 	return terrain->getHeight(this->getPosition()) - this->getPositionY();
 }
 
-void PhysicalObj::collideTerrain(Terrain* terrain) {
+void PhysicalObj::collideTerrain(Terrain* terrain, float dt) {
 	float height = this->detectCollision(terrain);
 	if(height > 0.0f) {
 		//this->setPositionY(terrain->getHeight(this->getPosition()));
@@ -176,7 +176,11 @@ void PhysicalObj::collideTerrain(Terrain* terrain) {
 		this->setOnGround(true);
 		//this->changePosition(height * terrain->getOutVector(this->getPosition()));
 		//printf("%f\n", this->getPositionY());
-		this->setPositionY(terrain->getHeight(this->getPosition()));
+		if(height > 0.2f) {
+			this->changePosition(-this->speed * dt);
+		} else {
+			this->setPositionY(terrain->getHeight(this->getPosition()));
+		}
 	} else if(height > -0.1f) {
 		this->setOnGround(true);
 		this->acceleration.y = 0.0f;

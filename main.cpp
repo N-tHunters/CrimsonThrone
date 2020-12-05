@@ -275,8 +275,8 @@ int main()
 		if(chunk_ptr == nullptr)
 		  chunk_ptr = location->GetChunkByPosition(0, 0);
 
-		player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain());
 		player->GetPhysicalObj()->setSpeed(speed + speedSide);
+		player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt);
 
 
 		location->Draw(&shaderHolder, camera, width, height);
