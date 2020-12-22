@@ -5,7 +5,7 @@ ObjectControlCore::ObjectControlCore(PhysicalObj * obj) : ProtoMagicCore(obj) {
 }
 
 char ObjectControlCore::SetVelocity(char arg, AbstractCore * core) {
-  this->GetPhysicalObj()->jump();
+  this->GetPhysicalObj()->setSpeed(glm::vec3(1.0f, 10.0f, 1.0f));
   return 0;
 }
 
