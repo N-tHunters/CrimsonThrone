@@ -2,12 +2,15 @@
 #define PHYSICALOBJ_H
 
 #include "../render/mesh.h"
-//#include "physics/boundary.h"
+#include "boundary.h"
 #include <glm/glm.hpp>
 #include "../render/camera.h"
 #include "../render/shaderLoader.h"
 #include "../render/shaderHolder.h"
+#include "../debug.h"
 //#include "terrain.h"
+
+class Chunk;
 
 class Terrain;
 
@@ -21,12 +24,16 @@ class PhysicalObj {
 	glm::vec3 rotation;
 	bool onGround;
 public:
+	Boundary* boundary;
+	float lastHeight;
 	std::string name;
 	glm::vec3 velocity;
 	glm::vec3 acceleration;
 	PhysicalObj();
-	PhysicalObj(glm::vec3);
+	PhysicalObj(glm::vec3, Boundary*);
 	PhysicalObj(Mesh*, bool, bool, bool, bool, glm::vec3, glm::vec3, std::string);
+	PhysicalObj(Mesh*, bool, bool, bool, bool, glm::vec3, glm::vec3, std::string, Boundary*);
+
 
 	// Getters and setters for position and rotation
 
@@ -62,16 +69,18 @@ public:
 
 	std::string getName();
 
-	virtual void update(float);
-	void jump();
+	virtual void update(float, glm::vec3);
+	void jump(Chunk*);
 	void setSpeed(glm::vec2 speed);
 	void setSpeed(glm::vec3 speed);
 	void setOnGround(bool);
 	bool getOnGround();
 	float detectCollision(Terrain* terrain);
-	void collideTerrain(Terrain*);
+	void collideTerrain(Terrain*, float);
 
 	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
+
+	glm::vec3 collide(PhysicalObj*, float, glm::vec3);
 };
 
 #endif

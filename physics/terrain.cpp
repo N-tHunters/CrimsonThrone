@@ -17,7 +17,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 	for(int i = 0; i < vertices_number; i ++) {
 		v.clear();
 		for(int j = 0; j < vertices_number; j ++) {
-			v.push_back((float)((i - vertices_number / 2) * (i - vertices_number / 2) + (j - vertices_number / 2) * (j - vertices_number / 2)) / 10.0f);
+			v.push_back(0.0f);
 		}
 		this->height.push_back(v);
 	}

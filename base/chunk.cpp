@@ -166,29 +166,29 @@ void Chunk::DeleteObject(int index) {
  * \param dt Time passed since last update
  */
 void Chunk::Update(float dt) {
+  for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++)
+    this->actors[actor_i]->GetPhysicalObj()->update(dt, glm::vec3(1.0f, 1.0f, 1.0f));
+
+  for(int object_i = 0; object_i < this->GetObjectsCount(); object_i++)
+    this->objects[object_i]->update(dt, glm::vec3(1.0f, 1.0f, 1.0f));
+  
+  for(int item_i = 0; item_i < this->GetItemsCount(); item_i++)
+    this->items[item_i]->GetPhysicalObj()->update(dt, glm::vec3(1.0f, 1.0f, 1.0f));
+
   for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
     this->actors[actor_i]->
       GetPhysicalObj()->
-      collideTerrain(this->terrain);
+      collideTerrain(this->terrain, dt);
   }
 
   for(int object_i = 0; object_i < this->GetObjectsCount(); object_i++) {
     this->objects[object_i]->
-      collideTerrain(this->terrain);
+      collideTerrain(this->terrain, dt);
   }
   
   for(int item_i = 0; item_i < this->GetItemsCount(); item_i++) {
     this->items[item_i]->
       GetPhysicalObj()->
-      collideTerrain(this->terrain);
+      collideTerrain(this->terrain, dt);
   }
-
-  for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++)
-    this->actors[actor_i]->GetPhysicalObj()->update(dt);
-
-  for(int object_i = 0; object_i < this->GetObjectsCount(); object_i++)
-    this->objects[object_i]->update(dt);
-  
-  for(int item_i = 0; item_i < this->GetItemsCount(); item_i++)
-    this->items[item_i]->GetPhysicalObj()->update(dt);
 }

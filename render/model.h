@@ -8,7 +8,7 @@ class Model
     public:
     	std::vector<GLfloat> vertices;
     	std::vector<GLuint> indices;
-        Model(char *path);
+        Model(char* path);
     private:
         void loadModel(string path);
         void processNode(aiNode *node, const aiScene *scene);

@@ -20,7 +20,7 @@ public:
   Player();
   Player(std::string, int, PhysicalObj *, Camera *);
 
-  void Update(float);
+  void Update(float, glm::vec3);
 
   void SetCamera(Camera *);
   Camera * GetCamera();
