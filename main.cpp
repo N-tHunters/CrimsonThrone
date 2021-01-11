@@ -59,6 +59,8 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+#define NO_SOUND
+
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
@@ -105,8 +107,10 @@ int main()
 	alSource3f(source, AL_VELOCITY, 0, 0, 0);
 	alSourcei(source, AL_LOOPING, AL_TRUE);
 
+#ifndef NO_SOUND
 	FileSound sound(&sound_engine, &source, "resources/sounds/happierburial.wav");
 	sound.Play();
+#endif
 
 	// Init GLFW
 	glfwInit();
