@@ -231,15 +231,15 @@ int main()
 	                                       "Test",
 	                                       new BoundaryBox(1.0f, 1.0f, 1.0f)));
 
-	PhysicalObj* player_model = new PhysicalObj(new Mesh("resources/textures/wire.png", new Model((char*)"resources/models/cube.obj")),
-	                                       true,
-	                                       true,
-	                                       false,
-	                                       false,
-	                                       glm::vec3(10.0f, 16.0f, 10.0f),
-	                                       glm::vec3(0.0f, 0.0f, 0.0f),
-	                                       "Test",
-	                                       new BoundaryBox(1.0f, 1.0f, 1.0f));
+	// PhysicalObj* player_model = new PhysicalObj(new Mesh("resources/textures/wire.png", new Model((char*)"resources/models/cube.obj")),
+	//                                        true,
+	//                                        true,
+	//                                        false,
+	//                                        false,
+	//                                        glm::vec3(10.0f, 16.0f, 10.0f),
+	//                                        glm::vec3(0.0f, 0.0f, 0.0f),
+	//                                        "Test",
+	//                                        new BoundaryBox(1.0f, 1.0f, 1.0f));
 
 	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
 
@@ -260,7 +260,7 @@ int main()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		player_model->setPosition(player->GetPhysicalObj()->getPosition());
+		// player_model->setPosition(player->GetPhysicalObj()->getPosition());
 		float dt;
 		float current_frame;
 		lastXPos = xpos;
@@ -315,7 +315,7 @@ int main()
 		player->Update(dt, result);
 
 		location->Draw(&shaderHolder, camera, width, height);
-		player_model->draw(&shaderHolder, camera, width, height);
+		// player_model->draw(&shaderHolder, camera, width, height);
 
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		test_frame.draw(&shaderHolder);

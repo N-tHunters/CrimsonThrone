@@ -5,7 +5,7 @@
 unsigned char* loadImage(std::string path, int* width, int* height) {
 	int channels;
 	
-	return stbi_load(path.c_str(), width, height, &channels, STBI_rgb_alpha);
+	return stbi_load(path.c_str(), width, height, &channels, STBI_rgb);
 }
 
 void freeImage(unsigned char* image) {

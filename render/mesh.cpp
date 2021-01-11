@@ -39,7 +39,7 @@ Mesh::Mesh(string texturePath, Model* model) {
 	// Load, create texture and generate mipmaps
 	int width, height;
 	unsigned char* image = loadImage(texturePath, &width, &height);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA8, GL_UNSIGNED_BYTE, image);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	freeImage(image);
 	glBindTexture(GL_TEXTURE_2D, 0);

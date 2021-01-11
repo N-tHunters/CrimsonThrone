@@ -166,9 +166,9 @@ void PhysicalObj::jump(Chunk* chunk) {
 	if (abs(velocity.y) < 1.0f) {
 		bool t = false;
 		for (int i = 0; i < chunk->GetObjectsCount(); i++) {
-			if (this->boundary->Collide(chunk->GetObject(i)->boundary, this->getPosition() + glm::vec3(0.0f, 0.5f, 0.0f), this->getRotation(), chunk->GetObject(i)->getPosition(), chunk->GetObject(i)->getRotation())) {
+			if (this->boundary->Collide(chunk->GetObject(i)->boundary, this->getPosition() - glm::vec3(0.0f, 0.5f, 0.0f), this->getRotation(), chunk->GetObject(i)->getPosition(), chunk->GetObject(i)->getRotation())) {
 				t = true;
-				break;
+				break; 
 			}
 		}
 		if (this->detectCollision(chunk->GetTerrain()) > -1.0f) {
@@ -295,10 +295,6 @@ glm::vec3 PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 ve
 
 	if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_z, this->getRotation(), other_object->getPosition() + other_velocity_z, other_object->getRotation())) {
 		result.z = 0.0f;
-	}
-
-	if (this->boundary->Collide(other_object->boundary, this->getPosition(), this->getRotation(), other_object->getPosition() + other_velocity_x, other_object->getRotation())) {
-		printf("%s\n", "I somehow collide");
 	}
 
 	return result;
