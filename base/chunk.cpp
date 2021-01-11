@@ -11,14 +11,26 @@
  * Empty constructor
  * \warning Should not use
  */
-Chunk::Chunk() {}
+Chunk::Chunk() {
+  this->is_water_present = false;
+}
 
 /**
  * Basic constructor
  * \param terrain Landscape of this chunk
  */
-Chunk::Chunk(Terrain * terrain) {
+Chunk::Chunk(Terrain * terrain) : Chunk() {
   this->terrain = terrain;
+}
+
+/**
+ * Constructor with water
+ * \param terrain Landscape of this chunk
+ * \param water_height Water level
+ */
+Chunk::Chunk(Terrain * terrain, float water_height) : Chunk(terrain) {
+  this->is_water_present = true;
+  this->water_height = water_height;
 }
 
 /**
@@ -192,3 +204,8 @@ void Chunk::Update(float dt) {
   for(int item_i = 0; item_i < this->GetItemsCount(); item_i++)
     this->items[item_i]->GetPhysicalObj()->update(dt);
 }
+
+
+bool Chunk::IsWaterPresent() { return this->is_water_present; }
+void Chunk::SetWaterHeight(float water_height) { this->water_height = water_height; }
+float Chunk::GetWaterHeight() { return this->water_height; }

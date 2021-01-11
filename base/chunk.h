@@ -17,6 +17,8 @@
  */
 class Chunk {
  private:
+  bool is_water_present;
+  float water_height;
   Terrain * terrain;
   std::vector<Item *>items;
   std::vector<Actor *>actors;
@@ -25,6 +27,7 @@ class Chunk {
  public:
   Chunk();
   Chunk(Terrain *);
+  Chunk(Terrain *, float);
 
   Terrain * GetTerrain();
 
@@ -47,6 +50,10 @@ class Chunk {
   void DeleteObject(int);
 
   void Update(float);
+
+  bool IsWaterPresent();
+  float GetWaterHeight();
+  void SetWaterHeight(float);
 };
 
 #endif
