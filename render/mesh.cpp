@@ -26,6 +26,7 @@ Mesh::Mesh() {};
  * @param      model        The model
  */
 Mesh::Mesh(string texturePath, Model* model) {
+	this->type = 1;
 	this->obj = nullptr;
 	this->size = model->indices.size();
 	glGenTextures(1, &texture);
@@ -76,9 +77,10 @@ Mesh::Mesh(string texturePath, Model* model) {
  * @param[in]  vertices     The vertices
  * @param[in]  indices      The indices
  */
-Mesh::Mesh(string texturePath, std::vector<GLfloat> vertices, std::vector<unsigned int> indices) {
+Mesh::Mesh(string texturePath, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices) {
+	this->type = 2;
 	this->obj = nullptr;
-	this->size = indices.size();
+	this->size = indices->size();
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
 	// Set our texture parameters
@@ -104,10 +106,10 @@ Mesh::Mesh(string texturePath, std::vector<GLfloat> vertices, std::vector<unsign
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), &(vertices[0]), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices->at(0)) * vertices->size(), &(vertices->at(0)), GL_STATIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices[0]) * indices.size(), &(indices[0]), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices->at(0)) * indices->size(), &(indices->at(0)), GL_STATIC_DRAW);
 
 	// Position attribute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
@@ -128,6 +130,7 @@ Mesh::Mesh(string texturePath, std::vector<GLfloat> vertices, std::vector<unsign
  * \param height Screen height
  */
 void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height) {
+	assert(this->obj != nullptr);
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 cameraRot = glm::mat4(1.0f);

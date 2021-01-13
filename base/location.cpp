@@ -38,7 +38,7 @@ void Location::FillEmptyChunks() {
       if(this->chunks[i][j] == nullptr) {
 	this->chunks[i][j] = new Chunk(new Terrain(this->chunk_width, 11, glm::vec3(this->chunk_width * i,
 										    -1.0f,
-										    this->chunk_height * j)));
+										    this->chunk_height * j)), 1.0f);
       }
     }
   }
@@ -107,8 +107,9 @@ void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_wid
   
   for(int ix = lx; ix <= rx; ix++) {
     for(int iy = uy; iy <= dy; iy++) {
-      if(this->chunks[ix][iy] != nullptr)
-	this->chunks[ix][iy]->Draw(shaderHolder, camera, screen_width, screen_height);
+      if(this->chunks[ix][iy] != nullptr) {
+        this->chunks[ix][iy]->Draw(shaderHolder, camera, screen_width, screen_height);\
+      }
     }
   }
 }

@@ -13,6 +13,7 @@
  */
 Chunk::Chunk() {
   this->is_water_present = false;
+  this->water_obj = nullptr;
 }
 
 /**
@@ -21,6 +22,7 @@ Chunk::Chunk() {
  */
 Chunk::Chunk(Terrain * terrain) : Chunk() {
   this->terrain = terrain;
+  this->water_obj = nullptr;
 }
 
 /**
@@ -31,6 +33,24 @@ Chunk::Chunk(Terrain * terrain) : Chunk() {
 Chunk::Chunk(Terrain * terrain, float water_height) : Chunk(terrain) {
   this->is_water_present = true;
   this->water_height = water_height;
+  std::vector<float> *vertices = new std::vector<float> {
+    -1.0f, 0.0f, -1.0f, 0.0f, 0.0f,
+    -1.0f, 0.0f,  1.0f, 0.0f, 1.0f,
+     1.0f, 0.0f,  1.0f, 1.0f, 1.0f,
+     1.0f, 0.0f, -1.0f, 1.0f, 0.0f
+  };
+  std::vector<unsigned int> *indices = new std::vector<unsigned int> {
+    0, 1, 2,
+    0, 2, 3
+  };
+  this->water_obj = new PhysicalObj(new Mesh("resources/textures/water.png", vertices, indices),
+                                    false,
+                                    true,
+                                    false,
+                                    false,
+                                    terrain->getPosition() + glm::vec3(0.0f, water_height, 0.0f),
+                                    glm::vec3(0.0f, 0.0f, 0.0f),
+                                    "water");
 }
 
 /**
@@ -58,6 +78,11 @@ void Chunk::Draw(ShaderHolder * shaderHolder, Camera * camera, int width, int he
   }
   for(int i = 0; i <  this->GetItemsCount(); i ++) {
     this->items[i]->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
+  }
+  if(this->water_obj != nullptr) {
+    this->water_obj->draw(shaderHolder, camera, width, height);
+  } else {
+    printf("%s\n", "NULLPTR");
   }
 }
 

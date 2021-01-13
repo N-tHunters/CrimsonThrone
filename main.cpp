@@ -214,8 +214,9 @@ int main()
 	Shader ourShader("resources/shaders/vertex_shader.glsl", "resources/shaders/fragment_shader.glsl");
 	Shader GUIShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/GUI_fragment_shader.glsl");
 	Shader textShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/text_fragment_shader.glsl");
+	Shader waterShader("resources/shaders/water_vertex_shader.glsl", "resources/shaders/water_fragment_shader.glsl");
 
-	ShaderHolder shaderHolder(&ourShader, &GUIShader, &textShader);
+	ShaderHolder shaderHolder(&ourShader, &GUIShader, &textShader, &waterShader);
 
 	// ----------------------------------------------- CODE ------------------------------------------
 	Location * location = new Location(10, 10, 30, 30);

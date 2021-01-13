@@ -6,6 +6,7 @@
 #define CHUNK_H
 
 #include "../physics/terrain.h"
+#include "../physics/physicalObj.h"
 #include "../render/shaderHolder.h"
 #include "item.h"
 #include "actor.h"
@@ -23,6 +24,7 @@ class Chunk {
   std::vector<Item *>items;
   std::vector<Actor *>actors;
   std::vector<PhysicalObj *>objects;
+  PhysicalObj* water_obj;
 
  public:
   Chunk();
