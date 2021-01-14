@@ -71,7 +71,6 @@ Chunk * Location::GetChunk(int x, int y) {
  */
 Chunk * Location::GetCurrentChunk() {
   if(this->current_x < 0 || this->current_y < 0 || this->current_x >= height || this->current_y >= width) return nullptr;
-  printf("%d %d\n", this->current_x, this->current_y);
   return this->chunks[this->current_x][this->current_y];
 }
 

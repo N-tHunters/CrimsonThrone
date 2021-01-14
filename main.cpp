@@ -82,10 +82,12 @@ bool player_wants_to_jump = false;
 
 std::map<GLchar, Character> Characters;
 
+bool push = false;
+
 int main()
 {
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-	player = new Player("player", 10, new PhysicalObj(glm::vec3(10.0f, 1.0f, 10.0f), new BoundaryBox(0.5f, 1.0f, 0.5f)), camera);
+	player = new Player("player", 10, new PhysicalObj(glm::vec3(10.0f, 1.0f, 1.0f), new BoundaryBox(0.5f, 1.0f, 0.5f)), camera);
 	player_core = new MagicCore();
 	player_core->SetPhysicalObj(player->GetPhysicalObj());
 
@@ -231,7 +233,7 @@ int main()
 	int field[10][10];
 	for(int i = 0; i < 10; i++)
 	  for(int j = 0; j < 10; j ++)
-	    field[i][j] = rand() % 1;
+	    field[i][j] = rand() % 2;
 
 
 	for(int i = 0; i < 10; i ++) {
@@ -328,6 +330,12 @@ int main()
 		/* Collide player with all objects in chunk */
 		player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt);
 
+		if (push) {
+			for (int i = 0; i < chunk_ptr->GetObjsCount(); i ++) {
+				chunk_ptr->GetObj(i)->acceleration -= (player->GetPhysicalObj()->getPosition() - chunk_ptr->GetObj(i)->getPosition()) / 10.0f;
+			}
+		}
+
 		chunk_ptr->CollideWithAll(player->GetPhysicalObj(), dt);
 
 		chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
@@ -356,7 +364,8 @@ int main()
 			fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
 			fps_change_last = glfwGetTime();
 		}
-		player_wants_to_jump = false; // What the fuck 
+		player_wants_to_jump = false; // What the fuck
+		push = false;
 	}
 	glfwTerminate();
 	return 0;
@@ -413,6 +422,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_P && action == GLFW_PRESS) {
 		//player->PickupItem(chunk);
+	}
+
+	if (key == GLFW_KEY_E) {
+		push = true;
 	}
 
 	if (key == GLFW_KEY_L && action == GLFW_PRESS) {

@@ -297,5 +297,10 @@ glm::vec3 PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 ve
 		result.z = 0.0f;
 	}
 
+	if (result.x + result.y + result.z < 3.0f) {
+		this->velocity = (this->getPosition() - other_object->getPosition()) * 0.1f;
+		result = glm::vec3(1.0f, 1.0f, 1.0f);
+	}
+
 	return result;
 }
