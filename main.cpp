@@ -235,7 +235,7 @@ int main()
 	int field[10][10];
 	for(int i = 0; i < 10; i++)
 	  for(int j = 0; j < 10; j ++)
-	    field[i][j] = rand() % 1;
+	    field[i][j] = rand() % 2;
 
 
 	for(int i = 0; i < 10; i ++) {
@@ -246,7 +246,7 @@ int main()
 	                                       true,
 	                                       false,
 	                                       false,
-							    glm::vec3(.5f + i * 2.001f, .5f, .5f + j * 2.001f),
+							    glm::vec3(.5f + i * 1.9f, .5f, .5f + j * 1.9f),
 							    glm::vec3(0.f, 0.f, 0.f),
 	                                       "Test",
 	                                       new BoundaryBox(1.0f, 1.0f, 1.0f)));
@@ -316,10 +316,8 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		location->UpdatePosition(player->GetPhysicalObj()->getPosition());
-		printf("%s\n", "f");
 
 		Chunk * chunk_ptr = location->GetCurrentChunk();
-		printf("%s\n", "t");
 		if (chunk_ptr == nullptr)
 			chunk_ptr = location->GetChunkByPosition(0, 0);
 
