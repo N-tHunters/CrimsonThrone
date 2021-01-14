@@ -336,7 +336,8 @@ int main()
 
 		for(int i = 0; i < 15; i ++) {
 		  for(int j = 0; j < 15; j++) {
-		    chunk_ptr->GetObj(i * 15 + j)->velocity = glm::vec3(rand() % 2 - 1.f, rand() % 2 - 1.f, rand() % 2 - 1.f);
+		    if(rand() % 100 < 5)
+		      chunk_ptr->GetObj(i * 15 + j)->velocity = glm::vec3(rand() % 10 - 5.f, rand() % 10 - 5.f, rand() % 10 - 5.f);
 		  }
 		}
 
