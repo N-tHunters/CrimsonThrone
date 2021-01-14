@@ -6,6 +6,6 @@ ElementPiece::ElementPiece(Mesh* mesh, bool isActive, bool isVisible, bool isTra
 
 
 void ElementPiece::update(float dt) {
-  PhysicalObj::update(dt, glm::vec3(1.0f, 1.0f, 1.0f));
+  PhysicalObj::update(dt);
   this->changeRotation(glm::vec3(1.0f, 1.0f, 1.0f));
 }

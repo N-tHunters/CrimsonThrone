@@ -27,8 +27,8 @@ Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * cam
  * Update physics for player and position for camera
  * \param dt Time passed since last update
  */
-void Player::Update(float dt, glm::vec3 multipler) {
-  this->GetPhysicalObj()->update(dt, multipler);
+void Player::Update(float dt) {
+  this->GetPhysicalObj()->update(dt);
   this->camera->setPosition(this->GetPhysicalObj()->getPosition());
 }
 

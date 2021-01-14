@@ -84,7 +84,7 @@ std::map<GLchar, Character> Characters;
 int main()
 {
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-	player = new Player("player", 10, new PhysicalObj(glm::vec3(10.0f, 20.0f, 10.0f), new BoundaryBox(1.0f, 1.0f, 1.0f)), camera);
+	player = new Player("player", 10, new PhysicalObj(glm::vec3(10.0f, 20.0f, 10.0f), new BoundaryBox(0.5f, 1.0f, 0.5f)), camera);
 	player_core = new MagicCore();
 	player_core->SetPhysicalObj(player->GetPhysicalObj());
 
@@ -225,17 +225,18 @@ int main()
 	SetCurrentLocation(location);
 
 	string cube_model_path = "resources/models/cube.obj";
+	for(int i = 0; i < 10; i ++) {
 
-	location->GetCurrentChunk()->AddObject(new PhysicalObj(new Mesh("resources/textures/void2.png", new Model((char*)"resources/models/cube.obj")),
+	location->GetCurrentChunk()->AddObj(new PhysicalObj(new Mesh("resources/textures/void2.png", new Model((char*)"resources/models/cube.obj")),
 	                                       true,
 	                                       true,
 	                                       false,
 	                                       false,
-	                                       glm::vec3(10.0f, 16.0f, 10.0f),
-	                                       glm::vec3(0.0f, 0.0f, 0.0f),
+							    glm::vec3((rand() % 10) * 1., (rand() % 10) * 1., (rand() % 10) * 1.f),
+							    glm::vec3(0.f, 0.f, 0.f),
 	                                       "Test",
 	                                       new BoundaryBox(1.0f, 1.0f, 1.0f)));
-
+	}
 	// PhysicalObj* player_model = new PhysicalObj(new Mesh("resources/textures/wire.png", new Model((char*)"resources/models/cube.obj")),
 	//                                        true,
 	//                                        true,
@@ -309,15 +310,22 @@ int main()
 
 		player->GetPhysicalObj()->setSpeed(speed + speedSide);
 		// player->GetPhysicalObj()->velocity += (glm::vec3((speed + speedSide).x, player->GetPhysicalObj()->velocity.y, (speed + speedSide).y) - player->GetPhysicalObj()->velocity) * 0.2f;
+
+
+		/* Collide player with all objects in chunk */
 		player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt);
-		glm::vec3 result = player->GetPhysicalObj()->collide(location->GetChunkByPosition(0, 0)->GetObject(0), dt, player->GetPhysicalObj()->velocity);
-		// print_vector(player->GetPhysicalObj()->velocity);
+		glm::vec3 result(1.0f, 1.0f, 1.0f);
 
-		player->GetPhysicalObj()->velocity.x *= result.x;
-		player->GetPhysicalObj()->velocity.y *= result.y;
-		player->GetPhysicalObj()->velocity.z *= result.z;
+		for(int object_i = 0; object_i < chunk_ptr->GetObjsCount(); object_i++) {
+		  result *= player->GetPhysicalObj()->collide(chunk_ptr->GetObj(object_i), dt, player->GetPhysicalObj()->velocity);
+		}
+		
+		for(int actor_i = 0; actor_i < chunk_ptr->GetActorsCount(); actor_i++) {
+		  result *= player->GetPhysicalObj()->collide(chunk_ptr->GetActor(actor_i)->GetPhysicalObj(), dt, player->GetPhysicalObj()->velocity);
+		}
+		player->GetPhysicalObj()->velocity *= result;
 
-		player->Update(dt, result);
+		player->Update(dt);
 
 		location->Draw(&shaderHolder, camera, width, height);
 		// player_model->draw(&shaderHolder, camera, width, height);

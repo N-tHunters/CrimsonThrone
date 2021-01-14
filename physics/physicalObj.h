@@ -69,7 +69,7 @@ public:
 
 	std::string getName();
 
-	virtual void update(float, glm::vec3);
+	virtual void update(float);
 	void jump(Chunk*);
 	void setSpeed(glm::vec2 speed);
 	void setSpeed(glm::vec3 speed);

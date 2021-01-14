@@ -37,19 +37,19 @@ class Chunk {
 
   int GetItemsCount();
   int GetActorsCount();
-  int GetObjectsCount();
+  int GetObjsCount();
 
   void AddItem(Item *);
   void AddActor(Actor *);
-  void AddObject(PhysicalObj *);
+  void AddObj(PhysicalObj *);
 
   Item * GetItem(int);
   Actor * GetActor(int);
-  PhysicalObj * GetObject(int);
+  PhysicalObj * GetObj(int);
 
   void DeleteItem(int);
   void DeleteActor(int);
-  void DeleteObject(int);
+  void DeleteObj(int);
 
   void Update(float);
 

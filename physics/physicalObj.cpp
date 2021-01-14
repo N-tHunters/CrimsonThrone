@@ -57,8 +57,8 @@ void PhysicalObj::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width,
 	}
 }
 
-void PhysicalObj::update(float dt, glm::vec3 multipler) {
-	this->position += glm::vec3(velocity.x * multipler.x, velocity.y * multipler.y, velocity.z * multipler.z) * dt;
+void PhysicalObj::update(float dt) {
+	this->position += velocity * dt;
 	velocity += this->acceleration * dt;
 }
 
@@ -165,8 +165,8 @@ string PhysicalObj::getName() {
 void PhysicalObj::jump(Chunk* chunk) {
 	if (abs(velocity.y) < 1.0f) {
 		bool t = false;
-		for (int i = 0; i < chunk->GetObjectsCount(); i++) {
-			if (this->boundary->Collide(chunk->GetObject(i)->boundary, this->getPosition() - glm::vec3(0.0f, 0.5f, 0.0f), this->getRotation(), chunk->GetObject(i)->getPosition(), chunk->GetObject(i)->getRotation())) {
+		for (int i = 0; i < chunk->GetObjsCount(); i++) {
+			if (this->boundary->Collide(chunk->GetObj(i)->boundary, this->getPosition() - glm::vec3(0.0f, 0.5f, 0.0f), this->getRotation(), chunk->GetObj(i)->getPosition(), chunk->GetObj(i)->getRotation())) {
 				t = true;
 				break; 
 			}

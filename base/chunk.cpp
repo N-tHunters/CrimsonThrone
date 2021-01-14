@@ -70,7 +70,7 @@ Terrain * Chunk::GetTerrain() {
  */
 void Chunk::Draw(ShaderHolder * shaderHolder, Camera * camera, int width, int height) {
   this->terrain->draw(shaderHolder, camera, width, height);
-  for(int i = 0; i <  this->GetObjectsCount(); i ++) {
+  for(int i = 0; i <  this->GetObjsCount(); i ++) {
     this->objects[i]->draw(shaderHolder, camera, width, height);
   }
   for(int i = 0; i <  this->GetActorsCount(); i ++) {
@@ -106,7 +106,7 @@ int Chunk::GetActorsCount() {
  * Get number of objects in this chunk
  * \return Number of objects
  */
-int Chunk::GetObjectsCount() {
+int Chunk::GetObjsCount() {
   return this->objects.size();
 }
 
@@ -128,9 +128,9 @@ void Chunk::AddActor(Actor * actor) {
 
 /**
  * Add physical object to chunk
- * \param object Object to add
+ * \param object Obj to add
  */
-void Chunk::AddObject(PhysicalObj * object) {
+void Chunk::AddObj(PhysicalObj * object) {
   this->objects.push_back(object);
 }
 
@@ -161,8 +161,8 @@ Actor * Chunk::GetActor(int index) {
  * \param index Index of object to get
  * \return Pointer to object on this position
  */
-PhysicalObj * Chunk::GetObject(int index) {
-  if (index < 0 || index >= this->GetObjectsCount())
+PhysicalObj * Chunk::GetObj(int index) {
+  if (index < 0 || index >= this->GetObjsCount())
     return nullptr;
   return this->objects[index];
 }
@@ -191,8 +191,8 @@ void Chunk::DeleteActor(int index) {
  * Delete object from chunk by index
  * \param index Index of object to delete
  */
-void Chunk::DeleteObject(int index) {
-  if (index < 0 || index >= this->GetObjectsCount())
+void Chunk::DeleteObj(int index) {
+  if (index < 0 || index >= this->GetObjsCount())
     return;
   this->objects.erase(this->objects.begin() + index);
 }
@@ -206,7 +206,7 @@ void Chunk::Update(float dt) {
   for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++)
     this->actors[actor_i]->GetPhysicalObj()->update(dt, glm::vec3(1.0f, 1.0f, 1.0f));
 
-  for(int object_i = 0; object_i < this->GetObjectsCount(); object_i++)
+  for(int object_i = 0; object_i < this->GetObjsCount(); object_i++)
     this->objects[object_i]->update(dt, glm::vec3(1.0f, 1.0f, 1.0f));
   
   for(int item_i = 0; item_i < this->GetItemsCount(); item_i++)
@@ -218,7 +218,7 @@ void Chunk::Update(float dt) {
       collideTerrain(this->terrain, dt);
   }
 
-  for(int object_i = 0; object_i < this->GetObjectsCount(); object_i++) {
+  for(int object_i = 0; object_i < this->GetObjsCount(); object_i++) {
     this->objects[object_i]->
       collideTerrain(this->terrain, dt);
   }
