@@ -308,8 +308,10 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		location->UpdatePosition(player->GetPhysicalObj()->getPosition());
+		printf("%s\n", "f");
 
 		Chunk * chunk_ptr = location->GetCurrentChunk();
+		printf("%s\n", "t");
 		if (chunk_ptr == nullptr)
 			chunk_ptr = location->GetChunkByPosition(0, 0);
 
