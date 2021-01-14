@@ -33,22 +33,77 @@ Chunk::Chunk(Terrain * terrain) : Chunk() {
 Chunk::Chunk(Terrain * terrain, float water_height) : Chunk(terrain) {
   this->is_water_present = true;
   this->water_height = water_height;
-  std::vector<float> *vertices = new std::vector<float> {
-    -1.0f, 0.0f, -1.0f, 0.0f, 0.0f,
-    -1.0f, 0.0f,  1.0f, 0.0f, 1.0f,
-     1.0f, 0.0f,  1.0f, 1.0f, 1.0f,
-     1.0f, 0.0f, -1.0f, 1.0f, 0.0f
-  };
-  std::vector<unsigned int> *indices = new std::vector<unsigned int> {
-    0, 1, 2,
-    0, 2, 3
-  };
-  this->water_obj = new PhysicalObj(new Mesh("resources/textures/water.png", vertices, indices),
+  std::vector<float> *vertices = new std::vector<float>;
+  std::vector<unsigned int> *indices = new std::vector<unsigned int>;
+
+  vertices->clear();
+  indices->clear();
+
+  int vertices_number = 10;
+
+  float tile_width = terrain->getSize() / (vertices_number - 1);
+
+
+  for(int i = 0; i < vertices_number - 1; i ++) {
+    for(int j = 0; j < vertices_number - 1; j ++) {
+      vertices->push_back(i * tile_width);
+      vertices->push_back(water_height * tile_width);
+      vertices->push_back(j * tile_width);
+
+      vertices->push_back(0.0f);
+      vertices->push_back(0.0f);
+
+      vertices->push_back((i + 1) * tile_width);
+      vertices->push_back(water_height * tile_width);
+      vertices->push_back(j * tile_width);
+
+      vertices->push_back(1.0f);
+      vertices->push_back(0.0f);
+
+      vertices->push_back(i * tile_width);
+      vertices->push_back(water_height * tile_width);
+      vertices->push_back((j + 1) * tile_width);
+
+      vertices->push_back(0.0f);
+      vertices->push_back(1.0f);
+
+      indices->push_back(i * (vertices_number - 1) * 6 + j * 6);
+      indices->push_back(i * (vertices_number - 1) * 6  + j * 6 + 1);
+      indices->push_back(i * (vertices_number - 1) * 6  + j * 6 + 2);
+
+      vertices->push_back((i + 1) * tile_width);
+      vertices->push_back(water_height * tile_width);
+      vertices->push_back(j * tile_width);
+
+      vertices->push_back(1.0f);
+      vertices->push_back(0.0f);
+
+      vertices->push_back((i + 1) * tile_width);
+      vertices->push_back(water_height * tile_width);
+      vertices->push_back((j + 1) * tile_width);
+
+      vertices->push_back(1.0f);
+      vertices->push_back(1.0f);
+
+      vertices->push_back(i * tile_width);
+      vertices->push_back(water_height * tile_width);
+      vertices->push_back((j + 1) * tile_width);
+
+      vertices->push_back(0.0f);
+      vertices->push_back(1.0f);
+
+      indices->push_back(i * (vertices_number - 1) * 6 + j * 6 + 3);
+      indices->push_back(i * (vertices_number - 1) * 6  + j * 6 + 4);
+      indices->push_back(i * (vertices_number - 1) * 6  + j * 6 + 5);
+    }
+  }
+
+  this->water_obj = new PhysicalObj(new Mesh("resources/textures/water.jpeg", vertices, indices, 2),
                                     false,
                                     true,
                                     false,
                                     false,
-                                    terrain->getPosition() + glm::vec3(0.0f, water_height, 0.0f),
+                                    terrain->getPosition(),// + glm::vec3(terrain->getSize() / 2.0f, water_height, terrain->getSize() / 2.0f),
                                     glm::vec3(0.0f, 0.0f, 0.0f),
                                     "water");
 }
@@ -79,6 +134,9 @@ void Chunk::Draw(ShaderHolder * shaderHolder, Camera * camera, int width, int he
   for(int i = 0; i <  this->GetItemsCount(); i ++) {
     this->items[i]->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
   }
+}
+
+void Chunk::DrawWater(ShaderHolder * shaderHolder, Camera * camera, int width, int height) {
   if(this->water_obj != nullptr) {
     this->water_obj->draw(shaderHolder, camera, width, height);
   }

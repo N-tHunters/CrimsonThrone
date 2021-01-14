@@ -77,7 +77,7 @@ MagicCore * player_core;
 
 int direction = 1;
 float directionSide = 0;
-float velocity = 5.0f;
+float velocity = 10.0f;
 bool player_wants_to_jump = false;
 
 std::map<GLchar, Character> Characters;
@@ -85,7 +85,11 @@ std::map<GLchar, Character> Characters;
 int main()
 {
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+<<<<<<< HEAD
 	player = new Player("player", 10, new PhysicalObj(glm::vec3(10.0f, 1.0f, 10.0f), new BoundaryBox(0.5f, 1.0f, 0.5f)), camera);
+=======
+	player = new Player("player", 10, new PhysicalObj(glm::vec3(10.0f, 20.0f, 10.0f), new BoundaryBox(0.5f, 1.0f, 0.5f)), camera);
+>>>>>>> Water better
 	player_core = new MagicCore();
 	player_core->SetPhysicalObj(player->GetPhysicalObj());
 
@@ -221,6 +225,7 @@ int main()
 
 	// ----------------------------------------------- CODE ------------------------------------------
 	Location * location = new Location(2, 2, 30, 30);
+
 	location->FillEmptyChunks();
 
 	SetCurrentLocation(location);
@@ -229,7 +234,7 @@ int main()
 
 	for(int i = 0; i < 30; i ++) {
 	  for(int j = 0; j < 30; j ++) {
-	location->GetCurrentChunk()->AddObj(new PhysicalObj(new Mesh("resources/textures/void2.png", new Model((char*)"resources/models/cube.obj")),
+	location->GetCurrentChunk()->AddObj(new PhysicalObj(new Mesh("resources/textures/box.jpeg", new Model((char*)"resources/models/cube.obj")),
 	                                       true,
 	                                       true,
 	                                       false,

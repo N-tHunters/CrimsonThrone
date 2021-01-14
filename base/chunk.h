@@ -36,6 +36,7 @@ class Chunk {
   Terrain * GetTerrain();
 
   void Draw(ShaderHolder *, Camera *, int, int);
+  void DrawWater(ShaderHolder *, Camera *, int, int);
 
   int GetItemsCount();
   int GetActorsCount();

@@ -108,7 +108,15 @@ void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_wid
   for(int ix = lx; ix <= rx; ix++) {
     for(int iy = uy; iy <= dy; iy++) {
       if(this->chunks[ix][iy] != nullptr) {
-        this->chunks[ix][iy]->Draw(shaderHolder, camera, screen_width, screen_height);\
+        this->chunks[ix][iy]->Draw(shaderHolder, camera, screen_width, screen_height);
+      }
+    }
+  }
+
+  for(int ix = lx; ix <= rx; ix++) {
+    for(int iy = uy; iy <= dy; iy++) {
+      if(this->chunks[ix][iy] != nullptr) {
+        this->chunks[ix][iy]->DrawWater(shaderHolder, camera, screen_width, screen_height);
       }
     }
   }

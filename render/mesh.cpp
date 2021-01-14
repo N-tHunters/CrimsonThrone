@@ -60,6 +60,61 @@ Mesh::Mesh(string texturePath, Model* model) {
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(model->indices[0]) * model->indices.size(), &(model->indices[0]), GL_STATIC_DRAW);
 
 	// Position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+	// Normals
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(0);
+	// TexCoord attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(2);
+
+	glBindVertexArray(0); // Unbind VAO
+
+}
+
+/**
+ * @brief      Constructs a new instance.
+ *
+ * @param[in]  texturePath  The texture path
+ * @param[in]  vertices     The vertices
+ * @param[in]  indices      The indices
+ */
+Mesh::Mesh(string texturePath, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices) {
+	this->type = 1;
+	this->obj = nullptr;
+	this->size = indices->size();
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
+	// Set our texture parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// Set texture filtering
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// Load, create texture and generate mipmaps
+	int width, height;
+	unsigned char* image = loadImage(texturePath, &width, &height);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	freeImage(image);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	// Vertices
+
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices->at(0)) * vertices->size(), &(vertices->at(0)), GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices->at(0)) * indices->size(), &(indices->at(0)), GL_STATIC_DRAW);
+
+	// Position attribute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
 	glEnableVertexAttribArray(0);
 	// TexCoord attribute
@@ -77,8 +132,8 @@ Mesh::Mesh(string texturePath, Model* model) {
  * @param[in]  vertices     The vertices
  * @param[in]  indices      The indices
  */
-Mesh::Mesh(string texturePath, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices) {
-	this->type = 2;
+Mesh::Mesh(string texturePath, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices, int type) {
+	this->type = type;
 	this->obj = nullptr;
 	this->size = indices->size();
 	glGenTextures(1, &texture);
@@ -149,15 +204,30 @@ void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint
 	GLint projLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "projection");
 	GLint camRotLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "cameraRot");
 
+	glm::vec3 lightPos = glm::vec3(20, 10, 20);
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glUniform1i(glGetUniformLocation(shaderHolder->get3D()->Program, "ourTexture"), 0);
 
-	shaderHolder->get3D()->Use();
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+	if (this->type == 1) {
+		shaderHolder->get3D()->Use();
+		glUniform3fv(glGetUniformLocation(shaderHolder->get3D()->Program, "objectPos"), 1, glm::value_ptr(this->obj->getPosition()));
+		glUniform3fv(glGetUniformLocation(shaderHolder->get3D()->Program, "lightPos"), 1, glm::value_ptr(lightPos));
+	} else {
+		shaderHolder->getWater()->Use();
+		glUniform1f(glGetUniformLocation(shaderHolder->getWater()->Program, "time"), glfwGetTime());
+		glUniform3fv(glGetUniformLocation(shaderHolder->getWater()->Program, "objectPos"), 1, glm::value_ptr(this->obj->getPosition()));
+		glUniform3fv(glGetUniformLocation(shaderHolder->getWater()->Program, "lightPos"), 1, glm::value_ptr(lightPos));
+		glUniform3fv(glGetUniformLocation(shaderHolder->getWater()->Program, "cameraPos"), 1, glm::value_ptr(camera->getPosition()));
+	}
+	             glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(camRotLoc, 1, GL_FALSE, glm::value_ptr(cameraRot));
+	glUniformMatrix4fv(camRotLoc, 1, GL_FALSE, glm::value_ptr(cameraRot));
+
+	// print_vector(this->obj->getPosition());
 
 	glBindVertexArray(this->VAO);
 	glDrawElements(GL_TRIANGLES, size, GL_UNSIGNED_INT, 0);

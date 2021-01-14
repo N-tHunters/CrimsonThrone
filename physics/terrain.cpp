@@ -75,7 +75,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 			this->indices.push_back(i * (vertices_number - 1) * 6  + j * 6 + 5);
 		}
 	}
-	this->obj = new PhysicalObj(new Mesh("resources/textures/rock.png", &(this->vertices), &(this->indices)), false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
+	this->obj = new PhysicalObj(new Mesh("resources/textures/rock.png", &(this->vertices), &(this->indices), 1), false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
 }
 
 void Terrain::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height) {
@@ -149,4 +149,8 @@ glm::vec3 Terrain::getOutVector(glm::vec3 position) {
 						this->height[tileX + 1][tileY + 1]) / 4.0f;
 	glm::vec3 center = glm::vec3(this->tile_width / 2.0f, h, this->tile_width / 2.0f);
 	return center - glm::vec3(xCoord, position.y, yCoord);*/
+}
+
+float Terrain::getSize() {
+	return this->size;
 }
