@@ -198,19 +198,59 @@ void Chunk::DeleteObj(int index) {
 }
 
 /**
+ * Collide given PhysicalObj with all objects in chunk (except items)
+ * \param obj Object to collide
+ * \param dt Time passed since last call
+ */
+void Chunk::CollideWithAll(PhysicalObj * obj, float dt) {
+  glm::vec3 result(1.0f, 1.0f, 1.0f);
+
+  for(int object_i = 0; object_i < this->GetObjsCount(); object_i++) {
+    if(this->GetObj(object_i) != obj)
+      result *= obj->collide(this->GetObj(object_i), dt, obj->velocity);
+  }
+		
+  for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
+    if(this->GetActor(actor_i)->GetPhysicalObj() != obj)
+      result *= obj->collide(this->GetActor(actor_i)->GetPhysicalObj(), dt, obj->velocity);
+  }
+  obj->velocity *= result;
+}
+
+/**
+ * Collides object with all other objects in chunk (except items)
+ * \param dt Time passed since last call
+ */
+void Chunk::CollideAll(float dt) {
+  for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
+    this->CollideWithAll(this->GetActor(actor_i)->GetPhysicalObj(), dt);
+  }
+
+  for(int object_i = 0; object_i < this->GetObjsCount(); object_i++) {
+    this->CollideWithAll(this->GetObj(object_i), dt);
+  }
+  
+  for(int item_i = 0; item_i < this->GetItemsCount(); item_i++) {
+    this->CollideWithAll(this->GetItem(item_i)->GetPhysicalObj(), dt);
+  }
+}
+
+/**
  * Update physics of all objects in this chunk
  * \warning Player is not updated!
  * \param dt Time passed since last update
  */
 void Chunk::Update(float dt) {
+  this->CollideAll(dt);
+  
   for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++)
-    this->actors[actor_i]->GetPhysicalObj()->update(dt, glm::vec3(1.0f, 1.0f, 1.0f));
+    this->actors[actor_i]->GetPhysicalObj()->update(dt);
 
   for(int object_i = 0; object_i < this->GetObjsCount(); object_i++)
-    this->objects[object_i]->update(dt, glm::vec3(1.0f, 1.0f, 1.0f));
+    this->objects[object_i]->update(dt);
   
   for(int item_i = 0; item_i < this->GetItemsCount(); item_i++)
-    this->items[item_i]->GetPhysicalObj()->update(dt, glm::vec3(1.0f, 1.0f, 1.0f));
+    this->items[item_i]->GetPhysicalObj()->update(dt);
 
   for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
     this->actors[actor_i]->

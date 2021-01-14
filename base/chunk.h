@@ -51,6 +51,8 @@ class Chunk {
   void DeleteActor(int);
   void DeleteObj(int);
 
+  void CollideWithAll(PhysicalObj *, float);
+  void CollideAll(float);
   void Update(float);
 
   bool IsWaterPresent();
