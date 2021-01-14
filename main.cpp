@@ -232,6 +232,7 @@ int main()
 
 	string cube_model_path = "resources/models/cube.obj";
 
+	/*
 	int field[10][10];
 	for(int i = 0; i < 10; i++)
 	  for(int j = 0; j < 10; j ++)
@@ -251,7 +252,7 @@ int main()
 	                                       "Test",
 	                                       new BoundaryBox(1.0f, 1.0f, 1.0f)));
 	  }
-	}
+	}*/
 
 	// PhysicalObj* player_model = new PhysicalObj(new Mesh("resources/textures/wire.png", new Model((char*)"resources/models/cube.obj")),
 	//                                        true,
@@ -266,6 +267,15 @@ int main()
 	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
 
 	std::vector<std::string> headers = {"name"};
+	PhysicalObj* light = new PhysicalObj(new Mesh("resources/textures/water.jpeg", new Model((char*)"resources/models/cube.obj")),
+	                                       true,
+	                                       true,
+	                                       false,
+	                                       false,
+	                                       glm::vec3(20.0f, 2.0f, 20.0f),
+	                                       glm::vec3(0.0f, 0.0f, 0.0f),
+	                                       "Test",
+	                                       new BoundaryBox(1.0f, 1.0f, 1.0f));
 
 
 	List<Item>* inventory = new List<Item>(glm::vec4(-0.9f, -0.9f, 0.7f, 1.0f), player->GetInventoryPointer(), std::string("resources/textures/list.png"), 10, Characters, &headers);
@@ -345,6 +355,7 @@ int main()
 
 		location->Draw(&shaderHolder, camera, width, height);
 		// player_model->draw(&shaderHolder, camera, width, height);
+		// light->draw(&shaderHolder, camera, width, height);
 
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		test_frame.draw(&shaderHolder);
