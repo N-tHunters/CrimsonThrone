@@ -85,11 +85,7 @@ std::map<GLchar, Character> Characters;
 int main()
 {
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-<<<<<<< HEAD
 	player = new Player("player", 10, new PhysicalObj(glm::vec3(10.0f, 1.0f, 10.0f), new BoundaryBox(0.5f, 1.0f, 0.5f)), camera);
-=======
-	player = new Player("player", 10, new PhysicalObj(glm::vec3(10.0f, 20.0f, 10.0f), new BoundaryBox(0.5f, 1.0f, 0.5f)), camera);
->>>>>>> Water better
 	player_core = new MagicCore();
 	player_core->SetPhysicalObj(player->GetPhysicalObj());
 
@@ -232,14 +228,21 @@ int main()
 
 	string cube_model_path = "resources/models/cube.obj";
 
-	for(int i = 0; i < 30; i ++) {
-	  for(int j = 0; j < 30; j ++) {
+	int field[10][10];
+	for(int i = 0; i < 10; i++)
+	  for(int j = 0; j < 10; j ++)
+	    field[i][j] = rand() % 1;
+
+
+	for(int i = 0; i < 10; i ++) {
+	  for(int j = 0; j < 10; j++) {
+	    if(field[i][j])
 	location->GetCurrentChunk()->AddObj(new PhysicalObj(new Mesh("resources/textures/box.jpeg", new Model((char*)"resources/models/cube.obj")),
 	                                       true,
 	                                       true,
 	                                       false,
 	                                       false,
-							    glm::vec3(.5f + i * 2.001f, .5f + j * 2.001f, .5f),
+							    glm::vec3(.5f + i * 2.001f, .5f, .5f + j * 2.001f),
 							    glm::vec3(0.f, 0.f, 0.f),
 	                                       "Test",
 	                                       new BoundaryBox(1.0f, 1.0f, 1.0f)));
