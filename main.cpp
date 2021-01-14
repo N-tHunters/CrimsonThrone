@@ -314,16 +314,8 @@ int main()
 
 		/* Collide player with all objects in chunk */
 		player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt);
-		glm::vec3 result(1.0f, 1.0f, 1.0f);
 
-		for(int object_i = 0; object_i < chunk_ptr->GetObjsCount(); object_i++) {
-		  result *= player->GetPhysicalObj()->collide(chunk_ptr->GetObj(object_i), dt, player->GetPhysicalObj()->velocity);
-		}
-		
-		for(int actor_i = 0; actor_i < chunk_ptr->GetActorsCount(); actor_i++) {
-		  result *= player->GetPhysicalObj()->collide(chunk_ptr->GetActor(actor_i)->GetPhysicalObj(), dt, player->GetPhysicalObj()->velocity);
-		}
-		player->GetPhysicalObj()->velocity *= result;
+		chunk_ptr->CollideWithAll(player->GetPhysicalObj(), dt);
 
 		player->Update(dt);
 
