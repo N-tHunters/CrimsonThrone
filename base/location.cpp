@@ -61,6 +61,7 @@ void Location::SetChunk(int x, int y, Chunk * chunk) {
  * \return Pointer to chunk at this position
  */
 Chunk * Location::GetChunk(int x, int y) {
+  if(x < 0 || y < 0 || x >= height || y >= width) return nullptr;
   return this->chunks[x][y];
 }
 
@@ -69,6 +70,8 @@ Chunk * Location::GetChunk(int x, int y) {
  * \return Pointer to chunk
  */
 Chunk * Location::GetCurrentChunk() {
+  if(this->current_x < 0 || this->current_y < 0 || this->current_x >= height || this->current_y >= width) return nullptr;
+  printf("%d %d\n", this->current_x, this->current_y);
   return this->chunks[this->current_x][this->current_y];
 }
 
@@ -79,10 +82,12 @@ Chunk * Location::GetCurrentChunk() {
  * \return Pointer to chunk at position
  */
 Chunk * Location::GetChunkByPosition(float x, float y) {
-  int xp = x / this->chunk_width;
-  int yp = y / this->chunk_height;
+  int px = x / this->chunk_width;
+  int py = y / this->chunk_height;
 
-  return this->chunks[xp][yp];
+   if(px < 0 || py < 0 || px >= height || py >= width) return nullptr;
+  
+  return this->chunks[px][py];
 }
 
 void Location::UpdatePosition(glm::vec3 pos) {
