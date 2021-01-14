@@ -8,6 +8,7 @@
 #include "../physics/terrain.h"
 #include "../physics/physicalObj.h"
 #include "../render/shaderHolder.h"
+#include "boundarytrigger.h"
 #include "item.h"
 #include "actor.h"
 #include <vector>
@@ -24,6 +25,7 @@ class Chunk {
   std::vector<Item *>items;
   std::vector<Actor *>actors;
   std::vector<PhysicalObj *>objects;
+  std::vector<BoundaryTrigger *>triggers;
   PhysicalObj* water_obj;
 
  public:
@@ -38,22 +40,29 @@ class Chunk {
   int GetItemsCount();
   int GetActorsCount();
   int GetObjsCount();
+  int GetTriggersCount();
 
   void AddItem(Item *);
   void AddActor(Actor *);
   void AddObj(PhysicalObj *);
+  void AddTrigger(BoundaryTrigger *);
 
   Item * GetItem(int);
   Actor * GetActor(int);
   PhysicalObj * GetObj(int);
+  BoundaryTrigger * GetTrigger(int);
 
   void DeleteItem(int);
   void DeleteActor(int);
   void DeleteObj(int);
+  void DeleteTrigger(int);
 
   void CollideWithAll(PhysicalObj *, float);
   void CollideAll(float);
   void Update(float);
+
+  void CheckAllTriggers(PhysicalObj *);
+  void TriggerAll();
 
   bool IsWaterPresent();
   float GetWaterHeight();

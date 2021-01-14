@@ -42,6 +42,7 @@
 #include "base/item.h"
 #include "base/chunk.h"
 #include "base/location.h"
+#include "base/shortjumptrigger.h"
 
 #include "base/magic/core.h"
 #include "base/magic/symbols.h"
@@ -220,11 +221,12 @@ int main()
 
 	// ----------------------------------------------- CODE ------------------------------------------
 	Location * location = new Location(10, 10, 30, 30);
-
 	location->FillEmptyChunks();
+
 	SetCurrentLocation(location);
 
 	string cube_model_path = "resources/models/cube.obj";
+
 	for(int i = 0; i < 10; i ++) {
 
 	location->GetCurrentChunk()->AddObj(new PhysicalObj(new Mesh("resources/textures/void2.png", new Model((char*)"resources/models/cube.obj")),
@@ -232,11 +234,12 @@ int main()
 	                                       true,
 	                                       false,
 	                                       false,
-							    glm::vec3((rand() % 10) * 1., (rand() % 10) * 1., (rand() % 10) * 1.f),
+							    glm::vec3(.5f, (rand() % 1000) * 1., .5f),
 							    glm::vec3(0.f, 0.f, 0.f),
 	                                       "Test",
 	                                       new BoundaryBox(1.0f, 1.0f, 1.0f)));
 	}
+
 	// PhysicalObj* player_model = new PhysicalObj(new Mesh("resources/textures/wire.png", new Model((char*)"resources/models/cube.obj")),
 	//                                        true,
 	//                                        true,
@@ -250,6 +253,7 @@ int main()
 	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
 
 	std::vector<std::string> headers = {"name"};
+
 
 	List<Item>* inventory = new List<Item>(glm::vec4(-0.9f, -0.9f, 0.7f, 1.0f), player->GetInventoryPointer(), std::string("resources/textures/list.png"), 10, Characters, &headers);
 
@@ -317,6 +321,7 @@ int main()
 
 		chunk_ptr->CollideWithAll(player->GetPhysicalObj(), dt);
 
+		chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
 		player->Update(dt);
 
 		location->Draw(&shaderHolder, camera, width, height);
@@ -342,7 +347,7 @@ int main()
 			fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
 			fps_change_last = glfwGetTime();
 		}
-		player_wants_to_jump = false;
+		player_wants_to_jump = false; // What the fuck 
 	}
 	glfwTerminate();
 	return 0;

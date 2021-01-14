@@ -7,8 +7,8 @@
 class Trigger {
  public:
   Trigger();
-  Execute();
-}
+  virtual void Trig(PhysicalObj *);
+};
 
 
 #endif
