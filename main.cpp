@@ -85,7 +85,7 @@ std::map<GLchar, Character> Characters;
 int main()
 {
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-	player = new Player("player", 10, new PhysicalObj(glm::vec3(10.0f, 20.0f, 10.0f), new BoundaryBox(0.5f, 1.0f, 0.5f)), camera);
+	player = new Player("player", 10, new PhysicalObj(glm::vec3(10.0f, 1.0f, 10.0f), new BoundaryBox(0.5f, 1.0f, 0.5f)), camera);
 	player_core = new MagicCore();
 	player_core->SetPhysicalObj(player->GetPhysicalObj());
 
@@ -220,24 +220,25 @@ int main()
 	ShaderHolder shaderHolder(&ourShader, &GUIShader, &textShader, &waterShader);
 
 	// ----------------------------------------------- CODE ------------------------------------------
-	Location * location = new Location(10, 10, 30, 30);
+	Location * location = new Location(2, 2, 30, 30);
 	location->FillEmptyChunks();
 
 	SetCurrentLocation(location);
 
 	string cube_model_path = "resources/models/cube.obj";
 
-	for(int i = 0; i < 10; i ++) {
-
+	for(int i = 0; i < 30; i ++) {
+	  for(int j = 0; j < 30; j ++) {
 	location->GetCurrentChunk()->AddObj(new PhysicalObj(new Mesh("resources/textures/void2.png", new Model((char*)"resources/models/cube.obj")),
 	                                       true,
 	                                       true,
 	                                       false,
 	                                       false,
-							    glm::vec3(.5f, (rand() % 1000) * 1., .5f),
+							    glm::vec3(.5f + i * 2.001f, .5f + j * 2.001f, .5f),
 							    glm::vec3(0.f, 0.f, 0.f),
 	                                       "Test",
 	                                       new BoundaryBox(1.0f, 1.0f, 1.0f)));
+	  }
 	}
 
 	// PhysicalObj* player_model = new PhysicalObj(new Mesh("resources/textures/wire.png", new Model((char*)"resources/models/cube.obj")),
