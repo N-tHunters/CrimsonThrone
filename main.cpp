@@ -230,21 +230,14 @@ int main()
 
 	string cube_model_path = "resources/models/cube.obj";
 
-	int field[10][10];
-	for(int i = 0; i < 10; i++)
-	  for(int j = 0; j < 10; j ++)
-	    field[i][j] = rand() % 2;
-
-
-	for(int i = 0; i < 10; i ++) {
-	  for(int j = 0; j < 10; j++) {
-	    if(field[i][j])
+	for(int i = 0; i < 15; i ++) {
+	  for(int j = 0; j < 15; j++) {
 	location->GetCurrentChunk()->AddObj(new PhysicalObj(new Mesh("resources/textures/box.jpeg", new Model((char*)"resources/models/cube.obj")),
 	                                       true,
 	                                       true,
 	                                       false,
 	                                       false,
-							    glm::vec3(.5f + i * 2.001f, .5f, .5f + j * 2.001f),
+							    glm::vec3(.5f + i * 2.001f, (rand() % 100) * 2.001f, .5f + j * 2.001f),
 							    glm::vec3(0.f, 0.f, 0.f),
 	                                       "Test",
 	                                       new BoundaryBox(1.0f, 1.0f, 1.0f)));
@@ -340,6 +333,12 @@ int main()
 
 		chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
 		player->Update(dt);
+
+		for(int i = 0; i < 15; i ++) {
+		  for(int j = 0; j < 15; j++) {
+		    chunk_ptr->GetObj(i * 15 + j)->velocity = glm::vec3(rand() % 2 - 1.f, rand() % 2 - 1.f, rand() % 2 - 1.f);
+		  }
+		}
 
 		location->Draw(&shaderHolder, camera, width, height);
 		// player_model->draw(&shaderHolder, camera, width, height);
