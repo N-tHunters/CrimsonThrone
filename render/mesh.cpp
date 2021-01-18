@@ -204,7 +204,7 @@ void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint
 	GLint projLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "projection");
 	GLint camRotLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "cameraRot");
 
-	glm::vec3 lightPos = glm::vec3(20, 10, 20);
+	glm::vec3 lightPos = glm::vec3(20, 1, 20);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);

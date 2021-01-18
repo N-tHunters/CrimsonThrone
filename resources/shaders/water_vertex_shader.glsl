@@ -5,6 +5,7 @@ layout (location = 2) in vec2 texCoord;
 
 out vec2 TexCoord;
 out float shading;
+out float specular;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -37,12 +38,17 @@ void main()
 	vec3 lightDir = normalize(lightPos - position - objectPos);
 	vec3 viewDir = normalize(cameraPos - position - objectPos);
 	vec3 reflectDir = reflect(-lightDir, norm);
+	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+	//float specular = 1024 * spec * 100.0;
+	float specular = 10;
 
     gl_Position = projection * cameraRot * view * model * vec4(position.x, position.y - abs(sin((position.x + objectPos.x - position.z - objectPos.z) * 10.0 - time) / 2.0), position.z, 1.0f);
 
-    shading = (lightVec.x * normal.x + lightVec.y * normal.y + lightVec.z * lightVec.z) + 3.0;
-    shading = (6.0 - shading) / 3.0;
+    shading = (lightVec.x * normal.x + lightVec.y * normal.y + lightVec.z * lightVec.z);
+    shading = 1.0 + (shading) / 3.0;
     shading -= lightVecL / 100.0;
+
+    print(shading);
 
     TexCoord = vec2(texCoord.x, 1.0 - texCoord.y);
 }
