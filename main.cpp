@@ -26,16 +26,16 @@
 #include <glm/gtx/string_cast.hpp>
 
 // Other includes
-#include "render/camera.h"
-#include "render/mesh.h"
-#include "render/shaderLoader.h"
-#include "render/constants.h"
-#include "render/model.h"
+#include "render/camera.hpp"
+#include "render/mesh.hpp"
+#include "render/shaderLoader.hpp"
+#include "render/constants.hpp"
+#include "render/model.hpp"
 //#include "render/shaders.h"
 
-#include "physics/physicalObj.h"
-#include "physics/boundary.h"
-#include "physics/terrain.h"
+#include "physics/physicalObj.hpp"
+#include "physics/boundary.hpp"
+#include "physics/terrain.hpp"
 
 #include "base/player.h"
 #include "base/npc.h"
@@ -51,11 +51,11 @@
 #include "sound/filesound.h"
 #include "sound/voice.h"
 
-#include "UI/frame.h"
-#include "UI/list.h"
-#include "UI/container.h"
-#include "UI/bar.h"
-#include "UI/text.h"
+#include "UI/frame.hpp"
+#include "UI/list.hpp"
+#include "UI/container.hpp"
+#include "UI/bar.hpp"
+#include "UI/text.hpp"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -71,6 +71,7 @@ glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 
 float VCAP = 0.1f;
 Camera* camera;
+// Camera* camera_3view;
 Player* player;
 SoundEngine sound_engine;
 MagicCore * player_core;
@@ -83,10 +84,12 @@ bool player_wants_to_jump = false;
 std::map<GLchar, Character> Characters;
 
 bool push = false;
+float push_m = 0.0f;
 
 int main()
 {
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	// camera_3view = new Camera(glm::vec3(4.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 	player = new Player("player", 10, new PhysicalObj(glm::vec3(10.0f, 1.0f, 1.0f), new BoundaryBox(0.5f, 1.0f, 0.5f)), camera);
 	player_core = new MagicCore();
 	player_core->SetPhysicalObj(player->GetPhysicalObj());
@@ -228,20 +231,18 @@ int main()
 
 	SetCurrentLocation(location);
 
-	string cube_model_path = "resources/models/cube.obj";
-
-	for(int i = 0; i < 15; i ++) {
-	  for(int j = 0; j < 15; j++) {
-	location->GetCurrentChunk()->AddObj(new PhysicalObj(new Mesh("resources/textures/box.jpeg", new Model((char*)"resources/models/cube.obj")),
-	                                       true,
-	                                       true,
-	                                       false,
-	                                       false,
-							    glm::vec3(.5f + i * 2.001f, (rand() % 100) * 2.001f, .5f + j * 2.001f),
-							    glm::vec3(0.f, 0.f, 0.f),
-	                                       "Test",
-	                                       new BoundaryBox(1.0f, 1.0f, 1.0f)));
-	  }
+	for (int i = 0; i < 15; i ++) {
+		for (int j = 0; j < 15; j++) {
+			location->GetCurrentChunk()->AddObj(new PhysicalObj(new Mesh("resources/textures/box.jpeg", new Model((char*)"resources/models/cube.obj")),
+			                                    true,
+			                                    true,
+			                                    false,
+			                                    false,
+			                                    glm::vec3(.5f + i * 2.001f, (rand() % 100) * 2.001f, .5f + j * 2.001f),
+			                                    glm::vec3(0.f, 0.f, 0.f),
+			                                    "Test",
+			                                    new BoundaryBox(1.0f, 1.0f, 1.0f)));
+		}
 	}
 
 	// PhysicalObj* player_model = new PhysicalObj(new Mesh("resources/textures/wire.png", new Model((char*)"resources/models/cube.obj")),
@@ -274,6 +275,7 @@ int main()
 
 	while (!glfwWindowShouldClose(window))
 	{
+		// camera_3view->setPosition()
 		// player_model->setPosition(player->GetPhysicalObj()->getPosition());
 		float dt;
 		float current_frame;
@@ -325,7 +327,7 @@ int main()
 
 		if (push) {
 			for (int i = 0; i < chunk_ptr->GetObjsCount(); i ++) {
-				chunk_ptr->GetObj(i)->acceleration -= (player->GetPhysicalObj()->getPosition() - chunk_ptr->GetObj(i)->getPosition()) / 10.0f;
+				chunk_ptr->GetObj(i)->acceleration += (player->GetPhysicalObj()->getPosition() - chunk_ptr->GetObj(i)->getPosition()) * push_m;
 			}
 		}
 
@@ -334,10 +336,8 @@ int main()
 		chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
 		player->Update(dt);
 
-		for(int i = 0; i < 15; i ++) {
-		  for(int j = 0; j < 15; j++) {
-		    chunk_ptr->GetObj(i * 15 + j)->velocity = glm::vec3(rand() % 2 - 1.f, rand() % 2 - 1.f, rand() % 2 - 1.f);
-		  }
+		for (int i = 0; i < chunk_ptr->GetObjsCount(); i ++) {
+			chunk_ptr->GetObj(i)->acceleration += glm::vec3(rand() % 3 - 1.f, rand() % 2 - 1.f, rand() % 3 - 1.f) / 10.0f;
 		}
 
 		location->Draw(&shaderHolder, camera, width, height);
@@ -425,6 +425,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_E) {
 		push = true;
+		push_m = -1.0;
+	}
+
+	if (key == GLFW_KEY_R) {
+		push = true;
+		push_m = 1.0;
 	}
 
 	if (key == GLFW_KEY_L && action == GLFW_PRESS) {

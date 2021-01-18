@@ -1,9 +1,9 @@
-#include "mesh.h"
-#include "imageLoader.h"
+#include "mesh.hpp"
+#include "imageLoader.hpp"
 #include <assimp/Importer.hpp>
-#include "model.h"
-#include "../physics/physicalObj.h"
-#include "../debug.h"
+#include "model.hpp"
+#include "../physics/physicalObj.hpp"
+#include "../debug.hpp"
 
 /**
  * @brief      Initializes the given object.
@@ -25,7 +25,7 @@ Mesh::Mesh() {};
  * @param[in]  texturePath  The texture path
  * @param      model        The model
  */
-Mesh::Mesh(string texturePath, Model* model) {
+Mesh::Mesh(const std::string& texturePath, Model* model) {
 	this->type = 1;
 	this->obj = nullptr;
 	this->size = model->indices.size();
@@ -80,7 +80,7 @@ Mesh::Mesh(string texturePath, Model* model) {
  * @param[in]  vertices     The vertices
  * @param[in]  indices      The indices
  */
-Mesh::Mesh(string texturePath, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices) {
+Mesh::Mesh(const std::string& texturePath, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices) {
 	this->type = 1;
 	this->obj = nullptr;
 	this->size = indices->size();
@@ -132,7 +132,7 @@ Mesh::Mesh(string texturePath, std::vector<GLfloat> *vertices, std::vector<unsig
  * @param[in]  vertices     The vertices
  * @param[in]  indices      The indices
  */
-Mesh::Mesh(string texturePath, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices, int type) {
+Mesh::Mesh(const std::string& texturePath, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices, int type) {
 	this->type = type;
 	this->obj = nullptr;
 	this->size = indices->size();
@@ -221,7 +221,7 @@ void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint
 		glUniform3fv(glGetUniformLocation(shaderHolder->getWater()->Program, "lightPos"), 1, glm::value_ptr(lightPos));
 		glUniform3fv(glGetUniformLocation(shaderHolder->getWater()->Program, "cameraPos"), 1, glm::value_ptr(camera->getPosition()));
 	}
-	             glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 	glUniformMatrix4fv(camRotLoc, 1, GL_FALSE, glm::value_ptr(cameraRot));

@@ -1,7 +1,7 @@
 #ifndef ABSCORE_H
 #define ABSCORE_H
 
-#include "../../physics/physicalObj.h"
+#include "../../physics/physicalObj.hpp"
 
 class ProtoMagicCore;
 

@@ -1,4 +1,4 @@
-#include "terrain.h"
+#include "terrain.hpp"
 
 /**
  * @brief      Constructs a new instance.
@@ -76,6 +76,35 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 		}
 	}
 	this->obj = new PhysicalObj(new Mesh("resources/textures/rock.png", &(this->vertices), &(this->indices), 1), false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
+}
+
+Terrain::Terrain(Terrain& terrain) {
+	this->size = terrain.getSize();
+	this->vertices_number = terrain.getVerticesNumber();
+	this->position = terrain.getPosition();
+	this->tile_width = terrain.getSize() / (terrain.getVerticesNumber() - 1);
+
+	std::vector<float> v;
+	for(int i = 0; i < terrain.getVerticesNumber(); i ++) {
+		v.clear();
+		for(int j = 0; j < terrain.getVerticesNumber(); j ++) {
+			v.push_back(terrain.getHeightMap(i, j));
+		}
+		this->height.push_back(v);
+	}
+	this->obj = terrain.obj;
+}
+
+PhysicalObj* Terrain::getPhysicalObj() {
+	return this->obj;
+}
+
+int Terrain::getVerticesNumber() {
+	return this->vertices_number;
+}
+
+float Terrain::getHeightMap(int x, int y) {
+	return this->height[x][y];
 }
 
 void Terrain::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height) {
