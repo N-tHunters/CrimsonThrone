@@ -34,6 +34,7 @@ void init_translators() {
   sym2pseudo[DECREASE_STACK_TOP] = 'D';
   sym2pseudo[SWITCH_STACK] = '_';
   sym2pseudo[INTERRACT] = ';';
+  sym2pseudo[INTERRACT_CHILD] = ':';
 
   for(auto &x: sym2pseudo) {
     pseudo2sym[x.second] = x.first;
@@ -53,4 +54,5 @@ void pseudo_to_prog(std::string pseudo, SYMBOL * prog) {
   for(int i = 0; i < pseudo.size(); i++) {
     prog[i] = pseudo2sym[pseudo[i]];
   }
+  prog[pseudo.size()] = HALT;
 }

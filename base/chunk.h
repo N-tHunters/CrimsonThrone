@@ -6,7 +6,9 @@
 #define CHUNK_H
 
 #include "../physics/terrain.h"
+#include "../physics/physicalObj.h"
 #include "../render/shaderHolder.h"
+#include "boundarytrigger.h"
 #include "item.h"
 #include "actor.h"
 #include <vector>
@@ -17,36 +19,55 @@
  */
 class Chunk {
  private:
+  bool is_water_present;
+  float water_height;
   Terrain * terrain;
   std::vector<Item *>items;
   std::vector<Actor *>actors;
   std::vector<PhysicalObj *>objects;
+  std::vector<BoundaryTrigger *>triggers;
+  PhysicalObj* water_obj;
 
  public:
   Chunk();
   Chunk(Terrain *);
+  Chunk(Terrain *, float);
 
   Terrain * GetTerrain();
 
   void Draw(ShaderHolder *, Camera *, int, int);
+  void DrawWater(ShaderHolder *, Camera *, int, int);
 
   int GetItemsCount();
   int GetActorsCount();
-  int GetObjectsCount();
+  int GetObjsCount();
+  int GetTriggersCount();
 
   void AddItem(Item *);
   void AddActor(Actor *);
-  void AddObject(PhysicalObj *);
+  void AddObj(PhysicalObj *);
+  void AddTrigger(BoundaryTrigger *);
 
   Item * GetItem(int);
   Actor * GetActor(int);
-  PhysicalObj * GetObject(int);
+  PhysicalObj * GetObj(int);
+  BoundaryTrigger * GetTrigger(int);
 
   void DeleteItem(int);
   void DeleteActor(int);
-  void DeleteObject(int);
+  void DeleteObj(int);
+  void DeleteTrigger(int);
 
+  void CollideWithAll(PhysicalObj *, float);
+  void CollideAll(float);
   void Update(float);
+
+  void CheckAllTriggers(PhysicalObj *);
+  void TriggerAll();
+
+  bool IsWaterPresent();
+  float GetWaterHeight();
+  void SetWaterHeight(float);
 };
 
 #endif

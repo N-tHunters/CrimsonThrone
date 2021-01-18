@@ -1,79 +1,81 @@
 #include "terrain.h"
-#include <random>
-#include <math.h>
 
-Terrain::Terrain(int size, float scale, glm::vec3 position) {
+/**
+ * @brief      Constructs a new instance.
+ *
+ * @param[in]  size             The width of terrain in meters
+ * @param[in]  vertices_number  The number of vertices
+ * @param[in]  position         The position
+ */
+Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 	this->size = size;
-	this->scale = scale;
+	this->vertices_number = vertices_number;
 	this->position = position;
+	this->tile_width = size / (vertices_number - 1);
 
 	std::vector<float> v;
-	for(int i = 0; i < size; i ++) {
+	for(int i = 0; i < vertices_number; i ++) {
 		v.clear();
-		for(int j = 0; j < size; j ++) {
-			//v.push_back((float)(sin(i / 10.0f) + cos(j / 10.0f)) * 5.0f);
-			//v.push_back((float)(((i - size / 2) * (i - size / 2) + (j - size / 2) * (j - size / 2) - 4)));
+		for(int j = 0; j < vertices_number; j ++) {
 			v.push_back(0.0f);
 		}
 		this->height.push_back(v);
 	}
 
-	for(int i = 0; i < size - 1; i ++) {
-		for(int j = 0; j < size - 1; j ++) {
-			this->vertices.push_back((i - size / 2 + 0.5) * scale);
-			this->vertices.push_back(this->height[i][j] * scale);
-			this->vertices.push_back((j - size / 2 + 0.5) * scale);
+	for(int i = 0; i < vertices_number - 1; i ++) {
+		for(int j = 0; j < vertices_number - 1; j ++) {
+			this->vertices.push_back(i * tile_width);
+			this->vertices.push_back(this->height[i][j] * tile_width);
+			this->vertices.push_back(j * tile_width);
 
 			this->vertices.push_back(0.0f);
 			this->vertices.push_back(0.0f);
 
-			this->vertices.push_back((i + 1 - size / 2 + 0.5) * scale);
-			this->vertices.push_back(this->height[i + 1][j] * scale);
-			this->vertices.push_back((j - size / 2 + 0.5) * scale);
+			this->vertices.push_back((i + 1) * tile_width);
+			this->vertices.push_back(this->height[i + 1][j] * tile_width);
+			this->vertices.push_back(j * tile_width);
 
 			this->vertices.push_back(1.0f);
 			this->vertices.push_back(0.0f);
 
-			this->vertices.push_back((i - size / 2 + 0.5) * scale);
-			this->vertices.push_back(this->height[i][j + 1] * scale);
-			this->vertices.push_back((j + 1 - size / 2 + 0.5) * scale);
+			this->vertices.push_back(i * tile_width);
+			this->vertices.push_back(this->height[i][j + 1] * tile_width);
+			this->vertices.push_back((j + 1) * tile_width);
 
 			this->vertices.push_back(0.0f);
 			this->vertices.push_back(1.0f);
 
-			this->indices.push_back(i * (size - 1) * 6 + j * 6);
-			this->indices.push_back(i * (size - 1) * 6  + j * 6 + 1);
-			this->indices.push_back(i * (size - 1) * 6  + j * 6 + 2);
+			this->indices.push_back(i * (vertices_number - 1) * 6 + j * 6);
+			this->indices.push_back(i * (vertices_number - 1) * 6  + j * 6 + 1);
+			this->indices.push_back(i * (vertices_number - 1) * 6  + j * 6 + 2);
 
-			// Arthur wanted this
-
-			this->vertices.push_back((i + 1 - size / 2 + 0.5) * scale);
-			this->vertices.push_back(this->height[i + 1][j] * scale);
-			this->vertices.push_back((j - size / 2 + 0.5) * scale);
+			this->vertices.push_back((i + 1) * tile_width);
+			this->vertices.push_back(this->height[i + 1][j] * tile_width);
+			this->vertices.push_back(j * tile_width);
 
 			this->vertices.push_back(1.0f);
 			this->vertices.push_back(0.0f);
 
-			this->vertices.push_back((i + 1 - size / 2 + 0.5) * scale);
-			this->vertices.push_back(this->height[i + 1][j + 1] * scale);
-			this->vertices.push_back((j + 1 - size / 2 + 0.5) * scale);
+			this->vertices.push_back((i + 1) * tile_width);
+			this->vertices.push_back(this->height[i + 1][j + 1] * tile_width);
+			this->vertices.push_back((j + 1) * tile_width);
 
 			this->vertices.push_back(1.0f);
 			this->vertices.push_back(1.0f);
 
-			this->vertices.push_back((i - size / 2 + 0.5) * scale);
-			this->vertices.push_back(this->height[i][j + 1] * scale);
-			this->vertices.push_back((j + 1 - size / 2 + 0.5) * scale);
+			this->vertices.push_back(i * tile_width);
+			this->vertices.push_back(this->height[i][j + 1] * tile_width);
+			this->vertices.push_back((j + 1) * tile_width);
 
 			this->vertices.push_back(0.0f);
 			this->vertices.push_back(1.0f);
 
-			this->indices.push_back(i * (size - 1) * 6 + j * 6 + 3);
-			this->indices.push_back(i * (size - 1) * 6  + j * 6 + 4);
-			this->indices.push_back(i * (size - 1) * 6  + j * 6 + 5);
+			this->indices.push_back(i * (vertices_number - 1) * 6 + j * 6 + 3);
+			this->indices.push_back(i * (vertices_number - 1) * 6  + j * 6 + 4);
+			this->indices.push_back(i * (vertices_number - 1) * 6  + j * 6 + 5);
 		}
 	}
-	this->obj = new PhysicalObj(new Mesh("resources/textures/rock.png", this->vertices, this->indices), false, true, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
+	this->obj = new PhysicalObj(new Mesh("resources/textures/rock.png", &(this->vertices), &(this->indices), 1), false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
 }
 
 void Terrain::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height) {
@@ -93,12 +95,12 @@ float barrycentric(glm::vec3 p1, glm::vec3 p2, glm::vec3 p3, glm::vec2 pos) {
 }
 
 float Terrain::getHeight(glm::vec3 position) {
-	float terrainX = position.x - this->obj->getPositionX() + (this->size / 2 - 0.5) * this->scale;
-	float terrainY = position.z - this->obj->getPositionZ() + (this->size / 2 - 0.5) * this->scale;
-	float tileSize = this->scale;
-	float tileX = floor(terrainX / tileSize);
-	float tileY = floor(terrainY / tileSize);
-	if(tileX >= this->size - 1 || tileY >= this->size - 1 || tileX < 0 || tileY < 0) {
+	float terrainX = position.x - this->position.x;
+	float terrainY = position.z - this->position.z;
+	float tileSize = this->tile_width;
+	int tileX = floor(terrainX / tileSize);
+	int tileY = floor(terrainY / tileSize);
+	if(tileX >= this->vertices_number - 1 || tileY >= this->vertices_number - 1 || tileX < 0 || tileY < 0) {
 		return -900.0f;
 	}
 	float xCoord = (terrainX - tileSize * tileX) / tileSize;
@@ -115,5 +117,40 @@ float Terrain::getHeight(glm::vec3 position) {
 							  glm::vec3(0, this->height[tileX][tileY + 1], 0),
 							  glm::vec2(xCoord, yCoord));
 	}
-	return answer * this->scale + this->position.y;
+	return answer * this->tile_width + this->position.y;
+}
+
+glm::vec3 Terrain::getOutVector(glm::vec3 position) {
+	float terrainX = position.x - this->position.x;
+	float terrainY = position.z - this->position.z;
+	float tileSize = this->tile_width;
+	float tileX = floor(terrainX / tileSize);
+	float tileY = floor(terrainY / tileSize);
+	float xCoord = (terrainX - tileSize * tileX) / tileSize;
+	float yCoord = (terrainY - tileSize * tileY) / tileSize;
+	glm::vec3 answer;
+	if(tileX >= this->size - 1 || tileY >= this->size - 1 || tileX < 0 || tileY < 0) {
+		return glm::vec3(0.0f, 0.0f, 0.0f);
+	}
+	if (xCoord <= (1-yCoord)) {
+		answer = get_normal(glm::vec3(0, this->height[tileX][tileY], 0),
+							  glm::vec3(1, this->height[tileX + 1][tileY], 0),
+							  glm::vec3(0, this->height[tileX][tileY + 1], 1));
+	} else {
+		answer = get_normal(glm::vec3(1, this->height[tileX + 1][tileY], 0),
+							  glm::vec3(1, this->height[tileX + 1][tileY + 1], 1),
+							  glm::vec3(0, this->height[tileX][tileY + 1], 0));
+	}
+	return answer;
+	/*
+	float h = (this->height[tileX][tileY] +
+						this->height[tileX][tileY + 1] +
+						this->height[tileX + 1][tileY] +
+						this->height[tileX + 1][tileY + 1]) / 4.0f;
+	glm::vec3 center = glm::vec3(this->tile_width / 2.0f, h, this->tile_width / 2.0f);
+	return center - glm::vec3(xCoord, position.y, yCoord);*/
+}
+
+float Terrain::getSize() {
+	return this->size;
 }

@@ -1,42 +1,65 @@
 #include "physicalObj.h"
 #include "terrain.h"
+#include "../base/chunk.h"
 
 PhysicalObj::PhysicalObj() {}
 
-
-// 
-
-PhysicalObj::PhysicalObj(glm::vec3 position) {
+PhysicalObj::PhysicalObj(glm::vec3 position, Boundary* boundary) {
+	this->lastHeight = 0.0f;
 	this->position = position;
-	this->velocity = glm::vec3(0.0f);
+	velocity = glm::vec3(0.0f);
 	this->acceleration = glm::vec3(0.0f);
 	this->onGround = true;
+	this->mesh = nullptr;
+	this->isActive = true;
+	this->isVisible = true;
+	this->isTransparent = true;
+	this->isFlying = false;
+	this->boundary = boundary;
 }
 
-PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, glm::vec3 position, glm::vec3 rotation, string name) {
+PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, bool isFlying, glm::vec3 position, glm::vec3 rotation, std::string name) {
+	this->lastHeight = 0.0f;
 	this->name = name;
 	this->mesh = mesh;
 	this->position = position;
 	this->rotation = rotation;
-	//this->boundary = boundary;
 	this->isActive = isActive;
 	this->isVisible = isVisible;
 	this->isTransparent = isTransparent;
-	this->velocity = glm::vec3(0.0f);
+	this->isFlying = isFlying;
+	velocity = glm::vec3(0.0f);
 	this->acceleration = glm::vec3(0.0f);
 	this->mesh->init(this);
 	this->onGround = true;
 }
 
+PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, bool isFlying, glm::vec3 position, glm::vec3 rotation, std::string name, Boundary* boundary) {
+	this->lastHeight = 0.0f;
+	this->name = name;
+	this->mesh = mesh;
+	this->position = position;
+	this->rotation = rotation;
+	this->isActive = isActive;
+	this->isVisible = isVisible;
+	this->isTransparent = isTransparent;
+	this->isFlying = isFlying;
+	velocity = glm::vec3(0.0f);
+	this->acceleration = glm::vec3(0.0f);
+	this->mesh->init(this);
+	this->onGround = true;
+	this->boundary = boundary;
+}
+
 void PhysicalObj::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height) {
-	if(this->isVisible) {
+	if (this->isVisible) {
 		this->mesh->draw(shaderHolder, camera, width, height);
 	}
 }
 
 void PhysicalObj::update(float dt) {
-	this->position += this->velocity * dt;
-	this->velocity += this->acceleration * dt;
+	this->position += velocity * dt;
+	velocity += this->acceleration * dt;
 }
 
 glm::vec3 PhysicalObj::getPosition() {
@@ -139,9 +162,21 @@ string PhysicalObj::getName() {
 	return this->name;
 }
 
-void PhysicalObj::jump() {
-	if(this->onGround) {
-		this->velocity.y = 10.0f;
+void PhysicalObj::jump(Chunk* chunk) {
+	if (abs(velocity.y) < 1.0f) {
+		bool t = false;
+		for (int i = 0; i < chunk->GetObjsCount(); i++) {
+			if (this->boundary->Collide(chunk->GetObj(i)->boundary, this->getPosition() - glm::vec3(0.0f, 0.5f, 0.0f), this->getRotation(), chunk->GetObj(i)->getPosition(), chunk->GetObj(i)->getRotation())) {
+				t = true;
+				break; 
+			}
+		}
+		if (this->detectCollision(chunk->GetTerrain()) > -1.0f) {
+			t = true;
+		}
+		if (t) {
+			velocity.y = 10.0f;
+		}
 	}
 }
 
@@ -153,6 +188,36 @@ bool PhysicalObj::getOnGround() {
 	return this->onGround;
 }
 
+void PhysicalObj::setSpeed(glm::vec2 speed) {
+	velocity.x = speed.x;
+	velocity.z = speed.y;
+}
+
+void PhysicalObj::setSpeed(glm::vec3 speed) {
+	velocity = speed;
+}
+
+float PhysicalObj::detectCollision(Terrain* terrain) {
+	return terrain->getHeight(this->getPosition()) - this->getPositionY();
+}
+
+void PhysicalObj::collideTerrain(Terrain* terrain, float dt) {
+	float height = this->detectCollision(terrain);
+	if (height > 0) {
+		this->setPositionY(terrain->getHeight(this->getPosition()));
+		this->acceleration.y = 0.0f;
+		velocity.y = 0.0f;
+		this->setOnGround(true);
+	} else if (height > -0.1f) {
+		this->setOnGround(true);
+		this->acceleration.y = 0.0f;
+	} else {
+		this->setOnGround(false);
+		this->acceleration.y = -G;
+	}
+}
+
+/*
 void PhysicalObj::collideTerrain(Terrain* terrain, glm::vec2 movement, float VCAP) {
 
 	float terrainHeight = terrain->getHeight(this->getPosition());
@@ -166,7 +231,7 @@ void PhysicalObj::collideTerrain(Terrain* terrain, glm::vec2 movement, float VCA
 		if(diff > VCAP) {
 			this->changePositionY(diff * VCAP);
 			this->acceleration.y = 0.0f;
-			this->velocity.y = 0.0f;
+			velocity.y = 0.0f;
 			//this->changePositionX(-Xchange);
 		} else {
 			this->setPositionY(terrainHeight);
@@ -187,7 +252,7 @@ void PhysicalObj::collideTerrain(Terrain* terrain, glm::vec2 movement, float VCA
 		if(diff > VCAP) {
 			this->changePositionY(VCAP * diff);
 			this->acceleration.y = 0.0f;
-			this->velocity.y = 0.0f;
+			velocity.y = 0.0f;
 			//this->changePositionZ(-Ychange);
 		} else {
 			this->setPositionY(terrainHeight);
@@ -206,4 +271,36 @@ void PhysicalObj::collideTerrain(Terrain* terrain, glm::vec2 movement, float VCA
 	} else {
 		this->setOnGround(true);
 	}
+}
+*/
+
+glm::vec3 PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocity) {
+	glm::vec3 this_velocity_x = glm::vec3(velocity.x * dt, 0.0f, 0.0f);
+	glm::vec3 this_velocity_y = glm::vec3(0.0f, velocity.y * dt, 0.0f);
+	glm::vec3 this_velocity_z = glm::vec3(0.0f, 0.0f, velocity.z * dt);
+
+	glm::vec3 other_velocity_x = glm::vec3(other_object->velocity.x * dt, 0.0f, 0.0f);
+	glm::vec3 other_velocity_y = glm::vec3(0.0f, other_object->velocity.y * dt, 0.0f);
+	glm::vec3 other_velocity_z = glm::vec3(0.0f, 0.0f, other_object->velocity.z * dt);
+
+	glm::vec3 result = glm::vec3(1.0f, 1.0f, 1.0f);
+
+	if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_x, this->getRotation(), other_object->getPosition() + other_velocity_x, other_object->getRotation())) {
+		result.x = 0.0f;
+	}
+
+	if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_y, this->getRotation(), other_object->getPosition() + other_velocity_y, other_object->getRotation())) {
+		result.y = 0.0f;
+	}
+
+	if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_z, this->getRotation(), other_object->getPosition() + other_velocity_z, other_object->getRotation())) {
+		result.z = 0.0f;
+	}
+
+	if (result.x + result.y + result.z < 3.0f) {
+		this->velocity = (this->getPosition() - other_object->getPosition()) * 0.1f;
+		result = glm::vec3(1.0f, 1.0f, 1.0f);
+	}
+
+	return result;
 }

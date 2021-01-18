@@ -46,7 +46,8 @@ enum SYMBOL {
 
 		    SWITCH_STACK,
 
-		    INTERRACT
+		    INTERRACT,
+		    INTERRACT_CHILD
 };
 
 void init_translators();

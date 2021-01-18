@@ -34,7 +34,7 @@
 //#include "render/shaders.h"
 
 #include "physics/physicalObj.h"
-//#include "boundary.h"
+#include "physics/boundary.h"
 #include "physics/terrain.h"
 
 #include "base/player.h"
@@ -42,6 +42,10 @@
 #include "base/item.h"
 #include "base/chunk.h"
 #include "base/location.h"
+#include "base/shortjumptrigger.h"
+
+#include "base/magic/core.h"
+#include "base/magic/symbols.h"
 
 #include "sound/soundengine.h"
 #include "sound/filesound.h"
@@ -56,49 +60,42 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-glm::vec2 normalize(glm::vec2 vec) {
-	float d = sqrt(vec.x * vec.x + vec.y * vec.y);
-	vec.x /= d;
-	vec.y /= d;
-	return vec;
-}
-
-glm::vec3 normalize(glm::vec3 vec) {
-	float d = sqrt(vec.x * vec.x + vec.y * vec.y + vec.z * vec.z);
-	vec.x /= d;
-	vec.y /= d;
-	vec.z /= d;
-	return vec;
-}
+#define NO_SOUND
 
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
-
 // Global variabels
 glm::vec2 speed = glm::vec2(0.0f, 0.0f);
+glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 
 float VCAP = 0.1f;
-
 Camera* camera;
-//PhysicalObj player = PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f));
 Player* player;
 SoundEngine sound_engine;
+MagicCore * player_core;
 
-
-
-glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 int direction = 1;
 float directionSide = 0;
-float velocity = 0.1f;
+float velocity = 10.0f;
+bool player_wants_to_jump = false;
 
 std::map<GLchar, Character> Characters;
 
-// The MAIN function, from here we start the application and run the game loop
+bool push = false;
+
 int main()
 {
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-	player = new Player("player", 10, new PhysicalObj(glm::vec3(0.0f, 0.0f, 0.0f)), camera);
+
+	player = new Player("player", 10, new PhysicalObj(glm::vec3(10.0f, 1.0f, 1.0f), new BoundaryBox(0.5f, 1.0f, 0.5f)), camera);
+
+	player_core = new MagicCore();
+	player_core->SetPhysicalObj(player->GetPhysicalObj());
+
+	init_translators();
+	init_protocores();
+
 	double xpos, ypos;
 	double lastXPos, lastYPos;
 	float sensivity = 0.1f;
@@ -115,12 +112,13 @@ int main()
 	alSource3f(source, AL_VELOCITY, 0, 0, 0);
 	alSourcei(source, AL_LOOPING, AL_TRUE);
 
+#ifndef NO_SOUND
 	FileSound sound(&sound_engine, &source, "resources/sounds/happierburial.wav");
 	sound.Play();
+#endif
 
 	// Init GLFW
 	glfwInit();
-	// Set all the required options for GLFW
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -135,11 +133,11 @@ int main()
 #ifdef _WIN32
 	// Turn on vertical screen sync under Windows.
 	// (I.e. it uses the WGL_EXT_swap_control extension)
-	typedef BOOL (WINAPI *PFNWGLSWAPINTERVALEXTPROC)(int interval);
+	typedef BOOL (WINAPI * PFNWGLSWAPINTERVALEXTPROC)(int interval);
 	PFNWGLSWAPINTERVALEXTPROC wglSwapIntervalEXT = NULL;
 	wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC)wglGetProcAddress("wglSwapIntervalEXT");
-	if(wglSwapIntervalEXT){
-	  wglSwapIntervalEXT(0);
+	if (wglSwapIntervalEXT) {
+		wglSwapIntervalEXT(0);
 	}
 #endif
 
@@ -221,25 +219,22 @@ int main()
 	Shader ourShader("resources/shaders/vertex_shader.glsl", "resources/shaders/fragment_shader.glsl");
 	Shader GUIShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/GUI_fragment_shader.glsl");
 	Shader textShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/text_fragment_shader.glsl");
+	Shader waterShader("resources/shaders/water_vertex_shader.glsl", "resources/shaders/water_fragment_shader.glsl");
 
-	ShaderHolder shaderHolder(&ourShader, &GUIShader, &textShader);
-
+	ShaderHolder shaderHolder(&ourShader, &GUIShader, &textShader, &waterShader);
 
 	// ----------------------------------------------- CODE ------------------------------------------
-	Location * location = new Location(10, 10, 30, 30);
+	Location * location = new Location(2, 2, 30, 30);
+
 	location->FillEmptyChunks();
-	printf("Location created\n");
-	
-	
+
+	SetCurrentLocation(location);
+
 	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
 
 	std::vector<std::string> headers = {"name"};
 
-	//printf("%li\n", player->GetInventoryPointer()->size());
-
 	List<Item>* inventory = new List<Item>(glm::vec4(-0.9f, -0.9f, 0.7f, 1.0f), player->GetInventoryPointer(), std::string("resources/textures/list.png"), 10, Characters, &headers);
-	//Text* text = new Text("LMAO Bottom text", glm::vec4(-0.9f, -0.9f, 0.0f, 0.0f), Characters, 32.0f / (float)width / 16.0f, glm::vec3(0, 255, 0));
-	//Container test_con(glm::vec4(-0.9f, -0.9f, 1.8f, 1.8f), text, "resources/textures/stone.jpg");
 
 	float last_frame = glfwGetTime();
 
@@ -254,6 +249,7 @@ int main()
 
 	while (!glfwWindowShouldClose(window))
 	{
+		// player_model->setPosition(player->GetPhysicalObj()->getPosition());
 		float dt;
 		float current_frame;
 		lastXPos = xpos;
@@ -277,37 +273,58 @@ int main()
 			if (player->GetCamera()->getRotation().x > 90.0f)
 				player->GetCamera()->setRotationX(90.0f);
 		}
+
 		// Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
-		// Render
+
 		// Clear the color buffer
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		Chunk * chunk_ptr = location->GetCurrentChunk(player->GetPhysicalObj()->getPositionX(),
-							      player->GetPhysicalObj()->getPositionZ());
+		location->UpdatePosition(player->GetPhysicalObj()->getPosition());
 
-		if(chunk_ptr == nullptr)
-		  chunk_ptr = location->GetCurrentChunk(0, 0);
+		Chunk * chunk_ptr = location->GetCurrentChunk();
+		if (chunk_ptr == nullptr)
+			chunk_ptr = location->GetChunkByPosition(0, 0);
 
-		player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(),
-							 speed + speedSide, VCAP);
+		if (player_wants_to_jump) {
+			player->GetPhysicalObj()->jump(chunk_ptr);
+		}
 
-		location->Draw(&shaderHolder, camera, width, height, player->GetPhysicalObj()->getPositionX(), player->GetPhysicalObj()->getPositionZ());
+		player->GetPhysicalObj()->setSpeed(speed + speedSide);
+		// player->GetPhysicalObj()->velocity += (glm::vec3((speed + speedSide).x, player->GetPhysicalObj()->velocity.y, (speed + speedSide).y) - player->GetPhysicalObj()->velocity) * 0.2f;
 
-		//test2->GetPhysicalObj()->draw(&ourShader, &camera, width, height);
 
+		/* Collide player with all objects in chunk */
+		player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt);
+
+		if (push) {
+			for (int i = 0; i < chunk_ptr->GetObjsCount(); i ++) {
+				chunk_ptr->GetObj(i)->acceleration -= (player->GetPhysicalObj()->getPosition() - chunk_ptr->GetObj(i)->getPosition()) / 10.0f;
+			}
+		}
+
+		chunk_ptr->CollideWithAll(player->GetPhysicalObj(), dt);
+
+		chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
+		player->Update(dt);
+
+		location->Draw(&shaderHolder, camera, width, height);
+		// player_model->draw(&shaderHolder, camera, width, height);
+		// light->draw(&shaderHolder, camera, width, height);
+
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		test_frame.draw(&shaderHolder);
-		//text->draw(&shaderHolder);
-		//printf("%s\n", "---");
 		inventory->draw(&shaderHolder);
 		fps_counter->draw(&shaderHolder);
-		//printf("%s\n", "---");
-    
+
 		glFinish();
 
 		// Swap the screen buffers
 		glfwSwapBuffers(window);
+
+		player_core->Step();
+		chunk_ptr->Update(dt);
 		current_frame = glfwGetTime();
 		dt = (current_frame - last_frame);
 		last_frame = current_frame;
@@ -316,9 +333,8 @@ int main()
 			fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
 			fps_change_last = glfwGetTime();
 		}
-
-		player->Update(dt);
-		//		chunk1->Update(dt);
+		player_wants_to_jump = false; // What the fuck
+		push = false;
 	}
 	glfwTerminate();
 	return 0;
@@ -369,10 +385,26 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-		player->GetPhysicalObj()->jump();//velocity.y = 10.0f;
+		// player->GetPhysicalObj()->jump();//velocity.y = 10.0f;
+		player_wants_to_jump = true;
 	}
 
 	if (key == GLFW_KEY_P && action == GLFW_PRESS) {
 		//player->PickupItem(chunk);
+	}
+
+	if (key == GLFW_KEY_E) {
+		push = true;
+	}
+
+	if (key == GLFW_KEY_L && action == GLFW_PRESS) {
+		std::string pseudo;
+		std::cin >> pseudo;
+
+		SYMBOL prog[1024];
+
+		pseudo_to_prog(pseudo, prog);
+
+		player_core->LoadProgram(prog, pseudo.length() + 1);
 	}
 }

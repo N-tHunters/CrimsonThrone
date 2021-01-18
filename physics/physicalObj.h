@@ -2,12 +2,15 @@
 #define PHYSICALOBJ_H
 
 #include "../render/mesh.h"
-//#include "physics/boundary.h"
+#include "boundary.h"
 #include <glm/glm.hpp>
 #include "../render/camera.h"
 #include "../render/shaderLoader.h"
 #include "../render/shaderHolder.h"
+#include "../debug.h"
 //#include "terrain.h"
+
+class Chunk;
 
 class Terrain;
 
@@ -16,22 +19,30 @@ class PhysicalObj {
 	bool isActive;
 	bool isVisible;
 	bool isTransparent;
+	bool isFlying;
 	glm::vec3 position;
 	glm::vec3 rotation;
 	bool onGround;
 public:
+	Boundary* boundary;
+	float lastHeight;
 	std::string name;
 	glm::vec3 velocity;
 	glm::vec3 acceleration;
 	PhysicalObj();
-	PhysicalObj(glm::vec3);
-	PhysicalObj(Mesh*, bool, bool, bool, glm::vec3, glm::vec3, string);
-	glm::vec3 getRotation();
+	PhysicalObj(glm::vec3, Boundary*);
+	PhysicalObj(Mesh*, bool, bool, bool, bool, glm::vec3, glm::vec3, std::string);
+	PhysicalObj(Mesh*, bool, bool, bool, bool, glm::vec3, glm::vec3, std::string, Boundary*);
+
+
+	// Getters and setters for position and rotation
+
+	glm::vec3 getPosition();
 	float getPositionX();
 	float getPositionY();
 	float getPositionZ();
 
-	glm::vec3 getPosition();
+	glm::vec3 getRotation();
 	float getRotationX();
 	float getRotationY();
 	float getRotationZ();
@@ -56,16 +67,20 @@ public:
 	void changeRotationY(float);
 	void changeRotationZ(float);
 
-	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
-	void update(float);
+	std::string getName();
 
-	string getName();
-
-	void jump();
-
+	virtual void update(float);
+	void jump(Chunk*);
+	void setSpeed(glm::vec2 speed);
+	void setSpeed(glm::vec3 speed);
 	void setOnGround(bool);
 	bool getOnGround();
-	void collideTerrain(Terrain*, glm::vec2, float);
+	float detectCollision(Terrain* terrain);
+	void collideTerrain(Terrain*, float);
+
+	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
+
+	glm::vec3 collide(PhysicalObj*, float, glm::vec3);
 };
 
 #endif

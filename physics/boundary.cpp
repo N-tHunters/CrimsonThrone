@@ -1,4 +1,5 @@
 #include "boundary.h"
+#include <iostream>
 #include <glm/glm.hpp>
 
 BoundaryBox::BoundaryBox(float width, float height, float length) {
@@ -21,22 +22,31 @@ BoundarySphere::BoundarySphere(float radius) {
 	this->radius = radius;
 };
 
-bool BoundaryBox::Collide(Boundary* a, glm::vec3 b, glm::vec3 c, glm::vec3 d, glm::vec3 e) {
+bool BoundaryBox::Collide(Boundary* other_boundary, glm::vec3 position_first, glm::vec3 rotation_first, glm::vec3 position_second, glm::vec3 rotation_second) {
+	// return position_first.x >= position_second.x; 	
+	bool a1 = position_first.x + this->width >= position_second.x - ((BoundaryBox*)other_boundary)->width;
+	bool a2 = position_second.x + ((BoundaryBox*)other_boundary)->width >= position_first.x - this->width;
+
+	bool b1 = position_first.y + this->height >= position_second.y - ((BoundaryBox*)other_boundary)->height;
+	bool b2 = position_second.y + ((BoundaryBox*)other_boundary)->height >= position_first.y - this->height;
+
+	bool c1 = position_first.z + this->length >= position_second.z - ((BoundaryBox*)other_boundary)->length;
+	bool c2 = position_second.z + ((BoundaryBox*)other_boundary)->length >= position_first.z - this->length;
+	return a1 && a2 && b1 && b2 && c1 && c2;
+}
+
+bool BoundaryPlane::Collide(Boundary* other_boundary, glm::vec3 position_first, glm::vec3 rotation_first, glm::vec3 position_second, glm::vec3 rotation_second) {
 	return false;
 }
 
-bool BoundaryPlane::Collide(Boundary* a, glm::vec3 b, glm::vec3 c, glm::vec3 d, glm::vec3 e) {
+bool BoundaryCapsule::Collide(Boundary* other_boundary, glm::vec3 position_first, glm::vec3 rotation_first, glm::vec3 position_second, glm::vec3 rotation_second) {
 	return false;
 }
 
-bool BoundaryCapsule::Collide(Boundary* a, glm::vec3 b, glm::vec3 c, glm::vec3 d, glm::vec3 e) {
+bool BoundarySphere::Collide(Boundary* other_boundary, glm::vec3 position_first, glm::vec3 rotation_first, glm::vec3 position_second, glm::vec3 rotation_second) {
 	return false;
 }
 
-bool BoundarySphere::Collide(Boundary* a, glm::vec3 b, glm::vec3 c, glm::vec3 d, glm::vec3 e) {
-	return false;
-}
-
-bool Boundary::Collide(Boundary* a, glm::vec3 b, glm::vec3 c, glm::vec3 d, glm::vec3 e) {
+bool Boundary::Collide(Boundary* other_boundary, glm::vec3 position_first, glm::vec3 rotation_first, glm::vec3 position_second, glm::vec3 rotation_second) {
 	return false;
 }

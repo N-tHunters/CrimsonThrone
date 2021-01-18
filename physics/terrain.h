@@ -1,24 +1,33 @@
 #ifndef TERRAIN_H
 #define TERRAIN_H
 
+#include <random>
+#include <math.h>
+
 #include "physicalObj.h"
+
 #include "../render/shaderLoader.h"
 #include "../render/camera.h"
 #include "../render/shaderHolder.h"
 
+#include "../math/vectors.h"
+
 class Terrain {
-	int size;
-	float scale = scale;
+	float size;
+	float tile_width;
+	int vertices_number;
 	std::vector<GLfloat> vertices;
 	std::vector<unsigned int> indices;
 	std::vector<std::vector<float>> height;
 	PhysicalObj* obj;
 	glm::vec3 position;
 public:
-	Terrain(int, float, glm::vec3);
+	Terrain(float, int, glm::vec3);
 	glm::vec3 getPosition();
 	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
 	float getHeight(glm::vec3);
+	glm::vec3 getOutVector(glm::vec3);
+	float getSize();
 };
 
 #endif

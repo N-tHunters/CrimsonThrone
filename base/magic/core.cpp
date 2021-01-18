@@ -3,7 +3,7 @@
 MagicCore::MagicCore() : AbstractCore() {
   this->state = STOPPED_OK;
   this->error = ERROR_OK;
-  this->debug = false;
+  this->debug = true;
   this->flag = false;
 }
 
@@ -37,9 +37,15 @@ char MagicCore::GetCell(int index) {
 }
 
 char MagicCore::PopStack() {
+  if(this->core_stack[this->sp].empty())
+    return 0;
   char top = this->core_stack[this->sp].top();
   this->core_stack[this->sp].pop();
   return top;
+}
+
+void MagicCore::PushStack(char val) {
+  this->core_stack[this->sp].push(val);
 }
 
 void MagicCore::LoadProgram(SYMBOL * prog, int len) {
@@ -66,7 +72,7 @@ void MagicCore::Step() {
   }
   
   SYMBOL cmd = static_cast<SYMBOL>(this->cell_tape[this->ip]);
-  char a, b;
+  char a, b, c;
   int i1, i2;
 
   switch(cmd) {
@@ -96,7 +102,7 @@ void MagicCore::Step() {
     break;
 
   case PUT_CELL_TO_STACK:
-    this->core_stack[this->sp].push(this->cell_tape[this->cp]);
+    this->PushStack(this->cell_tape[this->cp]);
     break;
 
   case GET_CELL_FROM_STACK:
@@ -106,19 +112,19 @@ void MagicCore::Step() {
   case ADD_STACK:
     a = this->PopStack();
     b = this->PopStack();
-    this->core_stack[this->sp].push(a + b);
+    this->PushStack(a + b);
     break;
     
   case SUB_STACK:
     a = this->PopStack();
     b = this->PopStack();
-    this->core_stack[this->sp].push(a - b);
+    this->PushStack(a - b);
     break;
     
   case MUL_STACK:
     a = this->PopStack();
     b = this->PopStack();
-    this->core_stack[this->sp].push(a * b);
+    this->PushStack(a * b);
     break;
     
   case DIV_STACK:
@@ -129,7 +135,7 @@ void MagicCore::Step() {
       this->error = ERROR_DIV_ZERO;
       return;
     }
-    this->core_stack[this->sp].push(a / b);
+    this->PushStack(a / b);
     break;
 
   case CYCLE_END:
@@ -182,40 +188,71 @@ void MagicCore::Step() {
 
   case DUP:
     a = this->PopStack();
-    this->core_stack[this->sp].push(a);
-    this->core_stack[this->sp].push(a);
+    this->PushStack(a);
+    this->PushStack(a);
     break;
 
   case DUP2:
     a = this->PopStack();
     b = this->PopStack();
-    this->core_stack[this->sp].push(b);
-    this->core_stack[this->sp].push(a);
-    this->core_stack[this->sp].push(b);
-    this->core_stack[this->sp].push(a);
+    this->PushStack(b);
+    this->PushStack(a);
+    this->PushStack(b);
+    this->PushStack(a);
     break;
 
   case SWAP:
     a = this->PopStack();
     b = this->PopStack();
-    this->core_stack[this->sp].push(a);
-    this->core_stack[this->sp].push(b);
+    this->PushStack(a);
+    this->PushStack(b);
     break;
 
   case INCREASE_STACK_TOP:
     a = this->PopStack();
-    this->core_stack[this->sp].push(a + 1);
+    this->PushStack(a + 1);
     break;
 
   case DECREASE_STACK_TOP:
     a = this->PopStack();
-    this->core_stack[this->sp].push(a - 1);
+    this->PushStack(a - 1);
     break;
     
   case SWITCH_STACK:
     this->sp = !this->sp;
     break;
+
+  case INTERRACT:
+    a = this->PopStack();
+    b = this->PopStack();
+    c = this->PopStack();
+    this->PushStack(proto_call(a, b, c, this));
+    break;
+
+  case INTERRACT_CHILD:
+    a = this->PopStack();
+    b = this->PopStack();
+    c = this->PopStack();
+
+    printf("Child call %d %d %d\n", a, b, c);
+
+    ProtoMagicCore * child_core = (ProtoMagicCore*) this->GetChildCore(a);
+
+    if(child_core == nullptr) {
+      printf("error: Child core not exists\n");
+      this->PushStack(-1);
+    } else 
+      this->PushStack(child_core->Call(b, c, this));
+    break;
   }
   
   this->ip ++;
+
+  JustifyStack();
+}
+
+void MagicCore::JustifyStack() {
+  if(this->core_stack[this->sp].size() > 64)
+    while(!this->core_stack[this->sp].empty())
+      this->core_stack[this->sp].pop();
 }

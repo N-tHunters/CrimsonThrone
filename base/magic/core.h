@@ -33,8 +33,10 @@ class MagicCore : public AbstractCore{
   bool flag;
 
   char PopStack();
+  void PushStack(char);
   int FindMark(int);
   int GetCycleBegin(int);
+  void JustifyStack();
   
  public:
   MagicCore();

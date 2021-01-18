@@ -34,9 +34,11 @@ class Mesh {
 	GLuint VBO, VAO, EBO;
 	PhysicalObj* obj;
 	int size;
+	int type;
 public:
 	Mesh(string, Model*);
-	Mesh(string, std::vector<GLfloat>, std::vector<unsigned int>);
+	Mesh(string, std::vector<GLfloat>*, std::vector<unsigned int>*);
+	Mesh(string, std::vector<GLfloat>*, std::vector<unsigned int>*, int);
 	Mesh();
 	void init(PhysicalObj*);
 	void draw(ShaderHolder*, Camera*, GLuint, GLuint);

@@ -31,6 +31,9 @@ void Model::processNode(aiNode *node, const aiScene *scene)
 		this->vertices.push_back(mesh->mVertices[i].x);
 		this->vertices.push_back(mesh->mVertices[i].y);
 		this->vertices.push_back(mesh->mVertices[i].z);
+		this->vertices.push_back(mesh->mNormals[i].x);
+		this->vertices.push_back(mesh->mNormals[i].y);
+		this->vertices.push_back(mesh->mNormals[i].z);
 		if(isTexCoords) {
 			this->vertices.push_back(mesh->mTextureCoords[0][i].x);
 			this->vertices.push_back(mesh->mTextureCoords[0][i].y);
