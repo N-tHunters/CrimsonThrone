@@ -12,13 +12,14 @@
 
 // Render includes
 
-#include "shaderLoader.h"
-#include "shaderHolder.h"
-#include "constants.h"
-#include "camera.h"
+#include "shaderLoader.hpp"
+#include "shaderHolder.hpp"
+#include "constants.hpp"
+#include "camera.hpp"
 
 #include <string>
 #include <vector>
+#include <math.h>
 
 using namespace std;
 
@@ -36,9 +37,9 @@ class Mesh {
 	int size;
 	int type;
 public:
-	Mesh(string, Model*);
-	Mesh(string, std::vector<GLfloat>*, std::vector<unsigned int>*);
-	Mesh(string, std::vector<GLfloat>*, std::vector<unsigned int>*, int);
+	Mesh(const string&, Model*);
+	Mesh(const string&, std::vector<GLfloat>*, std::vector<unsigned int>*);
+	Mesh(const string&, std::vector<GLfloat>*, std::vector<unsigned int>*, int);
 	Mesh();
 	void init(PhysicalObj*);
 	void draw(ShaderHolder*, Camera*, GLuint, GLuint);

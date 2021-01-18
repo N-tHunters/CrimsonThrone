@@ -1,7 +1,4 @@
 #include "darkcore.h"
-#include "../../render/model.h"
-#include "../location.h"
-#include "elementpiececore.h"
 
 DarkMagicCore::DarkMagicCore() : ElementMagicCore() {}
 

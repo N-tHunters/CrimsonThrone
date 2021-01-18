@@ -1,8 +1,8 @@
 #ifndef TEXT_H
 #define TEXT_H
 
-#include "frame.h"
-#include "image.h"
+#include "frame.hpp"
+#include "image.hpp"
 
 #include <map>
 
@@ -16,7 +16,7 @@ class Text: public Frame {
 public:
 	Text(std::string, glm::vec4, std::map<GLchar, Character>, float, glm::vec3);
 	void update(std::string, std::map<GLchar, Character>);
-	void draw(ShaderHolder*);
+	void draw(ShaderHolder*) override;
 };
 
 #endif

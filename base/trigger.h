@@ -1,5 +1,5 @@
 #ifndef TRIGGER_H
-#include "../physics/physicalObj.h"
+#include "../physics/physicalObj.hpp"
 
 /***
  * \brief Trigger represents action what is executed when actor gets into defined area

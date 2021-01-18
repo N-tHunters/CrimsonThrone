@@ -1,4 +1,4 @@
-#include "shaderHolder.h"
+#include "shaderHolder.hpp"
 
 ShaderHolder::ShaderHolder(Shader* shader3D, Shader* shaderGUI, Shader* shaderText, Shader* shaderWater) {
 	this->shader3D = shader3D;

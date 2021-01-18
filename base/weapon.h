@@ -7,7 +7,6 @@
 
 #include "item.h"
 #include "saver.h"
-#include "../physics/physicalObj.h"
 #include <sstream>
 
 /**

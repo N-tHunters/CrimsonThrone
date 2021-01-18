@@ -1,9 +1,9 @@
 #ifndef COLUMN_H
 #define COLUMN_H
 
-#include "frame.h"
-#include "abstractListElement.h"
-#include "text.h"
+#include "frame.hpp"
+#include "abstractListElement.hpp"
+#include "text.hpp"
 
 template <class Element>
 class Column: public Frame {
@@ -14,7 +14,7 @@ class Column: public Frame {
 	int index;
 
 public:
-	Column(glm::vec4 rect, std::vector<Element*>* list, std::string texturePath, int maxCount, std::map<GLchar, Character> Characters, std::string header): Frame(rect) {
+	Column(glm::vec4 rect, std::vector<Element*>* list, const std::string& texturePath, int maxCount, std::map<GLchar, Character> Characters, std::string header): Frame(rect) {
 		this->rect = rect;
 		this->maxCount = maxCount;
 		this->index = 0;
@@ -110,7 +110,7 @@ public:
 		                                glm::vec3(0, 255, 0)));
 	}
 
-	void draw(ShaderHolder* shaderHolder) {
+	void draw(ShaderHolder* shaderHolder) override {
 		glClear(GL_DEPTH_BUFFER_BIT);
 
 		glActiveTexture(GL_TEXTURE0);
