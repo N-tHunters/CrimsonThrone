@@ -75,6 +75,8 @@ Player* player;
 SoundEngine sound_engine;
 MagicCore * player_core;
 
+Location * location;
+
 int direction = 1;
 float directionSide = 0;
 float velocity = 10.0f;
@@ -222,7 +224,7 @@ int main()
 	ShaderHolder shaderHolder(&ourShader, &GUIShader, &textShader, &waterShader);
 
 	// ----------------------------------------------- CODE ------------------------------------------
-	Location * location = new Location(2, 2, 30, 30);
+	location = new Location(2, 2, 30, 30);
 
 	location->FillEmptyChunks();
 
@@ -334,11 +336,10 @@ int main()
 		chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
 		player->Update(dt);
 
-		for(int i = 0; i < 15; i ++) {
-		  for(int j = 0; j < 15; j++) {
-		    if(rand() % 100 < 5)
-		      chunk_ptr->GetObj(i * 15 + j)->velocity = glm::vec3(rand() % 10 - 5.f, rand() % 10 - 5.f, rand() % 10 - 5.f);
-		  }
+		for(int i = 0; i < chunk_ptr->GetObjsCount(); i ++) {
+		  chunk_ptr->GetObj(i)->velocity.y = 0;
+		    if(rand() % 100 < 2)
+		      chunk_ptr->GetObj(i)->velocity = glm::vec3(rand() % 3 - 1.f, 0, rand() % 3 - 1.f);
 		}
 
 		location->Draw(&shaderHolder, camera, width, height);
