@@ -16,11 +16,13 @@ char AbstractCore::FindEmptyChildCell() {
   for(int i = 0; i < 256; i ++)
     if(this->child_cores[i] == nullptr)
       return i;
-  return 0;
+  return -1;
 }
 
 char AbstractCore::AddChildProtoCore(ProtoMagicCore * new_child_core) {
   char index = this->FindEmptyChildCell();
+  if(index == -1)
+    return -1;
   this->child_cores[index] = new_child_core;
   new_child_core->SetParent(this);
   return index;
@@ -36,4 +38,8 @@ void AbstractCore::SetPhysicalObj(PhysicalObj * obj) {
 
 PhysicalObj * AbstractCore::GetPhysicalObj() {
   return this->physical_obj;
+}
+
+AbstractCore * AbstractCore::GetChildCore(int index) {
+  return this->child_cores[index];
 }

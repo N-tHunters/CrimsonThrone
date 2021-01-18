@@ -34,6 +34,7 @@ void init_translators() {
   sym2pseudo[DECREASE_STACK_TOP] = 'D';
   sym2pseudo[SWITCH_STACK] = '_';
   sym2pseudo[INTERRACT] = ';';
+  sym2pseudo[INTERRACT_CHILD] = ':';
 
   for(auto &x: sym2pseudo) {
     pseudo2sym[x.second] = x.first;

@@ -1,6 +1,4 @@
 #include "terrain.h"
-#include <random>
-#include <math.h>
 
 /**
  * @brief      Constructs a new instance.
@@ -19,7 +17,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 	for(int i = 0; i < vertices_number; i ++) {
 		v.clear();
 		for(int j = 0; j < vertices_number; j ++) {
-			v.push_back((float)((i - vertices_number / 2) * (i - vertices_number / 2) + (j - vertices_number / 2) * (j - vertices_number / 2)) / 10.0f);
+			v.push_back(0.0f);
 		}
 		this->height.push_back(v);
 	}
@@ -77,7 +75,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 			this->indices.push_back(i * (vertices_number - 1) * 6  + j * 6 + 5);
 		}
 	}
-	this->obj = new PhysicalObj(new Mesh("resources/textures/rock.png", this->vertices, this->indices), false, true, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
+	this->obj = new PhysicalObj(new Mesh("resources/textures/rock.png", &(this->vertices), &(this->indices), 1), false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
 }
 
 void Terrain::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height) {
@@ -100,9 +98,9 @@ float Terrain::getHeight(glm::vec3 position) {
 	float terrainX = position.x - this->position.x;
 	float terrainY = position.z - this->position.z;
 	float tileSize = this->tile_width;
-	float tileX = floor(terrainX / tileSize);
-	float tileY = floor(terrainY / tileSize);
-	if(tileX >= this->size - 1 || tileY >= this->size - 1 || tileX < 0 || tileY < 0) {
+	int tileX = floor(terrainX / tileSize);
+	int tileY = floor(terrainY / tileSize);
+	if(tileX >= this->vertices_number - 1 || tileY >= this->vertices_number - 1 || tileX < 0 || tileY < 0) {
 		return -900.0f;
 	}
 	float xCoord = (terrainX - tileSize * tileX) / tileSize;
@@ -130,13 +128,29 @@ glm::vec3 Terrain::getOutVector(glm::vec3 position) {
 	float tileY = floor(terrainY / tileSize);
 	float xCoord = (terrainX - tileSize * tileX) / tileSize;
 	float yCoord = (terrainY - tileSize * tileY) / tileSize;
+	glm::vec3 answer;
 	if(tileX >= this->size - 1 || tileY >= this->size - 1 || tileX < 0 || tileY < 0) {
 		return glm::vec3(0.0f, 0.0f, 0.0f);
 	}
+	if (xCoord <= (1-yCoord)) {
+		answer = get_normal(glm::vec3(0, this->height[tileX][tileY], 0),
+							  glm::vec3(1, this->height[tileX + 1][tileY], 0),
+							  glm::vec3(0, this->height[tileX][tileY + 1], 1));
+	} else {
+		answer = get_normal(glm::vec3(1, this->height[tileX + 1][tileY], 0),
+							  glm::vec3(1, this->height[tileX + 1][tileY + 1], 1),
+							  glm::vec3(0, this->height[tileX][tileY + 1], 0));
+	}
+	return answer;
+	/*
 	float h = (this->height[tileX][tileY] +
 						this->height[tileX][tileY + 1] +
 						this->height[tileX + 1][tileY] +
 						this->height[tileX + 1][tileY + 1]) / 4.0f;
 	glm::vec3 center = glm::vec3(this->tile_width / 2.0f, h, this->tile_width / 2.0f);
-	return center - glm::vec3(xCoord, position.y, yCoord);
+	return center - glm::vec3(xCoord, position.y, yCoord);*/
+}
+
+float Terrain::getSize() {
+	return this->size;
 }

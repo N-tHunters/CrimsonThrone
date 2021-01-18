@@ -1,3 +1,6 @@
+#ifndef BOUNDARY_H
+#define BOUNDARY_H
+
 #include <glm/glm.hpp>
 
 class Boundary {
@@ -32,3 +35,5 @@ public:
 	BoundarySphere(float);
 	bool Collide(Boundary*, glm::vec3, glm::vec3, glm::vec3, glm::vec3);
 };
+
+#endif

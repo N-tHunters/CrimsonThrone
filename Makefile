@@ -1,4 +1,4 @@
-CFLAGS := -std=c++17 -Werror -Isrc -Iinclude -s -m64 -O3
+CFLAGS := -std=c++17 -Werror -Isrc -Iinclude -s -m64 -O3 
 CXFLAGS := -Iinclude
 TARGET := main
 
@@ -19,6 +19,9 @@ SOUND_OBJS=$(patsubst %.cpp,%.o,$(SOUND_SRCS))
 
 UI_SRCS=$(wildcard UI/*.cpp)
 UI_OBJS=$(patsubst %.cpp,%.o,$(UI_SRCS))
+
+MATH_SRCS=$(wildcard math/*.cpp)
+MATH_OBJS=$(patsubst %.cpp,%.o,$(MATH_SRCS))
 
 OTH_SRCS=$(wildcard src/*.c)
 OTH_OBJS=$(patsubst %.c,%.o,$(OTH_SRCS))
@@ -50,7 +53,7 @@ endif
 
 all: $(TARGET)
 
-$(TARGET): $(TARGET).o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(UI_OBJS) $(MAGIC_OBJS) debug.o
+$(TARGET): $(TARGET).o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(UI_OBJS) $(MAGIC_OBJS) $(MATH_OBJS) debug.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LFLAGS) $(SFLAGS)
 
 %.o: %.cpp
@@ -60,7 +63,7 @@ $(TARGET): $(TARGET).o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $
 	$(CCX) $(CXFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(BASE_OBJS) $(MAGIC_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(UI_OBJS) $(TARGET).o $(REMOVABLE)
+	$(RM) $(BASE_OBJS) $(MAGIC_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(UI_OBJS) $(MATH_OBJS) $(TARGET).o $(REMOVABLE)
 
 cleanBase:
 	$(RM) $(BASE_OBJS) $(TARGET).o $(REMOVABLE)
@@ -76,6 +79,9 @@ cleanSound:
 
 cleanUI:
 	$(RM) $(UI_OBJS) $(TARGET).o $(REMOVABLE)
+
+cleanMath:
+	$(RM) $(MATH_OBJS) $(TARGET).o $(REMOVABLE)
 
 .PHONY: all cleanAll
 

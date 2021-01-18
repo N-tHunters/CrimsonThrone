@@ -1,9 +1,10 @@
 #include "shaderHolder.h"
 
-ShaderHolder::ShaderHolder(Shader* shader3D, Shader* shaderGUI, Shader* shaderText) {
+ShaderHolder::ShaderHolder(Shader* shader3D, Shader* shaderGUI, Shader* shaderText, Shader* shaderWater) {
 	this->shader3D = shader3D;
 	this->shaderGUI = shaderGUI;
 	this->shaderText = shaderText;
+	this->shaderWater = shaderWater;
 }
 
 Shader* ShaderHolder::get3D() {
@@ -16,4 +17,8 @@ Shader* ShaderHolder::getGUI() {
 
 Shader* ShaderHolder::getText() {
 	return this->shaderText;
+}
+
+Shader* ShaderHolder::getWater() {
+	return this->shaderWater;
 }
