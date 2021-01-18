@@ -1,7 +1,4 @@
 #include "firecore.h"
-#include "../../render/model.h"
-#include "../location.h"
-#include "elementpiececore.h"
 
 FireMagicCore::FireMagicCore() : ElementMagicCore() {}
 

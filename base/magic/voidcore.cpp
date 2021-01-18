@@ -1,7 +1,4 @@
 #include "voidcore.h"
-#include "../../render/model.h"
-#include "../location.h"
-#include "elementpiececore.h"
 
 VoidMagicCore::VoidMagicCore() : ElementMagicCore() {}
 

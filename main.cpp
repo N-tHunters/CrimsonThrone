@@ -233,7 +233,7 @@ int main()
 
 	for (int i = 0; i < 15; i ++) {
 		for (int j = 0; j < 15; j++) {
-			location->GetCurrentChunk()->AddObj(new PhysicalObj(new Mesh("resources/textures/box.jpeg", new Model((char*)"resources/models/cube.obj")),
+			location->GetCurrentChunk()->AddObj(new PhysicalObj(new Mesh("resources/textures/box.jpeg", new Model("resources/models/cube.obj")),
 			                                    true,
 			                                    true,
 			                                    false,

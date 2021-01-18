@@ -2,6 +2,8 @@
 #define ABSCORE_H
 
 #include "../../physics/physicalObj.hpp"
+#include "../../render/model.hpp"
+#include "../location.h"
 
 class ProtoMagicCore;
 

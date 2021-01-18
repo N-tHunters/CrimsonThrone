@@ -2,6 +2,7 @@
 #define FIRECORE_H
 
 #include "elementcore.h"
+#include "elementpiececore.h"
 
 const char CORE_ID_FIRE = 1;
 
