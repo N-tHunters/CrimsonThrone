@@ -1,7 +1,7 @@
 #ifndef CONTAINER_H
 #define CONTAINER_H
 
-#include "frame.h"
+#include "frame.hpp"
 
 /**
  * @brief      This class describes a container for frames, useless.

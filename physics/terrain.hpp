@@ -4,13 +4,13 @@
 #include <random>
 #include <math.h>
 
-#include "physicalObj.h"
+#include "physicalObj.hpp"
 
-#include "../render/shaderLoader.h"
-#include "../render/camera.h"
-#include "../render/shaderHolder.h"
+#include "../render/shaderLoader.hpp"
+#include "../render/camera.hpp"
+#include "../render/shaderHolder.hpp"
 
-#include "../math/vectors.h"
+#include "../math/vectors.hpp"
 
 class Terrain {
 	float size;
@@ -23,11 +23,17 @@ class Terrain {
 	glm::vec3 position;
 public:
 	Terrain(float, int, glm::vec3);
+	Terrain(Terrain&);
+	
 	glm::vec3 getPosition();
-	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
 	float getHeight(glm::vec3);
 	glm::vec3 getOutVector(glm::vec3);
 	float getSize();
+	PhysicalObj* getPhysicalObj();
+	int getVerticesNumber();
+	float getHeightMap(int x, int y);
+
+	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
 };
 
 #endif

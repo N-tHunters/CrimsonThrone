@@ -1,7 +1,7 @@
 #ifndef SHADERS_H
 #define SHADERS_H
 
-#include "shaderLoader.h"
+#include "shaderLoader.hpp"
 
 class ShaderHolder {
   Shader* shader3D;

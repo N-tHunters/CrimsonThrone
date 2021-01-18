@@ -1,5 +1,5 @@
-#include "vectors.h"
-#include "../debug.h"
+#include "vectors.hpp"
+#include "../debug.hpp"
 
 glm::vec2 normalize(glm::vec2 vec) {
 	float d = sqrt(vec.x * vec.x + vec.y * vec.y);

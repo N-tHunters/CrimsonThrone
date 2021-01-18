@@ -103,7 +103,7 @@ Chunk::Chunk(Terrain * terrain, float water_height) : Chunk(terrain) {
                                     true,
                                     false,
                                     false,
-                                    terrain->getPosition(),// + glm::vec3(terrain->getSize() / 2.0f, water_height, terrain->getSize() / 2.0f),
+                                    terrain->getPosition(),
                                     glm::vec3(0.0f, 0.0f, 0.0f),
                                     "water");
 }

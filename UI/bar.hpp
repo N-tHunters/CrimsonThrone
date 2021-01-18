@@ -1,7 +1,7 @@
 #ifndef BAR_H
 #define BAR_H
 
-#include "frame.h"
+#include "frame.hpp"
 
 class Bar: public Frame {
 	int* value;
@@ -9,7 +9,7 @@ class Bar: public Frame {
 	glm::vec4 rect;
 public:
 	Bar(glm::vec4, int*, int*, glm::vec3);
-	void draw(ShaderHolder*);
+	void draw(ShaderHolder*) override;
 };
 
 #endif

@@ -1,7 +1,7 @@
 #ifndef BOUNDARY_TRIGGER_H
 #define BOUNDARY_TRIGGER_H
 
-#include "../physics/boundary.h"
+#include "../physics/boundary.hpp"
 #include "trigger.h"
 
 class BoundaryTrigger : public Trigger {

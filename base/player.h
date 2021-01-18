@@ -6,7 +6,7 @@
 #define PLAYER_H
 
 #include "actor.h"
-#include "../render/camera.h"
+#include "../render/camera.hpp"
 
 /**
  * \brief Human controlled game character

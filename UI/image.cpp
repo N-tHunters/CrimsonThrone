@@ -1,4 +1,4 @@
-#include "image.h"
+#include "image.hpp"
 
 Image::Image(glm::vec4 rect, std::string texturePath): Frame(rect) {
 	vertices = {rect.x,     	 rect.y + rect.w, 0.0f, 0.0f, 1.0f,
