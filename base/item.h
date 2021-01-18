@@ -8,8 +8,8 @@
 #include <string>
 #include <sstream>
 
-#include "../physics/physicalObj.h"
-#include "../UI/abstractListElement.h"
+#include "../physics/physicalObj.hpp"
+#include "../UI/abstractListElement.hpp"
 
 class Actor;
 class Saver;

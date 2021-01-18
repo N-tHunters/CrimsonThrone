@@ -1,4 +1,4 @@
-#include "bar.h"
+#include "bar.hpp"
 
 Bar::Bar(glm::vec4 rect, int* value, int* maxValue, glm::vec3 color) : Frame(rect) {
 	this->value = value;

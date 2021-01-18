@@ -5,9 +5,9 @@
 #ifndef CHUNK_H
 #define CHUNK_H
 
-#include "../physics/terrain.h"
-#include "../physics/physicalObj.h"
-#include "../render/shaderHolder.h"
+#include "../physics/terrain.hpp"
+#include "../physics/physicalObj.hpp"
+#include "../render/shaderHolder.hpp"
 #include "boundarytrigger.h"
 #include "item.h"
 #include "actor.h"

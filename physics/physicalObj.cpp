@@ -1,5 +1,5 @@
-#include "physicalObj.h"
-#include "terrain.h"
+#include "physicalObj.hpp"
+#include "terrain.hpp"
 #include "../base/chunk.h"
 
 PhysicalObj::PhysicalObj() {}
@@ -7,8 +7,9 @@ PhysicalObj::PhysicalObj() {}
 PhysicalObj::PhysicalObj(glm::vec3 position, Boundary* boundary) {
 	this->lastHeight = 0.0f;
 	this->position = position;
-	velocity = glm::vec3(0.0f);
+	this->velocity = glm::vec3(0.0f);
 	this->acceleration = glm::vec3(0.0f);
+	this->force = glm::vec3(0.0f);
 	this->onGround = true;
 	this->mesh = nullptr;
 	this->isActive = true;
@@ -16,9 +17,10 @@ PhysicalObj::PhysicalObj(glm::vec3 position, Boundary* boundary) {
 	this->isTransparent = true;
 	this->isFlying = false;
 	this->boundary = boundary;
+	this->mass = 1.0f;
 }
 
-PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, bool isFlying, glm::vec3 position, glm::vec3 rotation, std::string name) {
+PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, bool isFlying, glm::vec3 position, glm::vec3 rotation, const std::string& name) {
 	this->lastHeight = 0.0f;
 	this->name = name;
 	this->mesh = mesh;
@@ -28,13 +30,15 @@ PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTrans
 	this->isVisible = isVisible;
 	this->isTransparent = isTransparent;
 	this->isFlying = isFlying;
-	velocity = glm::vec3(0.0f);
+	this->velocity = glm::vec3(0.0f);
 	this->acceleration = glm::vec3(0.0f);
+	this->force = glm::vec3(0.0f);
 	this->mesh->init(this);
 	this->onGround = true;
+	this->mass = 1.0f;
 }
 
-PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, bool isFlying, glm::vec3 position, glm::vec3 rotation, std::string name, Boundary* boundary) {
+PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, bool isFlying, glm::vec3 position, glm::vec3 rotation, const std::string& name, Boundary* boundary) {
 	this->lastHeight = 0.0f;
 	this->name = name;
 	this->mesh = mesh;
@@ -44,11 +48,13 @@ PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTrans
 	this->isVisible = isVisible;
 	this->isTransparent = isTransparent;
 	this->isFlying = isFlying;
-	velocity = glm::vec3(0.0f);
+	this->velocity = glm::vec3(0.0f);
 	this->acceleration = glm::vec3(0.0f);
+	this->force = glm::vec3(0.0f);
 	this->mesh->init(this);
 	this->onGround = true;
 	this->boundary = boundary;
+	this->mass = 1.0f;
 }
 
 void PhysicalObj::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height) {
@@ -58,8 +64,9 @@ void PhysicalObj::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width,
 }
 
 void PhysicalObj::update(float dt) {
-	this->position += velocity * dt;
-	velocity += this->acceleration * dt;
+	this->acceleration = this->force / this->mass;
+	this->velocity += this->acceleration * dt;
+	this->position += this->velocity * dt;
 }
 
 glm::vec3 PhysicalObj::getPosition() {
@@ -168,7 +175,7 @@ void PhysicalObj::jump(Chunk* chunk) {
 		for (int i = 0; i < chunk->GetObjsCount(); i++) {
 			if (this->boundary->Collide(chunk->GetObj(i)->boundary, this->getPosition() - glm::vec3(0.0f, 0.5f, 0.0f), this->getRotation(), chunk->GetObj(i)->getPosition(), chunk->GetObj(i)->getRotation())) {
 				t = true;
-				break; 
+				break;
 			}
 		}
 		if (this->detectCollision(chunk->GetTerrain()) > -1.0f) {
@@ -298,8 +305,8 @@ glm::vec3 PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 ve
 	}
 
 	if (result.x + result.y + result.z < 3.0f) {
-		this->velocity = (this->getPosition() - other_object->getPosition()) * 0.1f;
-		result = glm::vec3(1.0f, 1.0f, 1.0f);
+	  //		this->velocity = (this->getPosition() - other_object->getPosition()) * 0.1f;
+	  //	result = glm::vec3(1.0f, 1.0f, 1.0f);
 	}
 
 	return result;

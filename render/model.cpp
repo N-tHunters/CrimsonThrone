@@ -1,4 +1,4 @@
-#include "model.h"
+#include "model.hpp"
 
 Model::Model(char *path) {
 	this->loadModel(path);
@@ -23,17 +23,22 @@ void Model::loadModel(std::string path) {
 void Model::processNode(aiNode *node, const aiScene *scene)
 {
 	aiMesh *mesh = scene->mMeshes[0];
-	//std::vector<GLfloat> vertices;
-	//std::vector<unsigned int> indices;
 	bool isTexCoords = false;
-	if(mesh->mTextureCoords[0]) isTexCoords = true;
+
+	if(mesh->mTextureCoords[0]) {
+		isTexCoords = true;
+	}
+	
 	for(unsigned int i = 0; i < mesh->mNumVertices; i++) {
+		
 		this->vertices.push_back(mesh->mVertices[i].x);
 		this->vertices.push_back(mesh->mVertices[i].y);
 		this->vertices.push_back(mesh->mVertices[i].z);
+		
 		this->vertices.push_back(mesh->mNormals[i].x);
 		this->vertices.push_back(mesh->mNormals[i].y);
 		this->vertices.push_back(mesh->mNormals[i].z);
+
 		if(isTexCoords) {
 			this->vertices.push_back(mesh->mTextureCoords[0][i].x);
 			this->vertices.push_back(mesh->mTextureCoords[0][i].y);
@@ -46,6 +51,8 @@ void Model::processNode(aiNode *node, const aiScene *scene)
 	{
 		aiFace face = mesh->mFaces[i];
 		for(unsigned int j = 0; j < face.mNumIndices; j++)
+		{
 			this->indices.push_back(face.mIndices[j]);
+		}
 	}
 }

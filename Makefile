@@ -1,4 +1,4 @@
-CFLAGS := -std=c++17 -Werror -Isrc -Iinclude -s -m64 -O3 
+CFLAGS := -std=c++17 -Wall -Isrc -Iinclude -s -m64 -O3 
 CXFLAGS := -Iinclude
 TARGET := main
 

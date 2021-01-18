@@ -1,13 +1,13 @@
 #ifndef PHYSICALOBJ_H
 #define PHYSICALOBJ_H
 
-#include "../render/mesh.h"
-#include "boundary.h"
+#include "../render/mesh.hpp"
+#include "boundary.hpp"
 #include <glm/glm.hpp>
-#include "../render/camera.h"
-#include "../render/shaderLoader.h"
-#include "../render/shaderHolder.h"
-#include "../debug.h"
+#include "../render/camera.hpp"
+#include "../render/shaderLoader.hpp"
+#include "../render/shaderHolder.hpp"
+#include "../debug.hpp"
 //#include "terrain.h"
 
 class Chunk;
@@ -29,10 +29,12 @@ public:
 	std::string name;
 	glm::vec3 velocity;
 	glm::vec3 acceleration;
+	glm::vec3 force;
+	float mass;
 	PhysicalObj();
 	PhysicalObj(glm::vec3, Boundary*);
-	PhysicalObj(Mesh*, bool, bool, bool, bool, glm::vec3, glm::vec3, std::string);
-	PhysicalObj(Mesh*, bool, bool, bool, bool, glm::vec3, glm::vec3, std::string, Boundary*);
+	PhysicalObj(Mesh*, bool, bool, bool, bool, glm::vec3, glm::vec3, const std::string&);
+	PhysicalObj(Mesh*, bool, bool, bool, bool, glm::vec3, glm::vec3, const std::string&, Boundary*);
 
 
 	// Getters and setters for position and rotation

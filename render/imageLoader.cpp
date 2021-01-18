@@ -1,6 +1,6 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
-#include "imageLoader.h"
+#include "imageLoader.hpp"
 
 unsigned char* loadImage(std::string path, int* width, int* height) {
 	int channels;

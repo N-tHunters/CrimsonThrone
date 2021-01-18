@@ -9,7 +9,7 @@
 #include <sstream>
 #include <vector>
 
-#include "../physics/physicalObj.h"
+#include "../physics/physicalObj.hpp"
 
 class Item;
 class StackableItem;

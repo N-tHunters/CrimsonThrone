@@ -8,14 +8,14 @@
 #include <map>
 
 // Render includes
-#include "../render/shaderLoader.h"
-#include "../render/imageLoader.h"
-#include "../render/shaderHolder.h"
+#include "../render/shaderLoader.hpp"
+#include "../render/imageLoader.hpp"
+#include "../render/shaderHolder.hpp"
 
 // Base includes
 #include "../base/item.h"
 
-#include "character.h"
+#include "character.hpp"
 
 class Frame {
 
@@ -25,7 +25,7 @@ protected:
 	std::vector<unsigned int> indices;
 
 public:
-	Frame(glm::vec4);
+	explicit Frame(glm::vec4);
 	virtual void draw(ShaderHolder*);
 };
 

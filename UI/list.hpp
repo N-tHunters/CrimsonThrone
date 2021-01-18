@@ -1,9 +1,9 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include "frame.h"
-#include "column.h"
-#include "abstractListElement.h"
+#include "frame.hpp"
+#include "column.hpp"
+#include "abstractListElement.hpp"
 #include "../base/item.h"
 
 template <class Element>
@@ -19,13 +19,13 @@ public:
 		this->maxCount = maxCount;
 		this->index = 0;
 
-		for (int i = 0; i < headers->size(); i ++) {
+		for (size_t i = 0; i < headers->size(); i ++) {
 			this->columns.push_back(new Column<Element>(glm::vec4(rect.x + rect.z / (float)headers->size() * i,
 			                        rect.y, rect.z / (float)headers->size(), rect.w), list, texturePath, 10, Characters, headers->at(i)));
 		}
 
 	}
-	void draw(ShaderHolder* shaderHolder) {
+	void draw(ShaderHolder* shaderHolder) override {
 
 		for (int i = 0; i < this->columns.size(); i ++) {
 			this->columns.at(i)->draw(shaderHolder);
