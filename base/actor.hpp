@@ -98,10 +98,10 @@ public:
   void DealDamage(int);
   void Heal(int);
 
-  int GetInventorySize();
+  size_t GetInventorySize();
   std::vector<Item*>* GetInventoryPointer();
-  Item * GetItemAt(int);
-  void SetItemAt(int, Item *);
+  Item * GetItemAt(size_t);
+  void SetItemAt(size_t, Item *);
   int GetEmptyCell();
   bool PickupItem(Item *);
   void DeleteItem(Item *);
