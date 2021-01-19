@@ -15,7 +15,7 @@ Voice::Voice(SoundEngine * engine, ALuint * source, std::string voice_path) {
 
 
 void Voice::Say(std::string phrase) {
-  for(int i = 0; i < phrase.size(); i ++) {
+  for(size_t i = 0; i < phrase.size(); i ++) {
     if(phrase[i] == ' ') {
       sleep(0.5);
     } else 

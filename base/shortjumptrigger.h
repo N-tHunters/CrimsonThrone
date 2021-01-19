@@ -3,7 +3,7 @@
 
 #include "boundarytrigger.h"
 
-class ShortJumpTrigger : BoundaryTrigger{
+class ShortJumpTrigger : public BoundaryTrigger{
   glm::vec3 jump_position;
  public:
   ShortJumpTrigger(Boundary *, glm::vec3, glm::vec3);

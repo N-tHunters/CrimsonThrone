@@ -41,9 +41,9 @@ void init_translators() {
   }
 }
 
-std::string prog_to_pseudo(SYMBOL * prog, int len) {
+std::string prog_to_pseudo(SYMBOL * prog, size_t len) {
   std::string res = "";
-  for(int i = 0; i < len; i++) {
+  for(size_t i = 0; i < len; i++) {
     res += sym2pseudo[prog[i]];
   }
 
@@ -51,7 +51,7 @@ std::string prog_to_pseudo(SYMBOL * prog, int len) {
 }
 
 void pseudo_to_prog(std::string pseudo, SYMBOL * prog) {
-  for(int i = 0; i < pseudo.size(); i++) {
+  for(size_t i = 0; i < pseudo.size(); i++) {
     prog[i] = pseudo2sym[pseudo[i]];
   }
   prog[pseudo.size()] = HALT;
