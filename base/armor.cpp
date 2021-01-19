@@ -34,9 +34,7 @@ Armor::Armor() {}
  * Get defence
  * \return Amount of defence given by that piece of armor
  */
-int Armor::GetDefence() {
-  return this->defence;
-}
+int Armor::GetDefence() { return defence; }
 
 /**
  * Set defence
@@ -50,9 +48,7 @@ void Armor::SetDefence(int defence) {
  * Is this piece wearable? Should always return true for armor and it's child classes
  * \returns true
  */
-bool Armor::IsWearable() {
-  return true;
-}
+bool Armor::IsWearable() { return true; }
 
 /**
  * Convert to binary stream. Calls Item::Save(Saver *, int) and additionally stores amount of defence
@@ -71,6 +67,4 @@ std::stringstream * Armor::Save(Saver * saver, int entry) {
  * \param saver Serializer object
  * \return Binary stream representing this object
  */
-std::stringstream * Armor::Save(Saver * saver) {
-  return this->Save(saver, ENTRY_ARMOR);
-}
+std::stringstream * Armor::Save(Saver * saver) { return Save(saver, ENTRY_ARMOR); }

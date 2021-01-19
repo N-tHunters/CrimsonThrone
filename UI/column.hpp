@@ -123,7 +123,7 @@ public:
 		glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
-		for (int i = 0; i < this->column.size(); i ++) {
+		for (size_t i = 0; i < this->column.size(); i ++) {
 			this->column[i]->draw(shaderHolder);
 		}
 	}
