@@ -232,7 +232,6 @@ int main()
 	location->FillEmptyChunks();
 
 	SetCurrentLocation(location);
-
 	for (int i = 0; i < 15; i ++) {
 		for (int j = 0; j < 15; j++) {
 			location->GetCurrentChunk()->AddObj(new PhysicalObj(new Mesh("resources/textures/box.jpeg", new Model("resources/models/cube.obj")),
@@ -246,30 +245,9 @@ int main()
 			                                    new BoundaryBox(1.0f, 1.0f, 1.0f)));
 		}
 	}
-
-	// PhysicalObj* player_model = new PhysicalObj(new Mesh("resources/textures/wire.png", new Model((char*)"resources/models/cube.obj")),
-	//                                        true,
-	//                                        true,
-	//                                        false,
-	//                                        false,
-	//                                        glm::vec3(10.0f, 16.0f, 10.0f),
-	//                                        glm::vec3(0.0f, 0.0f, 0.0f),
-	//                                        "Test",
-	//                                        new BoundaryBox(1.0f, 1.0f, 1.0f));
-
 	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
 
 	std::vector<std::string> headers = {"name"};
-	PhysicalObj* light = new PhysicalObj(new Mesh("resources/textures/water.jpeg", new Model((char*)"resources/models/cube.obj")),
-	                                       true,
-	                                       true,
-	                                       false,
-	                                       false,
-	                                       glm::vec3(20.0f, 2.0f, 20.0f),
-	                                       glm::vec3(0.0f, 0.0f, 0.0f),
-	                                       "Test",
-	                                       new BoundaryBox(1.0f, 1.0f, 1.0f));
-
 
 	List<Item>* inventory = new List<Item>(glm::vec4(-0.9f, -0.9f, 0.7f, 1.0f), player->GetInventoryPointer(), std::string("resources/textures/list.png"), 10, Characters, &headers);
 
