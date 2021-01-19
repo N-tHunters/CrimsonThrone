@@ -125,13 +125,13 @@ Terrain * Chunk::GetTerrain() {
  */
 void Chunk::Draw(ShaderHolder * shaderHolder, Camera * camera, int width, int height) {
   this->terrain->draw(shaderHolder, camera, width, height);
-  for(int i = 0; i <  this->GetObjsCount(); i ++) {
+  for(size_t i = 0; i <  this->GetObjsCount(); i ++) {
     this->objects[i]->draw(shaderHolder, camera, width, height);
   }
-  for(int i = 0; i <  this->GetActorsCount(); i ++) {
+  for(size_t i = 0; i <  this->GetActorsCount(); i ++) {
     this->actors[i]->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
   }
-  for(int i = 0; i <  this->GetItemsCount(); i ++) {
+  for(size_t i = 0; i <  this->GetItemsCount(); i ++) {
     this->items[i]->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
   }
 }
@@ -146,7 +146,7 @@ void Chunk::DrawWater(ShaderHolder * shaderHolder, Camera * camera, int width, i
  * Get number of items in this chunk
  * \return Number of items
  */
-int Chunk::GetItemsCount() {
+size_t Chunk::GetItemsCount() {
   return this->items.size();
 }
 
@@ -154,7 +154,7 @@ int Chunk::GetItemsCount() {
  * Get number of actors in this chunk
  * \return Number of actors
  */
-int Chunk::GetActorsCount() {
+size_t Chunk::GetActorsCount() {
   return this->actors.size();
 }
 
@@ -162,7 +162,7 @@ int Chunk::GetActorsCount() {
  * Get number of objects in this chunk
  * \return Number of objects
  */
-int Chunk::GetObjsCount() {
+size_t Chunk::GetObjsCount() {
   return this->objects.size();
 }
 
@@ -170,7 +170,7 @@ int Chunk::GetObjsCount() {
  * Get number of triggers
  * \return Number of triggers
  */
-int Chunk::GetTriggersCount() {
+size_t Chunk::GetTriggersCount() {
   return this->triggers.size();
 }
 
@@ -211,7 +211,7 @@ void Chunk::AddTrigger(BoundaryTrigger * trigger) {
  * \param index Index of item to get
  * \return Pointer to item on this position
  */
-Item * Chunk::GetItem(int index) {
+Item * Chunk::GetItem(size_t index) {
   if (index < 0 || index >= this->GetItemsCount())
     return nullptr;
   return this->items[index];
@@ -222,7 +222,7 @@ Item * Chunk::GetItem(int index) {
  * \param index Index of actor to get
  * \return Pointer to actor on this position
  */
-Actor * Chunk::GetActor(int index) {
+Actor * Chunk::GetActor(size_t index) {
   if (index < 0 || index >= this->GetActorsCount())
     return nullptr;
   return this->actors[index];
@@ -233,7 +233,7 @@ Actor * Chunk::GetActor(int index) {
  * \param index Index of object to get
  * \return Pointer to object on this position
  */
-PhysicalObj * Chunk::GetObj(int index) {
+PhysicalObj * Chunk::GetObj(size_t index) {
   if (index < 0 || index >= this->GetObjsCount())
     return nullptr;
   return this->objects[index];
@@ -244,7 +244,7 @@ PhysicalObj * Chunk::GetObj(int index) {
  * \param index Index of trigger to get
  * \return Pointer to trigger
  */
-BoundaryTrigger * Chunk::GetTrigger(int index) {
+BoundaryTrigger * Chunk::GetTrigger(size_t index) {
   if (index < 0 || index >= this->GetTriggersCount())
     return nullptr;
   return this->triggers[index];
@@ -254,7 +254,7 @@ BoundaryTrigger * Chunk::GetTrigger(int index) {
  * Delete item from chunk by index
  * \param index Index of object to delete
  */
-void Chunk::DeleteItem(int index) {
+void Chunk::DeleteItem(size_t index) {
   if (index < 0 || index >= this->GetItemsCount())
     return;
   this->items.erase(this->items.begin() + index);
@@ -264,7 +264,7 @@ void Chunk::DeleteItem(int index) {
  * Delete actor from chunk by index
  * \param index Index of object to delete
  */
-void Chunk::DeleteActor(int index) {
+void Chunk::DeleteActor(size_t index) {
   if (index < 0 || index >= this->GetActorsCount())
     return;
   this->actors.erase(this->actors.begin() + index);
@@ -274,7 +274,7 @@ void Chunk::DeleteActor(int index) {
  * Delete object from chunk by index
  * \param index Index of object to delete
  */
-void Chunk::DeleteObj(int index) {
+void Chunk::DeleteObj(size_t index) {
   if (index < 0 || index >= this->GetObjsCount())
     return;
   this->objects.erase(this->objects.begin() + index);
@@ -284,7 +284,7 @@ void Chunk::DeleteObj(int index) {
  * Delete triggers from chunk by index
  * \param index Index of trigger to delete
  */
-void Chunk::DeleteTrigger(int index) {
+void Chunk::DeleteTrigger(size_t index) {
   if (index < 0 || index >= this->GetObjsCount())
     return;
   this->triggers.erase(this->triggers.begin() + index);
@@ -298,12 +298,12 @@ void Chunk::DeleteTrigger(int index) {
 void Chunk::CollideWithAll(PhysicalObj * obj, float dt) {
   glm::vec3 result(1.0f, 1.0f, 1.0f);
 
-  for(int object_i = 0; object_i < this->GetObjsCount(); object_i++) {
+  for(size_t object_i = 0; object_i < this->GetObjsCount(); object_i++) {
     if(this->GetObj(object_i) != obj)
       result *= obj->collide(this->GetObj(object_i), dt, obj->velocity);
   }
 		
-  for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
+  for(size_t actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
     if(this->GetActor(actor_i)->GetPhysicalObj() != obj)
       result *= obj->collide(this->GetActor(actor_i)->GetPhysicalObj(), dt, obj->velocity);
   }
@@ -315,37 +315,37 @@ void Chunk::CollideWithAll(PhysicalObj * obj, float dt) {
  * \param dt Time passed since last call
  */
 void Chunk::CollideAll(float dt) {
-  for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
+  for(size_t actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
     this->CollideWithAll(this->GetActor(actor_i)->GetPhysicalObj(), dt);
   }
 
-  for(int object_i = 0; object_i < this->GetObjsCount(); object_i++) {
+  for(size_t object_i = 0; object_i < this->GetObjsCount(); object_i++) {
     this->CollideWithAll(this->GetObj(object_i), dt);
   }
   
-  for(int item_i = 0; item_i < this->GetItemsCount(); item_i++) {
+  for(size_t item_i = 0; item_i < this->GetItemsCount(); item_i++) {
     this->CollideWithAll(this->GetItem(item_i)->GetPhysicalObj(), dt);
   }
 }
 
 
 void Chunk::CheckAllTriggers(PhysicalObj * obj) {
-  for(int trigger_i = 0; trigger_i < this->GetTriggersCount(); trigger_i++) {
-    if(obj->boundary->Collide(this->triggers[trigger_i]->GetBoundary(), obj->getPosition(), obj->getRotation(), this->triggers[trigger_i]->GetPosition(), glm::vec3(0.f, 0.f, 0.f)))
-      this->triggers[trigger_i]->Trig(obj);
+  for(BoundaryTrigger * trigger : triggers) {
+    if(obj->boundary->Collide(trigger->GetBoundary(), obj->getPosition(), obj->getRotation(), trigger->GetPosition(), glm::vec3(0.f, 0.f, 0.f)))
+      trigger->Trig(obj);
   }
 }
 
 void Chunk::TriggerAll() {
-  for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
+  for(size_t actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
     this->CheckAllTriggers(this->GetActor(actor_i)->GetPhysicalObj());
   }
 
-  for(int object_i = 0; object_i < this->GetObjsCount(); object_i++) {
+  for(size_t object_i = 0; object_i < this->GetObjsCount(); object_i++) {
     this->CheckAllTriggers(this->GetObj(object_i));
   }
   
-  for(int item_i = 0; item_i < this->GetItemsCount(); item_i++) {
+  for(size_t item_i = 0; item_i < this->GetItemsCount(); item_i++) {
     this->CheckAllTriggers(this->GetItem(item_i)->GetPhysicalObj());
   }
 }
@@ -359,27 +359,27 @@ void Chunk::Update(float dt) {
   this->CollideAll(dt);
   this->TriggerAll();
   
-  for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++)
+  for(size_t actor_i = 0; actor_i < this->GetActorsCount(); actor_i++)
     this->actors[actor_i]->GetPhysicalObj()->update(dt);
 
-  for(int object_i = 0; object_i < this->GetObjsCount(); object_i++)
+  for(size_t object_i = 0; object_i < this->GetObjsCount(); object_i++)
     this->objects[object_i]->update(dt);
   
-  for(int item_i = 0; item_i < this->GetItemsCount(); item_i++)
+  for(size_t item_i = 0; item_i < this->GetItemsCount(); item_i++)
     this->items[item_i]->GetPhysicalObj()->update(dt);
 
-  for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
+  for(size_t actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
     this->actors[actor_i]->
       GetPhysicalObj()->
       collideTerrain(this->terrain, dt);
   }
 
-  for(int object_i = 0; object_i < this->GetObjsCount(); object_i++) {
+  for(size_t object_i = 0; object_i < this->GetObjsCount(); object_i++) {
     this->objects[object_i]->
       collideTerrain(this->terrain, dt);
   }
   
-  for(int item_i = 0; item_i < this->GetItemsCount(); item_i++) {
+  for(size_t item_i = 0; item_i < this->GetItemsCount(); item_i++) {
     this->items[item_i]->
       GetPhysicalObj()->
       collideTerrain(this->terrain, dt);
