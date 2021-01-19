@@ -127,65 +127,49 @@ void Actor::SetHealth(int health) { this->health = health; }
  * Set maximum health to this actor
  * \param max_health New value of maximum health
  */
-void Actor::SetMaxHealth(int max_health) {
-  this->max_health = max_health;
-}
+void Actor::SetMaxHealth(int max_health) { this->max_health = max_health; }
 
 /**
  * Set weapon to use
  * \param weapon Pointer to new weapon to use
  */
-void Actor::SetWeapon(Weapon* weapon) {
-  this->weapon = weapon;
-}
+void Actor::SetWeapon(Weapon* weapon) { this->weapon = weapon; }
 
 /**
  * Set helmet to use
  * \param helmet Pointer to new helmet to use
  */
-void Actor::SetHelmet(Helmet* helmet) {
-  this->helmet = helmet;
-}
+void Actor::SetHelmet(Helmet* helmet) { this->helmet = helmet; }
 
 /**
  * Set boots to use
  * \param boots Pointer to new boots to use
  */
-void Actor::SetBoots(Boots* boots) {
-  this->boots = boots;
-}
+void Actor::SetBoots(Boots* boots) { this->boots = boots; }
 
 /**
  * Set gloves to use
  * \param gloves Pointer to new gloves to use
  */
-void Actor::SetGloves(Gloves* gloves) {
-  this->gloves = gloves;
-}
+void Actor::SetGloves(Gloves* gloves) { this->gloves = gloves; }
 
 /**
  * Set chestplate to use
  * \param chestplate Pointer to new gloves to use
  */
-void Actor::SetChestplate(Chestplate* chestplate) {
-  this->chestplate = chestplate;
-}
+void Actor::SetChestplate(Chestplate* chestplate) { this->chestplate = chestplate; }
 
 /**
  * Set leggins to use
  * \param leggins Pointer to new leggins to use
  */
-void Actor::SetLeggins(Leggins* leggins) {
-  this->leggins = leggins;
-}
+void Actor::SetLeggins(Leggins* leggins) { this->leggins = leggins; }
 
 /**
  * Set physical object
  * \param obj Pointer to new physical object
  */
-void Actor::SetPhysicalObj(PhysicalObj* obj) {
-  this->obj = obj;
-}
+void Actor::SetPhysicalObj(PhysicalObj* obj) { this->obj = obj; }
 
 /**
  * Wear weapon (Same as Set* functions)
@@ -339,9 +323,9 @@ bool Actor::PickupItem(Item * item) {
     }
   }
   int index = this->GetEmptyCell();
-  if (index < 0) {
+  if (index < 0)
     this->inventory.push_back(item);
-  } else 
+  else 
     this->SetItemAt(index, item);
   return true;
 }
