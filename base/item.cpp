@@ -4,10 +4,10 @@
  */
 #include <string>
 
-#include "item.h"
-#include "actor.h"
-#include "saver.h"
-#include "entries.h"
+#include "item.hpp"
+#include "actor.hpp"
+#include "saver.hpp"
+#include "entries.hpp"
 
 
 /**

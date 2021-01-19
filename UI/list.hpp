@@ -4,7 +4,7 @@
 #include "frame.hpp"
 #include "column.hpp"
 #include "abstractListElement.hpp"
-#include "../base/item.h"
+#include "../base/item.hpp"
 
 template <class Element>
 class List: public Frame {
@@ -27,7 +27,7 @@ public:
 	}
 	void draw(ShaderHolder* shaderHolder) override {
 
-		for (int i = 0; i < this->columns.size(); i ++) {
+		for (size_t i = 0; i < this->columns.size(); i ++) {
 			this->columns.at(i)->draw(shaderHolder);
 		}
 

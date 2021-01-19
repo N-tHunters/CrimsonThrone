@@ -8,9 +8,9 @@
 #include "../physics/terrain.hpp"
 #include "../physics/physicalObj.hpp"
 #include "../render/shaderHolder.hpp"
-#include "boundarytrigger.h"
-#include "item.h"
-#include "actor.h"
+#include "boundarytrigger.hpp"
+#include "item.hpp"
+#include "actor.hpp"
 #include <vector>
 
 /**

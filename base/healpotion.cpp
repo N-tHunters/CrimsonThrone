@@ -2,10 +2,10 @@
  * \file
  * \brief This file contains implementation of HealPotion
  */
-#include "healpotion.h"
-#include "stackableitem.h"
-#include "actor.h"
-#include "entries.h"
+#include "healpotion.hpp"
+#include "stackableitem.hpp"
+#include "actor.hpp"
+#include "entries.hpp"
 
 /**
  * Get amount of health points healed by this potion

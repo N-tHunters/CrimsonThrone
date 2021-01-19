@@ -2,9 +2,9 @@
  * \file
  * \brief This file contains implementaion of Gloves
  */
-#include "gloves.h"
-#include "actor.h"
-#include "entries.h"
+#include "gloves.hpp"
+#include "actor.hpp"
+#include "entries.hpp"
 
 /// Basic constructor inherited from Armor
 Gloves::Gloves(std::string name, PhysicalObj * obj, int defence) :

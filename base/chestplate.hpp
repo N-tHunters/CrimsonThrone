@@ -5,8 +5,8 @@
 #ifndef CHESTPLATE_H
 #define CHESTPLATE_H
 
-#include "armor.h"
-#include "saver.h"
+#include "armor.hpp"
+#include "saver.hpp"
 #include <sstream>
 
 class Actor;

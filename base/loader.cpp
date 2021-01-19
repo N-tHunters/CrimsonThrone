@@ -2,15 +2,15 @@
  * \file
  * \brief This file contains implementation of Loader
  */
-#include "loader.h"
-#include "weapon.h"
-#include "armor.h"
-#include "helmet.h"
-#include "chestplate.h"
-#include "entries.h"
-#include "gloves.h"
-#include "leggins.h"
-#include "boots.h"
+#include "loader.hpp"
+#include "weapon.hpp"
+#include "armor.hpp"
+#include "helmet.hpp"
+#include "chestplate.hpp"
+#include "entries.hpp"
+#include "gloves.hpp"
+#include "leggins.hpp"
+#include "boots.hpp"
 
 /**
  * Basic constructor

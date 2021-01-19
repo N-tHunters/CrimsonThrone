@@ -2,9 +2,9 @@
  * \file
  * \brief This file contains implementation of Weapon
  */
-#include "weapon.h"
-#include "entries.h"
-#include "saver.h"
+#include "weapon.hpp"
+#include "entries.hpp"
+#include "saver.hpp"
 
 /**
  * Basic constructor

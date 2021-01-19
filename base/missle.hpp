@@ -5,8 +5,8 @@
 #ifndef MISSLE_H
 #define MISSLE_H
 
-#include "stackableitem.h"
-#include "saver.h"
+#include "stackableitem.hpp"
+#include "saver.hpp"
 
 class Missle : public StackableItem {
 public:

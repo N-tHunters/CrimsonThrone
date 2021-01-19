@@ -2,9 +2,9 @@
  * \file
  * \brief This file contains implementation of Helmet
  */
-#include "helmet.h"
-#include "actor.h"
-#include "entries.h"
+#include "helmet.hpp"
+#include "actor.hpp"
+#include "entries.hpp"
 
 /**
  * Basic constructor implemented from Armor. Just the same.

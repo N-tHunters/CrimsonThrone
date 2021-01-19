@@ -1,7 +1,7 @@
 #ifndef SHORT_JUMP_TRIGGER
 #define SHORT_JUMP_TRIGGER
 
-#include "boundarytrigger.h"
+#include "boundarytrigger.hpp"
 
 class ShortJumpTrigger : public BoundaryTrigger{
   glm::vec3 jump_position;

@@ -1,6 +1,6 @@
 #include "abscore.h"
 #include "protocore.h"
-#include "../location.h"
+#include "../location.hpp"
 
 AbstractCore::AbstractCore() {
   for(int i = 0; i < 256; i++)

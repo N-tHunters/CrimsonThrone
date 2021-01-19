@@ -5,9 +5,9 @@
 #ifndef RANGEDWEAPON_H
 #define RANGEDWEAPON_H
 
-#include "weapon.h"
-#include "missle.h"
-#include "actor.h"
+#include "weapon.hpp"
+#include "missle.hpp"
+#include "actor.hpp"
 #include <sstream>
 
 /**

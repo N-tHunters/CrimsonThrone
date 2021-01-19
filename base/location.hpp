@@ -9,7 +9,7 @@
 #ifndef LOCATION_H
 #define LOCATION_H
 
-#include "chunk.h"
+#include "chunk.hpp"
 
 class Location {
  private:

@@ -2,9 +2,9 @@
  * \file
  * \brief This file contains implementation of Leggins
  */
-#include "leggins.h"
-#include "actor.h"
-#include "entries.h"
+#include "leggins.hpp"
+#include "actor.hpp"
+#include "entries.hpp"
 
 /**
  * Basic constructor implemented from Armor. Just the same.

@@ -1,4 +1,4 @@
-#include "boundarytrigger.h"
+#include "boundarytrigger.hpp"
 
 BoundaryTrigger::BoundaryTrigger(Boundary * boundary, glm::vec3 position) : Trigger() {
   this->boundary = boundary;

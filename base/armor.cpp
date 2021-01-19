@@ -2,9 +2,9 @@
  * \file
  * \brief This file contains implementation of Armor
  */
-#include "armor.h"
-#include "item.h"
-#include "entries.h"
+#include "armor.hpp"
+#include "item.hpp"
+#include "entries.hpp"
 #include <string>
 
 /**

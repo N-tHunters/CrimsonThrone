@@ -96,7 +96,7 @@ public:
 		// Creating header for this column
 
 		// Inserting valuse one by one
-		for (int i = 0; i < list->size(); i ++) {
+		for (size_t i = 0; i < list->size(); i ++) {
 			this->column.push_back(new Text(list->at(i)->getValues()->at(index),
 		                                	glm::vec4(rect.x, rect.y + rect.w / (float)maxCount * (i + 1), rect.z, rect.w / (float)maxCount),
 			                                Characters,

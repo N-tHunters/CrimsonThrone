@@ -4,16 +4,16 @@
  */
 #include <string>
 
-#include "actor.h"
-#include "weapon.h"
-#include "helmet.h"
-#include "boots.h"
-#include "chestplate.h"
-#include "leggins.h"
-#include "gloves.h"
-#include "item.h"
-#include "stackableitem.h"
-#include "saver.h"
+#include "actor.hpp"
+#include "weapon.hpp"
+#include "helmet.hpp"
+#include "boots.hpp"
+#include "chestplate.hpp"
+#include "leggins.hpp"
+#include "gloves.hpp"
+#include "item.hpp"
+#include "stackableitem.hpp"
+#include "saver.hpp"
 
 
 /**

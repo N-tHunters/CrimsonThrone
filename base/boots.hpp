@@ -5,8 +5,8 @@
 #ifndef BOOTS_H
 #define BOOTS_H
 
-#include "armor.h"
-#include "saver.h"
+#include "armor.hpp"
+#include "saver.hpp"
 #include <sstream>
 
 class Actor;

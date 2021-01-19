@@ -5,9 +5,9 @@
 #ifndef STACKABLEITEM_H
 #define STACKABLEITEM_H
 
-#include "item.h"
-#include "actor.h"
-#include "saver.h"
+#include "item.hpp"
+#include "actor.hpp"
+#include "saver.hpp"
 #include <sstream>
 
 /**

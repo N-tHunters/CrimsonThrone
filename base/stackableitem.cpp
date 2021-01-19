@@ -2,8 +2,8 @@
  * \file
  * \brief This file contains implementation of StackableItem
  */
-#include "stackableitem.h"
-#include "entries.h"
+#include "stackableitem.hpp"
+#include "entries.hpp"
 
 /**
  * Get amount of this item

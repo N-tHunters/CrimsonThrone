@@ -2,8 +2,8 @@
  * \file
  * \brief This file contains implementation of Missle
  */
-#include "missle.h"
-#include "entries.h"
+#include "missle.hpp"
+#include "entries.hpp"
 
 /**
  * Convert object to binary stream.

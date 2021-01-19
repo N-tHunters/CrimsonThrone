@@ -5,8 +5,8 @@
 #ifndef WEAPON_H
 #define WEAPON_H
 
-#include "item.h"
-#include "saver.h"
+#include "item.hpp"
+#include "saver.hpp"
 #include <sstream>
 
 /**

@@ -1,8 +1,8 @@
 #ifndef LONG_JUMP_TRIGGER_H
 #define LONG_JUMP_TRIGGER_H
 
-#include "shortjumptrigger.h"
-#include "location.h"
+#include "shortjumptrigger.hpp"
+#include "location.hpp"
 
 class LongJumpTrigger : public ShortJumpTrigger {
   Location * location;

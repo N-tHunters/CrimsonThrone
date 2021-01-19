@@ -3,7 +3,7 @@
 
 #include "../../physics/physicalObj.hpp"
 #include "../../render/model.hpp"
-#include "../location.h"
+#include "../location.hpp"
 
 class ProtoMagicCore;
 
