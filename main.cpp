@@ -317,7 +317,7 @@ int main()
 		glfwSwapBuffers(window);
 
 		player_core->Step();
-		chunk_ptr->Update(dt);
+		location->Update(dt);
 		current_frame = glfwGetTime();
 		dt = (current_frame - last_frame);
 		last_frame = current_frame;

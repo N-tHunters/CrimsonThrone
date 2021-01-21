@@ -38,25 +38,25 @@ class Chunk {
   void Draw(ShaderHolder *, Camera *, int, int);
   void DrawWater(ShaderHolder *, Camera *, int, int);
 
-  int GetItemsCount();
-  int GetActorsCount();
-  int GetObjsCount();
-  int GetTriggersCount();
+  size_t GetItemsCount();
+  size_t GetActorsCount();
+  size_t GetObjsCount();
+  size_t GetTriggersCount();
 
   void AddItem(Item *);
   void AddActor(Actor *);
   void AddObj(PhysicalObj *);
   void AddTrigger(BoundaryTrigger *);
 
-  Item * GetItem(int);
-  Actor * GetActor(int);
-  PhysicalObj * GetObj(int);
-  BoundaryTrigger * GetTrigger(int);
+  Item * GetItem(size_t);
+  Actor * GetActor(size_t);
+  PhysicalObj * GetObj(size_t);
+  BoundaryTrigger * GetTrigger(size_t);
 
-  void DeleteItem(int);
-  void DeleteActor(int);
-  void DeleteObj(int);
-  void DeleteTrigger(int);
+  void DeleteItem(size_t);
+  void DeleteActor(size_t);
+  void DeleteObj(size_t);
+  void DeleteTrigger(size_t);
 
   void CollideWithAll(PhysicalObj *, float, bool);
   void CollideAll(float);
