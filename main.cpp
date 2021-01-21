@@ -87,6 +87,7 @@ std::map<GLchar, Character> Characters;
 
 bool push = false;
 float push_m = 0.0f;
+void load_characters();
 
 int main()
 {
@@ -100,10 +101,7 @@ int main()
 	init_protocores();
 
 	double xpos, ypos;
-	double lastXPos, lastYPos;
 	float sensivity = 0.1f;
-	lastXPos = 0.0;
-	lastYPos = 0.0;
 	srand(time(0));
 
 	// Check openAL
@@ -164,59 +162,11 @@ int main()
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	FT_Library ft;
-	if (FT_Init_FreeType(&ft))
-		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
-	FT_Face face;
-	if (FT_New_Face(ft, "resources/fonts/hamburger.ttf", 0, &face))
-		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+	// LOADING SCREEN
 
+	glClearColor(0.5f, 0.0f, 0.7f, 1.0f);	
 
-	FT_Set_Pixel_Sizes(face, 0, 48);
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
-
-	for (GLubyte c = 0; c < 128; c++)
-	{
-		// Load character glyph
-		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
-		{
-			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
-			continue;
-		}
-		// Generate texture
-		GLuint texture;
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glTexImage2D(
-		    GL_TEXTURE_2D,
-		    0,
-		    GL_RED,
-		    face->glyph->bitmap.width,
-		    face->glyph->bitmap.rows,
-		    0,
-		    GL_RED,
-		    GL_UNSIGNED_BYTE,
-		    face->glyph->bitmap.buffer
-		);
-		// Set texture options
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		// Now store character for later use
-		Character character = {
-			texture,
-			glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-			(GLuint)face->glyph->advance.x
-		};
-		Characters.insert(std::pair<GLchar, Character>(c, character));
-		// Characters[c] = character;
-	}
-
-	FT_Done_Face(face);   // Завершение работы с шрифтом face
-	FT_Done_FreeType(ft); // Завершение работы FreeType
+	load_characters();
 
 	// Build and compile our shader program
 	Shader ourShader("resources/shaders/vertex_shader.glsl", "resources/shaders/fragment_shader.glsl");
@@ -224,27 +174,29 @@ int main()
 	Shader textShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/text_fragment_shader.glsl");
 	Shader waterShader("resources/shaders/water_vertex_shader.glsl", "resources/shaders/water_fragment_shader.glsl");
 
-	ShaderHolder shaderHolder(&ourShader, &GUIShader, &textShader, &waterShader);
+	ShaderHolder* shaderHolder = new ShaderHolder(&ourShader, &GUIShader, &textShader, &waterShader);
 
 	// ----------------------------------------------- CODE ------------------------------------------
-	location = new Location(2, 2, 30, 30);
+	location = new Location(10, 10, 30, 30);
 
 	location->FillEmptyChunks();
 
 	SetCurrentLocation(location);
-	for (int i = 0; i < 15; i ++) {
-		for (int j = 0; j < 15; j++) {
+
+	/*for (int i = 0; i < 2; i ++) {
+		for (int j = 0; j < 2; j++) {
 			location->GetCurrentChunk()->AddObj(new PhysicalObj(new Mesh("resources/textures/box.jpeg", new Model("resources/models/cube.obj")),
 			                                    true,
 			                                    true,
 			                                    false,
 			                                    false,
-			                                    glm::vec3(.5f + i * 2.001f, (rand() % 100) * 2.001f, .5f + j * 2.001f),
+			                                    glm::vec3(.5f + i * 2.001f + rand() % 10, (rand() % 100) * 2.001f, .5f + j * 2.001f + rand() % 10),
 			                                    glm::vec3(0.f, 0.f, 0.f),
 			                                    "Test",
 			                                    new BoundaryBox(1.0f, 1.0f, 1.0f)));
 		}
-	}
+	}*/
+
 	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
 
 	std::vector<std::string> headers = {"name"};
@@ -268,8 +220,8 @@ int main()
 		// player_model->setPosition(player->GetPhysicalObj()->getPosition());
 		float dt;
 		float current_frame;
-		lastXPos = xpos;
-		lastYPos = ypos;
+		float lastXPos = xpos;
+		float lastYPos = ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 		glm::vec2 cursorMotion = glm::vec2(lastXPos - xpos, lastYPos - ypos);
 		if (cursorMotion.x != 0 || cursorMotion.y != 0) {
@@ -294,7 +246,7 @@ int main()
 		glfwPollEvents();
 
 		// Clear the color buffer
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(0.5f, 0.7f, 0.7f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		location->UpdatePosition(player->GetPhysicalObj()->getPosition());
@@ -303,16 +255,28 @@ int main()
 		if (chunk_ptr == nullptr)
 			chunk_ptr = location->GetChunkByPosition(0, 0);
 
+		if (chunk_ptr->IsWaterPresent()) {
+			if (chunk_ptr->GetWaterHeight() > player->GetPhysicalObj()->getPositionY() + 3.0f) {
+				shaderHolder->setUnderWater(true);
+				player->GetPhysicalObj()->velocity.y += 0.1f;
+			} else {
+				if (chunk_ptr->GetWaterHeight() > player->GetPhysicalObj()->getPositionY() + 1.0f) {
+					player->GetPhysicalObj()->velocity.y += 0.1f;
+				}
+				shaderHolder->setUnderWater(false);
+			}
+		} else {
+			shaderHolder->setUnderWater(false);
+		}
+
 		if (player_wants_to_jump) {
 			player->GetPhysicalObj()->jump(chunk_ptr);
 		}
 
 		player->GetPhysicalObj()->setSpeed(speed + speedSide);
-		// player->GetPhysicalObj()->velocity += (glm::vec3((speed + speedSide).x, player->GetPhysicalObj()->velocity.y, (speed + speedSide).y) - player->GetPhysicalObj()->velocity) * 0.2f;
-
 
 		/* Collide player with all objects in chunk */
-		player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt);
+		player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
 
 		if (push) {
 			for (int i = 0; i < chunk_ptr->GetObjsCount(); i ++) {
@@ -320,25 +284,32 @@ int main()
 			}
 		}
 
-		chunk_ptr->CollideWithAll(player->GetPhysicalObj(), dt);
+		chunk_ptr->CollideWithAll(player->GetPhysicalObj(), dt, true);
 
 		chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
 		player->Update(dt);
 
-		for(int i = 0; i < chunk_ptr->GetObjsCount(); i ++) {
-		  chunk_ptr->GetObj(i)->velocity.y = 0;
-		    if(rand() % 100 < 2)
-		      chunk_ptr->GetObj(i)->velocity = glm::vec3(rand() % 3 - 1.f, 0, rand() % 3 - 1.f);
-		}
+		/*for (int i = 0; i < chunk_ptr->GetObjsCount(); i ++) {
+			chunk_ptr->GetObj(i)->velocity.y = 0;
+			if (rand() % 100 < 2)
+			{
+				chunk_ptr->GetObj(i)->velocity.x = rand() % 3 - 1.f;
+				chunk_ptr->GetObj(i)->velocity.z = rand() % 3 - 1.f;
+			}
+		}*/
 
-		location->Draw(&shaderHolder, camera, width, height);
+		location->Draw(shaderHolder, camera, width, height);
 		// player_model->draw(&shaderHolder, camera, width, height);
 		// light->draw(&shaderHolder, camera, width, height);
 
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		test_frame.draw(&shaderHolder);
-		inventory->draw(&shaderHolder);
-		fps_counter->draw(&shaderHolder);
+		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		test_frame.draw(shaderHolder);
+		inventory->draw(shaderHolder);
+		fps_counter->draw(shaderHolder);
+
+		if (shaderHolder->getUnderWater()) {
+			glClearColor(0.0f, 0.0f, 0.0f, 0.1f);
+		}
 
 		glFinish();
 
@@ -435,4 +406,60 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 		player_core->LoadProgram(prog, pseudo.length() + 1);
 	}
+}
+
+void load_characters() {
+	FT_Library ft;
+	if (FT_Init_FreeType(&ft))
+		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
+	FT_Face face;
+	if (FT_New_Face(ft, "resources/fonts/hamburger.ttf", 0, &face))
+		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
+
+
+	FT_Set_Pixel_Sizes(face, 0, 48);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
+
+	for (GLubyte c = 0; c < 128; c++)
+	{
+		// Load character glyph
+		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+		{
+			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+			continue;
+		}
+		// Generate texture
+		GLuint texture;
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexImage2D(
+		    GL_TEXTURE_2D,
+		    0,
+		    GL_RED,
+		    face->glyph->bitmap.width,
+		    face->glyph->bitmap.rows,
+		    0,
+		    GL_RED,
+		    GL_UNSIGNED_BYTE,
+		    face->glyph->bitmap.buffer
+		);
+		// Set texture options
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		// Now store character for later use
+		Character character = {
+			texture,
+			glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
+			(GLuint)face->glyph->advance.x
+		};
+		Characters.insert(std::pair<GLchar, Character>(c, character));
+		// Characters[c] = character;
+	}
+
+	FT_Done_Face(face);   // Завершение работы с шрифтом face
+	FT_Done_FreeType(ft); // Завершение работы FreeType
 }

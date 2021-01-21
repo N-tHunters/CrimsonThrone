@@ -78,11 +78,12 @@ public:
 	void setOnGround(bool);
 	bool getOnGround();
 	float detectCollision(Terrain* terrain);
-	void collideTerrain(Terrain*, float);
+	void collideTerrain(Terrain*, float, Chunk*);
+	Mesh* getMesh();
 
 	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
 
-	glm::vec3 collide(PhysicalObj*, float, glm::vec3);
+	void collide(PhysicalObj*, float, glm::vec3, bool);
 };
 
 #endif

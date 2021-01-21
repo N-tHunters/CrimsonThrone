@@ -1,7 +1,7 @@
 #version 330 core
 in vec2 TexCoord;
-in float shading;
-in float specular;
+in vec3 diffuse;
+in vec3 specular;
 //in float visibility;
 
 out vec4 color;
@@ -11,9 +11,7 @@ uniform vec3 skyColor;
 
 void main()
 {
-    //color = texture(Texture, TexCoord);
-    color = mix(vec4(vec3(0.0), 1.0), texture(Texture, TexCoord), specular + shading);
-    // color = texture(Texture, TexCoord) * (shading);
-    color.a = 0.6;
-    //color = mix(vec4(skyColor, 1.0), color, visibility);
+    // color = mix(vec4(vec3(0.0), 1.0), texture(Texture, TexCoord), specular + shading);
+    vec4 objectColor = texture(Texture, TexCoord);
+    color = vec4(objectColor.rgb * (diffuse + vec3(0.5) + specular), 0.9);
 }

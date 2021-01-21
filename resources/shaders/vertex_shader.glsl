@@ -4,7 +4,8 @@ layout (location = 1) in vec3 normal;
 layout (location = 2) in vec2 texCoord;
 
 out vec2 TexCoord;
-out float shading;
+out vec3 diffuse;
+out float underWater2;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -12,19 +13,24 @@ uniform mat4 projection;
 uniform mat4 cameraRot;
 uniform vec3 lightPos;
 uniform vec3 objectPos;
+uniform vec3 cameraPos;
+uniform float underWater;
 
 void main()
 {
-	vec3 lightVec = lightPos - position - objectPos;
-    lightVec *= -1.0;
-	float lightVecL = sqrt(lightVec.x * lightVec.x + lightVec.y * lightVec.y + lightVec.z * lightVec.z);
-	lightVec /= lightVecL;
+	// vec3 lightVec = lightPos - position - objectPos;
+
+	vec3 norm = normalize(normal);
+	vec3 lightDir = lightPos - position - objectPos;
+	float lightVecL = length(lightDir);
+	lightDir = normalize(lightDir);
 
     gl_Position = projection * cameraRot * view * model * vec4(position, 1.0f);
 
-    shading = (lightVec.x * normal.x + lightVec.y * normal.y + lightVec.z * lightVec.z) + 3.0;
-    shading = (6.0 - shading) / 3.0;
-    shading -= lightVecL / 100.0;
+    float diff = max(dot(norm, lightDir), 0.0);
+   	diffuse = vec3(min(diff / lightVecL * 100.0, 1.0));
+
+   	underWater2 = underWater;
 
     TexCoord = vec2(texCoord.x, 1.0 - texCoord.y);
 }

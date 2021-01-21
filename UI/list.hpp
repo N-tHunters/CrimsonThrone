@@ -27,7 +27,7 @@ public:
 	}
 	void draw(ShaderHolder* shaderHolder) override {
 
-		for (int i = 0; i < this->columns.size(); i ++) {
+		for (size_t i = 0; i < this->columns.size(); i ++) {
 			this->columns.at(i)->draw(shaderHolder);
 		}
 

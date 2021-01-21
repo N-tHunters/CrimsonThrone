@@ -36,10 +36,10 @@ void Location::FillEmptyChunks() {
   for(int i = 0; i < this->height; i++) {
     for(int j = 0; j < this->width; j++) {
       if(this->chunks[i][j] == nullptr) {
-	this->chunks[i][j] = new Chunk(new Terrain(this->chunk_width, 11, glm::vec3(this->chunk_width * i,
+	this->chunks[i][j] = new Chunk(new Terrain(this->chunk_width, 40, glm::vec3(this->chunk_width * i,
 										    -1.0f,
 										    this->chunk_height * j)),
-                        1.0f);
+                        4.0f);
       }
     }
   }
@@ -104,10 +104,10 @@ void Location::UpdatePosition(glm::vec3 pos) {
  * \param screen_height Height of screen
  */
 void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_width, int screen_height) {
-  int lx = max(this->current_x - 2, 0); // Most left row
-  int uy = max(this->current_y - 2, 0); // Most up column
-  int rx = min(this->current_x + 2, this->width - 1); // Most right row
-  int dy = min(this->current_y + 2, this->height - 1); // Most down column
+  int lx = max(this->current_x - 3, 0); // Most left row
+  int uy = max(this->current_y - 3, 0); // Most up column
+  int rx = min(this->current_x + 3, this->width - 1); // Most right row
+  int dy = min(this->current_y + 3, this->height - 1); // Most down column
 
   
   for(int ix = lx; ix <= rx; ix++) {
