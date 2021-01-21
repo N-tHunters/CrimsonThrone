@@ -1,4 +1,4 @@
-#include "shortjumptrigger.h"
+#include "shortjumptrigger.hpp"
 
 ShortJumpTrigger::ShortJumpTrigger(Boundary * boundary, glm::vec3 position, glm::vec3 jump_position) : BoundaryTrigger(boundary, position) {
   this->jump_position = jump_position;

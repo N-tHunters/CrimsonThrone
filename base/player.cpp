@@ -2,7 +2,7 @@
  * \file
  * \brief This file contains implementation of Player
  */
-#include "player.h"
+#include "player.hpp"
 
 /**
  * Empty constructor - calls Actor::Actor()

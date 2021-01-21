@@ -5,7 +5,7 @@
 #ifndef OPTIONS_H
 #define OPTIONS_H
 
-#include "log.h"
+#include "log.hpp"
 
 // !!!! RECOMPILE after changing !!!
 

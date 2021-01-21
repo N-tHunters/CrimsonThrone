@@ -2,9 +2,9 @@
  * \file
  * \brief This file contains implementation of Boots
  */
-#include "boots.h"
-#include "actor.h"
-#include "entries.h"
+#include "boots.hpp"
+#include "actor.hpp"
+#include "entries.hpp"
 
 
 /**

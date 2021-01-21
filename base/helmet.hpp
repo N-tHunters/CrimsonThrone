@@ -5,8 +5,8 @@
 #ifndef HELMET_H
 #define HELMET_H
 
-#include "armor.h"
-#include "saver.h"
+#include "armor.hpp"
+#include "saver.hpp"
 #include <string>
 #include <sstream>
 

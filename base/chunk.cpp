@@ -2,7 +2,7 @@
  * \file
  * \brief This file contains implementation of Chunk
  */
-#include "chunk.h"
+#include "chunk.hpp"
 
 /// Maximum velocity
 #define VCAP 0.1f

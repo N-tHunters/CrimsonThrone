@@ -2,9 +2,9 @@
  * \file
  * \brief This file contains implementation for Chestplate
  */
-#include "chestplate.h"
-#include "actor.h"
-#include "entries.h"
+#include "chestplate.hpp"
+#include "actor.hpp"
+#include "entries.hpp"
 
 /**
  * Basic constructor implemented from Armor. Just the same.

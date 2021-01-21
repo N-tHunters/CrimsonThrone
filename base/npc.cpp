@@ -2,7 +2,7 @@
  * \file
  * \brief This file contains implementation of NPC
  */
-#include "npc.h"
+#include "npc.hpp"
 
 /**
  * Empty constructor

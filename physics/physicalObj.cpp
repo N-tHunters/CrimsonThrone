@@ -1,6 +1,6 @@
 #include "physicalObj.hpp"
 #include "terrain.hpp"
-#include "../base/chunk.h"
+#include "../base/chunk.hpp"
 
 PhysicalObj::PhysicalObj() {}
 
@@ -58,9 +58,7 @@ PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTrans
 }
 
 void PhysicalObj::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height) {
-	if (this->isVisible) {
-		this->mesh->draw(shaderHolder, camera, width, height);
-	}
+	if (this->isVisible) this->mesh->draw(shaderHolder, camera, width, height);
 }
 
 void PhysicalObj::update(float dt) {
@@ -70,105 +68,55 @@ void PhysicalObj::update(float dt) {
 	this->force = glm::vec3(0.0f);
 }
 
-glm::vec3 PhysicalObj::getPosition() {
-	return this->position;
-}
+glm::vec3 PhysicalObj::getPosition() { return position; }
 
-float PhysicalObj::getPositionX() {
-	return this->position.x;
-}
+float PhysicalObj::getPositionX() { return position.x; }
 
-float PhysicalObj::getPositionY() {
-	return this->position.y;
-}
+float PhysicalObj::getPositionY() { return position.y; }
 
-float PhysicalObj::getPositionZ() {
-	return this->position.z;
-}
+float PhysicalObj::getPositionZ() { return position.z; }
 
-glm::vec3 PhysicalObj::getRotation() {
-	return this->rotation;
-}
+glm::vec3 PhysicalObj::getRotation() { return rotation; }
 
-float PhysicalObj::getRotationX() {
-	return this->rotation.x;
-}
+float PhysicalObj::getRotationX() { return rotation.x; }
 
-float PhysicalObj::getRotationY() {
-	return this->rotation.y;
-}
+float PhysicalObj::getRotationY() { return rotation.y; }
 
-float PhysicalObj::getRotationZ() {
-	return this->rotation.z;
-}
+float PhysicalObj::getRotationZ() { return rotation.z; }
 
-void PhysicalObj::setPosition(glm::vec3 position) {
-	this->position = position;
-}
+void PhysicalObj::setPosition(glm::vec3 position) { this->position = position; }
 
-void PhysicalObj::setPositionX(float value) {
-	this->position.x = value;
-}
+void PhysicalObj::setPositionX(float value) { position.x = value; }
 
-void PhysicalObj::setPositionY(float value) {
-	this->position.y = value;
-}
+void PhysicalObj::setPositionY(float value) { position.y = value; }
 
-void PhysicalObj::setPositionZ(float value) {
-	this->position.z = value;
-}
+void PhysicalObj::setPositionZ(float value) { position.z = value; }
 
-void PhysicalObj::setRotation(glm::vec3 rotation) {
-	this->rotation = rotation;
-}
+void PhysicalObj::setRotation(glm::vec3 rotation) { this->rotation = rotation; }
 
-void PhysicalObj::setRotationX(float value) {
-	this->rotation.x = value;
-}
+void PhysicalObj::setRotationX(float value) { rotation.x = value; }
 
-void PhysicalObj::setRotationY(float value) {
-	this->rotation.y = value;
-}
+void PhysicalObj::setRotationY(float value) { rotation.y = value; }
 
-void PhysicalObj::setRotationZ(float value) {
-	this->rotation.z = value;
-}
+void PhysicalObj::setRotationZ(float value) { rotation.z = value; }
 
-void PhysicalObj::changePosition(glm::vec3 delta) {
-	this->position += delta;
-}
+void PhysicalObj::changePosition(glm::vec3 delta) { position += delta; }
 
-void PhysicalObj::changePositionX(float delta) {
-	this->position.x += delta;
-}
+void PhysicalObj::changePositionX(float delta) { position.x += delta; }
 
-void PhysicalObj::changePositionY(float delta) {
-	this->position.y += delta;
-}
+void PhysicalObj::changePositionY(float delta) { position.y += delta; }
 
-void PhysicalObj::changePositionZ(float delta) {
-	this->position.z += delta;
-}
+void PhysicalObj::changePositionZ(float delta) { position.z += delta; }
 
-void PhysicalObj::changeRotation(glm::vec3 delta) {
-	this->rotation += delta;
-}
+void PhysicalObj::changeRotation(glm::vec3 delta) { rotation += delta; }
 
-void PhysicalObj::changeRotationX(float delta) {
-	this->rotation.x += delta;
-}
+void PhysicalObj::changeRotationX(float delta) { rotation.x += delta; }
 
-void PhysicalObj::changeRotationY(float delta) {
-	this->rotation.y += delta;
-}
+void PhysicalObj::changeRotationY(float delta) { rotation.y += delta; }
 
-void PhysicalObj::changeRotationZ(float delta) {
-	this->rotation.z += delta;
-}
+void PhysicalObj::changeRotationZ(float delta) { rotation.z += delta; }
 
-string PhysicalObj::getName() {
-	return this->name;
-}
+string PhysicalObj::getName() { return name; }
 
 void PhysicalObj::jump(Chunk* chunk) {
 	if (abs(velocity.y) < 1.0f) {
@@ -179,34 +127,24 @@ void PhysicalObj::jump(Chunk* chunk) {
 				break;
 			}
 		}
-		if (this->detectCollision(chunk->GetTerrain()) > -1.0f) {
-			t = true;
-		}
-		if (t) {
-			velocity.y = 10.0f;
-		}
+		if (this->detectCollision(chunk->GetTerrain()) > -1.0f) t = true;
+		if (t) velocity.y = 10.0f;
 	}
 }
 
-void PhysicalObj::setOnGround(bool value) {
-	this->onGround = value;
-}
+void PhysicalObj::setOnGround(bool value) { onGround = value; }
 
-bool PhysicalObj::getOnGround() {
-	return this->onGround;
-}
+bool PhysicalObj::getOnGround() { return onGround; }
 
 void PhysicalObj::setSpeed(glm::vec2 speed) {
 	velocity.x = speed.x;
 	velocity.z = speed.y;
 }
 
-void PhysicalObj::setSpeed(glm::vec3 speed) {
-	velocity = speed;
-}
+void PhysicalObj::setSpeed(glm::vec3 speed) { velocity = speed; }
 
 float PhysicalObj::detectCollision(Terrain* terrain) {
-	return terrain->getHeight(this->getPosition()) - this->getPositionY();
+	return terrain->getHeight(getPosition()) - getPositionY();
 }
 
 void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
@@ -215,7 +153,7 @@ void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
 		this->setPositionY(terrain->getHeight(this->getPosition()));
 		this->force.y = 0.0f;
 		velocity.y = 0.0f;
-		this->setOnGround(true);
+		setOnGround(true);
 	} else if (height > -0.1f) {
 		this->setOnGround(true);
 		this->force.y = 0.0f;

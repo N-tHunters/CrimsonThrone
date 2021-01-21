@@ -5,7 +5,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "actor.h"
+#include "actor.hpp"
 #include "../render/camera.hpp"
 
 /**

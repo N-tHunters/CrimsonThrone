@@ -6,7 +6,7 @@
 #ifndef NPC_H
 #define NPC_H
 
-#include "actor.h"
+#include "actor.hpp"
 
 /**
  * \brief NPC represents non-playable character (Characters created to interact with player, making the game more 'live')

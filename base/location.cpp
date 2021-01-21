@@ -2,7 +2,7 @@
  * \file
  * \brief This file contains implementation of Location and its helper functions
  */
-#include "location.h"
+#include "location.hpp"
 
 /**
  * Default constructor

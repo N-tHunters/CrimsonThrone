@@ -2,9 +2,9 @@
  * \file
  * \brief This file contains implementation of logging - not currently used
  */
-#include "log.h"
+#include "log.hpp"
 
-#include "options.h"
+#include "options.hpp"
 
 /**
  * Log message with facility

@@ -5,9 +5,9 @@
 #ifndef HEALPOTION_H
 #define HEALPOTION_H
 
-#include "stackableitem.h"
-#include "actor.h"
-#include "saver.h"
+#include "stackableitem.hpp"
+#include "actor.hpp"
+#include "saver.hpp"
 #include <sstream>
 
 /**

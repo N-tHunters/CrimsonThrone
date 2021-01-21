@@ -2,10 +2,10 @@
  * \file
  * \brief This file contains implementation of RangedWeapon
  */
-#include "rangedweapon.h"
-#include "actor.h"
-#include "missle.h"
-#include "entries.h"
+#include "rangedweapon.hpp"
+#include "actor.hpp"
+#include "missle.hpp"
+#include "entries.hpp"
 
 /**
  * Get missle used by this weapon
