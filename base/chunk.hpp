@@ -58,7 +58,7 @@ class Chunk {
   void DeleteObj(int);
   void DeleteTrigger(int);
 
-  void CollideWithAll(PhysicalObj *, float);
+  void CollideWithAll(PhysicalObj *, float, bool);
   void CollideAll(float);
   void Update(float);
 

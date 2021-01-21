@@ -62,9 +62,10 @@ void PhysicalObj::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width,
 }
 
 void PhysicalObj::update(float dt) {
-	acceleration = force / mass;
-	velocity += acceleration * dt;
-	position += velocity * dt;
+	this->acceleration = this->force / this->mass;
+	this->velocity += this->acceleration * dt;
+	this->position += this->velocity * dt;
+	this->force = glm::vec3(0.0f);
 }
 
 glm::vec3 PhysicalObj::getPosition() { return position; }
@@ -146,23 +147,35 @@ float PhysicalObj::detectCollision(Terrain* terrain) {
 	return terrain->getHeight(getPosition()) - getPositionY();
 }
 
-void PhysicalObj::collideTerrain(Terrain* terrain, float dt) {
-	float height = detectCollision(terrain);
+void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
+	float height = this->detectCollision(terrain);
 	if (height > 0) {
-		setPositionY(terrain->getHeight(getPosition()));
-		acceleration.y = 0.0f;
+		this->setPositionY(terrain->getHeight(this->getPosition()));
+		this->force.y = 0.0f;
 		velocity.y = 0.0f;
 		setOnGround(true);
 	} else if (height > -0.1f) {
-		setOnGround(true);
-		acceleration.y = 0.0f;
+		this->setOnGround(true);
+		this->force.y = 0.0f;
 	} else {
-		setOnGround(false);
-		acceleration.y = -G;
+		bool t = false;
+		for (int i = 0; i < chunk_ptr->GetObjsCount(); i++) {
+			if (this == chunk_ptr->GetObj(i)) {
+				continue;
+			}
+			if (this->boundary->Collide(chunk_ptr->GetObj(i)->boundary, this->getPosition() - glm::vec3(0.0f, 0.5f, 0.0f), this->getRotation(), chunk_ptr->GetObj(i)->getPosition(), chunk_ptr->GetObj(i)->getRotation())) {
+				t = true;
+				break;
+			}
+		}
+		if (!t) {
+			this->setOnGround(false);
+			this->force.y = -G * this->mass;
+		}
 	}
 }
 
-glm::vec3 PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocity) {
+void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocity, bool isPlayer) {
 	glm::vec3 this_velocity_x = glm::vec3(velocity.x * dt, 0.0f, 0.0f);
 	glm::vec3 this_velocity_y = glm::vec3(0.0f, velocity.y * dt, 0.0f);
 	glm::vec3 this_velocity_z = glm::vec3(0.0f, 0.0f, velocity.z * dt);
@@ -171,21 +184,43 @@ glm::vec3 PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 ve
 	glm::vec3 other_velocity_y = glm::vec3(0.0f, other_object->velocity.y * dt, 0.0f);
 	glm::vec3 other_velocity_z = glm::vec3(0.0f, 0.0f, other_object->velocity.z * dt);
 
-	glm::vec3 result = glm::vec3(1.0f, 1.0f, 1.0f);
+	// glm::vec3 result = glm::vec3(1.0f, 1.0f, 1.0f);
 
-	if (boundary->Collide(other_object->boundary, getPosition() + this_velocity_x, getRotation(), other_object->getPosition() + other_velocity_x, other_object->getRotation()))
-		result.x = 0.0f;
+	bool collided = false;
 
-	if (boundary->Collide(other_object->boundary, getPosition() + this_velocity_y, getRotation(), other_object->getPosition() + other_velocity_y, other_object->getRotation()))
-		result.y = 0.0f;
-
-	if (boundary->Collide(other_object->boundary, getPosition() + this_velocity_z, getRotation(), other_object->getPosition() + other_velocity_z, other_object->getRotation()))
-		result.z = 0.0f;
-
-	if (result.x + result.y + result.z < 3.0f) {
-	  //		this->velocity = (this->getPosition() - other_object->getPosition()) * 0.1f;
-	  //	result = glm::vec3(1.0f, 1.0f, 1.0f);
+	if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_x, this->getRotation(), other_object->getPosition() + other_velocity_x, other_object->getRotation())) {
+		this->velocity.x = 0.0f;
+		this->force.x = 0.0f;
+		collided = true;
 	}
 
-	return result;
+	if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_y, this->getRotation(), other_object->getPosition() + other_velocity_y, other_object->getRotation())) {
+		this->velocity.y = 0.0f;
+		this->force.y = 0.0f;
+		collided = true;
+	}
+
+	if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_z, this->getRotation(), other_object->getPosition() + other_velocity_z, other_object->getRotation())) {
+		this->velocity.z = 0.0f;
+		this->force.z = 0.0f;
+		collided = true;
+	}
+
+
+	if (isPlayer) {
+		if (collided)
+		{
+			other_object->getMesh()->changeTexture("resources/textures/fire.png");
+			other_object->getMesh()->activeDebug = true;
+		} else if (other_object->getMesh()->activeDebug) {
+			other_object->getMesh()->activeDebug = false;
+			other_object->getMesh()->changeTexture("resources/textures/box.jpeg");
+		}
+	}
+
+	// return result;
+}
+
+Mesh* PhysicalObj::getMesh() {
+	return this->mesh;
 }

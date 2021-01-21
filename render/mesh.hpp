@@ -37,6 +37,7 @@ class Mesh {
 	int size;
 	int type;
 public:
+	bool activeDebug;
 	Mesh(const string&, Model*);
 	Mesh(const string&, std::vector<GLfloat>*, std::vector<unsigned int>*);
 	Mesh(const string&, std::vector<GLfloat>*, std::vector<unsigned int>*, int);
@@ -44,6 +45,6 @@ public:
 	void init(PhysicalObj*);
 	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
 	void rotate(glm::vec3);
-	void load(std::string);
+	void changeTexture(const std::string&);
 };
 #endif

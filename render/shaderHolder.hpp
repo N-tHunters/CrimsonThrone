@@ -8,6 +8,7 @@ class ShaderHolder {
   Shader * shaderGUI;
   Shader * shaderText;
   Shader * shaderWater;
+  bool underWater;
 
 public:
 	ShaderHolder(Shader*, Shader*, Shader*, Shader*);
@@ -15,6 +16,9 @@ public:
 	Shader* getGUI();
 	Shader* getText();
 	Shader* getWater();
+
+	void setUnderWater(bool input);
+	bool getUnderWater();
 };
 
 #endif

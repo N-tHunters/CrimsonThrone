@@ -5,6 +5,7 @@ ShaderHolder::ShaderHolder(Shader* shader3D, Shader* shaderGUI, Shader* shaderTe
 	this->shaderGUI = shaderGUI;
 	this->shaderText = shaderText;
 	this->shaderWater = shaderWater;
+	this->underWater = false;
 }
 
 Shader* ShaderHolder::get3D() {
@@ -21,4 +22,12 @@ Shader* ShaderHolder::getText() {
 
 Shader* ShaderHolder::getWater() {
 	return this->shaderWater;
+}
+
+void ShaderHolder::setUnderWater(bool input) {
+	this->underWater = input;
+}
+
+bool ShaderHolder::getUnderWater() {
+	return this->underWater;
 }

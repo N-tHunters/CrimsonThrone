@@ -39,30 +39,41 @@ Chunk::Chunk(Terrain * terrain, float water_height) : Chunk(terrain) {
   vertices->clear();
   indices->clear();
 
-  int vertices_number = 10;
+  int vertices_number = 40;
 
   float tile_width = terrain->getSize() / (vertices_number - 1);
-
 
   for(int i = 0; i < vertices_number - 1; i ++) {
     for(int j = 0; j < vertices_number - 1; j ++) {
       vertices->push_back(i * tile_width);
-      vertices->push_back(water_height * tile_width);
+      vertices->push_back(water_height);
       vertices->push_back(j * tile_width);
+
+      vertices->push_back(0.0f);
+      vertices->push_back(1.0f);
+      vertices->push_back(0.0f);
 
       vertices->push_back(0.0f);
       vertices->push_back(0.0f);
 
       vertices->push_back((i + 1) * tile_width);
-      vertices->push_back(water_height * tile_width);
+      vertices->push_back(water_height);
       vertices->push_back(j * tile_width);
+
+      vertices->push_back(0.0f);
+      vertices->push_back(1.0f);
+      vertices->push_back(0.0f);
 
       vertices->push_back(1.0f);
       vertices->push_back(0.0f);
 
       vertices->push_back(i * tile_width);
-      vertices->push_back(water_height * tile_width);
+      vertices->push_back(water_height);
       vertices->push_back((j + 1) * tile_width);
+
+      vertices->push_back(0.0f);
+      vertices->push_back(1.0f);
+      vertices->push_back(0.0f);
 
       vertices->push_back(0.0f);
       vertices->push_back(1.0f);
@@ -72,22 +83,34 @@ Chunk::Chunk(Terrain * terrain, float water_height) : Chunk(terrain) {
       indices->push_back(i * (vertices_number - 1) * 6  + j * 6 + 2);
 
       vertices->push_back((i + 1) * tile_width);
-      vertices->push_back(water_height * tile_width);
+      vertices->push_back(water_height);
       vertices->push_back(j * tile_width);
+
+      vertices->push_back(0.0f);
+      vertices->push_back(1.0f);
+      vertices->push_back(0.0f);
 
       vertices->push_back(1.0f);
       vertices->push_back(0.0f);
 
       vertices->push_back((i + 1) * tile_width);
-      vertices->push_back(water_height * tile_width);
+      vertices->push_back(water_height);
       vertices->push_back((j + 1) * tile_width);
+
+      vertices->push_back(0.0f);
+      vertices->push_back(1.0f);
+      vertices->push_back(0.0f);
 
       vertices->push_back(1.0f);
       vertices->push_back(1.0f);
 
       vertices->push_back(i * tile_width);
-      vertices->push_back(water_height * tile_width);
+      vertices->push_back(water_height);
       vertices->push_back((j + 1) * tile_width);
+
+      vertices->push_back(0.0f);
+      vertices->push_back(1.0f);
+      vertices->push_back(0.0f);
 
       vertices->push_back(0.0f);
       vertices->push_back(1.0f);
@@ -295,19 +318,19 @@ void Chunk::DeleteTrigger(int index) {
  * \param obj Object to collide
  * \param dt Time passed since last call
  */
-void Chunk::CollideWithAll(PhysicalObj * obj, float dt) {
-  glm::vec3 result(1.0f, 1.0f, 1.0f);
+void Chunk::CollideWithAll(PhysicalObj * obj, float dt, bool isPlayer) {
+  // glm::vec3 result(1.0f, 1.0f, 1.0f);
 
   for(int object_i = 0; object_i < this->GetObjsCount(); object_i++) {
     if(this->GetObj(object_i) != obj)
-      result *= obj->collide(this->GetObj(object_i), dt, obj->velocity);
+      obj->collide(this->GetObj(object_i), dt, obj->velocity, isPlayer);
   }
 		
   for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
     if(this->GetActor(actor_i)->GetPhysicalObj() != obj)
-      result *= obj->collide(this->GetActor(actor_i)->GetPhysicalObj(), dt, obj->velocity);
+      obj->collide(this->GetActor(actor_i)->GetPhysicalObj(), dt, obj->velocity, isPlayer);
   }
-  obj->velocity *= result;
+  // obj->velocity *= result;
 }
 
 /**
@@ -316,15 +339,15 @@ void Chunk::CollideWithAll(PhysicalObj * obj, float dt) {
  */
 void Chunk::CollideAll(float dt) {
   for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
-    this->CollideWithAll(this->GetActor(actor_i)->GetPhysicalObj(), dt);
+    this->CollideWithAll(this->GetActor(actor_i)->GetPhysicalObj(), dt, false);
   }
 
   for(int object_i = 0; object_i < this->GetObjsCount(); object_i++) {
-    this->CollideWithAll(this->GetObj(object_i), dt);
+    this->CollideWithAll(this->GetObj(object_i), dt, false);
   }
   
   for(int item_i = 0; item_i < this->GetItemsCount(); item_i++) {
-    this->CollideWithAll(this->GetItem(item_i)->GetPhysicalObj(), dt);
+    this->CollideWithAll(this->GetItem(item_i)->GetPhysicalObj(), dt, false);
   }
 }
 
@@ -371,18 +394,18 @@ void Chunk::Update(float dt) {
   for(int actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
     this->actors[actor_i]->
       GetPhysicalObj()->
-      collideTerrain(this->terrain, dt);
+      collideTerrain(this->terrain, dt, this);
   }
 
   for(int object_i = 0; object_i < this->GetObjsCount(); object_i++) {
     this->objects[object_i]->
-      collideTerrain(this->terrain, dt);
+      collideTerrain(this->terrain, dt, this);
   }
   
   for(int item_i = 0; item_i < this->GetItemsCount(); item_i++) {
     this->items[item_i]->
       GetPhysicalObj()->
-      collideTerrain(this->terrain, dt);
+      collideTerrain(this->terrain, dt, this);
   }
 }
 

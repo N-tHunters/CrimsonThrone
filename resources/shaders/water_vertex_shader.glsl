@@ -1,11 +1,11 @@
 #version 330 core
 layout (location = 0) in vec3 position;
-layout (location = 1) in vec3 normal;
+// layout (location = 1) in vec3 normal;
 layout (location = 2) in vec2 texCoord;
 
 out vec2 TexCoord;
-out float shading;
-out float specular;
+out vec3 diffuse;
+out vec3 specular;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -16,39 +16,35 @@ uniform vec3 lightPos;
 uniform vec3 objectPos;
 uniform vec3 cameraPos;
 
-vec3 normalize(vec3 input_vector) {
-	float length = sqrt(input_vector.x * input_vector.x + input_vector.y * input_vector.y + input_vector.z * input_vector.z);
-	vec3 output_vector = input_vector / length;
-	return output_vector;
-}
-
-float dist(vec3 input_vector) {
-	float length = sqrt(input_vector.x * input_vector.x + input_vector.y * input_vector.y + input_vector.z * input_vector.z);
-	return length;
-}
-
 void main()
 {
-	vec3 lightVec = lightPos - position - objectPos;
-    lightVec *= -1.0;
-	lightVec = normalize(lightVec);
-	float lightVecL = dist(lightVec);
+	vec3 Position = vec3(position.x, position.y - abs(sin((position.x + objectPos.x - position.z - objectPos.z) * 10.0 - time) / 2.0), position.z);
+	vec3 Position2 = vec3(position.x - 1.0, position.y - abs(sin((position.x - 1.0 + objectPos.x - position.z - objectPos.z) * 10.0 - time) / 2.0), position.z);
+	vec3 Position3 = vec3(position.x, position.y - abs(sin((position.x + objectPos.x - position.z + 1.0 - objectPos.z) * 10.0 - time) / 2.0), position.z - 1.0);
+	
+	vec3 Vec1 = Position3 - Position;
+	vec3 Vec2 = Position2 - Position;
 
+	vec3 normal = vec3(Vec1.y * Vec2.z - Vec1.z * Vec2.y,
+				  Vec1.z * Vec2.x - Vec1.x * Vec2.z,
+				  Vec1.x * Vec2.y - Vec1.y * Vec2.x);
+	
 	vec3 norm = normalize(normal);
-	vec3 lightDir = normalize(lightPos - position - objectPos);
-	vec3 viewDir = normalize(cameraPos - position - objectPos);
+	vec3 lightDir = lightPos - position - objectPos;
+	float lightVecL = length(lightDir);
+	lightDir = normalize(lightDir);
+
+    gl_Position = projection * cameraRot * view * model * vec4(position, 1.0);
+
+    float diff = max(dot(norm, lightDir), 0.0);
+   	diffuse = vec3(min(diff * 1.0 / lightVecL * 10.0, 1.0));
+
+   	vec3 viewDir = normalize(cameraPos - position - objectPos);
 	vec3 reflectDir = reflect(-lightDir, norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
-	//float specular = 1024 * spec * 100.0;
-	float specular = 10;
-
-    gl_Position = projection * cameraRot * view * model * vec4(position.x, position.y - abs(sin((position.x + objectPos.x - position.z - objectPos.z) * 10.0 - time) / 2.0), position.z, 1.0f);
-
-    shading = (lightVec.x * normal.x + lightVec.y * normal.y + lightVec.z * lightVec.z);
-    shading = 1.0 + (shading) / 3.0;
-    shading -= lightVecL / 100.0;
-
-    print(shading);
+	specular = vec3(min(10.0 * spec * 1.0 / lightVecL, 1.0));
+	
+    gl_Position = projection * cameraRot * view * model * vec4(Position, 1.0f);
 
     TexCoord = vec2(texCoord.x, 1.0 - texCoord.y);
 }

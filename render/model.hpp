@@ -11,9 +11,9 @@ class Model
     public:
     	std::vector<GLfloat> vertices;
     	std::vector<GLuint> indices;
-        explicit Model(char* path);
+        explicit Model(const std::string& path);
     private:
-        void loadModel(string path);
+        void loadModel(const std::string& path);
         void processNode(aiNode *node, const aiScene *scene);
 };
 

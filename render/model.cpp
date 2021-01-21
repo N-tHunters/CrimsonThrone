@@ -1,10 +1,10 @@
 #include "model.hpp"
 
-Model::Model(char *path) {
+Model::Model(const std::string& path) {
 	this->loadModel(path);
 }
 
-void Model::loadModel(std::string path) {
+void Model::loadModel(const std::string& path) {
 
 	Assimp::Importer import;
 	const aiScene *scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);	

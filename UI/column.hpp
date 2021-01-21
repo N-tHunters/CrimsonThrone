@@ -20,7 +20,7 @@ public:
 		this->index = 0;
 		this->header = header;
 
-		for (int i = 0; i < maxCount; i ++) {
+		for (uint16_t i = 0; i < maxCount; i ++) {
 			this->vertices.push_back(rect.x);
 			this->vertices.push_back(rect.y + rect.w / maxCount * (i + 1));
 			this->vertices.push_back(0.0f);
@@ -96,7 +96,7 @@ public:
 		// Creating header for this column
 
 		// Inserting valuse one by one
-		for (size_t i = 0; i < list->size(); i ++) {
+		for (uint16_t i = 0; i < list->size(); i ++) {
 			this->column.push_back(new Text(list->at(i)->getValues()->at(index),
 		                                	glm::vec4(rect.x, rect.y + rect.w / (float)maxCount * (i + 1), rect.z, rect.w / (float)maxCount),
 			                                Characters,
@@ -123,7 +123,7 @@ public:
 		glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
-		for (size_t i = 0; i < this->column.size(); i ++) {
+		for (uint16_t i = 0; i < this->column.size(); i ++) {
 			this->column[i]->draw(shaderHolder);
 		}
 	}
