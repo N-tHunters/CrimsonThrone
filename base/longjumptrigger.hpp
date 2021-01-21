@@ -8,8 +8,8 @@ class LongJumpTrigger : public ShortJumpTrigger {
   Location * location;
   Chunk * chunk;
  public:
-  LongJumpTrigger(Boundary *, glm::vec3, glm::vec3, Location*, Chunk *);
-  void Trig(PhysicalObj *) override;
+  LongJumpTrigger(Boundary *, glm::vec3, glm::vec3, Chunk *);
+  virtual void Trig(Chunk *, PhysicalObj *) override;
 };
 
 #endif

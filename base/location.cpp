@@ -4,6 +4,9 @@
  */
 #include "location.hpp"
 
+const int PROCESS_RADIUS = 2;
+const int RENDER_RADIUS = 2;
+
 /**
  * Default constructor
  * \param width Width of this location (in chunks)
@@ -35,11 +38,8 @@ Location::Location(size_t width, size_t height, int chunk_width, int chunk_heigh
 void Location::FillEmptyChunks() {
   for(size_t i = 0; i < height; i++)
     for(size_t j = 0; j < width; j++)
-      if(this->chunks[i][j] == nullptr)
-	this->chunks[i][j] = new Chunk(new Terrain(this->chunk_width, 11, glm::vec3(this->chunk_width * i,
-										    -1.0f,
-										    this->chunk_height * j)),
-                        1.0f);
+      if(chunks[i][j] == nullptr)
+	chunks[i][j] = new Chunk(this, new Terrain(chunk_width, 11, glm::vec3(chunk_width * i, -1.0f, chunk_height * j)), 1.0f);
 }
 
 /**
@@ -101,10 +101,10 @@ void Location::UpdatePosition(glm::vec3 pos) {
  * \param screen_height Height of screen
  */
 void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_width, int screen_height) {
-  int lx = max((int)current_x - 2, 0); // Most left row
-  int uy = max((int)current_y - 2, 0); // Most up column
-  int rx = min((int)current_x + 2, (int)width - 1); // Most right row
-  int dy = min((int)current_y + 2, (int)height - 1); // Most down column
+  int lx = max((int)current_x - RENDER_RADIUS, 0); // Most left row
+  int uy = max((int)current_y - RENDER_RADIUS, 0); // Most up column
+  int rx = min((int)current_x + RENDER_RADIUS, (int)width - 1); // Most right row
+  int dy = min((int)current_y + RENDER_RADIUS, (int)height - 1); // Most down column
 
   
   for(int ix = lx; ix <= rx; ix++) {
@@ -137,10 +137,10 @@ void SetCurrentLocation(Location *loc) {
 }
 
 void Location::Update(float dt) {
-  int lx = max((int)current_x - 2, 0); // Most left row
-  int uy = max((int)current_y - 2, 0); // Most up column
-  int rx = min((int)current_x + 2, (int)width - 1); // Most right row
-  int dy = min((int)current_y + 2, (int)height - 1); // Most down column
+  int lx = max((int)current_x - PROCESS_RADIUS, 0); // Most left row
+  int uy = max((int)current_y - PROCESS_RADIUS, 0); // Most up column
+  int rx = min((int)current_x + PROCESS_RADIUS, (int)width - 1); // Most right row
+  int dy = min((int)current_y + PROCESS_RADIUS, (int)height - 1); // Most down column
 
   
   for(int ix = lx; ix <= rx; ix++) {

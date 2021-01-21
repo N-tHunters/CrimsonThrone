@@ -13,6 +13,8 @@
 #include "actor.hpp"
 #include <vector>
 
+class Location;
+
 /**
  * \brief Chunk is a piece of location for optiming rendering and processing.
  * Chunks are heavily used to interact with player with enviroment. \warning Consider that player is not part of chunk, it's separate object.
@@ -27,11 +29,12 @@ class Chunk {
   std::vector<PhysicalObj *>objects;
   std::vector<BoundaryTrigger *>triggers;
   PhysicalObj* water_obj;
+  Location * location;
 
  public:
   Chunk();
-  Chunk(Terrain *);
-  Chunk(Terrain *, float);
+  Chunk(Location *, Terrain *);
+  Chunk(Location *, Terrain *, float);
 
   Terrain * GetTerrain();
 
@@ -53,10 +56,15 @@ class Chunk {
   PhysicalObj * GetObj(size_t);
   BoundaryTrigger * GetTrigger(size_t);
 
-  void DeleteItem(size_t);
-  void DeleteActor(size_t);
-  void DeleteObj(size_t);
-  void DeleteTrigger(size_t);
+  void DeleteItemByIndex(size_t);
+  void DeleteActorByIndex(size_t);
+  void DeleteObjByIndex(size_t);
+  void DeleteTriggerByIndex(size_t);
+  
+  void DeleteItem(Item *);
+  void DeleteActor(Actor *);
+  void DeleteObj(PhysicalObj *);
+  void DeleteTrigger(BoundaryTrigger *);
 
   void CollideWithAll(PhysicalObj *, float);
   void CollideAll(float);
@@ -68,6 +76,9 @@ class Chunk {
   bool IsWaterPresent();
   float GetWaterHeight();
   void SetWaterHeight(float);
+
+  void SetLocation(Location *);
+  Location * GetLocation();
 };
 
 #endif

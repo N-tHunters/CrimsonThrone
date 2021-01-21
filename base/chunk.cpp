@@ -14,15 +14,17 @@
 Chunk::Chunk() {
   this->is_water_present = false;
   this->water_obj = nullptr;
+  this->location = nullptr;
 }
 
 /**
  * Basic constructor
  * \param terrain Landscape of this chunk
  */
-Chunk::Chunk(Terrain * terrain) : Chunk() {
+Chunk::Chunk(Location * location, Terrain * terrain) : Chunk() {
   this->terrain = terrain;
   this->water_obj = nullptr;
+  this->location = location;
 }
 
 /**
@@ -30,9 +32,10 @@ Chunk::Chunk(Terrain * terrain) : Chunk() {
  * \param terrain Landscape of this chunk
  * \param water_height Water level
  */
-Chunk::Chunk(Terrain * terrain, float water_height) : Chunk(terrain) {
+Chunk::Chunk(Location * location, Terrain * terrain, float water_height) : Chunk(location, terrain) {
   this->is_water_present = true;
   this->water_height = water_height;
+  
   std::vector<float> *vertices = new std::vector<float>;
   std::vector<unsigned int> *indices = new std::vector<unsigned int>;
 
@@ -254,7 +257,7 @@ BoundaryTrigger * Chunk::GetTrigger(size_t index) {
  * Delete item from chunk by index
  * \param index Index of object to delete
  */
-void Chunk::DeleteItem(size_t index) {
+void Chunk::DeleteItemByIndex(size_t index) {
   if (index < 0 || index >= this->GetItemsCount())
     return;
   this->items.erase(this->items.begin() + index);
@@ -264,7 +267,7 @@ void Chunk::DeleteItem(size_t index) {
  * Delete actor from chunk by index
  * \param index Index of object to delete
  */
-void Chunk::DeleteActor(size_t index) {
+void Chunk::DeleteActorByIndex(size_t index) {
   if (index < 0 || index >= this->GetActorsCount())
     return;
   this->actors.erase(this->actors.begin() + index);
@@ -274,7 +277,7 @@ void Chunk::DeleteActor(size_t index) {
  * Delete object from chunk by index
  * \param index Index of object to delete
  */
-void Chunk::DeleteObj(size_t index) {
+void Chunk::DeleteObjByIndex(size_t index) {
   if (index < 0 || index >= this->GetObjsCount())
     return;
   this->objects.erase(this->objects.begin() + index);
@@ -284,7 +287,7 @@ void Chunk::DeleteObj(size_t index) {
  * Delete triggers from chunk by index
  * \param index Index of trigger to delete
  */
-void Chunk::DeleteTrigger(size_t index) {
+void Chunk::DeleteTriggerByIndex(size_t index) {
   if (index < 0 || index >= this->GetObjsCount())
     return;
   this->triggers.erase(this->triggers.begin() + index);
@@ -332,7 +335,7 @@ void Chunk::CollideAll(float dt) {
 void Chunk::CheckAllTriggers(PhysicalObj * obj) {
   for(BoundaryTrigger * trigger : triggers) {
     if(obj->boundary->Collide(trigger->GetBoundary(), obj->getPosition(), obj->getRotation(), trigger->GetPosition(), glm::vec3(0.f, 0.f, 0.f)))
-      trigger->Trig(obj);
+      trigger->Trig(this, obj);
   }
 }
 
@@ -356,34 +359,34 @@ void Chunk::TriggerAll() {
  * \param dt Time passed since last update
  */
 void Chunk::Update(float dt) {
-  this->CollideAll(dt);
-  this->TriggerAll();
+  CollideAll(dt);
+  TriggerAll();
   
-  for(size_t actor_i = 0; actor_i < this->GetActorsCount(); actor_i++)
-    this->actors[actor_i]->GetPhysicalObj()->update(dt);
+  for(Actor * actor : actors)
+    actor->GetPhysicalObj()->update(dt);
 
-  for(size_t object_i = 0; object_i < this->GetObjsCount(); object_i++)
-    this->objects[object_i]->update(dt);
+  for(PhysicalObj * object : objects)
+    object->update(dt);
   
-  for(size_t item_i = 0; item_i < this->GetItemsCount(); item_i++)
-    this->items[item_i]->GetPhysicalObj()->update(dt);
+  for(Item * item : items)
+    item->GetPhysicalObj()->update(dt);
 
+  for(Actor * actor : actors)
+    actor->GetPhysicalObj()->collideTerrain(terrain, dt);
+
+  for(PhysicalObj * object : objects)
+    object->collideTerrain(terrain, dt);
+  
+  for(Item * item : items)
+    item->GetPhysicalObj()->collideTerrain(terrain, dt);
+
+
+  // Check if any object went into another chunk
+  /*
   for(size_t actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
-    this->actors[actor_i]->
-      GetPhysicalObj()->
-      collideTerrain(this->terrain, dt);
+    Chunk * chunk_ptr = this->location->GetChunkByPosition(this->actors[actor_i]->GetPhysicalObj()->getPosition());
   }
-
-  for(size_t object_i = 0; object_i < this->GetObjsCount(); object_i++) {
-    this->objects[object_i]->
-      collideTerrain(this->terrain, dt);
-  }
-  
-  for(size_t item_i = 0; item_i < this->GetItemsCount(); item_i++) {
-    this->items[item_i]->
-      GetPhysicalObj()->
-      collideTerrain(this->terrain, dt);
-  }
+  */
 }
 
 
@@ -391,3 +394,6 @@ void Chunk::Update(float dt) {
 bool Chunk::IsWaterPresent() { return this->is_water_present; }
 void Chunk::SetWaterHeight(float water_height) { this->water_height = water_height; }
 float Chunk::GetWaterHeight() { return this->water_height; }
+
+Location * Chunk::GetLocation() { return location; }
+void Chunk::SetLocation(Location * location) { this->location = location; }
