@@ -40,8 +40,7 @@ void Location::FillEmptyChunks() {
 										    -1.0f,
 										    this->chunk_height * j)),
 				       4.0f);
-}
-
+}   
 /**
  * Set chunk at position
  * \param x Row
