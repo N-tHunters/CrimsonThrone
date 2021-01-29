@@ -36,16 +36,10 @@ Location::Location(size_t width, size_t height, int chunk_width, int chunk_heigh
  * Fill empty chunks with plain terrain
  */
 void Location::FillEmptyChunks() {
-  for(int i = 0; i < this->height; i++) {
-    for(int j = 0; j < this->width; j++) {
-      if(this->chunks[i][j] == nullptr) {
-	this->chunks[i][j] = new Chunk(new Terrain(this->chunk_width, 10, glm::vec3(this->chunk_width * i,
-										    -1.0f,
-										    this->chunk_height * j)),
-                        4.0f);
-      }
-    }
-  }
+  for(size_t i = 0; i < height; i++)
+    for(size_t j = 0; j < width; j++)
+      if(chunks[i][j] == nullptr)
+	chunks[i][j] = new Chunk(this, i, j, new Terrain(chunk_width, 11, glm::vec3(chunk_width * i, -1.0f, chunk_height * j)), 1.0f);
 }
 
 /**
