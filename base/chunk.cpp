@@ -3,6 +3,7 @@
  * \brief This file contains implementation of Chunk
  */
 #include "chunk.hpp"
+#include "location.hpp"
 
 /// Maximum velocity
 #define VCAP 0.1f
@@ -21,10 +22,12 @@ Chunk::Chunk() {
  * Basic constructor
  * \param terrain Landscape of this chunk
  */
-Chunk::Chunk(Location * location, Terrain * terrain) : Chunk() {
+Chunk::Chunk(Location * location, unsigned short x, unsigned short y, Terrain * terrain) : Chunk() {
   this->terrain = terrain;
   this->water_obj = nullptr;
   this->location = location;
+  this->x = x;
+  this->y = y;
 }
 
 /**
@@ -32,7 +35,7 @@ Chunk::Chunk(Location * location, Terrain * terrain) : Chunk() {
  * \param terrain Landscape of this chunk
  * \param water_height Water level
  */
-Chunk::Chunk(Location * location, Terrain * terrain, float water_height) : Chunk(location, terrain) {
+Chunk::Chunk(Location * location, unsigned short x, unsigned short y, Terrain * terrain, float water_height) : Chunk(location, x, y, terrain) {
   this->is_water_present = true;
   this->water_height = water_height;
   
@@ -317,6 +320,30 @@ void Chunk::DeleteTriggerByIndex(size_t index) {
 }
 
 /**
+ * Delete object from chunk by pointer
+ * \param object Pointer to object
+ */
+void Chunk::DeleteObj(PhysicalObj * object) {
+  for(size_t i = 0; i < objects.size(); i++)
+    if(objects[i] == object) {
+      objects.erase(objects.begin() + i);
+      return;
+    }
+}
+
+/**
+ * Delete actor from chunk by pointer
+ * \param actor Pointer to actor
+ */
+void Chunk::DeleteActor(Actor * actor) {
+  for(size_t i = 0; i < actors.size(); i++)
+    if(actors[i] == actor) {
+      actors.erase(actors.begin() + i);
+      return;
+    }
+}
+
+/**
  * Collide given PhysicalObj with all objects in chunk (except items)
  * \param obj Object to collide
  * \param dt Time passed since last call
@@ -405,11 +432,27 @@ void Chunk::Update(float dt) {
 
 
   // Check if any object went into another chunk
-  /*
-  for(size_t actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
-    Chunk * chunk_ptr = this->location->GetChunkByPosition(this->actors[actor_i]->GetPhysicalObj()->getPosition());
+  
+  for(Actor * actor: actors) {
+    glm::vec3 position = actor->GetPhysicalObj()->getPosition();
+    Chunk * chunk_ptr = this->location->GetChunkByPosition(position.x, position.y);
+    if(chunk_ptr != this) {
+      this->DeleteActor(actor);
+      if(chunk_ptr != nullptr)
+	chunk_ptr->AddActor(actor);
+    }
   }
-  */
+  
+  for(PhysicalObj * object: objects) {
+    glm::vec3 position = object->getPosition();
+    Chunk * chunk_ptr = this->location->GetChunkByPosition(position.x, position.y);
+    if(chunk_ptr != this) {
+      this->DeleteObj(object);
+      if(chunk_ptr != nullptr)
+	chunk_ptr->AddObj(object);
+    }
+  }
+  
 }
 
 

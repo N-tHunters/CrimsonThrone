@@ -30,11 +30,12 @@ class Chunk {
   std::vector<BoundaryTrigger *>triggers;
   PhysicalObj* water_obj;
   Location * location;
+  unsigned short x, y;
 
  public:
   Chunk();
-  Chunk(Location *, Terrain *);
-  Chunk(Location *, Terrain *, float);
+  Chunk(Location *, unsigned short, unsigned short, Terrain *);
+  Chunk(Location *, unsigned short, unsigned short, Terrain *, float);
 
   Terrain * GetTerrain();
 
