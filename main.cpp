@@ -197,7 +197,7 @@ int main()
 		}
 	}*/
 
-	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
+	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(255, 0, 0));
 
 	std::vector<std::string> headers = {"name"};
 
@@ -216,8 +216,6 @@ int main()
 
 	while (!glfwWindowShouldClose(window))
 	{
-		// camera_3view->setPosition()
-		// player_model->setPosition(player->GetPhysicalObj()->getPosition());
 		float dt;
 		float current_frame;
 		float lastXPos = xpos;
@@ -242,10 +240,8 @@ int main()
 				player->GetCamera()->setRotationX(90.0f);
 		}
 
-		// Check if any events have been activated (key pressed, mouse moved etc.) and call corresponding response functions
 		glfwPollEvents();
 
-		// Clear the color buffer
 		glClearColor(0.5f, 0.7f, 0.7f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -289,31 +285,13 @@ int main()
 		chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
 		player->Update(dt);
 
-		/*for (int i = 0; i < chunk_ptr->GetObjsCount(); i ++) {
-			chunk_ptr->GetObj(i)->velocity.y = 0;
-			if (rand() % 100 < 2)
-			{
-				chunk_ptr->GetObj(i)->velocity.x = rand() % 3 - 1.f;
-				chunk_ptr->GetObj(i)->velocity.z = rand() % 3 - 1.f;
-			}
-		}*/
-
 		location->Draw(shaderHolder, camera, width, height);
-		// player_model->draw(&shaderHolder, camera, width, height);
-		// light->draw(&shaderHolder, camera, width, height);
 
-		// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		test_frame.draw(shaderHolder);
 		inventory->draw(shaderHolder);
 		fps_counter->draw(shaderHolder);
 
-		if (shaderHolder->getUnderWater()) {
-			glClearColor(0.0f, 0.0f, 0.0f, 0.1f);
-		}
-
 		glFinish();
 
-		// Swap the screen buffers
 		glfwSwapBuffers(window);
 
 		player_core->Step();
@@ -326,6 +304,7 @@ int main()
 			fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
 			fps_change_last = glfwGetTime();
 		}
+
 		player_wants_to_jump = false; // What the fuck
 		push = false;
 	}

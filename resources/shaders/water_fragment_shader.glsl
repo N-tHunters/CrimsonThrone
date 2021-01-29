@@ -2,6 +2,7 @@
 in vec2 TexCoord;
 in vec3 diffuse;
 in vec3 specular;
+in vec2 resolution;
 //in float visibility;
 
 out vec4 color;

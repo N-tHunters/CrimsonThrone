@@ -4,6 +4,8 @@
 #include "frame.hpp"
 #include "image.hpp"
 
+#include "../debug.hpp"
+
 #include <map>
 
 class Text: public Frame {

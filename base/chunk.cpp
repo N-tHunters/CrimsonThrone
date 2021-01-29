@@ -39,7 +39,7 @@ Chunk::Chunk(Terrain * terrain, float water_height) : Chunk(terrain) {
   vertices->clear();
   indices->clear();
 
-  int vertices_number = 40;
+  int vertices_number = 10;
 
   float tile_width = terrain->getSize() / (vertices_number - 1);
 

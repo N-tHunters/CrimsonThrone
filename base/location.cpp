@@ -36,7 +36,7 @@ void Location::FillEmptyChunks() {
   for(int i = 0; i < this->height; i++) {
     for(int j = 0; j < this->width; j++) {
       if(this->chunks[i][j] == nullptr) {
-	this->chunks[i][j] = new Chunk(new Terrain(this->chunk_width, 40, glm::vec3(this->chunk_width * i,
+	this->chunks[i][j] = new Chunk(new Terrain(this->chunk_width, 10, glm::vec3(this->chunk_width * i,
 										    -1.0f,
 										    this->chunk_height * j)),
                         4.0f);

@@ -95,6 +95,15 @@ public:
 
 		// Creating header for this column
 
+		glm::vec4 header_rect = glm::vec4(rect.x, rect.y + rect.w, rect.z, rect.w / (float)maxCount);
+		header_rect.y += 0.1;
+
+		this->column.push_back(new Text(header,
+		                                header_rect,
+		                                Characters,
+		                                0.001f,
+		                                glm::vec3(0, 255, 0)));
+
 		// Inserting valuse one by one
 		for (uint16_t i = 0; i < list->size(); i ++) {
 			this->column.push_back(new Text(list->at(i)->getValues()->at(index),
@@ -103,11 +112,16 @@ public:
 			                                0.001f,
 			                                glm::vec3(255, 255, 0)));
 		}
-		this->column.push_back(new Text(header,
-		                                glm::vec4(rect.x, rect.y, rect.z, rect.w / (float)maxCount),
-		                                Characters,
-		                                0.001f,
-		                                glm::vec3(0, 255, 0)));
+
+		if (maxCount > list->size()) {
+			for (uint8_t i = 0; i < maxCount - list->size(); i++) {
+				this->column.push_back(new Text("",
+			                                	glm::vec4(rect.x, rect.y + rect.w / (float)maxCount * (i + 1), rect.z, rect.w / (float)maxCount),
+				                                Characters,
+				                                0.001f,
+				                                glm::vec3(255, 255, 0)));
+			}
+		}
 	}
 
 	void draw(ShaderHolder* shaderHolder) override {
