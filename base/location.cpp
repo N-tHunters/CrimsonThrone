@@ -13,7 +13,7 @@ const int RENDER_RADIUS = 2;
  * \param height Height of this location (in chunks)
  * \param chunk_width Width of chunk (in meters)
  * \param chunk_height Height of chunk (in meters)
-nn */
+ */
 Location::Location(size_t width, size_t height, int chunk_width, int chunk_height) {
   this->width = width;
   this->height = height;
