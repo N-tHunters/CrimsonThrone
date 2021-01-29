@@ -4,6 +4,9 @@
  */
 #include "location.hpp"
 
+const int PROCESS_RADIUS = 2;
+const int RENDER_RADIUS = 2;
+
 /**
  * Default constructor
  * \param width Width of this location (in chunks)
@@ -11,15 +14,15 @@
  * \param chunk_width Width of chunk (in meters)
  * \param chunk_height Height of chunk (in meters)
  */
-Location::Location(int width, int height, int chunk_width, int chunk_height) {
+Location::Location(size_t width, size_t height, int chunk_width, int chunk_height) {
   this->width = width;
   this->height = height;
   this->chunk_width = chunk_width;
   this->chunk_height = chunk_height;
 
-  for(int i = 0; i < height; i++) {
+  for(size_t i = 0; i < height; i++) {
     vector<Chunk *> row;
-    for(int j = 0; j < width; j++) {
+    for(size_t j = 0; j < width; j++) {
       row.push_back(nullptr);
     }
     this->chunks.push_back(row);
@@ -51,8 +54,8 @@ void Location::FillEmptyChunks() {
  * \param y Column
  * \param chunk New chunk
  */
-void Location::SetChunk(int x, int y, Chunk * chunk) {
-  this->chunks[x][y] = chunk;
+void Location::SetChunk(size_t x, size_t y, Chunk * chunk) {
+  chunks[x][y] = chunk;
 }
 
 /**
@@ -61,9 +64,9 @@ void Location::SetChunk(int x, int y, Chunk * chunk) {
  * \param y Column
  * \return Pointer to chunk at this position
  */
-Chunk * Location::GetChunk(int x, int y) {
-  if(x < 0 || y < 0 || x >= height || y >= width) return nullptr;
-  return this->chunks[x][y];
+Chunk * Location::GetChunk(size_t x, size_t y) {
+  if(x >= height || y >= width) return nullptr;
+  return chunks[x][y];
 }
 
 /**
@@ -71,8 +74,8 @@ Chunk * Location::GetChunk(int x, int y) {
  * \return Pointer to chunk
  */
 Chunk * Location::GetCurrentChunk() {
-  if(this->current_x < 0 || this->current_y < 0 || this->current_x >= height || this->current_y >= width) return nullptr;
-  return this->chunks[this->current_x][this->current_y];
+  if(current_x >= height || current_y >= width) return nullptr;
+  return chunks[current_x][current_y];
 }
 
 /**
@@ -82,17 +85,17 @@ Chunk * Location::GetCurrentChunk() {
  * \return Pointer to chunk at position
  */
 Chunk * Location::GetChunkByPosition(float x, float y) {
-  int px = x / this->chunk_width;
-  int py = y / this->chunk_height;
+  int px = x / chunk_width;
+  int py = y / chunk_height;
 
-   if(px < 0 || py < 0 || px >= height || py >= width) return nullptr;
+  if(px < 0 || py < 0 || px >= (int)height || py >= (int)width) return nullptr;
   
-  return this->chunks[px][py];
+  return chunks[px][py];
 }
 
 void Location::UpdatePosition(glm::vec3 pos) {
-  this->current_x = pos.x / this->chunk_width;
-  this->current_y = pos.z / this->chunk_height;
+  current_x = pos.x / chunk_width;
+  current_y = pos.z / chunk_height;
 }
 
 /**
@@ -104,10 +107,10 @@ void Location::UpdatePosition(glm::vec3 pos) {
  * \param screen_height Height of screen
  */
 void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_width, int screen_height) {
-  int lx = max(this->current_x - 3, 0); // Most left row
-  int uy = max(this->current_y - 3, 0); // Most up column
-  int rx = min(this->current_x + 3, this->width - 1); // Most right row
-  int dy = min(this->current_y + 3, this->height - 1); // Most down column
+  int lx = max((int)current_x - RENDER_RADIUS, 0); // Most left row
+  int uy = max((int)current_y - RENDER_RADIUS, 0); // Most up column
+  int rx = min((int)current_x + RENDER_RADIUS, (int)width - 1); // Most right row
+  int dy = min((int)current_y + RENDER_RADIUS, (int)height - 1); // Most down column
 
   
   for(int ix = lx; ix <= rx; ix++) {
@@ -137,4 +140,21 @@ Location * GetCurrentLocation() {
 
 void SetCurrentLocation(Location *loc) {
   current_location = loc;
+}
+
+void Location::Update(float dt) {
+  int lx = max((int)current_x - PROCESS_RADIUS, 0); // Most left row
+  int uy = max((int)current_y - PROCESS_RADIUS, 0); // Most up column
+  int rx = min((int)current_x + PROCESS_RADIUS, (int)width - 1); // Most right row
+  int dy = min((int)current_y + PROCESS_RADIUS, (int)height - 1); // Most down column
+
+  
+  for(int ix = lx; ix <= rx; ix++) {
+    for(int iy = uy; iy <= dy; iy++) {
+      if(this->chunks[ix][iy] != nullptr) {
+        this->chunks[ix][iy]->Update(dt);
+      }
+    }
+  }
+
 }

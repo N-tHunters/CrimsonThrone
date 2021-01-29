@@ -13,6 +13,8 @@
 #include "actor.hpp"
 #include <vector>
 
+class Location;
+
 /**
  * \brief Chunk is a piece of location for optiming rendering and processing.
  * Chunks are heavily used to interact with player with enviroment. \warning Consider that player is not part of chunk, it's separate object.
@@ -27,36 +29,43 @@ class Chunk {
   std::vector<PhysicalObj *>objects;
   std::vector<BoundaryTrigger *>triggers;
   PhysicalObj* water_obj;
+  Location * location;
+  unsigned short x, y;
 
  public:
   Chunk();
-  Chunk(Terrain *);
-  Chunk(Terrain *, float);
+  Chunk(Location *, unsigned short, unsigned short, Terrain *);
+  Chunk(Location *, unsigned short, unsigned short, Terrain *, float);
 
   Terrain * GetTerrain();
 
   void Draw(ShaderHolder *, Camera *, int, int);
   void DrawWater(ShaderHolder *, Camera *, int, int);
 
-  int GetItemsCount();
-  int GetActorsCount();
-  int GetObjsCount();
-  int GetTriggersCount();
+  size_t GetItemsCount();
+  size_t GetActorsCount();
+  size_t GetObjsCount();
+  size_t GetTriggersCount();
 
   void AddItem(Item *);
   void AddActor(Actor *);
   void AddObj(PhysicalObj *);
   void AddTrigger(BoundaryTrigger *);
 
-  Item * GetItem(int);
-  Actor * GetActor(int);
-  PhysicalObj * GetObj(int);
-  BoundaryTrigger * GetTrigger(int);
+  Item * GetItem(size_t);
+  Actor * GetActor(size_t);
+  PhysicalObj * GetObj(size_t);
+  BoundaryTrigger * GetTrigger(size_t);
 
-  void DeleteItem(int);
-  void DeleteActor(int);
-  void DeleteObj(int);
-  void DeleteTrigger(int);
+  void DeleteItemByIndex(size_t);
+  void DeleteActorByIndex(size_t);
+  void DeleteObjByIndex(size_t);
+  void DeleteTriggerByIndex(size_t);
+  
+  void DeleteItem(Item *);
+  void DeleteActor(Actor *);
+  void DeleteObj(PhysicalObj *);
+  void DeleteTrigger(BoundaryTrigger *);
 
   void CollideWithAll(PhysicalObj *, float, bool);
   void CollideAll(float);
@@ -68,6 +77,9 @@ class Chunk {
   bool IsWaterPresent();
   float GetWaterHeight();
   void SetWaterHeight(float);
+
+  void SetLocation(Location *);
+  Location * GetLocation();
 };
 
 #endif
