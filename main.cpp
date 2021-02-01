@@ -175,8 +175,6 @@ int main()
 
 	// LOADING SCREEN
 
-	glClearColor(0.5f, 0.0f, 0.7f, 1.0f);	
-
 	load_characters();
 
 	// Build and compile our shader program
