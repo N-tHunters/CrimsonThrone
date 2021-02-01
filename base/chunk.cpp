@@ -343,6 +343,19 @@ void Chunk::DeleteActor(Actor * actor) {
     }
 }
 
+
+/**
+ * Delete item from chunk by pointer
+ * \param item Pointer to item
+ */
+void Chunk::DeleteItem(Item * item) {
+  for(size_t i = 0; i < items.size(); i++)
+    if(items[i] == item) {
+      items.erase(items.begin() + i);
+      return;
+    }
+}
+
 /**
  * Collide given PhysicalObj with all objects in chunk (except items)
  * \param obj Object to collide
@@ -450,6 +463,16 @@ void Chunk::Update(float dt) {
       this->DeleteObj(object);
       if(chunk_ptr != nullptr)
 	chunk_ptr->AddObj(object);
+    }
+  }
+
+  for(Item * item: items) {
+    glm::vec3 position = item->GetPhysicalObj()->getPosition();
+    Chunk * chunk_ptr = this->location->GetChunkByPosition(position.x, position.y);
+    if(chunk_ptr != this) {
+      this->DeleteItem(item);
+      if(chunk_ptr != nullptr)
+	chunk_ptr->AddItem(item);
     }
   }
   

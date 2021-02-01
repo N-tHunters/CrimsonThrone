@@ -26,17 +26,17 @@ void Log(int facility, const char * format, ...) {
   va_start(argptr, format);
 
   if(facility == LOG_DEBUG) {
-    printf("%d:%d:%d DEBG ",
+    printf("%02d:%02d:%02d DEBG ",
 	   timeinfo->tm_hour,
 	   timeinfo->tm_min,
 	   timeinfo->tm_sec);
   } else if (facility == LOG_INFO) {
-    printf("%d:%d:%d INFO ",
+    printf("%02d:%02d:%02d INFO ",
 	   timeinfo->tm_hour,
 	   timeinfo->tm_min,
 	   timeinfo->tm_sec);
   } else if (facility == LOG_ERROR) {
-    printf("%d:%d:%d ERRR ",
+    printf("%02d:%02d:%02d ERRR ",
 	   timeinfo->tm_hour,
 	   timeinfo->tm_min,
 	   timeinfo->tm_sec);
