@@ -122,9 +122,9 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 				c += 1;
 			}
 
-			if (i < vertices_number - 1) {
+			/*if (i < vertices_number - 1) {
 				normal += 
-			}
+			}*/
 
 			normal /= c;
 

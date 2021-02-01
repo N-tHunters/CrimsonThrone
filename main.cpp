@@ -163,14 +163,16 @@ int main()
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	int icon_width, icon_height;
-	unsigned char * icon = loadImage("resources/textures/logo.png", &icon_width, &icon_height);
-	GLFWimage icon_image;
-	icon_image.width = icon_width;
-	icon_image.height = icon_height;
-	icon_image.pixels = icon;
+	// LOADING ICON
 
-	glfwSetWindowIcon(window, 1, &icon_image);
+	/*int icon_width, icon_height;
+	unsigned char * icon = loadImage("resources/textures/icon.jpeg", &icon_width, &icon_height);
+	GLFWimage icon_image[1];
+	icon_image[0].pixels = icon;
+	icon_image[0].width = 32;
+	icon_image[0].height = 32;
+	glfwSetWindowIcon(window, 1, icon_image);
+	freeImage(icon);*/
 
 	// LOADING SCREEN
 

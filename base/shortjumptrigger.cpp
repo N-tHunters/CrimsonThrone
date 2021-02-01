@@ -4,7 +4,7 @@ ShortJumpTrigger::ShortJumpTrigger(Boundary * boundary, glm::vec3 position, glm:
   this->jump_position = jump_position;
 }
 
-void ShortJumpTrigger::Trig(PhysicalObj * obj) {
+void ShortJumpTrigger::Trig(Chunk * chunk_ptr, PhysicalObj * obj) {
   obj->velocity = glm::vec3(0.0f, 0.0f, 0.0f);
   obj->acceleration = glm::vec3(0.0f, 0.0f, 0.0f);
 
