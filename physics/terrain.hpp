@@ -25,7 +25,7 @@ class Terrain {
 public:
 	Terrain(float, int, glm::vec3);
 	Terrain(Terrain&);
-	
+
 	glm::vec3 getPosition();
 	float getHeight(glm::vec3);
 	glm::vec3 getOutVector(glm::vec3);
