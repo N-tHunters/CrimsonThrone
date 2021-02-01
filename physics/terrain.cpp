@@ -17,9 +17,9 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 	for (int i = 0; i < vertices_number; i ++) {
 		v.clear();
 		for (int j = 0; j < vertices_number; j ++) {
-			float x = (i - vertices_number / 2) / 10.0f;
-			float y = (j - vertices_number / 2) / 10.0f;
-			v.push_back(cos(sqrt(x * x + y * y)) * 8.0);
+			float x = (i - vertices_number / 2) / 2.0f;
+			float y = (j - vertices_number / 2) / 2.0f;
+			v.push_back(cos(sqrt(x * x + y * y)) * 1.0);
 		}
 		this->height.push_back(v);
 	}
@@ -33,8 +33,40 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 			this->vertices.push_back(j * tile_width);
 
 			normal = -get_normal(glm::vec3(i, this->height[i][j], j),
-			                     glm::vec3(i + 1, this->height[i + 1][j], j),
-			                     glm::vec3(i, this->height[i][j + 1], j + 1));
+								 glm::vec3(i + 1, this->height[i + 1][j], j),
+								 glm::vec3(i, this->height[i][j + 1], j + 1));
+			int c = 1;
+
+			if (j > 0) {
+				normal += -get_normal(glm::vec3(i, this->height[i][j - 1], j - 1),
+									  glm::vec3(i + 1, this->height[i + 1][j - 1], j - 1),
+									  glm::vec3(i, this->height[i][j], j));
+				c += 1;
+				normal += get_normal(glm::vec3(i + 1, this->height[i + 1][j], j),
+									 glm::vec3(i + 1, this->height[i + 1][j - 1], j - 1),
+									 glm::vec3(i, this->height[i][j], j));
+				c += 1;
+			}
+
+			if (i > 0) {
+				normal += -get_normal(glm::vec3(i, this->height[i][j], j),
+									  glm::vec3(i + 1, this->height[i + 1][j], j),
+									  glm::vec3(i, this->height[i][j + 1], j + 1));
+				c += 1;
+				normal += get_normal(glm::vec3(i + 1, this->height[i + 1][j + 1], j + 1),
+									 glm::vec3(i + 1, this->height[i + 1][j], j),
+									 glm::vec3(i, this->height[i][j + 1], j + 1));
+				c += 1;
+			}
+
+			if (i > 0 && j > 0) {
+				normal += get_normal(glm::vec3(i + 1, this->height[i][j], j),
+								glm::vec3(i + 1, this->height[i][j - 1], j - 1),
+								glm::vec3(i, this->height[i - 1][j], j));
+				c += 1;
+			}
+
+			normal /= c;
 
 			this->vertices.push_back(normal.x);
 			this->vertices.push_back(normal.y);
@@ -74,8 +106,27 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 			this->vertices.push_back(j * tile_width);
 
 			normal = get_normal(glm::vec3(i + 1, this->height[i + 1][j + 1], j + 1),
-			                    glm::vec3(i + 1, this->height[i + 1][j], j),
-			                    glm::vec3(i, this->height[i][j + 1], j + 1));
+								glm::vec3(i + 1, this->height[i + 1][j], j),
+								glm::vec3(i, this->height[i][j + 1], j + 1));
+
+			c = 1;
+
+			if (j < vertices_number - 1) {
+				normal += -get_normal(glm::vec3(i, this->height[i][j + 1], j + 1),
+								 glm::vec3(i + 1, this->height[i + 1][j + 1], j + 1),
+								 glm::vec3(i, this->height[i][j + 2], j + 2));
+				c += 1;
+				normal += get_normal(glm::vec3(i + 1, this->height[i + 1][j + 2], j + 2),
+								glm::vec3(i + 1, this->height[i + 1][j + 1], j + 1),
+								glm::vec3(i, this->height[i][j + 2], j + 2));
+				c += 1;
+			}
+
+			if (i < vertices_number - 1) {
+				normal += 
+			}
+
+			normal /= c;
 
 			this->vertices.push_back(normal.x);
 			this->vertices.push_back(normal.y);
@@ -173,14 +224,14 @@ float Terrain::getHeight(glm::vec3 position) {
 	float answer;
 	if (xCoord <= (1 - yCoord)) {
 		answer = barrycentric(glm::vec3(0, this->height[tileX][tileY], 0),
-		                      glm::vec3(1, this->height[tileX + 1][tileY], 0),
-		                      glm::vec3(0, this->height[tileX][tileY + 1], 1),
-		                      glm::vec2(xCoord, yCoord));
+							  glm::vec3(1, this->height[tileX + 1][tileY], 0),
+							  glm::vec3(0, this->height[tileX][tileY + 1], 1),
+							  glm::vec2(xCoord, yCoord));
 	} else {
 		answer = barrycentric(glm::vec3(1, this->height[tileX + 1][tileY], 0),
-		                      glm::vec3(1, this->height[tileX + 1][tileY + 1], 1),
-		                      glm::vec3(0, this->height[tileX][tileY + 1], 0),
-		                      glm::vec2(xCoord, yCoord));
+							  glm::vec3(1, this->height[tileX + 1][tileY + 1], 1),
+							  glm::vec3(0, this->height[tileX][tileY + 1], 0),
+							  glm::vec2(xCoord, yCoord));
 	}
 	return answer * this->tile_width + this->position.y;
 }
@@ -199,12 +250,12 @@ glm::vec3 Terrain::getOutVector(glm::vec3 position) {
 	}
 	if (xCoord <= (1 - yCoord)) {
 		answer = get_normal(glm::vec3(0, this->height[tileX][tileY], 0),
-		                    glm::vec3(1, this->height[tileX + 1][tileY], 0),
-		                    glm::vec3(0, this->height[tileX][tileY + 1], 1));
+							glm::vec3(1, this->height[tileX + 1][tileY], 0),
+							glm::vec3(0, this->height[tileX][tileY + 1], 1));
 	} else {
 		answer = get_normal(glm::vec3(1, this->height[tileX + 1][tileY], 0),
-		                    glm::vec3(1, this->height[tileX + 1][tileY + 1], 1),
-		                    glm::vec3(0, this->height[tileX][tileY + 1], 0));
+							glm::vec3(1, this->height[tileX + 1][tileY + 1], 1),
+							glm::vec3(0, this->height[tileX][tileY + 1], 0));
 	}
 	return answer;
 	/*

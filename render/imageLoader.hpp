@@ -1,5 +1,5 @@
 #include <string>
 
-unsigned char* loadImage(std::string, int *, int*);
+unsigned char * loadImage(std::string, int *, int *);
 
-void freeImage(unsigned char*);
+void freeImage(unsigned char *);

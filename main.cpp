@@ -31,6 +31,7 @@
 #include "render/shaderLoader.hpp"
 #include "render/constants.hpp"
 #include "render/model.hpp"
+#include "render/imageLoader.hpp"
 //#include "render/shaders.h"
 
 #include "physics/physicalObj.hpp"
@@ -161,6 +162,15 @@ int main()
 	glViewport(0, 0, width, height);
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+	int icon_width, icon_height;
+	unsigned char * icon = loadImage("resources/textures/logo.png", &icon_width, &icon_height);
+	GLFWimage icon_image;
+	icon_image.width = icon_width;
+	icon_image.height = icon_height;
+	icon_image.pixels = icon;
+
+	glfwSetWindowIcon(window, 1, &icon_image);
 
 	// LOADING SCREEN
 
