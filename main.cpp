@@ -72,7 +72,6 @@ glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 
 float VCAP = 0.1f;
 Camera* camera;
-// Camera* camera_3view;
 Player* player;
 SoundEngine sound_engine;
 MagicCore * player_core;

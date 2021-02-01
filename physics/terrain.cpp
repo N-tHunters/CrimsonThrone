@@ -26,47 +26,29 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 
 	glm::vec3 normal;
 
+	/*
+	x y z uv.x uv.y
+	...
+
+	normal.x normal.y normal.z
+	...
+
+	x y z normal.x normal.y normal.z uv.x uv.y
+	...
+	*/
+
+	std::vector<float[5]> coords;
+	std::vector<float[3]> normals;
+
 	for (int i = 0; i < vertices_number - 1; i ++) {
 		for (int j = 0; j < vertices_number - 1; j ++) {
-			this->vertices.push_back(i * tile_width);
-			this->vertices.push_back(this->height[i][j] * tile_width);
-			this->vertices.push_back(j * tile_width);
+			coords.push_back(i * tile_width);
+			coords.push_back(this->height[i][j] * tile_width);
+			coords.push_back(j * tile_width);
 
 			normal = -get_normal(glm::vec3(i, this->height[i][j], j),
 								 glm::vec3(i + 1, this->height[i + 1][j], j),
 								 glm::vec3(i, this->height[i][j + 1], j + 1));
-			int c = 1;
-
-			if (j > 0) {
-				normal += -get_normal(glm::vec3(i, this->height[i][j - 1], j - 1),
-									  glm::vec3(i + 1, this->height[i + 1][j - 1], j - 1),
-									  glm::vec3(i, this->height[i][j], j));
-				c += 1;
-				normal += get_normal(glm::vec3(i + 1, this->height[i + 1][j], j),
-									 glm::vec3(i + 1, this->height[i + 1][j - 1], j - 1),
-									 glm::vec3(i, this->height[i][j], j));
-				c += 1;
-			}
-
-			if (i > 0) {
-				normal += -get_normal(glm::vec3(i, this->height[i][j], j),
-									  glm::vec3(i + 1, this->height[i + 1][j], j),
-									  glm::vec3(i, this->height[i][j + 1], j + 1));
-				c += 1;
-				normal += get_normal(glm::vec3(i + 1, this->height[i + 1][j + 1], j + 1),
-									 glm::vec3(i + 1, this->height[i + 1][j], j),
-									 glm::vec3(i, this->height[i][j + 1], j + 1));
-				c += 1;
-			}
-
-			if (i > 0 && j > 0) {
-				normal += get_normal(glm::vec3(i + 1, this->height[i][j], j),
-								glm::vec3(i + 1, this->height[i][j - 1], j - 1),
-								glm::vec3(i, this->height[i - 1][j], j));
-				c += 1;
-			}
-
-			normal /= c;
 
 			this->vertices.push_back(normal.x);
 			this->vertices.push_back(normal.y);
