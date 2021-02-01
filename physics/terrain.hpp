@@ -3,6 +3,7 @@
 
 #include <random>
 #include <math.h>
+#include <array>
 
 #include "physicalObj.hpp"
 

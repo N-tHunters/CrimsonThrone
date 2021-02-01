@@ -24,126 +24,219 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 		this->height.push_back(v);
 	}
 
-	glm::vec3 normal;
-
-	/*
-	x y z uv.x uv.y
-	...
-
-	normal.x normal.y normal.z
-	...
-
-	x y z normal.x normal.y normal.z uv.x uv.y
-	...
-	*/
-
-	std::vector<float[5]> coords;
-	std::vector<float[3]> normals;
+	std::vector<std::array<float, 5>> coords;
+	std::vector<glm::vec3> normals;
 
 	for (int i = 0; i < vertices_number - 1; i ++) {
 		for (int j = 0; j < vertices_number - 1; j ++) {
-			coords.push_back(i * tile_width);
-			coords.push_back(this->height[i][j] * tile_width);
-			coords.push_back(j * tile_width);
+			int index = i * (vertices_number - 1) + j;
 
-			normal = -get_normal(glm::vec3(i, this->height[i][j], j),
-								 glm::vec3(i + 1, this->height[i + 1][j], j),
-								 glm::vec3(i, this->height[i][j + 1], j + 1));
+			for (int k = 0; k < 6; k ++) {
+				coords.push_back({0.0f, 0.0f, 0.0f, 0.0f, 0.0f});
+			}
 
-			this->vertices.push_back(normal.x);
-			this->vertices.push_back(normal.y);
-			this->vertices.push_back(normal.z);
+			for (int k = 0; k < 2; k ++) {
+				normals.push_back(glm::vec3(0.0f, 0.0f, 0.0f));
+			}
 
-			this->vertices.push_back(0.0f);
-			this->vertices.push_back(0.0f);
 
-			this->vertices.push_back((i + 1) * tile_width);
-			this->vertices.push_back(this->height[i + 1][j] * tile_width);
-			this->vertices.push_back(j * tile_width);
+			/*
+			 ___
+			|  /
+			| /
+			|/
 
-			this->vertices.push_back(normal.x);
-			this->vertices.push_back(normal.y);
-			this->vertices.push_back(normal.z);
+			*/
 
-			this->vertices.push_back(1.0f);
-			this->vertices.push_back(0.0f);
+			coords[6 * index][0] = i * tile_width;
+			coords[6 * index][1] = this->height[i][j] * tile_width;
+			coords[6 * index][2] = j * tile_width;
 
-			this->vertices.push_back(i * tile_width);
-			this->vertices.push_back(this->height[i][j + 1] * tile_width);
-			this->vertices.push_back((j + 1) * tile_width);
+			coords[6 * index][3] = 0.0f;
+			coords[6 * index][4] = 0.0f;
 
-			this->vertices.push_back(normal.x);
-			this->vertices.push_back(normal.y);
-			this->vertices.push_back(normal.z);
+			coords[6 * index + 1][0] = (i + 1) * tile_width;
+			coords[6 * index + 1][1] = this->height[i + 1][j] * tile_width;
+			coords[6 * index + 1][2] = j * tile_width;
 
-			this->vertices.push_back(0.0f);
-			this->vertices.push_back(1.0f);
+			coords[6 * index + 1][3] = 1.0f;
+			coords[6 * index + 1][4] = 0.0f;
+
+			coords[6 * index + 2][0] = i * tile_width;
+			coords[6 * index + 2][1] = this->height[i][j + 1] * tile_width;
+			coords[6 * index + 2][2] = (j + 1) * tile_width;
+
+			coords[6 * index + 2][3] = 0.0f;
+			coords[6 * index + 2][4] = 1.0f;
 
 			this->indices.push_back(i * (vertices_number - 1) * 6 + j * 6);
 			this->indices.push_back(i * (vertices_number - 1) * 6  + j * 6 + 1);
 			this->indices.push_back(i * (vertices_number - 1) * 6  + j * 6 + 2);
 
-			this->vertices.push_back((i + 1) * tile_width);
-			this->vertices.push_back(this->height[i + 1][j] * tile_width);
-			this->vertices.push_back(j * tile_width);
+			/*
+			    
+			  /|
+			 / |
+			/__|
 
-			normal = get_normal(glm::vec3(i + 1, this->height[i + 1][j + 1], j + 1),
-								glm::vec3(i + 1, this->height[i + 1][j], j),
-								glm::vec3(i, this->height[i][j + 1], j + 1));
+			*/
 
-			c = 1;
+			coords[6 * index + 3][0] = (i + 1) * tile_width;
+			coords[6 * index + 3][1] = this->height[i + 1][j] * tile_width;
+			coords[6 * index + 3][2] = j * tile_width;
 
-			if (j < vertices_number - 1) {
-				normal += -get_normal(glm::vec3(i, this->height[i][j + 1], j + 1),
-								 glm::vec3(i + 1, this->height[i + 1][j + 1], j + 1),
-								 glm::vec3(i, this->height[i][j + 2], j + 2));
-				c += 1;
-				normal += get_normal(glm::vec3(i + 1, this->height[i + 1][j + 2], j + 2),
-								glm::vec3(i + 1, this->height[i + 1][j + 1], j + 1),
-								glm::vec3(i, this->height[i][j + 2], j + 2));
-				c += 1;
-			}
+			coords[6 * index + 3][3] = 1.0f;
+			coords[6 * index + 3][4] = 0.0f;
 
-			/*if (i < vertices_number - 1) {
-				normal += 
-			}*/
+			coords[6 * index + 4][0] = (i + 1) * tile_width;
+			coords[6 * index + 4][1] = this->height[i + 1][j + 1] * tile_width;
+			coords[6 * index + 4][2] = (j + 1) * tile_width;
 
-			normal /= c;
+			coords[6 * index + 4][3] = 1.0f;
+			coords[6 * index + 4][4] = 1.0f;
 
-			this->vertices.push_back(normal.x);
-			this->vertices.push_back(normal.y);
-			this->vertices.push_back(normal.z);
+			coords[6 * index + 5][0] = i * tile_width;
+			coords[6 * index + 5][1] = this->height[i][j + 1] * tile_width;
+			coords[6 * index + 5][2] = (j + 1) * tile_width;
 
-			this->vertices.push_back(1.0f);
-			this->vertices.push_back(0.0f);
-
-			this->vertices.push_back((i + 1) * tile_width);
-			this->vertices.push_back(this->height[i + 1][j + 1] * tile_width);
-			this->vertices.push_back((j + 1) * tile_width);
-
-			this->vertices.push_back(normal.x);
-			this->vertices.push_back(normal.y);
-			this->vertices.push_back(normal.z);
-
-			this->vertices.push_back(1.0f);
-			this->vertices.push_back(1.0f);
-
-			this->vertices.push_back(i * tile_width);
-			this->vertices.push_back(this->height[i][j + 1] * tile_width);
-			this->vertices.push_back((j + 1) * tile_width);
-
-			this->vertices.push_back(normal.x);
-			this->vertices.push_back(normal.y);
-			this->vertices.push_back(normal.z);
-
-			this->vertices.push_back(0.0f);
-			this->vertices.push_back(1.0f);
+			coords[6 * index + 5][3] = 0.0f;
+			coords[6 * index + 5][4] = 1.0f;
 
 			this->indices.push_back(i * (vertices_number - 1) * 6 + j * 6 + 3);
 			this->indices.push_back(i * (vertices_number - 1) * 6  + j * 6 + 4);
 			this->indices.push_back(i * (vertices_number - 1) * 6  + j * 6 + 5);
+
+			// NORMALS
+
+			normals[2 * index] = -get_normal(glm::vec3(i, this->height[i][j], j),
+								 glm::vec3(i + 1, this->height[i + 1][j], j),
+								 glm::vec3(i, this->height[i][j + 1], j + 1));
+
+			normals[2 * index + 1] = get_normal(glm::vec3(i + 1, this->height[i + 1][j + 1], j + 1),
+								glm::vec3(i + 1, this->height[i + 1][j], j),
+								glm::vec3(i, this->height[i][j + 1], j + 1));
 		}
 	}
+
+	for (size_t i = 0; i < coords.size(); i ++) {
+		this->vertices.push_back(coords[i][0]);
+		this->vertices.push_back(coords[i][1]);
+		this->vertices.push_back(coords[i][2]);
+
+		glm::vec3 normal = normals[i / 3];
+		int x = (i / 6) / (vertices_number - 1);
+		int y = (i / 6) % (vertices_number - 1);
+		int w = vertices_number - 1;
+		int c = 1;
+
+		if (i % 6 == 0) {
+			if (x > 0) {
+				normal += normals[i / 3 - 1];
+				normal += normals[i / 3 - 2];
+				c += 2;
+			}
+
+			if (y > 0) {
+				normal += normals[i / 3 - w * 2];
+				normal += normals[i / 3 - w * 2 + 1];
+				c += 2;
+			}
+
+			if(x > 0 && y > 0) {
+				normal += normals[i / 3 - w * 2 - 1];
+				c += 1;
+			}
+		} else if (i % 6 == 1) {
+			normal += normals[i / 3 + 1];
+			c += 1;
+			if (x > 0) {
+				normal += normals[i / 3 - 1];
+				c += 1;
+			}
+			if (y < w - 1) {
+				normal += normals[i / 3 + 2 * w];
+				c += 1;
+			}
+			if (x > 0 && y < w - 1) {
+				normal += normals[i / 3 + 2 * w - 1];
+				normal += normals[i / 3 + 2 * w - 2];
+				c += 2;
+			}
+		} else if (i % 6 == 2) {
+			normal += normals[i / 3 + 1];
+			c += 1;
+			if (y > 0) {
+				normal += normals[i / 3 - w * 2 + 1];
+				c += 1;
+			}
+			if (x < w - 1) {
+				normal += normals[i / 3 + 2];
+				c += 1;
+			}
+			if (y > 0 && x < w - 1) {
+				normal += normals[i / 3 - w * 2 + 2];
+				normal += normals[i / 3 - w * 2 + 3];
+				c += 2;
+			}
+		} else if (i % 6 == 3) {
+			normal += normals[i / 3 - 1];
+			c += 1;
+			if (x > 0) {
+				normal += normals[i / 3 - 2];
+				c += 1;
+			}
+			if (y < w - 1) {
+				normal += normals[i / 3 + w * 2 - 1];
+				c += 1;
+			}
+			if (x > 0 && y < w - 1) {
+				normal += normals[i / 3 + w * 2 - 2];
+				normal += normals[i / 3 + w * 2 - 3];
+				c += 2;
+			}
+		} else if (i % 6 == 4) {
+			if (x < w - 1) {
+				normal += normals[i / 3 + 1];
+				normal += normals[i / 3 + 2];
+				c += 2;
+			}
+			if (y < w - 1) {
+				normal += normals[i / 3 + w * 2];
+				normal += normals[i / 3 + w * 2 - 1];
+				c += 2;
+			}
+			if (y < w - 1 && x < w - 1) {
+				normal += normals[i / 3 + w * 2 + 1];
+				c += 1;
+			}
+		} else {
+			normal += normals[i / 3 - 1];
+			c += 1;
+			if (y > 0) {
+				normal += normals[i / 3 - w * 2];
+				c += 1;
+			}
+			if (x < w - 1) {
+				normal += normals[i / 3 + 1];
+				c += 1;
+			}
+			if (y > 0 && x < w - 1) {
+				normal += normals[i / 3 - w * 2 + 1];
+				normal += normals[i / 3 - w * 2 + 2];
+				c += 2;
+			}
+		}
+
+		normal /= c;
+
+		this->vertices.push_back(normal.x);
+		this->vertices.push_back(normal.y);
+		this->vertices.push_back(normal.z);
+		
+		this->vertices.push_back(coords[i][3]);
+		this->vertices.push_back(coords[i][4]);
+	}
+
 	this->obj = new PhysicalObj(new Mesh("resources/textures/rock.png", &(this->vertices), &(this->indices), 1), false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
 }
 
