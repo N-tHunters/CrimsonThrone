@@ -30,11 +30,16 @@ void main()
 				  Vec1.x * Vec2.y - Vec1.y * Vec2.x);
 	
 	vec3 norm = normalize(normal);
-	vec3 lightDir = lightPos - position - objectPos;
-	float lightVecL = length(lightDir);
-	lightDir = normalize(lightDir);
+	
+	vec3 lightDir = lightPos;
+	
+	Position = position;
+    gl_Position = projection * cameraRot * view * model * vec4(Position, 1.0f);
 
-    gl_Position = projection * cameraRot * view * model * vec4(position, 1.0);
+	
+	float lightVecL = length(lightDir);
+	lightVecL = max(lightVecL, 1.0f);
+	lightDir = normalize(lightDir);
 
     float diff = max(dot(norm, lightDir), 0.0);
    	diffuse = vec3(min(diff * 1.0 / lightVecL * 10.0, 1.0));
@@ -43,7 +48,7 @@ void main()
 	vec3 reflectDir = reflect(-lightDir, norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
 	specular = vec3(min(10.0 * spec * 1.0 / lightVecL, 1.0));
-	
+	Position = position;
     gl_Position = projection * cameraRot * view * model * vec4(Position, 1.0f);
 
     TexCoord = vec2(texCoord.x, 1.0 - texCoord.y);
