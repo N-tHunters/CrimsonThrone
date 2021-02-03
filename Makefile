@@ -1,11 +1,11 @@
-CFLAGS := -std=c++17 -Wall -Ithirdparty/include -Iinclude -s -m64 -O3 
+CFLAGS := -std=c++17 -Wall -Isrc -Iinclude -s -m64 -O3 
 CXFLAGS := -Iinclude
 TARGET := main
 
 BASE_SRCS = $(wildcard base/*.cpp)
 BASE_OBJS = $(patsubst %.cpp,%.o,$(BASE_SRCS))
 
-MAGIC_SRCS = $(wildcard magic/*.cpp)
+MAGIC_SRCS = $(wildcard base/magic/*.cpp)
 MAGIC_OBJS = $(patsubst %.cpp,%.o,$(MAGIC_SRCS))
 
 RENDER_SRCS=$(wildcard render/*.cpp)
@@ -32,7 +32,7 @@ OBJS := $(patsubst %.cpp,%.o,$(SRCS))
 # OS specific
 ifeq ($(OS),Windows_NT)
 	RM := rm
-	LFLAGS := -static-libgcc -static-libstdc++ -L ./thirdparty/lib -lgdi32 -lglu32 -lglew32 -lzlib1 -lopengl32 -lglfw3 -lassimp -lOpenAL32 -lfreetype
+	LFLAGS := -static-libgcc -static-libstdc++ -L ./lib -lgdi32 -lglu32 -lglew32 -lzlib1 -lopengl32 -lglfw3 -lassimp -lOpenAL32 -lfreetype
 	SFLAGS := #-Wl,--subsystem,windows
 
 	CC := x86_64-w64-mingw32-g++

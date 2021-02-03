@@ -45,8 +45,8 @@
 #include "base/location.hpp"
 #include "base/shortjumptrigger.hpp"
 
-#include "magic/core.h"
-#include "magic/symbols.h"
+#include "base/magic/core.h"
+#include "base/magic/symbols.h"
 
 #include "sound/soundengine.h"
 #include "sound/filesound.h"
@@ -115,7 +115,7 @@ int main()
 	alSourcei(source, AL_LOOPING, AL_TRUE);
 
 #ifndef NO_SOUND
-	FileSound sound(&sound_engine, &source, "resources/sounds/everythingallright.wav");
+	FileSound sound(&sound_engine, &source, "resources/sounds/happierburial.wav");
 	sound.Play();
 #endif
 
