@@ -102,6 +102,8 @@ int main()
 	init_protocores();
 
 	double xpos, ypos;
+	xpos = 0.0;
+	ypos = 0.0;
 	float sensivity = 0.1f;
 	srand(time(0));
 
@@ -212,6 +214,8 @@ int main()
 	float fps_change_last = 0.0f;
 
 	location->GetChunk(0, 0)->AddObj(new PhysicalObj(new Mesh("resources/textures/box.jpeg", new Model("resources/models/cube.obj")), true, true, false, false, glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), "box"));
+
+	glfwSetCursorPos(window, (double)width / 2.0, (double)height / 2.0);
 
 	while (!glfwWindowShouldClose(window))
 	{
