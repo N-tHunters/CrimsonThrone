@@ -174,7 +174,6 @@ void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint
 		shaderHolder->get3D()->Use();
 		glUniform3fv(glGetUniformLocation(shaderHolder->get3D()->Program, "objectPos"), 1, glm::value_ptr(this->obj->getPosition()));
 		glUniform3fv(glGetUniformLocation(shaderHolder->get3D()->Program, "lightPos"), 1, glm::value_ptr(lightPos));
-		glUniform3fv(glGetUniformLocation(shaderHolder->get3D()->Program, "cameraPos"), 1, glm::value_ptr(camera->getPosition()));
 		glUniform1f(glGetUniformLocation(shaderHolder->get3D()->Program, "underWater"), (float)(shaderHolder->getUnderWater()));
 		modelLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "model");
 		viewLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "view");
@@ -187,7 +186,6 @@ void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint
 		glUniform1f(glGetUniformLocation(shaderHolder->getWater()->Program, "time"), glfwGetTime());
 		glUniform3fv(glGetUniformLocation(shaderHolder->getWater()->Program, "objectPos"), 1, glm::value_ptr(this->obj->getPosition()));
 		glUniform3fv(glGetUniformLocation(shaderHolder->getWater()->Program, "lightPos"), 1, glm::value_ptr(lightPos));
-		glUniform3fv(glGetUniformLocation(shaderHolder->getWater()->Program, "cameraPos"), 1, glm::value_ptr(camera->getPosition()));
 		modelLoc = glGetUniformLocation(shaderHolder->getWater()->Program, "model");
 		viewLoc = glGetUniformLocation(shaderHolder->getWater()->Program, "view");
 		projLoc = glGetUniformLocation(shaderHolder->getWater()->Program, "projection");

@@ -12,7 +12,6 @@ uniform mat4 projection;
 uniform mat4 cameraRot;
 uniform vec3 lightPos;
 uniform vec3 objectPos;
-uniform vec3 cameraPos;
 
 void main()
 {

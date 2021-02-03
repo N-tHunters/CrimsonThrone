@@ -284,7 +284,7 @@ int main()
 		chunk_ptr->CollideWithAll(player->GetPhysicalObj(), dt, true);
 
 		chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
-
+		
 		location->Draw(shaderHolder, camera, width, height);
 
 		inventory->draw(shaderHolder);
