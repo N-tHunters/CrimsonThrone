@@ -100,16 +100,13 @@ void Image::draw(ShaderHolder* shaderHolder) {
 
 }
 
-void Image::draw(ShaderHolder* shaderHolder, glm::vec3 color) {
-	//printf("%f %f %f\n", color.x, color.y, color.z);
-
-	glClear(GL_DEPTH_BUFFER_BIT);
+void Image::draw(ShaderHolder* shaderHolder, glm::vec3 drawColor) {
+	//glClear(GL_DEPTH_BUFFER_BIT);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glUniform1i(glGetUniformLocation(shaderHolder->getText()->Program, "text"), 0);
-	//glUniform3f(glGetUniformLocation(shaderHolder->getText()->Program, "textColor"), color.x, color.y, color.z);
-	glUniform3fv(glGetUniformLocation(shaderHolder->getText()->Program, "textColor"), 1, glm::value_ptr(color));
+	glUniform3fv(glGetUniformLocation(shaderHolder->getText()->Program, "textColor"), 1, glm::value_ptr(drawColor));
 
 	shaderHolder->getText()->Use();
 

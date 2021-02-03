@@ -4,11 +4,11 @@
 #include "shaderLoader.hpp"
 
 class ShaderHolder {
-  Shader* shader3D;
-  Shader * shaderGUI;
-  Shader * shaderText;
-  Shader * shaderWater;
-  bool underWater;
+	Shader* shader3D;
+	Shader * shaderGUI;
+	Shader * shaderText;
+	Shader * shaderWater;
+	bool underWater;
 
 public:
 	ShaderHolder(Shader*, Shader*, Shader*, Shader*);

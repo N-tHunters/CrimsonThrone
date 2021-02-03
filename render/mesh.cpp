@@ -168,25 +168,33 @@ void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
+	GLint modelLoc, viewLoc, projLoc, camRotLoc;
+
 	if (this->type == 1) {
 		shaderHolder->get3D()->Use();
-		GLuint program = shaderHolder->get3D()->Program;
-		glUniform2fv(glGetUniformLocation(program, "resolution"), 1, glm::value_ptr(glm::vec2(width, height)));
-		glUniform1i(glGetUniformLocation(program, "Texture"), 0);
-		glUniform3fv(glGetUniformLocation(program, "objectPos"), 1, glm::value_ptr(this->obj->getPosition()));
-		glUniform3fv(glGetUniformLocation(program, "lightPos"), 1, glm::value_ptr(lightPos));
-		glUniform3fv(glGetUniformLocation(program, "cameraPos"), 1, glm::value_ptr(camera->getPosition()));
-		glUniform1f(glGetUniformLocation(program, "underWater"), (float)(shaderHolder->getUnderWater()));
+		glUniform3fv(glGetUniformLocation(shaderHolder->get3D()->Program, "objectPos"), 1, glm::value_ptr(this->obj->getPosition()));
+		glUniform3fv(glGetUniformLocation(shaderHolder->get3D()->Program, "lightPos"), 1, glm::value_ptr(lightPos));
+		glUniform3fv(glGetUniformLocation(shaderHolder->get3D()->Program, "cameraPos"), 1, glm::value_ptr(camera->getPosition()));
+		glUniform1f(glGetUniformLocation(shaderHolder->get3D()->Program, "underWater"), (float)(shaderHolder->getUnderWater()));
+		modelLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "model");
+		viewLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "view");
+		projLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "projection");
+		camRotLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "cameraRot");
+		glUniform2fv(glGetUniformLocation(shaderHolder->get3D()->Program, "resolution"), 1, glm::value_ptr(glm::vec2(width, height)));
+		glUniform1i(glGetUniformLocation(shaderHolder->get3D()->Program, "Texture"), 0);
 	} else {
 		shaderHolder->getWater()->Use();
-		GLuint program = shaderHolder->getWater()->Program;
-       		glUniform2fv(glGetUniformLocation(program, "resolution"), 1, glm::value_ptr(glm::vec2(width, height)));
-		glUniform1i(glGetUniformLocation(program, "Texture"), 0);
-		glUniform1f(glGetUniformLocation(program, "time"), (float)glfwGetTime());
-		glUniform3fv(glGetUniformLocation(program, "objectPos"), 1, glm::value_ptr(this->obj->getPosition()));
-		glUniform3fv(glGetUniformLocation(program, "lightPos"), 1, glm::value_ptr(lightPos));
-		glUniform3fv(glGetUniformLocation(program, "cameraPos"), 1, glm::value_ptr(camera->getPosition()));
+		glUniform1f(glGetUniformLocation(shaderHolder->getWater()->Program, "time"), glfwGetTime());
+		glUniform3fv(glGetUniformLocation(shaderHolder->getWater()->Program, "objectPos"), 1, glm::value_ptr(this->obj->getPosition()));
+		glUniform3fv(glGetUniformLocation(shaderHolder->getWater()->Program, "lightPos"), 1, glm::value_ptr(lightPos));
+		glUniform3fv(glGetUniformLocation(shaderHolder->getWater()->Program, "cameraPos"), 1, glm::value_ptr(camera->getPosition()));
+		modelLoc = glGetUniformLocation(shaderHolder->getWater()->Program, "model");
+		viewLoc = glGetUniformLocation(shaderHolder->getWater()->Program, "view");
+		projLoc = glGetUniformLocation(shaderHolder->getWater()->Program, "projection");
+		camRotLoc = glGetUniformLocation(shaderHolder->getWater()->Program, "cameraRot");
+		glUniform1i(glGetUniformLocation(shaderHolder->getWater()->Program, "Texture"), 0);
 	}
+
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
@@ -207,11 +215,11 @@ void Mesh::changeTexture(const std::string& texturePath) {
 	// Set our texture parameters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	
+
 	// Set texture filtering
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	
+
 	// Load, create texture and generate mipmaps
 	int width, height;
 	unsigned char* image = loadImage(texturePath, &width, &height);
