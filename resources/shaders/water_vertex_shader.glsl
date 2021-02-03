@@ -34,8 +34,6 @@ void main()
 	float lightVecL = length(lightDir);
 	lightDir = normalize(lightDir);
 
-    gl_Position = projection * cameraRot * view * model * vec4(position, 1.0);
-
     float diff = max(dot(norm, lightDir), 0.0);
    	diffuse = vec3(min(diff * 1.0 / lightVecL * 10.0, 1.0));
 
@@ -43,6 +41,8 @@ void main()
 	vec3 reflectDir = reflect(-lightDir, norm);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
 	specular = vec3(min(10.0 * spec * 1.0 / lightVecL, 1.0));
+
+	//Position = vec3()
 	
     gl_Position = projection * cameraRot * view * model * vec4(Position, 1.0f);
 

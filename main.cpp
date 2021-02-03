@@ -57,6 +57,7 @@
 #include "UI/container.hpp"
 #include "UI/bar.hpp"
 #include "UI/text.hpp"
+#include "UI/abstractListElement.hpp"
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -192,25 +193,12 @@ int main()
 
 	SetCurrentLocation(location);
 
-	/*for (int i = 0; i < 2; i ++) {
-		for (int j = 0; j < 2; j++) {
-			location->GetCurrentChunk()->AddObj(new PhysicalObj(new Mesh("resources/textures/box.jpeg", new Model("resources/models/cube.obj")),
-			                                    true,
-			                                    true,
-			                                    false,
-			                                    false,
-			                                    glm::vec3(.5f + i * 2.001f + rand() % 10, (rand() % 100) * 2.001f, .5f + j * 2.001f + rand() % 10),
-			                                    glm::vec3(0.f, 0.f, 0.f),
-			                                    "Test",
-			                                    new BoundaryBox(1.0f, 1.0f, 1.0f)));
-		}
-	}*/
+	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
 
-	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(255, 0, 0));
+	std::vector<std::string> headers;
+	headers.push_back("name");
 
-	std::vector<std::string> headers = {"name"};
-
-	List<Item>* inventory = new List<Item>(glm::vec4(-0.9f, -0.9f, 0.7f, 1.0f), player->GetInventoryPointer(), std::string("resources/textures/list.png"), 10, Characters, &headers);
+	List* inventory = new List(glm::vec4(-0.9f, -0.9f, 0.7f, 1.0f), (std::vector<AbstractListElement*>*)(player->GetInventoryPointer()), std::string("resources/textures/list.png"), 10, Characters, &headers);
 
 	float last_frame = glfwGetTime();
 
@@ -219,9 +207,11 @@ int main()
 
 	player->GetPhysicalObj()->name = "Player";
 
-	Bar test_frame(glm::vec4(-0.9f, 0.9f, 0.5f, 0.1f), &hp, &maxHp, glm::vec3(255, 0, 0));
+	Bar test_frame(glm::vec4(-0.9f, 0.9f, 0.5f, 0.1f), &hp, &maxHp, glm::vec3(255.0, 0, 0));
 
 	float fps_change_last = 0.0f;
+
+	location->GetChunk(0, 0)->AddObj(new PhysicalObj(new Mesh("resources/textures/box.jpeg", new Model("resources/models/cube.obj")), true, true, false, false, glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), "box"));
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -279,20 +269,21 @@ int main()
 		}
 
 		player->GetPhysicalObj()->setSpeed(speed + speedSide);
+		player->Update(dt);
 
 		/* Collide player with all objects in chunk */
 		player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
 
-		if (push) {
+
+		/*if (push) {
 			for (int i = 0; i < chunk_ptr->GetObjsCount(); i ++) {
 				chunk_ptr->GetObj(i)->acceleration += (player->GetPhysicalObj()->getPosition() - chunk_ptr->GetObj(i)->getPosition()) * push_m;
 			}
-		}
+		}*/
 
 		chunk_ptr->CollideWithAll(player->GetPhysicalObj(), dt, true);
 
 		chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
-		player->Update(dt);
 
 		location->Draw(shaderHolder, camera, width, height);
 

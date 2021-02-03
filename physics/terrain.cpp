@@ -237,7 +237,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 		this->vertices.push_back(coords[i][4]);
 	}
 
-	this->obj = new PhysicalObj(new Mesh("resources/textures/rock.png", &(this->vertices), &(this->indices), 1), false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
+	this->obj = new PhysicalObj(new Mesh("resources/textures/rock.png", &(this->vertices), &(this->indices)), false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
 }
 
 Terrain::Terrain(Terrain& terrain) {
@@ -297,7 +297,7 @@ float Terrain::getHeight(glm::vec3 position) {
 	float xCoord = (terrainX - tileSize * tileX) / tileSize;
 	float yCoord = (terrainY - tileSize * tileY) / tileSize;
 	float answer;
-	if (xCoord <= (1 - yCoord)) {
+	if (xCoord <= 1 - yCoord) {
 		answer = barrycentric(glm::vec3(0, this->height[tileX][tileY], 0),
 		                      glm::vec3(1, this->height[tileX + 1][tileY], 0),
 		                      glm::vec3(0, this->height[tileX][tileY + 1], 1),
@@ -305,7 +305,7 @@ float Terrain::getHeight(glm::vec3 position) {
 	} else {
 		answer = barrycentric(glm::vec3(1, this->height[tileX + 1][tileY], 0),
 		                      glm::vec3(1, this->height[tileX + 1][tileY + 1], 1),
-		                      glm::vec3(0, this->height[tileX][tileY + 1], 0),
+		                      glm::vec3(0, this->height[tileX][tileY + 1], 1),
 		                      glm::vec2(xCoord, yCoord));
 	}
 	return answer * this->tile_width + this->position.y;

@@ -209,17 +209,13 @@ void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint
 	cameraRot = glm::rotate(cameraRot, glm::radians(camera->getRotation().z), glm::vec3(0.0f, 0.0f, 1.0f));
 	view = glm::translate(view, this->obj->getPosition() - cameraPosition);
 	projection = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);
-	GLint modelLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "model");
-	GLint viewLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "view");
-	GLint projLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "projection");
-	GLint camRotLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "cameraRot");
 
 	glm::vec3 lightPos = glm::vec3(20, 1, 20);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glUniform1i(glGetUniformLocation(shaderHolder->get3D()->Program, "ourTexture"), 0);
-	glUniform2fv(glGetUniformLocation(shaderHolder->get3D()->Program, "resolution"), 1, glm::value_ptr(glm::vec2(width, height)));
+
+	GLint modelLoc, viewLoc, projLoc, camRotLoc;
 
 	if (this->type == 1) {
 		shaderHolder->get3D()->Use();
@@ -227,13 +223,25 @@ void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint
 		glUniform3fv(glGetUniformLocation(shaderHolder->get3D()->Program, "lightPos"), 1, glm::value_ptr(lightPos));
 		glUniform3fv(glGetUniformLocation(shaderHolder->get3D()->Program, "cameraPos"), 1, glm::value_ptr(camera->getPosition()));
 		glUniform1f(glGetUniformLocation(shaderHolder->get3D()->Program, "underWater"), (float)(shaderHolder->getUnderWater()));
+		modelLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "model");
+		viewLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "view");
+		projLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "projection");
+		camRotLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "cameraRot");
+		glUniform2fv(glGetUniformLocation(shaderHolder->get3D()->Program, "resolution"), 1, glm::value_ptr(glm::vec2(width, height)));
+		glUniform1i(glGetUniformLocation(shaderHolder->get3D()->Program, "Texture"), 0);
 	} else {
 		shaderHolder->getWater()->Use();
 		glUniform1f(glGetUniformLocation(shaderHolder->getWater()->Program, "time"), glfwGetTime());
 		glUniform3fv(glGetUniformLocation(shaderHolder->getWater()->Program, "objectPos"), 1, glm::value_ptr(this->obj->getPosition()));
 		glUniform3fv(glGetUniformLocation(shaderHolder->getWater()->Program, "lightPos"), 1, glm::value_ptr(lightPos));
 		glUniform3fv(glGetUniformLocation(shaderHolder->getWater()->Program, "cameraPos"), 1, glm::value_ptr(camera->getPosition()));
+		modelLoc = glGetUniformLocation(shaderHolder->getWater()->Program, "model");
+		viewLoc = glGetUniformLocation(shaderHolder->getWater()->Program, "view");
+		projLoc = glGetUniformLocation(shaderHolder->getWater()->Program, "projection");
+		camRotLoc = glGetUniformLocation(shaderHolder->getWater()->Program, "cameraRot");
+		glUniform1i(glGetUniformLocation(shaderHolder->getWater()->Program, "Texture"), 0);
 	}
+
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));

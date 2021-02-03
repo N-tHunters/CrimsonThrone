@@ -36,6 +36,7 @@ PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTrans
 	this->mesh->init(this);
 	this->onGround = true;
 	this->mass = 1.0f;
+	this->boundary = new BoundaryBox(1.0f, 1.0f, 1.0f);
 }
 
 PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, bool isFlying, glm::vec3 position, glm::vec3 rotation, const std::string& name, Boundary* boundary) {
