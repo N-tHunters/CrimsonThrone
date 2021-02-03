@@ -290,6 +290,7 @@ int main()
 		inventory->draw(shaderHolder);
 		fps_counter->draw(shaderHolder);
 
+
 		glFinish();
 
 		glfwSwapBuffers(window);

@@ -85,11 +85,19 @@ Column::Column(glm::vec4 rect, std::vector<AbstractListElement*>* list, const st
 	glm::vec4 header_rect = glm::vec4(rect.x, rect.y + rect.w, rect.z, rect.w / (float)maxCount);
 	header_rect.y += 0.1;
 
+
 	this->column->push_back(new Text(header,
 	                                 header_rect,
 	                                 Characters,
 	                                 0.001f,
 	                                 glm::vec3(0, 1.0, 0)));
+		header_rect.y += 0.1;
+
+	this->column->push_back(new Text("azaza",
+	                                 header_rect,
+	                                 Characters,
+	                                 0.001f,
+	                                 glm::vec3(0.0, 0.0, 1.0)));
 
 	// Inserting valuse one by one
 	/*for (uint16_t i = 0; i < list->size(); i ++) {
