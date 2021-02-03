@@ -26,38 +26,38 @@
 #include <glm/gtx/string_cast.hpp>
 
 // Other includes
-#include "render/camera.hpp"
-#include "render/mesh.hpp"
-#include "render/shaderLoader.hpp"
-#include "render/constants.hpp"
-#include "render/model.hpp"
-#include "render/imageLoader.hpp"
-//#include "render/shaders.h"
+#include <render/camera.hpp>
+#include <render/mesh.hpp>
+#include <render/shaderLoader.hpp>
+#include <render/constants.hpp>
+#include <render/model.hpp>
+#include <render/imageLoader.hpp>
+//#include <render/shaders.h>
 
-#include "physics/physicalObj.hpp"
-#include "physics/boundary.hpp"
-#include "physics/terrain.hpp"
+#include <physics/physicalObj.hpp>
+#include <physics/boundary.hpp>
+#include <physics/terrain.hpp>
 
-#include "base/player.hpp"
-#include "base/npc.hpp"
-#include "base/item.hpp"
-#include "base/chunk.hpp"
-#include "base/location.hpp"
-#include "base/shortjumptrigger.hpp"
+#include <base/player.hpp>
+#include <base/npc.hpp>
+#include <base/item.hpp>
+#include <base/chunk.hpp>
+#include <base/location.hpp>
+#include <base/shortjumptrigger.hpp>
 
-#include "base/magic/core.h"
-#include "base/magic/symbols.h"
+#include <base/magic/core.h>
+#include <base/magic/symbols.h>
 
-#include "sound/soundengine.h"
-#include "sound/filesound.h"
-#include "sound/voice.h"
+#include <sound/soundengine.h>
+#include <sound/filesound.h>
+#include <sound/voice.h>
 
-#include "UI/frame.hpp"
-#include "UI/list.hpp"
-#include "UI/container.hpp"
-#include "UI/bar.hpp"
-#include "UI/text.hpp"
-#include "UI/abstractListElement.hpp"
+#include <UI/frame.hpp>
+#include <UI/list.hpp>
+#include <UI/container.hpp>
+#include <UI/bar.hpp>
+#include <UI/text.hpp>
+#include <UI/abstractListElement.hpp>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H

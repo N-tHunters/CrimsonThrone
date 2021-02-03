@@ -2,25 +2,25 @@ CFLAGS := -std=c++17 -Wall -Isrc -Iinclude -s -m64 -O3
 CXFLAGS := -Iinclude
 TARGET := main
 
-BASE_SRCS = $(wildcard base/*.cpp)
+BASE_SRCS = $(wildcard src/base/*.cpp)
 BASE_OBJS = $(patsubst %.cpp,%.o,$(BASE_SRCS))
 
-MAGIC_SRCS = $(wildcard base/magic/*.cpp)
+MAGIC_SRCS = $(wildcard src/magic/*.cpp)
 MAGIC_OBJS = $(patsubst %.cpp,%.o,$(MAGIC_SRCS))
 
-RENDER_SRCS=$(wildcard render/*.cpp)
+RENDER_SRCS=$(wildcard src/render/*.cpp)
 RENDER_OBJS=$(patsubst %.cpp,%.o,$(RENDER_SRCS))
 
-PHYSICS_SRCS=$(wildcard physics/*.cpp)
+PHYSICS_SRCS=$(wildcard src/physics/*.cpp)
 PHYSICS_OBJS=$(patsubst %.cpp,%.o,$(PHYSICS_SRCS))
 
-SOUND_SRCS=$(wildcard sound/*.cpp)
+SOUND_SRCS=$(wildcard src/sound/*.cpp)
 SOUND_OBJS=$(patsubst %.cpp,%.o,$(SOUND_SRCS))
 
-UI_SRCS=$(wildcard UI/*.cpp)
+UI_SRCS=$(wildcard src/UI/*.cpp)
 UI_OBJS=$(patsubst %.cpp,%.o,$(UI_SRCS))
 
-MATH_SRCS=$(wildcard math/*.cpp)
+MATH_SRCS=$(wildcard src/math/*.cpp)
 MATH_OBJS=$(patsubst %.cpp,%.o,$(MATH_SRCS))
 
 OTH_SRCS=$(wildcard src/*.c)
@@ -53,7 +53,7 @@ endif
 
 all: $(TARGET)
 
-$(TARGET): $(TARGET).o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(UI_OBJS) $(MAGIC_OBJS) $(MATH_OBJS) debug.o
+$(TARGET): $(TARGET).o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(UI_OBJS) $(MAGIC_OBJS) $(MATH_OBJS) src/debug.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LFLAGS) $(SFLAGS)
 
 %.o: %.cpp
