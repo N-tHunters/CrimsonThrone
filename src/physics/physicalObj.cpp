@@ -63,10 +63,12 @@ void PhysicalObj::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width,
 }
 
 void PhysicalObj::update(float dt) {
+  if(this->isActive) {
 	this->acceleration = this->force / this->mass;
 	this->velocity += this->acceleration * dt;
 	this->position += this->velocity * dt;
 	this->force = glm::vec3(0.0f);
+  }
 }
 
 glm::vec3 PhysicalObj::getPosition() { return position; }
@@ -208,7 +210,7 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 	}
 
 
-	if (isPlayer) {
+	/*	if (isPlayer) {
 		if (collided)
 		{
 			other_object->getMesh()->changeTexture("resources/textures/fire.png");
@@ -217,7 +219,8 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 			other_object->getMesh()->activeDebug = false;
 			other_object->getMesh()->changeTexture("resources/textures/box.jpeg");
 		}
-	}
+		}*/
+	
 
 	// return result;
 }

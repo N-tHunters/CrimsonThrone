@@ -1,4 +1,5 @@
 #include "debug.hpp"
+#include <physics/boundary.hpp>
 
 void print_vector(glm::vec2 vec) {
 	printf("x: %f \t y: %f\n", vec.x, vec.y);
