@@ -109,5 +109,6 @@ std::stringstream * Item::Save(Saver * saver, int entry) {
 std::vector<std::string>* Item::getValues() {
   std::vector<std::string> * values = new std::vector<std::string>();
   values->push_back(this->name);
+  values->push_back("10 coins");
   return values;
 }

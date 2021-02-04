@@ -20,6 +20,8 @@ public:
 		std::map<GLchar, Character> Characters,
 		std::vector<std::string>* headers);
 
+	void update();
+
 	void draw(ShaderHolder* shaderHolder) override;
 };
 
