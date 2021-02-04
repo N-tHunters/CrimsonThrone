@@ -13,6 +13,18 @@ glm::vec3 Camera::getRotation() {
 	return this->rotation;
 }
 
+float Camera::getRotationX() {
+	return this->rotation.x;
+}
+
+float Camera::getRotationY() {
+	return this->rotation.y;
+}
+
+float Camera::getRotationZ() {
+	return this->rotation.z;
+}
+
 void Camera::setPosition(glm::vec3 newPosition) {
 	this->position = newPosition;
 }

@@ -13,9 +13,9 @@ void main()
 
 	color = vec4(objectColor.rgb * (diffuse + vec3(0.7)), objectColor.a);
 	
-	vec2 uv = vec2(gl_FragCoord.x / resolution.x - 0.5, gl_FragCoord.y / resolution.y - 0.5);
-	float len = max(min(0.4 / length(uv), 1.0), 0.0);
-	len *= len * len;
+	//vec2 uv = vec2(gl_FragCoord.x / resolution.x - 0.5, gl_FragCoord.y / resolution.y - 0.5);
+	//float len = max(min(0.4 / length(uv), 1.0), 0.0);
+	//len *= len * len;
 	
-	color.xyz *= len;
+	//color.xyz *= len;
 }

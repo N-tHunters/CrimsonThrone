@@ -13,6 +13,12 @@ List::List(glm::vec4 rect, std::vector<AbstractListElement*>* list, std::string 
 
 }
 
+void List::update() {
+	for (int i = 0; i < this->columns->size(); i ++) {
+		this->columns->at(i)->update();
+	}
+}
+
 void List::draw(ShaderHolder* shaderHolder) {
 
 	for (size_t i = 0; i < this->columns->size(); i ++) {

@@ -174,7 +174,38 @@ int main()
 	glfwSetWindowIcon(window, 1, icon_image);
 	freeImage(icon);*/
 
-	// LOADING SCREEN
+	// Frame buffer
+
+	unsigned int framebuffer;
+	glGenFramebuffers(1, &framebuffer);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+
+	// создание текстурного объекта
+	unsigned int texColorBuffer;
+	glGenTextures(1, &texColorBuffer);
+	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);	
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	// присоедиение текстуры к объекту текущего кадрового буфера
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
+
+	unsigned int rbo;
+	glGenRenderbuffers(1, &rbo);
+	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
+	glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
+
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 
 	load_characters();
 
@@ -183,8 +214,13 @@ int main()
 	Shader GUIShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/GUI_fragment_shader.glsl");
 	Shader textShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/text_fragment_shader.glsl");
 	Shader waterShader("resources/shaders/water_vertex_shader.glsl", "resources/shaders/water_fragment_shader.glsl");
+	Shader postShader("resources/shaders/post_vertex_shader.glsl", "resources/shaders/post_fragment_shader.glsl");
 
-	ShaderHolder* shaderHolder = new ShaderHolder(&ourShader, &GUIShader, &textShader, &waterShader);
+	ShaderHolder* shaderHolder = new ShaderHolder(&ourShader,
+	        &GUIShader,
+	        &textShader,
+	        &waterShader,
+	        &postShader);
 
 	// ----------------------------------------------- CODE ------------------------------------------
 	location = new Location(10, 10, 30, 30);
@@ -197,10 +233,15 @@ int main()
 
 	std::vector<std::string> headers;
 	headers.push_back("name");
+	headers.push_back("value");
 
 	List* inventory = new List(glm::vec4(-0.9f, -0.9f, 0.7f, 1.0f), (std::vector<AbstractListElement*>*)(player->GetInventoryPointer()), std::string("resources/textures/list.png"), 10, Characters, &headers);
 
 	float last_frame = glfwGetTime();
+
+	// Item* test_item = new Item("hammer");
+	// player->PickupItem(test_item);
+	// inventory->update();
 
 	int hp = player->GetHealth();
 	int maxHp = player->GetMaxHealth();
@@ -211,10 +252,65 @@ int main()
 
 	float fps_change_last = 0.0f;
 
-	location->GetChunk(0, 0)->AddObj(new PhysicalObj(new Mesh("resources/textures/box.jpeg", new Model("resources/models/cube.obj")), true, true, false, false, glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), "box"));
+	location->GetChunk(0, 0)->AddObj(new PhysicalObj(new Mesh("resources/textures/box.jpeg", new Model("resources/models/box.obj")), true, true, false, false, glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), "box"));
+
+	GLuint quadVAO, quadVBO, quadEBO;
+
+	glGenVertexArrays(1, &quadVAO);
+	glBindVertexArray(quadVAO);
+	glGenBuffers(1, &quadVBO);
+	glGenBuffers(1, &quadEBO);
+
+	glBindVertexArray(quadVAO);
+
+	std::vector<float>* quad_vertices = new std::vector<float> {
+		-1.0f, -1.0f, 0.0f, 0.0f,
+		 1.0f, -1.0f, 1.0f, 0.0f,
+		 1.0f,  1.0f, 1.0f, 1.0f,
+		-1.0f,  1.0f, 0.0f, 1.0f
+	};
+
+	std::vector<unsigned int>* quad_indices = new std::vector<unsigned int> {
+		0, 1, 2,
+		0, 2, 3
+	};
+
+	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quad_vertices->at(0)) * quad_vertices->size(), &(quad_vertices->at(0)), GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quadEBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(quad_indices->at(0)) * quad_indices->size(), &(quad_indices->at(0)), GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+
+	// TexCoord attribute
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+
+	glBindVertexArray(0);
 
 	while (!glfwWindowShouldClose(window))
 	{
+		if (camera->getRotationX() > 180.0f) {
+			camera->setRotationX(-180.0f);
+		}
+		if (camera->getRotationX() < -180.0f) {
+			camera->setRotationX(180.0f);
+		}
+		if (camera->getRotationY() > 180.0f) {
+			camera->setRotationY(-180.0f);
+		}
+		if (camera->getRotationY() < -180.0f) {
+			camera->setRotationY(180.0f);
+		}
+		if (camera->getRotationZ() > 180.0f) {
+			camera->setRotationZ(-180.0f);
+		}
+		if (camera->getRotationZ() < -180.0f) {
+			camera->setRotationZ(180.0f);
+		}
+
 		float dt;
 		float current_frame;
 		float lastXPos = xpos;
@@ -240,6 +336,16 @@ int main()
 		}
 
 		glfwPollEvents();
+
+		/*glClearColor(0.5f, 0.7f, 0.7f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
+
+
+		// первый проход
+		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // буфер трафарета не используется
+		glEnable(GL_DEPTH_TEST);
 
 		glClearColor(0.5f, 0.7f, 0.7f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -274,21 +380,26 @@ int main()
 		/* Collide player with all objects in chunk */
 		player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
 
-
-		/*if (push) {
-			for (int i = 0; i < chunk_ptr->GetObjsCount(); i ++) {
-				chunk_ptr->GetObj(i)->acceleration += (player->GetPhysicalObj()->getPosition() - chunk_ptr->GetObj(i)->getPosition()) * push_m;
-			}
-		}*/
-
 		chunk_ptr->CollideWithAll(player->GetPhysicalObj(), dt, true);
-
 		chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
-		
+
 		location->Draw(shaderHolder, camera, width, height);
 
 		inventory->draw(shaderHolder);
 		fps_counter->draw(shaderHolder);
+		test_frame.draw(shaderHolder);
+
+		// второй проход
+		glBindFramebuffer(GL_FRAMEBUFFER, 0); // возвращаем буфер кадра по умолчанию
+		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		shaderHolder->getPost()->Use();
+		glBindVertexArray(quadVAO);
+		glDisable(GL_DEPTH_TEST);
+		glBindTexture(GL_TEXTURE_2D, texColorBuffer);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glBindVertexArray(0);
 
 		glFinish();
 
