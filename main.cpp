@@ -90,8 +90,15 @@ bool push = false;
 float push_m = 0.0f;
 void load_characters();
 
+enum {
+      STATE_LOADING,
+      STATE_RUNNING,
+      STATE_PAUSED
+} game_state;
+
 int main()
 {
+        game_state = STATE_LOADING;
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 	// camera_3view = new Camera(glm::vec3(4.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 	player = new Player("player", 10, new PhysicalObj(glm::vec3(10.0f, 1.0f, 1.0f), new BoundaryBox(0.5f, 1.0f, 0.5f)), camera);
@@ -197,6 +204,8 @@ int main()
 
 	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
 
+	Text* paused_text = new Text("PAUSED", glm::vec4(-0.5f, -0.5f, 1.0f, 1.0f), Characters, 0.01f, glm::vec3(1.0f, 1.0f, 1.0f));
+
 	std::vector<std::string> headers;
 	headers.push_back("name");
 
@@ -217,6 +226,7 @@ int main()
 
 	glfwSetCursorPos(window, (double)width / 2.0, (double)height / 2.0);
 
+	game_state = STATE_RUNNING;
 	while (!glfwWindowShouldClose(window))
 	{
 		float dt;
@@ -225,22 +235,24 @@ int main()
 		float lastYPos = ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 		glm::vec2 cursorMotion = glm::vec2(lastXPos - xpos, lastYPos - ypos);
-		if (cursorMotion.x != 0 || cursorMotion.y != 0) {
-			if (speed.x != 0 || speed.y != 0) {
-				speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
-				speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
-			}
-			if (speedSide.x != 0 || speedSide.y != 0) {
-				speedSide.x = -sin(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
-				speedSide.y = -cos(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
-			}
-			cursorMotion *= sensivity;
-			player->GetCamera()->changeRotationX(-cursorMotion.y);
-			player->GetCamera()->changeRotationY(-cursorMotion.x);
-			if (player->GetCamera()->getRotation().x < -90.0f)
-				player->GetCamera()->setRotationX(-90.0f);
-			if (player->GetCamera()->getRotation().x > 90.0f)
-				player->GetCamera()->setRotationX(90.0f);
+		if(game_state != STATE_PAUSED) {
+		  if (cursorMotion.x != 0 || cursorMotion.y != 0) {
+		    if (speed.x != 0 || speed.y != 0) {
+		      speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
+		      speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
+		    }
+		    if (speedSide.x != 0 || speedSide.y != 0) {
+		      speedSide.x = -sin(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
+		      speedSide.y = -cos(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
+		    }
+		    cursorMotion *= sensivity;
+		    player->GetCamera()->changeRotationX(-cursorMotion.y);
+		    player->GetCamera()->changeRotationY(-cursorMotion.x);
+		    if (player->GetCamera()->getRotation().x < -90.0f)
+		      player->GetCamera()->setRotationX(-90.0f);
+		    if (player->GetCamera()->getRotation().x > 90.0f)
+		      player->GetCamera()->setRotationX(90.0f);
+		  }
 		}
 
 		glfwPollEvents();
@@ -248,35 +260,36 @@ int main()
 		glClearColor(0.5f, 0.7f, 0.7f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		location->UpdatePosition(player->GetPhysicalObj()->getPosition());
+		if(game_state != STATE_PAUSED){
+		  location->UpdatePosition(player->GetPhysicalObj()->getPosition());
 
-		Chunk * chunk_ptr = location->GetCurrentChunk();
-		if (chunk_ptr == nullptr)
-			chunk_ptr = location->GetChunkByPosition(0, 0);
+		  Chunk * chunk_ptr = location->GetCurrentChunk();
+		  if (chunk_ptr == nullptr)
+		    chunk_ptr = location->GetChunkByPosition(0, 0);
 
-		if (chunk_ptr->IsWaterPresent()) {
-			if (chunk_ptr->GetWaterHeight() > player->GetPhysicalObj()->getPositionY() + 3.0f) {
-				shaderHolder->setUnderWater(true);
-				player->GetPhysicalObj()->velocity.y += 0.1f;
-			} else {
-				if (chunk_ptr->GetWaterHeight() > player->GetPhysicalObj()->getPositionY() + 1.0f) {
-					player->GetPhysicalObj()->velocity.y += 0.1f;
-				}
-				shaderHolder->setUnderWater(false);
-			}
-		} else {
-			shaderHolder->setUnderWater(false);
-		}
+		  if (chunk_ptr->IsWaterPresent()) {
+		    if (chunk_ptr->GetWaterHeight() > player->GetPhysicalObj()->getPositionY() + 3.0f) {
+		      shaderHolder->setUnderWater(true);
+		      player->GetPhysicalObj()->velocity.y += 0.1f;
+		    } else {
+		      if (chunk_ptr->GetWaterHeight() > player->GetPhysicalObj()->getPositionY() + 1.0f) {
+			player->GetPhysicalObj()->velocity.y += 0.1f;
+		      }
+		      shaderHolder->setUnderWater(false);
+		    }
+		  } else {
+		    shaderHolder->setUnderWater(false);
+		  }
 
-		if (player_wants_to_jump) {
-			player->GetPhysicalObj()->jump(chunk_ptr);
-		}
+		  if (player_wants_to_jump) {
+		    player->GetPhysicalObj()->jump(chunk_ptr);
+		  }
 
-		player->GetPhysicalObj()->setSpeed(speed + speedSide);
-		player->Update(dt);
+		  player->GetPhysicalObj()->setSpeed(speed + speedSide);
+		  player->Update(dt);
 
-		/* Collide player with all objects in chunk */
-		player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
+		  /* Collide player with all objects in chunk */
+		  player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
 
 
 		/*if (push) {
@@ -285,29 +298,35 @@ int main()
 			}
 		}*/
 
-		chunk_ptr->CollideWithAll(player->GetPhysicalObj(), dt, true);
+		  chunk_ptr->CollideWithAll(player->GetPhysicalObj(), dt, true);
 
-		chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
-		
+		  chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
+		}
 		location->Draw(shaderHolder, camera, width, height);
 
 		inventory->draw(shaderHolder);
 		fps_counter->draw(shaderHolder);
+		if(game_state == STATE_PAUSED)
+		  paused_text->draw(shaderHolder);
 
 
 		glFinish();
 
 		glfwSwapBuffers(window);
 
-		player_core->Step();
-		location->Update(dt);
-		current_frame = glfwGetTime();
-		dt = (current_frame - last_frame);
-		last_frame = current_frame;
+		if(game_state != STATE_PAUSED) {
+		  player_core->Step();
+		  location->Update(dt);
+		  current_frame = glfwGetTime();
+		  dt = (current_frame - last_frame);
+		  last_frame = current_frame;
 
-		if (glfwGetTime() - fps_change_last > 0.1) {
-			fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
-			fps_change_last = glfwGetTime();
+		  if (glfwGetTime() - fps_change_last > 0.1) {
+		    fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
+		    fps_change_last = glfwGetTime();
+		  }
+		} else {
+		  last_frame = glfwGetTime();
 		}
 
 		player_wants_to_jump = false; // What the fuck
@@ -320,8 +339,13 @@ int main()
 // Is called whenever a key is pressed/released via GLFW
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, GL_TRUE);
+	}
+	if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
+	  if (game_state != STATE_PAUSED) game_state = STATE_PAUSED;
+	  else game_state = STATE_RUNNING;
+	}
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
 		speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
 		speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
