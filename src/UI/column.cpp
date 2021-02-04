@@ -89,6 +89,7 @@ Column::Column(glm::vec4 rect, std::vector<AbstractListElement*>* list, const st
 
 	glm::vec4 header_rect = glm::vec4(rect.x + 0.01, rect.y + rect.w - tile_width / 2 - letter_height / 2 * 0.001f, rect.z, rect.w / (float)maxCount);
 
+
 	this->column->push_back(new Text(header,
 	                                 header_rect,
 	                                 Characters,

@@ -108,8 +108,7 @@ void Image::draw(ShaderHolder* shaderHolder, glm::vec3 drawColor) {
 	shaderHolder->getText()->Use();
 
 	glUniform1i(glGetUniformLocation(shaderHolder->getText()->Program, "text"), 0);
-	GLuint textColorLoc = glGetUniformLocation(shaderHolder->getText()->Program, "textColor");
-	glUniform3fv(textColorLoc, 1, glm::value_ptr(drawColor));
+	glUniform3fv(glGetUniformLocation(shaderHolder->getText()->Program, "textColor"), 1, glm::value_ptr(drawColor));
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
