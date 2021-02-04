@@ -6,6 +6,8 @@ Column::Column(glm::vec4 rect, std::vector<AbstractListElement*>* list, const st
 	this->index = 0;
 	this->header = header;
 	this->column = new std::vector<Frame*>;
+	this->list = list;
+	this->characters = Characters;
 
 	for (size_t i = 0; i < maxCount; i ++) {
 		this->vertices.push_back(rect.x);
@@ -82,41 +84,50 @@ Column::Column(glm::vec4 rect, std::vector<AbstractListElement*>* list, const st
 
 	// Creating header for this column
 
-	glm::vec4 header_rect = glm::vec4(rect.x, rect.y + rect.w, rect.z, rect.w / (float)maxCount);
-	header_rect.y += 0.1;
+	float tile_width = rect.w / (float)maxCount;
+	float letter_height = Characters['a'].Size.y;
+
+	glm::vec4 header_rect = glm::vec4(rect.x + 0.01, rect.y + rect.w - tile_width / 2 - letter_height / 2 * 0.001f, rect.z, rect.w / (float)maxCount);
 
 
 	this->column->push_back(new Text(header,
 	                                 header_rect,
 	                                 Characters,
 	                                 0.001f,
-	                                 glm::vec3(0, 1.0, 0)));
-		header_rect.y += 0.1;
-
-	this->column->push_back(new Text("azaza",
-	                                 header_rect,
-	                                 Characters,
-	                                 0.001f,
-	                                 glm::vec3(0.0, 0.0, 1.0)));
+	                                 glm::vec3(0)));
 
 	// Inserting valuse one by one
-	/*for (uint16_t i = 0; i < list->size(); i ++) {
-		this->column.push_back(new Text(list->at(i)->getValues()->at(index),
-	                                	glm::vec4(rect.x, rect.y + rect.w / (float)maxCount * (i + 1), rect.z, rect.w / (float)maxCount),
-		                                Characters,
-		                                0.001f,
-		                                glm::vec3(1.0, 1.0, 0)));
-	}*/
+	for (uint16_t i = 0; i < list->size(); i ++) {
+		this->column->push_back(new Text(list->at(i)->getValues()->at(index),
+		                                 glm::vec4(rect.x, rect.y + rect.w / (float)maxCount * (i + 1), rect.z, rect.w / (float)maxCount),
+		                                 Characters,
+		                                 0.001f,
+		                                 glm::vec3(1.0, 1.0, 0)));
+	}
+}
 
-	/*if (maxCount > list->size()) {
-		for (uint8_t i = 0; i < maxCount - list->size(); i++) {
-			this->column.push_back(new Text("",
-		                                	glm::vec4(rect.x, rect.y + rect.w / (float)maxCount * (i + 1), rect.z, rect.w / (float)maxCount),
-			                                Characters,
-			                                0.001f,
-			                                glm::vec3(255, 255, 0)));
-		}
-	}*/
+void Column::update() {
+	float tile_width = this->rect.w / (float)(this->maxCount);
+	float letter_height = characters['a'].Size.y;
+
+	glm::vec4 header_rect = glm::vec4(this->rect.x + 0.01, this->rect.y + this->rect.w - tile_width / 2 - letter_height / 2 * 0.001f, this->rect.z, tile_width);
+
+	this->column->clear();
+
+	this->column->push_back(new Text(this->header,
+	                                 header_rect,
+	                                 characters,
+	                                 0.001f,
+	                                 glm::vec3(0)));
+
+	// Inserting valuse one by one
+	for (uint16_t i = 0; i < this->list->size(); i ++) {
+		this->column->push_back(new Text(this->list->at(i)->getValues()->at(this->index),
+		                                 glm::vec4(this->rect.x, this->rect.y + tile_width * (i + 1), this->rect.z, tile_width),
+		                                 characters,
+		                                 0.001f,
+		                                 glm::vec3(1.0, 1.0, 0)));
+	}
 }
 
 void Column::draw(ShaderHolder* shaderHolder) {

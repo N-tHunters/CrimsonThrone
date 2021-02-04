@@ -1,10 +1,11 @@
 #include "shaderHolder.hpp"
 
-ShaderHolder::ShaderHolder(Shader* shader3D, Shader* shaderGUI, Shader* shaderText, Shader* shaderWater) {
+ShaderHolder::ShaderHolder(Shader* shader3D, Shader* shaderGUI, Shader* shaderText, Shader* shaderWater, Shader* shaderPost) {
 	this->shader3D = shader3D;
 	this->shaderGUI = shaderGUI;
 	this->shaderText = shaderText;
 	this->shaderWater = shaderWater;
+	this->shaderPost = shaderPost;
 	this->underWater = false;
 }
 
@@ -22,6 +23,10 @@ Shader* ShaderHolder::getText() {
 
 Shader* ShaderHolder::getWater() {
 	return this->shaderWater;
+}
+
+Shader* ShaderHolder::getPost() {
+	return this->shaderPost;
 }
 
 void ShaderHolder::setUnderWater(bool input) {
