@@ -7,25 +7,24 @@
  * @param[in]  vertices_number  The number of vertices
  * @param[in]  position         The position
  */
-Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
+Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>> * height) {
 	this->size = size;
 	this->vertices_number = vertices_number;
 	this->position = position;
 	this->tile_width = size / (vertices_number - 1);
-
+	
 	std::vector<float> v;
 	for (int i = 0; i < vertices_number; i ++) {
 		v.clear();
 		for (int j = 0; j < vertices_number; j ++) {
-			float x = (i - vertices_number / 2) / 2.0f;
-			float y = (j - vertices_number / 2) / 2.0f;
-			v.push_back(cos(sqrt(x * x + y * y)) * 1.0);
+		  v.push_back(height->at(i)[j]);
 		}
 		this->height.push_back(v);
 	}
 
 	std::vector<std::array<float, 5>> coords;
 	std::vector<glm::vec3> normals;
+
 
 	for (int i = 0; i < vertices_number - 1; i ++) {
 		for (int j = 0; j < vertices_number - 1; j ++) {
@@ -118,17 +117,17 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 		}
 	}
 
+
 	for (size_t i = 0; i < coords.size(); i ++) {
 		this->vertices.push_back(coords[i][0]);
 		this->vertices.push_back(coords[i][1]);
 		this->vertices.push_back(coords[i][2]);
 
 		glm::vec3 normal = normals[i / 3];
-		int x = (i / 6) / (vertices_number - 1);
-		int y = (i / 6) % (vertices_number - 1);
+		int y = (i / 6) / (vertices_number - 1);
+		int x = (i / 6) % (vertices_number - 1);
 		int w = vertices_number - 1;
 		int c = 1;
-
 		if (i % 6 == 0) {
 			if (x > 0) {
 				normal += normals[i / 3 - 1];
@@ -227,6 +226,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 			}
 		}
 
+
 		normal /= c;
 
 		this->vertices.push_back(normal.x);
@@ -238,6 +238,21 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 	}
 
 	this->obj = new PhysicalObj(new Mesh("resources/textures/rock.png", &(this->vertices), &(this->indices)), false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
+}
+
+Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
+        std::vector<std::vector<float>> height;
+	std::vector<float> v;
+	for (int i = 0; i < vertices_number; i ++) {
+		v.clear();
+		for (int j = 0; j < vertices_number; j ++) {
+			float x = (i - vertices_number / 2) / 2.0f;
+			float y = (j - vertices_number / 2) / 2.0f;
+			v.push_back(cos(sqrt(x * x + y * y)) * 1.0);
+		}
+		height.push_back(v);
+	}
+	Terrain(size, vertices_number, position, &height);
 }
 
 Terrain::Terrain(Terrain& terrain) {

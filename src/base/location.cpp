@@ -33,6 +33,34 @@ Location::Location(size_t width, size_t height, int chunk_width, int chunk_heigh
 }
 
 /**
+ * Construct location from landscape generator
+ * \param width Width of this location (in chunks)
+ * \param height Height of this location (in chunks)
+ * \param chunk_width Width of chunk (in meters)
+ * \param chunk_height Height of chunk (in meters)
+ */
+Location::Location(size_t width, size_t height, int chunk_width, int chunk_height, LandscapeGenerator * generator) {
+  this->width = width;
+  this->height = height;
+  this->chunk_width = chunk_width;
+  this->chunk_height = chunk_height;
+
+  for(size_t i = 0; i < height; i++) {
+    vector<Chunk *> row;
+    for(size_t j = 0; j < width; j++) {
+      row.push_back(nullptr);
+    }
+    this->chunks.push_back(row);
+  }
+
+  generator->Generate(this, width, height, chunk_width, chunk_height, 10);
+
+  this->current_x = 0;
+  this->current_y = 0;
+}
+
+
+/**
  * Fill empty chunks with plain terrain
  */
 void Location::FillEmptyChunks() {
