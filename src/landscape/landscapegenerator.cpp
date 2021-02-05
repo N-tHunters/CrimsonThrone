@@ -11,14 +11,14 @@ PhysicalObj * create_wall(glm::vec3 position, glm::vec3 size, std::string textur
   glm::vec3 halfs = size * 0.5f;
 
   glm::vec3 v[8] = {
-			      glm::vec3(-halfs.x, 0, -halfs.z),
-			      glm::vec3(halfs.x, 0, -halfs.z),
-			      glm::vec3(-halfs.x, size.y, -halfs.z),
-			      glm::vec3(halfs.x, size.y, -halfs.z),
-			      glm::vec3(-halfs.x, 0, halfs.z),
-			      glm::vec3(halfs.x, 0, halfs.z),
-			      glm::vec3(-halfs.x, size.y, halfs.z),
-			      glm::vec3(halfs.x, size.y, halfs.z)
+			      glm::vec3(-halfs.x, -halfs.y, -halfs.z),
+			      glm::vec3(halfs.x, -halfs.y, -halfs.z),
+			      glm::vec3(-halfs.x, halfs.y, -halfs.z),
+			      glm::vec3(halfs.x, halfs.y, -halfs.z),
+			      glm::vec3(-halfs.x, -halfs.y, halfs.z),
+			      glm::vec3(halfs.x, -halfs.y, halfs.z),
+			      glm::vec3(-halfs.x, halfs.y, halfs.z),
+			      glm::vec3(halfs.x, halfs.y, halfs.z)
   };
 
   push_vertex(&vertices, v[0], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f));

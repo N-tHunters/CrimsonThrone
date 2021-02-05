@@ -230,15 +230,10 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 		this->velocity.z = 0.0f;
 		this->force.z = 0.0f;
 		collided = true;
-		printf("%s\n", "Collided by z!");
 	}
 
 
-<<<<<<< HEAD
 	/*if (isPlayer) {
-=======
-	/*	if (isPlayer) {
->>>>>>> dd7786b (Dungeon generator implemented)
 		if (collided)
 		{
 			other_object->getMesh()->changeTexture("resources/textures/fire.png");
