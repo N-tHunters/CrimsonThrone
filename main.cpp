@@ -234,7 +234,7 @@ int main()
 	        &postShader);
 
 	// ----------------------------------------------- CODE ------------------------------------------
-	location = new Location(10, 10, 10, 10, new DungeonA1Generator(3));
+	location = new Location(10, 10, 10, 10, new DungeonA1Generator(10));
 
 	SetCurrentLocation(location);
 

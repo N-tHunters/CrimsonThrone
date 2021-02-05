@@ -4,7 +4,7 @@
 
 const float wall_height = 10.0f;
 
-DungeonA1Generator::DungeonA1Generator() {}
+DungeonA1Generator::DungeonA1Generator(int floors) : floors(floors) {}
 
 void DungeonA1Generator::Generate(Location * location, size_t width, size_t height, int chunk_width, int chunk_height, int vertices_number) {
   FlatGenerator::Generate(location, width, height, chunk_width, chunk_height, vertices_number);
@@ -18,26 +18,7 @@ void DungeonA1Generator::Generate(Location * location, size_t width, size_t heig
 
   GenerateDungeon(0, 0, width, height);
 
-  int q = 0;
-  for(size_t i = 0; i < height * 2 + 1; i++) {
-    if(i % 2 == 0) {
-      printf("#");
-      for(size_t j = 0; j < width; j++) {
-	if(walls[q++])
-	  printf("##");
-	else
-	  printf(" #");
-      }
-    } else {
-      for(size_t j = 0; j < width + 1; j++) {
-	if(walls[q++])
-	  printf("# ");
-	else
-	  printf("  ");
-      }
-    }
-    puts("");
-  }
+  PrintDungeon(height, width);
 
   for(size_t i = 0; i < width + 1; i ++) {
     for(size_t j = 0; j < height; j ++) {
@@ -59,6 +40,13 @@ void DungeonA1Generator::Generate(Location * location, size_t width, size_t heig
 	else
 	  location->GetChunk(j, i)->AddObj(create_wall(glm::vec3(chunk_width * 0.5f + chunk_width * j, 0.1f, chunk_height * i - 0.3f), glm::vec3(chunk_width, wall_height, 2.0f), "resources/textures/stone.jpg"));
       }
+    }
+  }
+  
+  for(size_t i = 0; i < height; i ++) {
+    for(size_t j = 0; j < width; j ++) {
+	  location->GetChunk(j, i)->AddObj(create_wall(glm::vec3(chunk_width * 0.5f + chunk_width * j, wall_height, chunk_height * i + 0.5f * chunk_height), glm::vec3(chunk_width, 2.0f, chunk_height), "resources/textures/stone.jpg"));
+
     }
   }
 }
@@ -103,4 +91,28 @@ void DungeonA1Generator::GenerateDungeon(int tx, int ty, int mx, int my) {
     
     GenerateDungeon(nx, ny, mx, my);
   } while (choices.size() - 1 > 0);
+}
+
+
+void DungeonA1Generator::PrintDungeon(int height, int width) {
+  int q = 0;
+  for(size_t i = 0; i < height * 2 + 1; i++) {
+    if(i % 2 == 0) {
+      printf("#");
+      for(size_t j = 0; j < width; j++) {
+	if(walls[q++])
+	  printf("##");
+	else
+	  printf(" #");
+      }
+    } else {
+      for(size_t j = 0; j < width + 1; j++) {
+	if(walls[q++])
+	  printf("# ");
+	else
+	  printf("  ");
+      }
+    }
+    puts("");
+  }
 }
