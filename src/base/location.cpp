@@ -4,8 +4,8 @@
  */
 #include "location.hpp"
 
-const int PROCESS_RADIUS = 2;
-const int RENDER_RADIUS = 2;
+const int PROCESS_RADIUS = 3;
+const int RENDER_RADIUS = 5;
 
 /**
  * Default constructor
