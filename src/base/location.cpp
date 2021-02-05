@@ -53,7 +53,7 @@ Location::Location(size_t width, size_t height, int chunk_width, int chunk_heigh
     this->chunks.push_back(row);
   }
 
-  generator->Generate(this, width, height, chunk_width, chunk_height, 10);
+  generator->Generate(this, width, height, chunk_width, chunk_height, 5);
 
   this->current_x = 0;
   this->current_y = 0;
