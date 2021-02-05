@@ -59,6 +59,8 @@
 #include <UI/text.hpp>
 #include <UI/abstractListElement.hpp>
 
+#include <landscape/flatgenerator.hpp>
+
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -232,7 +234,7 @@ int main()
 	        &postShader);
 
 	// ----------------------------------------------- CODE ------------------------------------------
-	location = new Location(10, 10, 30, 30);
+	location = new Location(10, 10, 30, 30, new FlatGenerator());
 
 	location->FillEmptyChunks();
 

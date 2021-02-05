@@ -23,6 +23,9 @@ UI_OBJS=$(patsubst %.cpp,%.o,$(UI_SRCS))
 MATH_SRCS=$(wildcard src/math/*.cpp)
 MATH_OBJS=$(patsubst %.cpp,%.o,$(MATH_SRCS))
 
+LAND_SRCS=$(wildcard src/landscape/*.cpp)
+LAND_OBJS=$(patsubst %.cpp,%.o,$(LAND_SRCS))
+
 OTH_SRCS=$(wildcard src/*.c)
 OTH_OBJS=$(patsubst %.c,%.o,$(OTH_SRCS))
 
@@ -53,7 +56,7 @@ endif
 
 all: $(TARGET)
 
-$(TARGET): $(TARGET).o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(UI_OBJS) $(MAGIC_OBJS) $(MATH_OBJS) src/debug.o
+$(TARGET): $(TARGET).o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(UI_OBJS) $(MAGIC_OBJS) $(MATH_OBJS) $(LAND_OBJS) src/debug.o
 	$(CC) -o $@ $^ $(CFLAGS) $(LFLAGS) $(SFLAGS)
 
 %.o: %.cpp
@@ -63,7 +66,7 @@ $(TARGET): $(TARGET).o $(BASE_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $
 	$(CCX) $(CXFLAGS) -c $< -o $@
 
 clean:
-	$(RM) $(BASE_OBJS) $(MAGIC_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(UI_OBJS) $(MATH_OBJS) $(TARGET).o $(REMOVABLE)
+	$(RM) $(BASE_OBJS) $(MAGIC_OBJS) $(RENDER_OBJS) $(PHYSICS_OBJS) $(OTH_OBJS) $(SOUND_OBJS) $(UI_OBJS) $(MATH_OBJS) $(LAND_OBJS) $(TARGET).o $(REMOVABLE)
 
 cleanBase:
 	$(RM) $(BASE_OBJS) $(TARGET).o $(REMOVABLE)

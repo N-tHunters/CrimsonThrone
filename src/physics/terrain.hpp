@@ -24,6 +24,7 @@ class Terrain {
 	glm::vec3 position;
 public:
 	Terrain(float, int, glm::vec3);
+        Terrain(float, int, glm::vec3, std::vector<std::vector<float>> *);
 	Terrain(Terrain&);
 
 	glm::vec3 getPosition();
