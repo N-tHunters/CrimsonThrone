@@ -486,3 +486,6 @@ float Chunk::GetWaterHeight() { return this->water_height; }
 
 Location * Chunk::GetLocation() { return location; }
 void Chunk::SetLocation(Location * location) { this->location = location; }
+
+int Chunk::GetX() { return this->x; }
+int Chunk::GetY() { return this->y; }

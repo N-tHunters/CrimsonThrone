@@ -80,6 +80,9 @@ class Chunk {
 
   void SetLocation(Location *);
   Location * GetLocation();
+
+  int GetX();
+  int GetY();
 };
 
 #endif
