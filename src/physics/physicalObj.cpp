@@ -261,7 +261,7 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 			other_object->getMesh()->activeDebug = true;
 		} else if (other_object->getMesh()->activeDebug) {
 			other_object->getMesh()->activeDebug = false;
-			other_object->getMesh()->changeTexture("resources/textures/box.jpeg");
+			other_object->getMesh()->changeTexture("resources/textures/wood.png");
 		}
 	}
 
