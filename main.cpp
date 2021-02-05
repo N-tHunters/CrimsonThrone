@@ -59,7 +59,7 @@
 #include <UI/text.hpp>
 #include <UI/abstractListElement.hpp>
 
-#include <landscape/flatgenerator.hpp>
+#include <landscape/dungeona1generator.hpp>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -103,7 +103,7 @@ int main()
 	game_state = STATE_LOADING;
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 	// camera_3view = new Camera(glm::vec3(4.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-	player = new Player("player", 10, new PhysicalObj(glm::vec3(10.0f, 1.0f, 1.0f), new BoundaryBox(0.5f, 1.0f, 0.5f)), camera);
+	player = new Player("player", 10, new PhysicalObj(glm::vec3(3.0f, 1.0f, 3.0f), new BoundaryBox(0.5f, 1.0f, 0.5f)), camera);
 	player_core = new MagicCore();
 	player_core->SetPhysicalObj(player->GetPhysicalObj());
 
@@ -234,15 +234,13 @@ int main()
 	        &postShader);
 
 	// ----------------------------------------------- CODE ------------------------------------------
-	location = new Location(10, 10, 30, 30, new FlatGenerator());
-
-	location->FillEmptyChunks();
+	location = new Location(10, 10, 10, 10, new DungeonA1Generator(3));
 
 	SetCurrentLocation(location);
 
 	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
 
-	Text* paused_text = new Text("PAUSED", glm::vec4(-0.5f, -0.5f, 1.0f, 1.0f), Characters, 0.01f, glm::vec3(1.0f, 1.0f, 1.0f));
+	Text* paused_text = new Text("PAUSED", glm::vec4(-0.7f, -0.7f, 1.0f, 1.0f), Characters, 0.01f, glm::vec3(1.0f, 1.0f, 1.0f));
 
 	std::vector<std::string> headers;
 	headers.push_back("name");
@@ -264,8 +262,6 @@ int main()
 	Bar test_frame(glm::vec4(-0.9f, 0.9f, 0.5f, 0.1f), &hp, &maxHp, glm::vec3(255.0, 0, 0));
 
 	float fps_change_last = 0.0f;
-
-	location->GetChunk(0, 0)->AddObj(new PhysicalObj(new Mesh("resources/textures/marble.jpg", new Model("resources/models/marble_cube.obj")), true, true, false, false, glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), "box"));
 
 	GLuint quadVAO, quadVBO, quadEBO;
 
@@ -306,6 +302,7 @@ int main()
 	glfwSetCursorPos(window, (double)width / 2.0, (double)height / 2.0);
 
 	game_state = STATE_RUNNING;
+	printf("Game stared\n");
 	while (!glfwWindowShouldClose(window))
 	{
 		if (camera->getRotationX() > 180.0f) {

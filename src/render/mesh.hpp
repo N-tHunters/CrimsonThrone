@@ -47,4 +47,7 @@ public:
 	void rotate(glm::vec3);
 	void changeTexture(const std::string&);
 };
+
+void push_vertex(std::vector<float>* vec, glm::vec3 pos, glm::vec3 normal, glm::vec2 uv);
+
 #endif

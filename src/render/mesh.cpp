@@ -225,3 +225,18 @@ void Mesh::changeTexture(const std::string& texturePath) {
 	freeImage(image);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
+
+
+void push_vertex(std::vector<float>* vec, glm::vec3 pos, glm::vec3 normal, glm::vec2 uv) {
+  vec->push_back(pos.x);
+  vec->push_back(pos.y);
+  vec->push_back(pos.z);
+  
+  vec->push_back(normal.x);
+  vec->push_back(normal.y);
+  vec->push_back(normal.z);
+  
+  vec->push_back(uv.x);
+  vec->push_back(uv.y);
+}
+

@@ -448,7 +448,7 @@ void Chunk::Update(float dt) {
   
   for(Actor * actor: actors) {
     glm::vec3 position = actor->GetPhysicalObj()->getPosition();
-    Chunk * chunk_ptr = this->location->GetChunkByPosition(position.x, position.y);
+    Chunk * chunk_ptr = this->location->GetChunkByPosition(position.x, position.z);
     if(chunk_ptr != this) {
       this->DeleteActor(actor);
       if(chunk_ptr != nullptr)
@@ -458,7 +458,7 @@ void Chunk::Update(float dt) {
   
   for(PhysicalObj * object: objects) {
     glm::vec3 position = object->getPosition();
-    Chunk * chunk_ptr = this->location->GetChunkByPosition(position.x, position.y);
+    Chunk * chunk_ptr = this->location->GetChunkByPosition(position.x, position.z);
     if(chunk_ptr != this) {
       this->DeleteObj(object);
       if(chunk_ptr != nullptr)
@@ -468,7 +468,7 @@ void Chunk::Update(float dt) {
 
   for(Item * item: items) {
     glm::vec3 position = item->GetPhysicalObj()->getPosition();
-    Chunk * chunk_ptr = this->location->GetChunkByPosition(position.x, position.y);
+    Chunk * chunk_ptr = this->location->GetChunkByPosition(position.x, position.z);
     if(chunk_ptr != this) {
       this->DeleteItem(item);
       if(chunk_ptr != nullptr)
