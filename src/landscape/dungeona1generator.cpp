@@ -2,7 +2,7 @@
 #include <base/location.hpp>
 #include <utility>
 
-const float wall_height = 10.0f;
+const float wall_height = 6.0f;
 
 DungeonA1Generator::DungeonA1Generator(int floors) : floors(floors) {}
 
@@ -24,9 +24,9 @@ void DungeonA1Generator::Generate(Location * location, size_t width, size_t heig
     for(size_t j = 0; j < height; j ++) {
       if(walls[i * (height * 2 + 1) + j]) {
 	if(i == width)
-	  location->GetChunk(width - 1, j)->AddObj(create_wall(glm::vec3(chunk_width * i - 0.5f, 0.0f, chunk_height * 0.5f + chunk_height * j), glm::vec3(2.0f, wall_height, chunk_height), "resources/textures/stone.jpg"));
+	  location->GetChunk(width - 1, j)->AddObj(create_wall(glm::vec3(chunk_width * i - 0.5f, wall_height * 0.5f, chunk_height * 0.5f + chunk_height * j), glm::vec3(2.0f, wall_height, chunk_height), "resources/textures/stone.jpg"));
 	else
-	  location->GetChunk(i, j)->AddObj(create_wall(glm::vec3(chunk_width * i, 0.0f, chunk_height * 0.5f + chunk_height * j), glm::vec3(2.0f, wall_height, chunk_height), "resources/textures/stone.jpg"));
+	  location->GetChunk(i, j)->AddObj(create_wall(glm::vec3(chunk_width * i, wall_height * 0.5f, chunk_height * 0.5f + chunk_height * j), glm::vec3(2.0f, wall_height, chunk_height), "resources/textures/stone.jpg"));
       }
     }
   }
@@ -36,9 +36,9 @@ void DungeonA1Generator::Generate(Location * location, size_t width, size_t heig
     for(size_t j = 0; j < width; j ++) {
       if(walls[height + (height * 2 + 1) * j + i]) {
 	if(i == height)
-	  location->GetChunk(j, height - 1)->AddObj(create_wall(glm::vec3(chunk_width * 0.5f + chunk_width * j, 0.0f, chunk_height * i - 0.3f), glm::vec3(chunk_width, wall_height, 2.0f), "resources/textures/stone.jpg"));
+	  location->GetChunk(j, height - 1)->AddObj(create_wall(glm::vec3(chunk_width * 0.5f + chunk_width * j, wall_height * 0.5f, chunk_height * i - 0.3f), glm::vec3(chunk_width, wall_height, 2.0f), "resources/textures/stone.jpg"));
 	else
-	  location->GetChunk(j, i)->AddObj(create_wall(glm::vec3(chunk_width * 0.5f + chunk_width * j, 0.1f, chunk_height * i - 0.3f), glm::vec3(chunk_width, wall_height, 2.0f), "resources/textures/stone.jpg"));
+	  location->GetChunk(j, i)->AddObj(create_wall(glm::vec3(chunk_width * 0.5f + chunk_width * j, wall_height * 0.5f, chunk_height * i - 0.3f), glm::vec3(chunk_width, wall_height, 2.0f), "resources/textures/stone.jpg"));
       }
     }
   }

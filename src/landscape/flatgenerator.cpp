@@ -18,7 +18,7 @@ void FlatGenerator::Generate(Location * location, size_t width, size_t height, i
   
   for(size_t i = 0; i < height; i++)
     for(size_t j = 0; j < width; j++) {
-      Chunk * new_chunk = new Chunk(location, chunk_width, chunk_height, new Terrain((float)chunk_width, vertices_number, glm::vec3(chunk_width * i, -1.0f, chunk_height * j), &height_map));
+      Chunk * new_chunk = new Chunk(location, i, j, new Terrain((float)chunk_width, vertices_number, glm::vec3(chunk_width * i, -1.0f, chunk_height * j), &height_map));
       location->SetChunk(i, j, new_chunk);
     }
 }
