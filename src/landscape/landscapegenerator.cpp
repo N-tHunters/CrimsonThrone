@@ -21,6 +21,17 @@ PhysicalObj * create_wall(glm::vec3 position, glm::vec3 size, std::string textur
 			      glm::vec3(halfs.x, halfs.y, halfs.z)
   };
 
+  /*glm::vec3 v[8] = {
+            glm::vec3(0.0f, 0.0f, 0.0f),
+            glm::vec3(size.x, 0.0, 0.0),
+            glm::vec3(0.0, size.y, 0.0),
+            glm::vec3(size.x, size.y, 0.0),
+            glm::vec3(0.0, 0.0, size.z),
+            glm::vec3(size.x, 0.0, size.z),
+            glm::vec3(0.0, size.y, size.z),
+            glm::vec3(size.x, size.y, size.z)
+  };*/
+
   // z * y
 
   push_vertex(&vertices, v[0], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f));
@@ -80,5 +91,5 @@ PhysicalObj * create_wall(glm::vec3 position, glm::vec3 size, std::string textur
 
   
   return new PhysicalObj(new Mesh(texture_path, &vertices, &indices),
-			 false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "wall", new BoundaryBox(size.x, size.y, size.z));
+			 false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "wall", new BoundaryBox(size.x / 2.f, size.y / 2.f, size.z / 2.f));
 }
