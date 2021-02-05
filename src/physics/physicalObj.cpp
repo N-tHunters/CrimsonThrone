@@ -63,10 +63,16 @@ void PhysicalObj::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width,
 }
 
 void PhysicalObj::update(float dt) {
-	this->acceleration = this->force / this->mass;
-	this->velocity += this->acceleration * dt;
-	this->position += this->velocity * dt;
-	this->force = glm::vec3(0.0f);
+	if (this->isActive) {
+		this->acceleration = this->force / this->mass;
+		this->velocity += this->acceleration * dt;
+		this->position += this->velocity * dt;
+		this->force = glm::vec3(0.0f);
+		if (this->onGround) {
+			this->velocity.x /= 1.1f;
+			this->velocity.z /= 1.1f;
+		}
+	}
 }
 
 glm::vec3 PhysicalObj::getPosition() { return position; }
@@ -145,7 +151,7 @@ void PhysicalObj::setSpeed(glm::vec2 speed) {
 void PhysicalObj::setSpeed(glm::vec3 speed) { velocity = speed; }
 
 float PhysicalObj::detectCollision(Terrain* terrain) {
-	return terrain->getHeight(getPosition()) - this->getPositionY() + reinterpret_cast<BoundaryBox*>(this->boundary)->height / 2.0f;
+	return terrain->getHeight(getPosition()) - this->getPositionY() + reinterpret_cast<BoundaryBox*>(this->boundary)->height;
 }
 
 float PhysicalObj::detectCollision(Terrain* terrain, glm::vec3 position) {
@@ -214,8 +220,9 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 
 	if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_x, this->getRotation(), other_object->getPosition() + other_velocity_x, other_object->getRotation())) {
 		this->velocity.x = 0.0f;
-		this->force.x = 0.0f;
+		this->velocity.x = -(this->position.x - other_object->getPositionX()) * 2.0f;
 		collided = true;
+		other_object->velocity.x -= (this->position.x - other_object->getPositionX()) * 2.0f;
 	}
 
 	if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_y, this->getRotation(), other_object->getPosition() + other_velocity_y, other_object->getRotation())) {
@@ -226,9 +233,18 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 
 	if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_z, this->getRotation(), other_object->getPosition() + other_velocity_z, other_object->getRotation())) {
 		this->velocity.z = 0.0f;
-		this->force.z = 0.0f;
+		this->velocity.z = -(this->position.z - other_object->getPositionZ()) * 2.0f;
+		other_object->velocity.z -= (this->position.z - other_object->getPositionZ()) * 2.0f;
 		collided = true;
-		printf("%s\n", "Collided by z!");
+	}
+
+	if (this->boundary->Collide(other_object->boundary,
+	                            this->getPosition(),
+	                            this->getRotation(),
+	                            other_object->getPosition(),
+	                            other_object->getRotation())) {
+		this->force += this->getPosition() - other_object->getPosition();
+		other_object->force -= this->getPosition() - other_object->getPosition();
 	}
 
 
