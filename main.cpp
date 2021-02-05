@@ -392,7 +392,17 @@ int main()
 
 
 			player->GetPhysicalObj()->setSpeed(speed + speedSide);
-			chunk_ptr->CollideWithAll(player->GetPhysicalObj(), dt, true);
+			int chunk_ix = chunk_ptr->GetX();
+			int chunk_iy = chunk_ptr->GetY();
+			for(int dx = -1; dx <= 1; dx++) {
+			  for(int dy = -1; dy <= 1; dy++) {
+			    int nx = chunk_ix + dx;
+			    int ny = chunk_iy + dy;
+			    Chunk * nchunk = chunk_ptr->GetLocation()->GetChunk(nx, ny);
+			    if(nchunk == nullptr) continue;
+			    nchunk->CollideWithAll(player->GetPhysicalObj(), dt, true);			    
+			  }
+			}
 			player->Update(dt);
 
 			/* Collide player with all objects in chunk */
