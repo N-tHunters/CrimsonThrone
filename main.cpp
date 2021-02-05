@@ -91,14 +91,14 @@ float push_m = 0.0f;
 void load_characters();
 
 enum {
-      STATE_LOADING,
-      STATE_RUNNING,
-      STATE_PAUSED
+	STATE_LOADING,
+	STATE_RUNNING,
+	STATE_PAUSED
 } game_state;
 
 int main()
 {
-        game_state = STATE_LOADING;
+	game_state = STATE_LOADING;
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 	// camera_3view = new Camera(glm::vec3(4.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 	player = new Player("player", 10, new PhysicalObj(glm::vec3(10.0f, 1.0f, 1.0f), new BoundaryBox(0.5f, 1.0f, 0.5f)), camera);
@@ -193,7 +193,7 @@ int main()
 	unsigned int texColorBuffer;
 	glGenTextures(1, &texColorBuffer);
 	glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);	
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -263,7 +263,7 @@ int main()
 
 	float fps_change_last = 0.0f;
 
-	location->GetChunk(0, 0)->AddObj(new PhysicalObj(new Mesh("resources/textures/box.jpeg", new Model("resources/models/box.obj")), true, true, false, false, glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), "box"));
+	location->GetChunk(0, 0)->AddObj(new PhysicalObj(new Mesh("resources/textures/marble.jpg", new Model("resources/models/marble_cube.obj")), true, true, false, false, glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), "box"));
 
 	GLuint quadVAO, quadVBO, quadEBO;
 
@@ -276,8 +276,8 @@ int main()
 
 	std::vector<float>* quad_vertices = new std::vector<float> {
 		-1.0f, -1.0f, 0.0f, 0.0f,
-		 1.0f, -1.0f, 1.0f, 0.0f,
-		 1.0f,  1.0f, 1.0f, 1.0f,
+		1.0f, -1.0f, 1.0f, 0.0f,
+		1.0f,  1.0f, 1.0f, 1.0f,
 		-1.0f,  1.0f, 0.0f, 1.0f
 	};
 
@@ -331,24 +331,24 @@ int main()
 		float lastYPos = ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 		glm::vec2 cursorMotion = glm::vec2(lastXPos - xpos, lastYPos - ypos);
-		if(game_state != STATE_PAUSED) {
-		  if (cursorMotion.x != 0 || cursorMotion.y != 0) {
-		    if (speed.x != 0 || speed.y != 0) {
-		      speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
-		      speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
-		    }
-		    if (speedSide.x != 0 || speedSide.y != 0) {
-		      speedSide.x = -sin(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
-		      speedSide.y = -cos(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
-		    }
-		    cursorMotion *= sensivity;
-		    player->GetCamera()->changeRotationX(-cursorMotion.y);
-		    player->GetCamera()->changeRotationY(-cursorMotion.x);
-		    if (player->GetCamera()->getRotation().x < -90.0f)
-		      player->GetCamera()->setRotationX(-90.0f);
-		    if (player->GetCamera()->getRotation().x > 90.0f)
-		      player->GetCamera()->setRotationX(90.0f);
-		  }
+		if (game_state != STATE_PAUSED) {
+			if (cursorMotion.x != 0 || cursorMotion.y != 0) {
+				if (speed.x != 0 || speed.y != 0) {
+					speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
+					speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
+				}
+				if (speedSide.x != 0 || speedSide.y != 0) {
+					speedSide.x = -sin(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
+					speedSide.y = -cos(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
+				}
+				cursorMotion *= sensivity;
+				player->GetCamera()->changeRotationX(-cursorMotion.y);
+				player->GetCamera()->changeRotationY(-cursorMotion.x);
+				if (player->GetCamera()->getRotation().x < -90.0f)
+					player->GetCamera()->setRotationX(-90.0f);
+				if (player->GetCamera()->getRotation().x > 90.0f)
+					player->GetCamera()->setRotationX(90.0f);
+			}
 		}
 
 		glfwPollEvents();
@@ -366,54 +366,49 @@ int main()
 		glClearColor(0.5f, 0.7f, 0.7f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		if(game_state != STATE_PAUSED){
-		  location->UpdatePosition(player->GetPhysicalObj()->getPosition());
+		if (game_state != STATE_PAUSED) {
+			location->UpdatePosition(player->GetPhysicalObj()->getPosition());
 
-		  Chunk * chunk_ptr = location->GetCurrentChunk();
-		  if (chunk_ptr == nullptr)
-		    chunk_ptr = location->GetChunkByPosition(0, 0);
+			Chunk * chunk_ptr = location->GetCurrentChunk();
+			if (chunk_ptr == nullptr)
+				chunk_ptr = location->GetChunkByPosition(0, 0);
 
-		  if (chunk_ptr->IsWaterPresent()) {
-		    if (chunk_ptr->GetWaterHeight() > player->GetPhysicalObj()->getPositionY() + 3.0f) {
-		      shaderHolder->setUnderWater(true);
-		      player->GetPhysicalObj()->velocity.y += 0.1f;
-		    } else {
-		      if (chunk_ptr->GetWaterHeight() > player->GetPhysicalObj()->getPositionY() + 1.0f) {
-			player->GetPhysicalObj()->velocity.y += 0.1f;
-		      }
-		      shaderHolder->setUnderWater(false);
-		    }
-		  } else {
-		    shaderHolder->setUnderWater(false);
-		  }
+			/*if (chunk_ptr->IsWaterPresent()) {
+				if (chunk_ptr->GetWaterHeight() > player->GetPhysicalObj()->getPositionY() + 3.0f) {
+					shaderHolder->setUnderWater(true);
+					player->GetPhysicalObj()->velocity.y += 0.1f;
+				} else {
+					if (chunk_ptr->GetWaterHeight() > player->GetPhysicalObj()->getPositionY() + 1.0f) {
+						player->GetPhysicalObj()->velocity.y += 0.1f;
+					}
+					shaderHolder->setUnderWater(false);
+				}
+			} else {
+				shaderHolder->setUnderWater(false);
+			}*/
 
-		  if (player_wants_to_jump) {
-		    player->GetPhysicalObj()->jump(chunk_ptr);
-		  }
-
-		  player->GetPhysicalObj()->setSpeed(speed + speedSide);
-		  player->Update(dt);
-
-		  /* Collide player with all objects in chunk */
-		  player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
-
-		/*if (push) {
-			for (int i = 0; i < chunk_ptr->GetObjsCount(); i ++) {
-				chunk_ptr->GetObj(i)->acceleration += (player->GetPhysicalObj()->getPosition() - chunk_ptr->GetObj(i)->getPosition()) * push_m;
+			if (player_wants_to_jump) {
+				player->GetPhysicalObj()->jump(chunk_ptr);
 			}
-		}*/
 
-		  chunk_ptr->CollideWithAll(player->GetPhysicalObj(), dt, true);
 
-		  chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
+			player->GetPhysicalObj()->setSpeed(speed + speedSide);
+			chunk_ptr->CollideWithAll(player->GetPhysicalObj(), dt, true);
+			player->Update(dt);
+
+			/* Collide player with all objects in chunk */
+			player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
+
+			/*if (push) {
+				for (int i = 0; i < chunk_ptr->GetObjsCount(); i ++) {
+					chunk_ptr->GetObj(i)->acceleration += (player->GetPhysicalObj()->getPosition() - chunk_ptr->GetObj(i)->getPosition()) * push_m;
+				}
+			}*/
+
+			chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
 		}
-		location->Draw(shaderHolder, camera, width, height);
 
-		inventory->draw(shaderHolder);
-		fps_counter->draw(shaderHolder);
-		test_frame.draw(shaderHolder);
-		if(game_state == STATE_PAUSED)
-		  paused_text->draw(shaderHolder);
+		location->Draw(shaderHolder, camera, width, height);
 
 		// второй проход
 		glBindFramebuffer(GL_FRAMEBUFFER, 0); // возвращаем буфер кадра по умолчанию
@@ -427,23 +422,29 @@ int main()
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
+		inventory->draw(shaderHolder);
+		fps_counter->draw(shaderHolder);
+		test_frame.draw(shaderHolder);
+		if (game_state == STATE_PAUSED)
+			paused_text->draw(shaderHolder);
+
 		glFinish();
 
 		glfwSwapBuffers(window);
 
-		if(game_state != STATE_PAUSED) {
-		  player_core->Step();
-		  location->Update(dt);
-		  current_frame = glfwGetTime();
-		  dt = (current_frame - last_frame);
-		  last_frame = current_frame;
+		if (game_state != STATE_PAUSED) {
+			player_core->Step();
+			location->Update(dt);
+			current_frame = glfwGetTime();
+			dt = (current_frame - last_frame);
+			last_frame = current_frame;
 
-		  if (glfwGetTime() - fps_change_last > 0.1) {
-		    fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
-		    fps_change_last = glfwGetTime();
-		  }
+			if (glfwGetTime() - fps_change_last > 0.1) {
+				fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
+				fps_change_last = glfwGetTime();
+			}
 		} else {
-		  last_frame = glfwGetTime();
+			last_frame = glfwGetTime();
 		}
 
 		player_wants_to_jump = false; // What the fuck
@@ -456,12 +457,12 @@ int main()
 // Is called whenever a key is pressed/released via GLFW
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
-        if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
 	if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
-	  if (game_state != STATE_PAUSED) game_state = STATE_PAUSED;
-	  else game_state = STATE_RUNNING;
+		if (game_state != STATE_PAUSED) game_state = STATE_PAUSED;
+		else game_state = STATE_RUNNING;
 	}
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
 		speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;

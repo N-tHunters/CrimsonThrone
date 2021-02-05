@@ -78,6 +78,7 @@ public:
 	void setOnGround(bool);
 	bool getOnGround();
 	float detectCollision(Terrain* terrain);
+	float detectCollision(Terrain* terrain, glm::vec3 position);
 	void collideTerrain(Terrain*, float, Chunk*);
 	Mesh* getMesh();
 

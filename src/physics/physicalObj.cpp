@@ -145,13 +145,36 @@ void PhysicalObj::setSpeed(glm::vec2 speed) {
 void PhysicalObj::setSpeed(glm::vec3 speed) { velocity = speed; }
 
 float PhysicalObj::detectCollision(Terrain* terrain) {
-	return terrain->getHeight(getPosition()) - getPositionY();
+	return terrain->getHeight(getPosition()) - this->getPositionY() + reinterpret_cast<BoundaryBox*>(this->boundary)->height / 2.0f;
+}
+
+float PhysicalObj::detectCollision(Terrain* terrain, glm::vec3 position) {
+	return terrain->getHeight(position) - position.y + reinterpret_cast<BoundaryBox*>(this->boundary)->height / 2.0f;
 }
 
 void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
 	float height = this->detectCollision(terrain);
+	float width = terrain->getTileWidth() / 2.0f;
+	float b_width = reinterpret_cast<BoundaryBox*>(this->boundary)->width * 2.0f;
+	float b_length = reinterpret_cast<BoundaryBox*>(this->boundary)->length * 2.0f;
+	float b_height = reinterpret_cast<BoundaryBox*>(this->boundary)->height * 2.0f;
+
+	for (int i = 0; i < ceil(b_width / width) + 1; i ++) {
+		for (int j = 0; j < ceil(b_length / width) + 1; j ++) {
+			float x = this->position.x - (i - (ceil(b_width / width) + 1.0f) / 2.0f) * width;
+			float y = this->position.y;
+			float z = this->position.z - (j - (ceil(b_length / width) + 1.0f) / 2.0f) * width;
+			float temp_height = this->detectCollision(terrain, glm::vec3(x, y, z));
+			if (temp_height > height) {
+				height = temp_height;
+			}
+		}
+	}
+
+	//height -= this->position.y;// + reinterpret_cast<BoundaryBox*>(this->boundary)->height / 2.0f;
+
 	if (height > 0) {
-		this->setPositionY(terrain->getHeight(this->getPosition()));
+		this->changePositionY(height);
 		this->force.y = 0.0f;
 		velocity.y = 0.0f;
 		setOnGround(true);
@@ -205,10 +228,11 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 		this->velocity.z = 0.0f;
 		this->force.z = 0.0f;
 		collided = true;
+		printf("%s\n", "Collided by z!");
 	}
 
 
-	if (isPlayer) {
+	/*if (isPlayer) {
 		if (collided)
 		{
 			other_object->getMesh()->changeTexture("resources/textures/fire.png");
@@ -217,7 +241,7 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 			other_object->getMesh()->activeDebug = false;
 			other_object->getMesh()->changeTexture("resources/textures/box.jpeg");
 		}
-	}
+	}*/
 
 	// return result;
 }

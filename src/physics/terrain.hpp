@@ -33,6 +33,7 @@ public:
 	PhysicalObj* getPhysicalObj();
 	int getVerticesNumber();
 	float getHeightMap(int x, int y);
+	float getTileWidth();
 
 	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
 };

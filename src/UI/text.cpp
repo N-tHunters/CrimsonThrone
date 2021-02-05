@@ -7,7 +7,6 @@ Text::Text(std::string text, glm::vec4 rect, std::map<GLchar, Character> Charact
 	this->color = color;
 	this->letters = new std::vector<Image*>;
 
-	printf("%s\n", "1");
 	float x = this->rect.x;
 	float y = this->rect.y;
 
@@ -25,7 +24,6 @@ Text::Text(std::string text, glm::vec4 rect, std::map<GLchar, Character> Charact
 		this->letters->push_back(new Image(glm::vec4(xpos, ypos, w, h), ch.TextureID));
 		x += (ch.Advance >> 6) * scale;
 	}
-	printf("%s\n", "2");
 }
 
 void Text::update(std::string text, std::map<GLchar, Character> Characters) {

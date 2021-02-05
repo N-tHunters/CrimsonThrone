@@ -362,7 +362,7 @@ void Chunk::DeleteItem(Item * item) {
  * \param dt Time passed since last call
  */
 void Chunk::CollideWithAll(PhysicalObj * obj, float dt, bool isPlayer) {
-  // glm::vec3 result(1.0f, 1.0f, 1.0f);
+  // glm::vec3 result(1.0f);
 
   for(size_t object_i = 0; object_i < this->GetObjsCount(); object_i++) {
     if(this->GetObj(object_i) != obj)

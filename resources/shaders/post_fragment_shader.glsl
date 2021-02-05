@@ -39,10 +39,10 @@ void main()
 
     vec3 col = texture(screenTexture, TexCoords).xyz;
 
-    float l = length((TexCoords - vec2(0.5)) * 2.0);
-    float sqrt_2 = sqrt(2);
+    // float l = length((TexCoords - vec2(0.5)) * 2.0);
+    // float sqrt_2 = sqrt(2);
 
-    col *= 1.0 - l / sqrt_2 / 2.0;
+    // col *= 1.0 - l / sqrt_2 / 2.0;
 
     FragColor = vec4(col, 1.0);
 }

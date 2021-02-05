@@ -19,7 +19,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 		for (int j = 0; j < vertices_number; j ++) {
 			float x = (i - vertices_number / 2) / 2.0f;
 			float y = (j - vertices_number / 2) / 2.0f;
-			v.push_back(cos(sqrt(x * x + y * y)) * 1.0);
+			v.push_back(cos((x * x + y * y) / 3.0f));
 		}
 		this->height.push_back(v);
 	}
@@ -124,8 +124,8 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 		this->vertices.push_back(coords[i][2]);
 
 		glm::vec3 normal = normals[i / 3];
-		int x = (i / 6) / (vertices_number - 1);
-		int y = (i / 6) % (vertices_number - 1);
+		int y = (i / 6) / (vertices_number - 1);
+		int x = (i / 6) % (vertices_number - 1);
 		int w = vertices_number - 1;
 		int c = 1;
 
@@ -344,4 +344,8 @@ glm::vec3 Terrain::getOutVector(glm::vec3 position) {
 
 float Terrain::getSize() {
 	return this->size;
+}
+
+float Terrain::getTileWidth() {
+	return this->tile_width;
 }

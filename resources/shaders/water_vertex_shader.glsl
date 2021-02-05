@@ -16,11 +16,15 @@ uniform vec3 lightPos;
 uniform vec3 objectPos;
 uniform vec3 cameraPos;
 
+float f(float x, float z, float t) {
+	return sin((x + t * 10.0) / 2.0) / 4.0;
+}
+
 void main()
 {
-	vec3 Position = vec3(position.x, position.y - abs(sin((position.x + objectPos.x - position.z - objectPos.z) * 10.0 - time) / 2.0), position.z);
-	vec3 Position2 = vec3(position.x - 1.0, position.y - abs(sin((position.x - 1.0 + objectPos.x - position.z - objectPos.z) * 10.0 - time) / 2.0), position.z);
-	vec3 Position3 = vec3(position.x, position.y - abs(sin((position.x + objectPos.x - position.z + 1.0 - objectPos.z) * 10.0 - time) / 2.0), position.z - 1.0);
+	vec3 Position = vec3(position.x, position.y + f(position.x + objectPos.x, position.z + objectPos.z, time), position.z);
+	vec3 Position2 = vec3(position.x - 1.0, position.y + f(position.x + objectPos.x - 1.0, position.z + objectPos.z, time), position.z);
+	vec3 Position3 = vec3(position.x, position.y + f(position.x + objectPos.x, position.z + objectPos.z - 1.0, time), position.z - 1.0);
 	
 	vec3 Vec1 = Position3 - Position;
 	vec3 Vec2 = Position2 - Position;
