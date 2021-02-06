@@ -52,21 +52,21 @@ PhysicalObj * create_wall(glm::vec3 position, glm::vec3 size, std::string textur
 
   // x * y
 
-  push_vertex(&vertices, v[0], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, size.y * 0.5));
-  push_vertex(&vertices, v[2], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f));
-  push_vertex(&vertices, v[6], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(size.z * 0.5, 0.0f));
-  push_vertex(&vertices, v[0], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, size.y * 0.5));
-  push_vertex(&vertices, v[4], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(size.z * 0.5, size.y * 0.5));
-  push_vertex(&vertices, v[6], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(size.z * 0.5, 0.0f));
+  push_vertex(&vertices, v[0], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f));
+  push_vertex(&vertices, v[2], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, size.y * 0.5));
+  push_vertex(&vertices, v[6], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(size.z * 0.5, size.y * 0.5));
+  push_vertex(&vertices, v[0], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f));
+  push_vertex(&vertices, v[4], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(size.z * 0.5, 0.0f));
+  push_vertex(&vertices, v[6], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(size.z * 0.5, size.y * 0.5));
 
   // x * y
 
-  push_vertex(&vertices, v[3], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(size.z * 0.5, 0.0f));
-  push_vertex(&vertices, v[7], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f));
-  push_vertex(&vertices, v[5], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, size.y * 0.5));
-  push_vertex(&vertices, v[3], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(size.z * 0.5, 0.0f));
-  push_vertex(&vertices, v[1], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(size.z * 0.5, size.y * 0.5));
-  push_vertex(&vertices, v[5], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, size.y * 0.5));
+  push_vertex(&vertices, v[3], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(size.z * 0.5, size.y * 0.5));
+  push_vertex(&vertices, v[7], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, size.y * 0.5));
+  push_vertex(&vertices, v[5], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f));
+  push_vertex(&vertices, v[3], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(size.z * 0.5, size.y * 0.5));
+  push_vertex(&vertices, v[1], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(size.z * 0.5, 0.0f));
+  push_vertex(&vertices, v[5], glm::vec3(0.0f, 1.0f, 0.0f), glm::vec2(0.0f, 0.0f));
 
   // z * x, bottom
 
