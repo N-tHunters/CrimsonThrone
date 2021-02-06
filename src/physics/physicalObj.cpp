@@ -227,7 +227,7 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 		//this->force.x = (this->position.x - other_object->getPositionX()) * 10.0f;
 		collided = true;
 		this->force.x = 0.0f;
-		other_object->velocity.x -= (this->position.x - other_object->getPositionX()) * 2.0f;
+		//other_object->velocity.x -= (this->position.x - other_object->getPositionX()) * 2.0f;
 	}
 
 	if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_y, this->getRotation(), other_object->getPosition() + other_velocity_y, other_object->getRotation())) {
@@ -241,7 +241,7 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 		//this->velocity.z = (this->position.z - other_object->getPositionZ()) * 2.0f;
 		//this->force.z = (this->position.z - other_object->getPositionZ()) * 10.0f;
 		this->force.z = 0.0f;
-		other_object->velocity.z -= (this->position.z - other_object->getPositionZ()) * 2.0f;
+		//other_object->velocity.z -= (this->position.z - other_object->getPositionZ()) * 2.0f;
 		collided = true;
 	}
 

@@ -237,7 +237,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 		this->vertices.push_back(coords[i][4]);
 	}
 
-	this->obj = new PhysicalObj(new Mesh("resources/textures/rock.png", &(this->vertices), &(this->indices)), false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
+	this->obj = new PhysicalObj(new Mesh("resources/textures/stone.jpg", &(this->vertices), &(this->indices)), false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
 }
 
 Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
