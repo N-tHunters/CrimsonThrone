@@ -4,7 +4,7 @@
 
 const float wall_height = 6.0f;
 
-DungeonA1Generator::DungeonA1Generator(int floors) : floors(floors) {}
+DungeonA1Generator::DungeonA1Generator(int floors) : DungeonGenerator(floors) {}
 
 void DungeonA1Generator::Generate(Location * location, size_t width, size_t height, int chunk_width, int chunk_height, int vertices_number) {
   FlatGenerator::Generate(location, width, height, chunk_width, chunk_height, vertices_number);
@@ -94,26 +94,3 @@ void DungeonA1Generator::GenerateDungeon(int tx, int ty, int mx, int my) {
   } while (choices.size() - 1 > 0);
 }
 
-
-void DungeonA1Generator::PrintDungeon(int height, int width) {
-  int q = 0;
-  for (size_t i = 0; i < height * 2 + 1; i++) {
-    if (i % 2 == 0) {
-      printf("#");
-      for (size_t j = 0; j < width; j++) {
-        if (walls[q++])
-          printf("##");
-        else
-          printf(" #");
-      }
-    } else {
-      for (size_t j = 0; j < width + 1; j++) {
-        if (walls[q++])
-          printf("# ");
-        else
-          printf("  ");
-      }
-    }
-    puts("");
-  }
-}
