@@ -1,6 +1,7 @@
 #ifndef DUNGEONA1_GENERATOR_H
 #define DUNGEONA1_GENERATOR_H
 
+#include <base/configuration.hpp>
 #include "dungeongenerator.hpp"
 
 class DungeonA1Generator : public DungeonGenerator {

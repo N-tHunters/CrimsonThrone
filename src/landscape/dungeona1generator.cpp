@@ -4,12 +4,13 @@
 
 const float wall_height = 6.0f;
 const float wall_width = 0.5f;
-const std::string wall_texture = "resources/textures/void.png";
+std::string wall_texture;
 
 DungeonA1Generator::DungeonA1Generator(int floors) : DungeonGenerator(floors) {}
 
 void DungeonA1Generator::Generate(Location * location, size_t width, size_t height, int chunk_width, int chunk_height, int vertices_number) {
   FlatGenerator::Generate(location, width, height, chunk_width, chunk_height, vertices_number);
+  wall_texture = GetDefaultTexture();
   used.clear();
   for (size_t i = 0; i < width * height; i++)
     used.push_back(false);

@@ -1,7 +1,5 @@
 #include "terrain.hpp"
 
-const std::string default_texture = "resources/textures/stone.jpg";
-
 /**
  * @brief      Constructs a new instance.
  *
@@ -257,8 +255,8 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::strin
 	Terrain(size, vertices_number, position, &height, texture);
 }
 
-Terrain::Terrain(float size, int vertices_number, glm::vec3 position) : Terrain(size, vertices_number, position, default_texture) {}
-Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>>* height) : Terrain(size, vertices_number, position, height, default_texture) {}
+Terrain::Terrain(float size, int vertices_number, glm::vec3 position) : Terrain(size, vertices_number, position, GetDefaultTexture()) {}
+Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>>* height) : Terrain(size, vertices_number, position, height, GetDefaultTexture()) {}
 
 
 Terrain::Terrain(Terrain& terrain) {

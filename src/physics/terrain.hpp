@@ -4,14 +4,15 @@
 #include <random>
 #include <math.h>
 #include <array>
+#include <base/configuration.hpp>
 
 #include "physicalObj.hpp"
 
-#include "../render/shaderLoader.hpp"
-#include "../render/camera.hpp"
-#include "../render/shaderHolder.hpp"
+#include <render/shaderLoader.hpp>
+#include <render/camera.hpp>
+#include <render/shaderHolder.hpp>
 
-#include "../math/vectors.hpp"
+#include <math/vectors.hpp>
 
 class Terrain {
 	float size;
