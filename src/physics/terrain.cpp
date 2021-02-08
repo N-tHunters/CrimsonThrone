@@ -1,5 +1,7 @@
 #include "terrain.hpp"
 
+const std::string default_texture = "resources/textures/stone.jpg";
+
 /**
  * @brief      Constructs a new instance.
  *
@@ -7,7 +9,7 @@
  * @param[in]  vertices_number  The number of vertices
  * @param[in]  position         The position
  */
-Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>> * height) {
+Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>> * height, std::string texture) {
 	this->size = size;
 	this->vertices_number = vertices_number;
 	this->position = position;
@@ -237,10 +239,10 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 		this->vertices.push_back(coords[i][4]);
 	}
 
-	this->obj = new PhysicalObj(new Mesh("resources/textures/stone.jpg", &(this->vertices), &(this->indices)), false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
+	this->obj = new PhysicalObj(new Mesh(texture, &(this->vertices), &(this->indices)), false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
 }
 
-Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
+Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::string texture) {
         std::vector<std::vector<float>> height;
 	std::vector<float> v;
 	for (int i = 0; i < vertices_number; i ++) {
@@ -252,8 +254,12 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position) {
 		}
 		height.push_back(v);
 	}
-	Terrain(size, vertices_number, position, &height);
+	Terrain(size, vertices_number, position, &height, texture);
 }
+
+Terrain::Terrain(float size, int vertices_number, glm::vec3 position) : Terrain(size, vertices_number, position, default_texture) {}
+Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>>* height) : Terrain(size, vertices_number, position, height, default_texture) {}
+
 
 Terrain::Terrain(Terrain& terrain) {
 	this->size = terrain.getSize();
