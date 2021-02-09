@@ -1,7 +1,10 @@
 #ifndef DUNGEON_GENERATOR_H
 #define DUNGEON_GENERATOR_H
 
-#define UP_WALL(x, y) (i * (height * 2 + 1))
+#define UP_WALL(X, Y) ((X) * (height * 2 + 1) + (Y))
+#define DOWN_WALL(X, Y) (((X) + 1) * (height * 2 + 1) + (Y))
+#define RIGHT_WALL(X, Y) (height + (height * 2 + 1) * (X) + (Y))
+#define LEFT_WALL(X, Y) (height + (height * 2 + 1) * (X) + ((Y) + 1))
 
 #include "flatgenerator.hpp"
 
