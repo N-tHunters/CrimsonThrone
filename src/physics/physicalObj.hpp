@@ -8,7 +8,6 @@
 #include "../render/shaderLoader.hpp"
 #include "../render/shaderHolder.hpp"
 #include "../debug.hpp"
-//#include "terrain.h"
 
 class Chunk;
 

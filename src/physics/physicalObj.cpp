@@ -123,7 +123,7 @@ void PhysicalObj::changeRotationY(float delta) { rotation.y += delta; }
 
 void PhysicalObj::changeRotationZ(float delta) { rotation.z += delta; }
 
-string PhysicalObj::getName() { return name; }
+std::string PhysicalObj::getName() { return name; }
 
 void PhysicalObj::jump(Chunk* chunk) {
 	if (abs(velocity.y) < 1.0f) {
