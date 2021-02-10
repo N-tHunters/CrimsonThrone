@@ -12,7 +12,7 @@ void Model::loadModel(const std::string& path) {
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
-		cout << "ERROR::ASSIMP::" << import.GetErrorString() << endl;
+		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
 		return;
 	}
 	//directory = path.substr(0, path.find_last_of('/'));
