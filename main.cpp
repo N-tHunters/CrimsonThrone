@@ -32,7 +32,6 @@
 #include <render/constants.hpp>
 #include <render/model.hpp>
 #include <render/imageLoader.hpp>
-//#include <render/shaders.h>
 
 #include <physics/physicalObj.hpp>
 #include <physics/boundary.hpp>
@@ -58,6 +57,7 @@
 #include <UI/bar.hpp>
 #include <UI/text.hpp>
 #include <UI/abstractListElement.hpp>
+#include <UI/button.hpp>
 
 #include <landscape/dungeona1generator.hpp>
 
@@ -98,11 +98,15 @@ enum {
 	STATE_PAUSED
 } game_state;
 
+void useless() {
+	int a = 1;
+	printf("%d\n", a);
+}
+
 int main()
 {
 	game_state = STATE_LOADING;
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-	// camera_3view = new Camera(glm::vec3(4.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 	player = new Player("player", 10, new PhysicalObj(glm::vec3(3.0f, 1.0f, 3.0f), new BoundaryBox(0.25f, 1.0f, 0.25f)), camera);
 	player_core = new MagicCore();
 	player_core->SetPhysicalObj(player->GetPhysicalObj());
@@ -240,20 +244,7 @@ int main()
 
 	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
 
-	Text* paused_text = new Text("PAUSED", glm::vec4(-0.7f, -0.7f, 1.0f, 1.0f), Characters, 0.01f, glm::vec3(1.0f, 1.0f, 1.0f));
-
-	std::vector<std::string> headers;
-	headers.push_back("name");
-	headers.push_back("value");
-
-	List* inventory = new List(glm::vec4(-0.9f, -0.9f, 0.7f, 1.0f), (std::vector<AbstractListElement*>*)(player->GetInventoryPointer()), std::string("resources/textures/list.png"), 10, Characters, &headers);
-
 	float last_frame = glfwGetTime();
-
-	// Item* test_item = new Item("hammer");
-	// player->PickupItem(test_item);
-	// inventory->update();
-
 	int hp = player->GetHealth();
 	int maxHp = player->GetMaxHealth();
 
@@ -301,8 +292,11 @@ int main()
 
 	glfwSetCursorPos(window, (double)width / 2.0, (double)height / 2.0);
 
+	typedef void (*function)();
+	Button* button = new Button(glm::vec4(-0.1f, -0.1f, 0.2f, 0.2f), (function)useless, "bruh", Characters, 14.0f, glm::vec3(255.0f, 255.0f, 0.0f), width, height);
+
 	game_state = STATE_RUNNING;
-	printf("Game stared\n");
+
 	while (!glfwWindowShouldClose(window))
 	{
 		if (camera->getRotationX() > 180.0f) {
@@ -372,20 +366,6 @@ int main()
 			if (chunk_ptr == nullptr)
 				chunk_ptr = location->GetChunkByPosition(0, 0);
 
-			/*if (chunk_ptr->IsWaterPresent()) {
-				if (chunk_ptr->GetWaterHeight() > player->GetPhysicalObj()->getPositionY() + 3.0f) {
-					shaderHolder->setUnderWater(true);
-					player->GetPhysicalObj()->velocity.y += 0.1f;
-				} else {
-					if (chunk_ptr->GetWaterHeight() > player->GetPhysicalObj()->getPositionY() + 1.0f) {
-						player->GetPhysicalObj()->velocity.y += 0.1f;
-					}
-					shaderHolder->setUnderWater(false);
-				}
-			} else {
-				shaderHolder->setUnderWater(false);
-			}*/
-
 			if (player_wants_to_jump) {
 				player->GetPhysicalObj()->jump(chunk_ptr);
 			}
@@ -394,25 +374,19 @@ int main()
 			player->GetPhysicalObj()->setSpeed(speed + speedSide);
 			int chunk_ix = chunk_ptr->GetX();
 			int chunk_iy = chunk_ptr->GetY();
-			for(int dx = -1; dx <= 1; dx++) {
-			  for(int dy = -1; dy <= 1; dy++) {
-			    int nx = chunk_ix + dx;
-			    int ny = chunk_iy + dy;
-			    Chunk * nchunk = chunk_ptr->GetLocation()->GetChunk(nx, ny);
-			    if(nchunk == nullptr) continue;
-			    nchunk->CollideWithAll(player->GetPhysicalObj(), dt, true);			    
-			  }
+			for (int dx = -1; dx <= 1; dx++) {
+				for (int dy = -1; dy <= 1; dy++) {
+					int nx = chunk_ix + dx;
+					int ny = chunk_iy + dy;
+					Chunk * nchunk = chunk_ptr->GetLocation()->GetChunk(nx, ny);
+					if (nchunk == nullptr) continue;
+					nchunk->CollideWithAll(player->GetPhysicalObj(), dt, true);
+				}
 			}
 			player->Update(dt);
 
 			/* Collide player with all objects in chunk */
 			player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
-
-			/*if (push) {
-				for (int i = 0; i < chunk_ptr->GetObjsCount(); i ++) {
-					chunk_ptr->GetObj(i)->acceleration += (player->GetPhysicalObj()->getPosition() - chunk_ptr->GetObj(i)->getPosition()) * push_m;
-				}
-			}*/
 
 			chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
 		}
@@ -425,17 +399,22 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		shaderHolder->getPost()->Use();
+		glUniform1f(glGetUniformLocation(shaderHolder->getPost()->Program, "speed"), sqrt(player->GetPhysicalObj()->velocity.x * player->GetPhysicalObj()->velocity.x + 
+																						  player->GetPhysicalObj()->velocity.y * player->GetPhysicalObj()->velocity.y + 
+																						  player->GetPhysicalObj()->velocity.z * player->GetPhysicalObj()->velocity.z));
+
 		glBindVertexArray(quadVAO);
 		glDisable(GL_DEPTH_TEST);
 		glBindTexture(GL_TEXTURE_2D, texColorBuffer);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 
-		inventory->draw(shaderHolder);
+		// inventory->draw(shaderHolder);
 		fps_counter->draw(shaderHolder);
 		test_frame.draw(shaderHolder);
+
 		if (game_state == STATE_PAUSED)
-			paused_text->draw(shaderHolder);
+			button->draw(shaderHolder);
 
 		glFinish();
 
@@ -552,7 +531,7 @@ void load_characters() {
 		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 
 
-	FT_Set_Pixel_Sizes(face, 0, 48);
+	FT_Set_Pixel_Sizes(face, 0, 256);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 
@@ -582,8 +561,8 @@ void load_characters() {
 		// Set texture options
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 		// Now store character for later use
 		Character character = {
 			texture,

@@ -58,11 +58,11 @@ Container::Container(glm::vec4 rect, Frame* frame, std::string texturePath): Fra
 void Container::draw(ShaderHolder* shaderHolder) {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
+	shaderHolder->getGUI()->Use();
+
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glUniform1i(glGetUniformLocation(shaderHolder->getGUI()->Program, "ourTexture"), 0);
-
-	shaderHolder->getGUI()->Use();
 
 	glBindVertexArray(VAO);
 	//glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);

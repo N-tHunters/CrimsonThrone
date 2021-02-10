@@ -1,7 +1,7 @@
 #ifndef BAR_H
 #define BAR_H
 
-#include "frame.hpp"
+#include <UI/frame.hpp>
 
 class Bar: public Frame {
 	int* value;
