@@ -1,7 +1,7 @@
 #ifndef CONFIGURATION_H
 #define CONFIGURATION_H
 
-#include <Simpleini.h>
+#include <SimpleIni.h>
 #include <string>
 
 void LoadConfiguration(std::string);
