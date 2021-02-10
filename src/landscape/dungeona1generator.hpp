@@ -1,18 +1,16 @@
 #ifndef DUNGEONA1_GENERATOR_H
 #define DUNGEONA1_GENERATOR_H
 
-#include "flatgenerator.hpp"
+#include <base/configuration.hpp>
+#include "dungeongenerator.hpp"
 
-class DungeonA1Generator : public FlatGenerator {
-  std::vector<bool> used;
-  std::vector<bool> walls;
+class DungeonA1Generator : public DungeonGenerator {
   void GenerateDungeon(int, int, int, int);
-  int floors;
 
-  void PrintDungeon(int, int);
 public:
   DungeonA1Generator(int);
-  virtual void Generate(Location *, size_t, size_t, int, int, int);
+
+  void Generate(Location *, size_t, size_t, int, int, int) override;
 };
 
 #endif

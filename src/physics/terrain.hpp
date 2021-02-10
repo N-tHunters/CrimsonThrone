@@ -4,14 +4,15 @@
 #include <random>
 #include <math.h>
 #include <array>
+#include <base/configuration.hpp>
 
 #include "physicalObj.hpp"
 
-#include "../render/shaderLoader.hpp"
-#include "../render/camera.hpp"
-#include "../render/shaderHolder.hpp"
+#include <render/shaderLoader.hpp>
+#include <render/camera.hpp>
+#include <render/shaderHolder.hpp>
 
-#include "../math/vectors.hpp"
+#include <math/vectors.hpp>
 
 class Terrain {
 	float size;
@@ -23,8 +24,10 @@ class Terrain {
 	PhysicalObj* obj;
 	glm::vec3 position;
 public:
-	Terrain(float, int, glm::vec3);
-        Terrain(float, int, glm::vec3, std::vector<std::vector<float>> *);
+  Terrain(float, int, glm::vec3, std::string);
+  Terrain(float, int, glm::vec3);
+  Terrain(float, int, glm::vec3, std::vector<std::vector<float>> *, std::string);
+  Terrain(float, int, glm::vec3, std::vector<std::vector<float>> *);
 	Terrain(Terrain&);
 
 	glm::vec3 getPosition();

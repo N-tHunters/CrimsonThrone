@@ -123,7 +123,7 @@ void PhysicalObj::changeRotationY(float delta) { rotation.y += delta; }
 
 void PhysicalObj::changeRotationZ(float delta) { rotation.z += delta; }
 
-string PhysicalObj::getName() { return name; }
+std::string PhysicalObj::getName() { return name; }
 
 void PhysicalObj::jump(Chunk* chunk) {
 	if (abs(velocity.y) < 1.0f) {
@@ -256,7 +256,7 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 	}
 
 
-	if (isPlayer) {
+	/*if (isPlayer) {
 		if (collided)
 		{
 			other_object->getMesh()->changeTexture("resources/textures/fire.png");
@@ -265,7 +265,7 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 			other_object->getMesh()->activeDebug = false;
 			other_object->getMesh()->changeTexture("resources/textures/wood.png");
 		}
-	}
+		}*/
 
 	// return result;
 }

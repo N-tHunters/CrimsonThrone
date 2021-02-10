@@ -16,7 +16,7 @@ class Location {
  private:
   int chunk_width, chunk_height;
   size_t width, height;
-  vector<vector<Chunk *>> chunks;
+  std::vector<std::vector<Chunk *>> chunks;
   size_t current_x, current_y;
   
  public:
