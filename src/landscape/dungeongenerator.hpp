@@ -16,6 +16,7 @@ protected:
   int floors;
 
   void PrintDungeon(int, int);
+  void PrintDungeon3D(int, int);
 public:
   DungeonGenerator(int);
   virtual void Generate(Location *, size_t, size_t, int, int, int);
