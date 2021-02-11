@@ -64,6 +64,7 @@ void DungeonA1Generator3D::Generate(Location * location, size_t width, size_t he
 void DungeonA1Generator3D::GenerateDungeon(int tx, int ty, int tz, int width, int height, int floors) {
   used[tz * width * height + ty * width + tx] = true;
   std::vector<std::tuple<int, int, int>> choices;
+  
   do {
     choices.clear();
     for (int i = -1; i < 2; i++) {
