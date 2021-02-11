@@ -61,14 +61,10 @@
 
 #include <landscape/dungeona1generator.hpp>
 
-#include <base/configuration.hpp>
-
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
 #define NO_SOUND
-
-const std::string CONFIG_FILE = "resources/settings.ini";
 
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -117,7 +113,6 @@ int main()
 
 	init_translators();
 	init_protocores();
-	LoadConfiguration(CONFIG_FILE);
 
 	double xpos, ypos;
 	xpos = 0.0;
@@ -536,7 +531,7 @@ void load_characters() {
 		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 
 
-	FT_Set_Pixel_Sizes(face, 0, 256);
+	FT_Set_Pixel_Sizes(face, 0, 64);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 

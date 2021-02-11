@@ -40,23 +40,21 @@ Button::Button(glm::vec4 rect, func function, std::string text, std::map<GLchar,
 	width = (int)(rect.z);
 	height = (int)(rect.w);
 
-	printf("%d %d\n", width, height);
-
 	unsigned char* image = (unsigned char *)malloc(width * height * 3 * sizeof(GL_FLOAT));
 	// image[0] = 0.0f;
 	// image[1] = 255.0f;
 	// image[2] = 0.0f;
 
-	for (int i = 0; i < (int)(rect.w); i ++) {
-		for (int j = 0; j < (int)(rect.z); j ++) {
+	for (int i = 0; i < height; i ++) {
+		for (int j = 0; j < width; j ++) {
 			if (i <= 3 || j <= 3 || i >= height - 4 || j >= width - 4) {
-				image[(int)(i * rect.z + j) * 3] = 255.0f;
-				image[(int)(i * rect.z + j) * 3 + 1] = 255.0f;
-				image[(int)(i * rect.z + j) * 3 + 2] = 255.0f;
+				image[(i * width + j) * 3] = 255.0f;
+				image[(i * width + j) * 3 + 1] = 255.0f;
+				image[(i * width + j) * 3 + 2] = 255.0f;
 			} else {
-				image[(int)(i * rect.z + j) * 3] = 0.0f;
-				image[(int)(i * rect.z + j) * 3 + 1] = 0.0f;
-				image[(int)(i * rect.z + j) * 3 + 2] = 0.0f;
+				image[(i * width + j) * 3] = 0.0f;
+				image[(i * width + j) * 3 + 1] = 0.0f;
+				image[(i * width + j) * 3 + 2] = 0.0f;
 			}
 		}
 	}
