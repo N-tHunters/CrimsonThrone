@@ -1,4 +1,4 @@
-#include "dungeona1generator.hpp"
+#include "dungeona1generator3d.hpp"
 #include <base/location.hpp>
 #include <utility>
 #include <base/configuration.hpp>
@@ -6,23 +6,28 @@
 const float wall_height = 6.0f;
 const float wall_width = 0.5f;
 
-DungeonA1Generator::DungeonA1Generator() : DungeonGenerator(1) {}
+DungeonA1Generator3D::DungeonA1Generator3D(int floors) : DungeonGenerator(floors) {}
 
-void DungeonA1Generator::Generate(Location * location, size_t width, size_t height, int chunk_width, int chunk_height, int vertices_number) {
+
+void DungeonA1Generator3D::Generate(Location * location, size_t width, size_t height, int chunk_width, int chunk_height, int vertices_number) {
   FlatGenerator::Generate(location, width, height, chunk_width, chunk_height, vertices_number);
   GetDefaultTexture() = GetDefaultTexture();
   used.clear();
-  for (size_t i = 0; i < width * height; i++)
+  for (size_t i = 0; i < width * height * floors; i++)
     used.push_back(false);
 
   walls.clear();
-  for (size_t i = 0; i < width * (height * 2 + 2); i ++)
+  for (size_t i = 0; i < width * (height * 2 + 2); i ++) //// ????
     walls.push_back(true);
 
-  GenerateDungeon(0, 0, width, height);
+  ladders.clear();
+  for (size_t i = 0; i < width * height * floors; i++)
+    ladders.push_back(NO_LADDER);
 
-  PrintDungeon(height, width);
+  GenerateDungeon(0, 0, 0, width, height, floors);
 
+  //  PrintDungeon3D(height, width);
+  /*
 
   for(size_t i = 0; i < width + 1; i ++) {
     for(size_t j = 0; j < height; j ++) {
@@ -53,47 +58,48 @@ void DungeonA1Generator::Generate(Location * location, size_t width, size_t heig
 
     }
   }
+  */
 }
 
-void DungeonA1Generator::GenerateDungeon(int tx, int ty, int width, int height) {
-  used[ty * width + tx] = true;
-  std::vector<std::pair<int, int>> choices;
+void DungeonA1Generator3D::GenerateDungeon(int tx, int ty, int tz, int width, int height, int floors) {
+  used[tz * width * height + ty * width + tx] = true;
+  std::vector<std::tuple<int, int, int>> choices;
   do {
     choices.clear();
     for (int i = -1; i < 2; i++) {
       for (int j = -1; j < 2; j++) {
-        if (abs(i + j) != 1) continue;
-        int nx = tx + i;
-        int ny = ty + j;
-        if (nx < 0 || ny < 0 || nx >= width || ny >= height) continue;
-        if (used[ny * width + nx]) continue;
-        choices.push_back({nx, ny});
+	if (abs(i + j) != 1) continue;
+	int nx = tx + i;
+	int ny = ty + j;
+	int nz = tz;
+	if (nx < 0 || ny < 0 || nx >= width || ny >= height) continue;
+	// Floor movements
+	if (!used[nz * width * height + ny * width + nx])
+	  choices.push_back({nx, ny, nz});
+	// Go up
+	nz = tz + 1;
+	if (!used[nz * width * height + ny * width + nx] &&
+	    !used[nz * width * height + ty * width + tx])
+	  choices.push_back({nx, ny, nz});
+	// Go down
+	nz = tz - 1;
+	if (!used[nz * width * height + ny * width + nx] &&
+	    !used[nz * width * height + ty * width + tx])
+	  choices.push_back({nx, ny, nz});
       }
     }
     if (choices.size() == 0) break;
 
     int choice = rand() % choices.size();
-    int nx = choices[choice].first;
-    int ny = choices[choice].second;
+    int nx = std::get<0>(choices[choice]);
+    int ny = std::get<1>(choices[choice]);
+    int nz = std::get<2>(choices[choice]);
 
     int dy = ny - ty;
     int dx = nx - tx;
+    int dz = nz - tz;
 
-    if (dy != 0) {
-      if (dy == -1) {
-        walls[RIGHT_WALL(tx, ty)] = false;
-      } else {
-        walls[LEFT_WALL(tx, ty)] = false;
-      }
-    } else {
-      if (dx == -1) {
-        walls[UP_WALL(tx, ty)] = false;
-      } else {
-        walls[DOWN_WALL(tx, ty)] = false;
-      }
-    }
-
-    GenerateDungeon(nx, ny, width, height);
+    GenerateDungeon(nx, ny, nz, width, height, floors);
   } while (choices.size() - 1 > 0);
 }
 

@@ -8,7 +8,7 @@ class DungeonA1Generator : public DungeonGenerator {
   void GenerateDungeon(int, int, int, int);
 
 public:
-  DungeonA1Generator(int);
+  DungeonA1Generator();
 
   void Generate(Location *, size_t, size_t, int, int, int) override;
 };
