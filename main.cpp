@@ -60,11 +60,14 @@
 #include <UI/button.hpp>
 
 #include <landscape/dungeona1generator.hpp>
+#include <base/configuration.hpp>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
 #define NO_SOUND
+
+const std::string CONFIG_FILE = "resources/settings.ini";
 
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
@@ -113,6 +116,7 @@ int main()
 
 	init_translators();
 	init_protocores();
+	LoadConfiguration(CONFIG_FILE);
 
 	double xpos, ypos;
 	xpos = 0.0;
@@ -250,7 +254,7 @@ int main()
 
 	player->GetPhysicalObj()->name = "Player";
 
-	Bar test_frame(glm::vec4(-0.9f, 0.9f, 0.5f, 0.1f), &hp, &maxHp, glm::vec3(255.0, 0, 0));
+	Bar test_frame(glm::vec4(100, 100, 100, 10), &hp, &maxHp, glm::vec3(255.0, 0, 0));
 
 	float fps_change_last = 0.0f;
 
@@ -411,7 +415,7 @@ int main()
 
 		// inventory->draw(shaderHolder);
 		fps_counter->draw(shaderHolder);
-		test_frame.draw(shaderHolder);
+		test_frame.draw(shaderHolder, width, height);
 
 		if (game_state == STATE_PAUSED)
 			button->draw(shaderHolder);

@@ -19,6 +19,8 @@ Text::Text(std::string text, glm::vec4 rect, std::map<GLchar, Character> Charact
 		xpos = x + ch.Bearing.x * scale;
 		ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
 
+		printf("%d %d %c\n", ch.Bearing.y, ch.Size.y, text[c]);
+
 		w = ch.Size.x * scale;
 		h = ch.Size.y * scale;
 		this->letters->push_back(new Image(glm::vec4(xpos, ypos, w, h), ch.TextureID));

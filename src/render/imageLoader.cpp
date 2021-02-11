@@ -5,7 +5,13 @@
 unsigned char * loadImage(std::string path, int* width, int* height) {
 	int channels;
 
-	return stbi_load(path.c_str(), width, height, &channels, STBI_rgb);
+	unsigned char * result = stbi_load(path.c_str(), width, height, &channels, STBI_rgb);
+
+	if (result == nullptr) {
+		result = stbi_load("resources/textures/error.png", width, height, &channels, STBI_rgb);		
+	}
+
+	return result;
 }
 
 void freeImage(unsigned char * image) {
