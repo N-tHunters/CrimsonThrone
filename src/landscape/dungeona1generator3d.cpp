@@ -1,4 +1,4 @@
-#include "dungeona1generator.hpp"
+#include "dungeona1generator3d.hpp"
 #include <base/location.hpp>
 #include <utility>
 #include <base/configuration.hpp>
@@ -6,23 +6,24 @@
 const float wall_height = 6.0f;
 const float wall_width = 0.5f;
 
-DungeonA1Generator::DungeonA1Generator() : DungeonGenerator(1) {}
+DungeonA1Generator3D::DungeonA1Generator3D(int floors) : DungeonGenerator(floors) {}
 
-void DungeonA1Generator::Generate(Location * location, size_t width, size_t height, int chunk_width, int chunk_height, int vertices_number) {
+
+void DungeonA1Generator3D::Generate(Location * location, size_t width, size_t height, int chunk_width, int chunk_height, int vertices_number) {
   FlatGenerator::Generate(location, width, height, chunk_width, chunk_height, vertices_number);
   GetDefaultTexture() = GetDefaultTexture();
   used.clear();
-  for (size_t i = 0; i < width * height; i++)
+  for (size_t i = 0; i < width * height * floors; i++)
     used.push_back(false);
 
   walls.clear();
   for (size_t i = 0; i < width * (height * 2 + 2); i ++)
     walls.push_back(true);
 
-  GenerateDungeon(0, 0, width, height);
+  GenerateDungeon(0, 0, 0, width, height, floors);
 
-  PrintDungeon(height, width);
-
+  //  PrintDungeon3D(height, width);
+  /*
 
   for(size_t i = 0; i < width + 1; i ++) {
     for(size_t j = 0; j < height; j ++) {
@@ -53,9 +54,10 @@ void DungeonA1Generator::Generate(Location * location, size_t width, size_t heig
 
     }
   }
+  */
 }
 
-void DungeonA1Generator::GenerateDungeon(int tx, int ty, int width, int height) {
+void DungeonA1Generator3D::GenerateDungeon(int tx, int ty, int tz, int width, int height, int floors) {
   used[ty * width + tx] = true;
   std::vector<std::pair<int, int>> choices;
   do {
