@@ -16,7 +16,7 @@ void DungeonA1Generator::Generate(Location * location, size_t width, size_t heig
     used.push_back(false);
 
   walls.clear();
-  for (size_t i = 0; i < width * (height * 2 + 2); i ++)
+  for (size_t i = 0; i < width * (height * 2 + 1) + height; i ++)
     walls.push_back(true);
 
   GenerateDungeon(0, 0, width, height);

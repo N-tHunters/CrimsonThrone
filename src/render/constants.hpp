@@ -3,6 +3,6 @@
 
 const GLuint WIDTH = 800, HEIGHT = 600;
 // const GLuint WIDTH = 640, HEIGHT = 320;
-const float G = 98.1f;
+const float G = 10.f;//98.1f;
 
 #endif

@@ -59,7 +59,7 @@
 #include <UI/abstractListElement.hpp>
 #include <UI/button.hpp>
 
-#include <landscape/dungeona1generator.hpp>
+#include <landscape/dungeona1generator3d.hpp>
 #include <base/configuration.hpp>
 
 #include <ft2build.h>
@@ -242,7 +242,7 @@ int main()
 	        &postShader);
 
 	// ----------------------------------------------- CODE ------------------------------------------
-	location = new Location(3, 3, 10, 10, new DungeonA1Generator());
+	location = new Location(5, 5, 10, 10, new DungeonA1Generator3D(5));
 
 	SetCurrentLocation(location);
 

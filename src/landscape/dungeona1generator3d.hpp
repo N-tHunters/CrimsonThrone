@@ -15,7 +15,7 @@ class DungeonA1Generator3D : public DungeonGenerator {
   std::vector<uint8_t>ladders;
 
 public:
-  DungeonA1Generator3D(int);
+  DungeonA1Generator3D(size_t);
 
   void Generate(Location *, size_t, size_t, int, int, int) override;
 };

@@ -135,7 +135,7 @@ void PhysicalObj::jump(Chunk* chunk) {
 			}
 		}
 		if (this->detectCollision(chunk->GetTerrain()) > -1.0f) t = true;
-		if (t) velocity.y = 10.0f;
+		if (t) velocity.y = 20.0f;
 	}
 }
 
