@@ -5,6 +5,12 @@ Button::Button(glm::vec4 rect, func function, std::string text, std::map<GLchar,
 	this->function = function;
 	this->text = new Text(text, glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), Characters, scale / 32.0f, color);
 
+	this->rect.x = (rect.x + 1.0f) / 2.0f * screen_width;
+	this->rect.y = (rect.y + 1.0f) / 2.0f * screen_height;
+	this->rect.z = rect.z / 2.0f * screen_width;
+	this->rect.w = rect.w / 2.0f * screen_height;
+	rect = this->rect;
+
 	vertices = {rect.x,     	 rect.y + rect.w, 0.0f, 0.0f, 1.0f,
 	            rect.x,     	 rect.y,     	  0.0f, 0.0f, 0.0f,
 	            rect.x + rect.z, rect.y + rect.w, 0.0f, 1.0f, 1.0f,
@@ -14,17 +20,12 @@ Button::Button(glm::vec4 rect, func function, std::string text, std::map<GLchar,
 	           1, 2, 3
 	          };
 
-	rect.x = (rect.x + 1.0f) / 2.0f * screen_width;
-	rect.y = (rect.y + 1.0f) / 2.0f * screen_height;
-	rect.z = rect.z / 2.0f * screen_width;
-	rect.w = rect.w / 2.0f * screen_height;
-
 	glm::vec2 center = glm::vec2(rect.x + rect.z / 2.0f, rect.y + rect.w / 2.0f);
 
 	glm::vec2 textPosition = glm::vec2(center.x - this->text->getRect().z / 2.0f, center.y - this->text->getRect().w / 2.0f);
 
-	this->text->update(text, Characters, glm::vec4(textPosition / glm::vec2(screen_width, screen_height) * 2.0f - 1.0f,
-	                   glm::vec2(this->text->getRect().z, this->text->getRect().w) / glm::vec2(screen_width, screen_height) * 2.0f - 1.0f));
+	this->text->update(text, Characters, glm::vec4(textPosition,
+	                   glm::vec2(this->text->getRect().z, this->text->getRect().w)));
 
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
@@ -58,6 +59,7 @@ Button::Button(glm::vec4 rect, func function, std::string text, std::map<GLchar,
 			}
 		}
 	}
+
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	freeImage(image);
@@ -86,6 +88,46 @@ Button::Button(glm::vec4 rect, func function, std::string text, std::map<GLchar,
 	glBindVertexArray(0);
 }
 
+void Button::update(glm::vec3 color) {
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
+	// Set our texture parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// Set texture filtering
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	// Load, create texture and generate mipmaps
+	int width, height;
+
+	width = (int)(rect.z);
+	height = (int)(rect.w);
+
+	unsigned char* image = (unsigned char *)malloc(width * height * 3 * sizeof(GL_FLOAT));
+	// image[0] = 0.0f;
+	// image[1] = 255.0f;
+	// image[2] = 0.0f;
+
+	for (int i = 0; i < height; i ++) {
+		for (int j = 0; j < width; j ++) {
+			if (i <= 3 || j <= 3 || i >= height - 4 || j >= width - 4) {
+				image[(i * width + j) * 3] = 255.0f;
+				image[(i * width + j) * 3 + 1] = 255.0f;
+				image[(i * width + j) * 3 + 2] = 255.0f;
+			} else {
+				image[(i * width + j) * 3] = color.x;
+				image[(i * width + j) * 3 + 1] = color.y;
+				image[(i * width + j) * 3 + 2] = color.z;
+			}
+		}
+	}
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	freeImage(image);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 void Button::draw(ShaderHolder* shaderHolder) {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
@@ -103,4 +145,16 @@ void Button::draw(ShaderHolder* shaderHolder) {
 	glBindVertexArray(0);
 
 	this->text->draw(shaderHolder);
+}
+
+bool Button::check(glm::vec2 position) {
+	bool x = position.x >= rect.x && position.x <= rect.x + rect.z;
+	bool y = position.y >= rect.y && position.y <= rect.y + rect.w;
+	return x && y;
+}
+
+void Button::click(glm::vec2 position) {
+	if (check(position)) {
+		function();
+	}
 }

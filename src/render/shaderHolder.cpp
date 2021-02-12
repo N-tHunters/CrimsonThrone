@@ -1,12 +1,20 @@
 #include "shaderHolder.hpp"
 
-ShaderHolder::ShaderHolder(Shader* shader3D, Shader* shaderGUI, Shader* shaderText, Shader* shaderWater, Shader* shaderPost) {
+ShaderHolder::ShaderHolder(Shader* shader3D,
+                           Shader* shaderGUI,
+                           Shader* shaderText,
+                           Shader* shaderWater,
+                           Shader* shaderPost,
+                           int screen_width,
+                           int screen_height) {
 	this->shader3D = shader3D;
 	this->shaderGUI = shaderGUI;
 	this->shaderText = shaderText;
 	this->shaderWater = shaderWater;
 	this->shaderPost = shaderPost;
 	this->underWater = false;
+	this->screen_width = screen_width;
+	this->screen_height = screen_height;
 }
 
 Shader* ShaderHolder::get3D() {
@@ -35,4 +43,8 @@ void ShaderHolder::setUnderWater(bool input) {
 
 bool ShaderHolder::getUnderWater() {
 	return this->underWater;
+}
+
+glm::vec2 ShaderHolder::getResolution() {
+	return glm::vec2(this->screen_width, this->screen_height);
 }

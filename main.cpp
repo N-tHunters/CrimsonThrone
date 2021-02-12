@@ -71,6 +71,7 @@ const std::string CONFIG_FILE = "resources/settings.ini";
 
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 
 // Global variabels
 glm::vec2 speed = glm::vec2(0.0f, 0.0f);
@@ -94,20 +95,25 @@ std::map<GLchar, Character> Characters;
 bool push = false;
 float push_m = 0.0f;
 void load_characters();
+bool clicked;
 
 enum {
 	STATE_LOADING,
 	STATE_RUNNING,
-	STATE_PAUSED
+	STATE_PAUSED,
+	STATE_MAIN_MENU
 } game_state;
 
+GLFWwindow* window;
+
 void useless() {
-	int a = 1;
-	printf("%d\n", a);
+	game_state = STATE_RUNNING;
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 int main()
 {
+	clicked = false;
 	game_state = STATE_LOADING;
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 	player = new Player("player", 10, new PhysicalObj(glm::vec3(3.0f, 1.0f, 3.0f), new BoundaryBox(0.25f, 1.0f, 0.25f)), camera);
@@ -147,7 +153,7 @@ int main()
 	glfwWindowHint(GLFW_MAXIMIZED, GL_TRUE);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Crimson Throne", nullptr, nullptr);
+	window = glfwCreateWindow(WIDTH, HEIGHT, "Crimson Throne", nullptr, nullptr);
 
 	glfwMakeContextCurrent(window);
 
@@ -168,6 +174,7 @@ int main()
 
 	// Set the required callback functions
 	glfwSetKeyCallback(window, key_callback);
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
 
 	// Set this to true so GLEW knows to use a modern approach to retrieving function pointers and extensions
 	glewExperimental = GL_TRUE;
@@ -180,7 +187,7 @@ int main()
 	// Define the viewport dimensions
 	glViewport(0, 0, width, height);
 
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 
 	// LOADING ICON
 
@@ -239,7 +246,8 @@ int main()
 	        &GUIShader,
 	        &textShader,
 	        &waterShader,
-	        &postShader);
+	        &postShader,
+	        width, height);
 
 	// ----------------------------------------------- CODE ------------------------------------------
 	location = new Location(3, 3, 10, 10, new DungeonA1Generator());
@@ -297,9 +305,15 @@ int main()
 	glfwSetCursorPos(window, (double)width / 2.0, (double)height / 2.0);
 
 	typedef void (*function)();
-	Button* button = new Button(glm::vec4(-0.1f, -0.1f, 0.2f, 0.2f), (function)useless, "bruh", Characters, 14.0f, glm::vec3(255.0f, 255.0f, 0.0f), width, height);
+	printf("%s\n", "1");
+	Button* resume_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)useless, "resume", Characters, 14.0f, glm::vec3(255), width, height);
 
-	game_state = STATE_RUNNING;
+	//Text* title = new Text("CrimsonThrone", glm::vec4(100, 100, 1, 1), Characters)
+
+	Image* title = new Image(glm::vec4(width / 2 - 100 / 2, height - 100, 100, 100), "resources/textures/title.png");
+	Button* play_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)useless, "start game", Characters, 14.0f, glm::vec3(255), width, height);
+
+	game_state = STATE_MAIN_MENU;
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -327,123 +341,165 @@ int main()
 		float lastXPos = xpos;
 		float lastYPos = ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
-		glm::vec2 cursorMotion = glm::vec2(lastXPos - xpos, lastYPos - ypos);
-		if (game_state != STATE_PAUSED) {
-			if (cursorMotion.x != 0 || cursorMotion.y != 0) {
-				if (speed.x != 0 || speed.y != 0) {
-					speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
-					speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
-				}
-				if (speedSide.x != 0 || speedSide.y != 0) {
-					speedSide.x = -sin(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
-					speedSide.y = -cos(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
-				}
-				cursorMotion *= sensivity;
-				player->GetCamera()->changeRotationX(-cursorMotion.y);
-				player->GetCamera()->changeRotationY(-cursorMotion.x);
-				if (player->GetCamera()->getRotation().x < -90.0f)
-					player->GetCamera()->setRotationX(-90.0f);
-				if (player->GetCamera()->getRotation().x > 90.0f)
-					player->GetCamera()->setRotationX(90.0f);
+
+		if (game_state == STATE_MAIN_MENU)  {
+			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			glfwPollEvents();
+
+			if (play_button->check(glm::vec2(xpos, ypos))) {
+				play_button->update(glm::vec3(100));
+			} else {
+				play_button->update(glm::vec3(0));
 			}
-		}
-
-		glfwPollEvents();
-
-		/*glClearColor(0.5f, 0.7f, 0.7f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
-
-
-		// первый проход
-		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // буфер трафарета не используется
-		glEnable(GL_DEPTH_TEST);
-
-		glClearColor(0.5f, 0.7f, 0.7f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		if (game_state != STATE_PAUSED) {
-			location->UpdatePosition(player->GetPhysicalObj()->getPosition());
-
-			Chunk * chunk_ptr = location->GetCurrentChunk();
-			if (chunk_ptr == nullptr)
-				chunk_ptr = location->GetChunkByPosition(0, 0);
-
-			if (player_wants_to_jump) {
-				player->GetPhysicalObj()->jump(chunk_ptr);
+			if (clicked) {
+				play_button->click(glm::vec2(xpos, ypos));
 			}
 
+			title->draw(shaderHolder);
+			play_button->draw(shaderHolder);
 
-			player->GetPhysicalObj()->setSpeed(speed + speedSide);
-			int chunk_ix = chunk_ptr->GetX();
-			int chunk_iy = chunk_ptr->GetY();
-			for (int dx = -1; dx <= 1; dx++) {
-				for (int dy = -1; dy <= 1; dy++) {
-					int nx = chunk_ix + dx;
-					int ny = chunk_iy + dy;
-					Chunk * nchunk = chunk_ptr->GetLocation()->GetChunk(nx, ny);
-					if (nchunk == nullptr) continue;
-					nchunk->CollideWithAll(player->GetPhysicalObj(), dt, true);
-				}
-			}
-			player->Update(dt);
+			glFinish();
 
-			/* Collide player with all objects in chunk */
-			player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
-
-			chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
-		}
-
-		location->Draw(shaderHolder, camera, width, height);
-
-		// второй проход
-		glBindFramebuffer(GL_FRAMEBUFFER, 0); // возвращаем буфер кадра по умолчанию
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		shaderHolder->getPost()->Use();
-		glUniform1f(glGetUniformLocation(shaderHolder->getPost()->Program, "speed"), sqrt(player->GetPhysicalObj()->velocity.x * player->GetPhysicalObj()->velocity.x + 
-																						  player->GetPhysicalObj()->velocity.y * player->GetPhysicalObj()->velocity.y + 
-																						  player->GetPhysicalObj()->velocity.z * player->GetPhysicalObj()->velocity.z));
-
-		glBindVertexArray(quadVAO);
-		glDisable(GL_DEPTH_TEST);
-		glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-
-		// inventory->draw(shaderHolder);
-		fps_counter->draw(shaderHolder);
-		test_frame.draw(shaderHolder, width, height);
-
-		if (game_state == STATE_PAUSED)
-			button->draw(shaderHolder);
-
-		glFinish();
-
-		glfwSwapBuffers(window);
-
-		if (game_state != STATE_PAUSED) {
-			player_core->Step();
-			location->Update(dt);
-			current_frame = glfwGetTime();
-			dt = (current_frame - last_frame);
-			last_frame = current_frame;
-
-			if (glfwGetTime() - fps_change_last > 0.1) {
-				fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
-				fps_change_last = glfwGetTime();
-			}
+			glfwSwapBuffers(window);
 		} else {
-			last_frame = glfwGetTime();
+			glm::vec2 cursorMotion = glm::vec2(lastXPos - xpos, lastYPos - ypos);
+			if (game_state != STATE_PAUSED) {
+				if (cursorMotion.x != 0 || cursorMotion.y != 0) {
+					if (speed.x != 0 || speed.y != 0) {
+						speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
+						speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
+					}
+					if (speedSide.x != 0 || speedSide.y != 0) {
+						speedSide.x = -sin(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
+						speedSide.y = -cos(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
+					}
+					cursorMotion *= sensivity;
+					player->GetCamera()->changeRotationX(-cursorMotion.y);
+					player->GetCamera()->changeRotationY(-cursorMotion.x);
+					if (player->GetCamera()->getRotation().x < -90.0f)
+						player->GetCamera()->setRotationX(-90.0f);
+					if (player->GetCamera()->getRotation().x > 90.0f)
+						player->GetCamera()->setRotationX(90.0f);
+				}
+			}
+
+			glfwPollEvents();
+
+			if (game_state == STATE_PAUSED) {
+				if (resume_button->check(glm::vec2(xpos, ypos))) {
+					resume_button->update(glm::vec3(255, 255, 0));
+				} else {
+					resume_button->update(glm::vec3(0));
+				}
+				if (clicked) {
+					resume_button->click(glm::vec2(xpos, ypos));
+				}
+			}
+
+			/*glClearColor(0.5f, 0.7f, 0.7f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
+
+
+			// первый проход
+			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glEnable(GL_DEPTH_TEST);
+
+			glClearColor(0.5f, 0.7f, 0.7f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+			if (game_state != STATE_PAUSED) {
+				location->UpdatePosition(player->GetPhysicalObj()->getPosition());
+
+				Chunk * chunk_ptr = location->GetCurrentChunk();
+				if (chunk_ptr == nullptr)
+					chunk_ptr = location->GetChunkByPosition(0, 0);
+
+				if (player_wants_to_jump) {
+					player->GetPhysicalObj()->jump(chunk_ptr);
+				}
+
+
+				player->GetPhysicalObj()->setSpeed(speed + speedSide);
+				int chunk_ix = chunk_ptr->GetX();
+				int chunk_iy = chunk_ptr->GetY();
+				for (int dx = -1; dx <= 1; dx++) {
+					for (int dy = -1; dy <= 1; dy++) {
+						int nx = chunk_ix + dx;
+						int ny = chunk_iy + dy;
+						Chunk * nchunk = chunk_ptr->GetLocation()->GetChunk(nx, ny);
+						if (nchunk == nullptr) continue;
+						nchunk->CollideWithAll(player->GetPhysicalObj(), dt, true);
+					}
+				}
+				player->Update(dt);
+
+				/* Collide player with all objects in chunk */
+				player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
+
+				chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
+			}
+
+			location->Draw(shaderHolder, camera, width, height);
+
+			// второй проход
+			glBindFramebuffer(GL_FRAMEBUFFER, 0); // возвращаем буфер кадра по умолчанию
+			glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
+
+			shaderHolder->getPost()->Use();
+			glUniform1f(glGetUniformLocation(shaderHolder->getPost()->Program, "speed"), sqrt(player->GetPhysicalObj()->velocity.x * player->GetPhysicalObj()->velocity.x +
+			            player->GetPhysicalObj()->velocity.y * player->GetPhysicalObj()->velocity.y +
+			            player->GetPhysicalObj()->velocity.z * player->GetPhysicalObj()->velocity.z));
+
+			glBindVertexArray(quadVAO);
+			glDisable(GL_DEPTH_TEST);
+			glBindTexture(GL_TEXTURE_2D, texColorBuffer);
+			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			glBindVertexArray(0);
+
+			// inventory->draw(shaderHolder);
+			fps_counter->draw(shaderHolder);
+			test_frame.draw(shaderHolder, width, height);
+
+			if (game_state == STATE_PAUSED)
+				resume_button->draw(shaderHolder);
+
+			glFinish();
+
+			glfwSwapBuffers(window);
+
+			if (game_state != STATE_PAUSED) {
+				player_core->Step();
+				location->Update(dt);
+				current_frame = glfwGetTime();
+				dt = (current_frame - last_frame);
+				last_frame = current_frame;
+
+				if (glfwGetTime() - fps_change_last > 0.1) {
+					fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
+					fps_change_last = glfwGetTime();
+				}
+			} else {
+				last_frame = glfwGetTime();
+			}
 		}
 
 		player_wants_to_jump = false; // What the fuck
 		push = false;
+		clicked = false;
 	}
 	glfwTerminate();
 	return 0;
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+	if (action == GLFW_PRESS) {
+		clicked = true;
+	}
 }
 
 // Is called whenever a key is pressed/released via GLFW
@@ -453,8 +509,13 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	}
 	if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
-		if (game_state != STATE_PAUSED) game_state = STATE_PAUSED;
-		else game_state = STATE_RUNNING;
+		if (game_state == STATE_RUNNING) {
+			game_state = STATE_PAUSED;
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		} else if (game_state == STATE_PAUSED) {
+			game_state = STATE_RUNNING;
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
 	}
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
 		speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;

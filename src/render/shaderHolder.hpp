@@ -1,7 +1,8 @@
 #ifndef SHADERS_H
 #define SHADERS_H
 
-#include "shaderLoader.hpp"
+#include <render/shaderLoader.hpp>
+#include <glm/glm.hpp>
 
 class ShaderHolder {
 	Shader * shader3D;
@@ -10,9 +11,11 @@ class ShaderHolder {
 	Shader * shaderWater;
 	Shader * shaderPost;
 	bool underWater;
+	int screen_width;
+	int screen_height;
 
 public:
-	ShaderHolder(Shader*, Shader*, Shader*, Shader*, Shader*);
+	ShaderHolder(Shader*, Shader*, Shader*, Shader*, Shader*, int, int);
 	Shader* get3D();
 	Shader* getGUI();
 	Shader* getText();
@@ -21,6 +24,7 @@ public:
 
 	void setUnderWater(bool input);
 	bool getUnderWater();
+	glm::vec2 getResolution();
 };
 
 #endif

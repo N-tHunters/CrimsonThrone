@@ -92,6 +92,7 @@ void Image::draw(ShaderHolder* shaderHolder) {
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 	glUniform1i(glGetUniformLocation(shaderHolder->getGUI()->Program, "text"), 0);
+	glUniform2fv(glGetUniformLocation(shaderHolder->getGUI()->Program, "resolution"), 1, glm::value_ptr(shaderHolder->getResolution()));
 
 
 	glBindVertexArray(VAO);
@@ -109,6 +110,7 @@ void Image::draw(ShaderHolder* shaderHolder, glm::vec3 drawColor) {
 
 	glUniform1i(glGetUniformLocation(shaderHolder->getText()->Program, "text"), 0);
 	glUniform3fv(glGetUniformLocation(shaderHolder->getText()->Program, "textColor"), 1, glm::value_ptr(drawColor));
+	glUniform2fv(glGetUniformLocation(shaderHolder->getGUI()->Program, "resolution"), 1, glm::value_ptr(shaderHolder->getResolution()));
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
