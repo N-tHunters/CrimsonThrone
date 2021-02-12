@@ -115,7 +115,7 @@ void Button::update(glm::vec3 color) {
 				image[(i * width + j) * 3 + 1] = 255.0f;
 				image[(i * width + j) * 3 + 2] = 255.0f;
 			} else {
-				image[(i * width + j) * 3] = color.x;
+				image[(i * width + j) * 3] = color.x;	
 				image[(i * width + j) * 3 + 1] = color.y;
 				image[(i * width + j) * 3 + 2] = color.z;
 			}

@@ -106,9 +106,17 @@ enum {
 
 GLFWwindow* window;
 
-void useless() {
+void change_to_running() {
 	game_state = STATE_RUNNING;
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+}
+
+void change_to_main_menu() {
+	game_state = STATE_MAIN_MENU;
+}
+
+void close_window() {
+	glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
 int main()
@@ -250,7 +258,7 @@ int main()
 	        width, height);
 
 	// ----------------------------------------------- CODE ------------------------------------------
-	location = new Location(3, 3, 10, 10, new DungeonA1Generator());
+	location = new Location(10, 10, 10, 10, new DungeonA1Generator());
 
 	SetCurrentLocation(location);
 
@@ -306,12 +314,14 @@ int main()
 
 	typedef void (*function)();
 	printf("%s\n", "1");
-	Button* resume_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)useless, "resume", Characters, 14.0f, glm::vec3(255), width, height);
+	Button* resume_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "resume", Characters, 14.0f, glm::vec3(255), width, height);
+	Button* exit_to_menu = new Button(glm::vec4(-0.1, -0.20, 0.2, 0.1), (function)change_to_main_menu, "exit to menu", Characters, 14.0f, glm::vec3(255), width, height);
 
 	//Text* title = new Text("CrimsonThrone", glm::vec4(100, 100, 1, 1), Characters)
 
 	Image* title = new Image(glm::vec4(width / 2 - 100 / 2, height - 100, 100, 100), "resources/textures/title.png");
-	Button* play_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)useless, "start game", Characters, 14.0f, glm::vec3(255), width, height);
+	Button* play_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "start game", Characters, 14.0f, glm::vec3(255), width, height);
+	Button* exit_button = new Button(glm::vec4(-0.1, -0.2, 0.2, 0.1), (function)close_window, "exit game", Characters, 14.0f, glm::vec3(255), width, height);
 
 	game_state = STATE_MAIN_MENU;
 
@@ -343,6 +353,7 @@ int main()
 		glfwGetCursorPos(window, &xpos, &ypos);
 
 		if (game_state == STATE_MAIN_MENU)  {
+			ypos = height - ypos;
 			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -353,12 +364,21 @@ int main()
 			} else {
 				play_button->update(glm::vec3(0));
 			}
+
+			if (exit_button->check(glm::vec2(xpos, ypos))) {
+				exit_button->update(glm::vec3(100));
+			} else {
+				exit_button->update(glm::vec3(0));
+			}
+
 			if (clicked) {
 				play_button->click(glm::vec2(xpos, ypos));
+				exit_button->click(glm::vec2(xpos, ypos));
 			}
 
 			title->draw(shaderHolder);
 			play_button->draw(shaderHolder);
+			exit_button->draw(shaderHolder);
 
 			glFinish();
 
@@ -388,13 +408,20 @@ int main()
 			glfwPollEvents();
 
 			if (game_state == STATE_PAUSED) {
+				ypos = height - ypos;
 				if (resume_button->check(glm::vec2(xpos, ypos))) {
 					resume_button->update(glm::vec3(255, 255, 0));
 				} else {
 					resume_button->update(glm::vec3(0));
 				}
+				if (exit_to_menu->check(glm::vec2(xpos, ypos))) {
+					exit_to_menu->update(glm::vec3(255, 255, 0));
+				} else {
+					exit_to_menu->update(glm::vec3(0));
+				}
 				if (clicked) {
 					resume_button->click(glm::vec2(xpos, ypos));
+					exit_to_menu->click(glm::vec2(xpos, ypos));
 				}
 			}
 
@@ -465,8 +492,10 @@ int main()
 			fps_counter->draw(shaderHolder);
 			test_frame.draw(shaderHolder, width, height);
 
-			if (game_state == STATE_PAUSED)
+			if (game_state == STATE_PAUSED) {
 				resume_button->draw(shaderHolder);
+				exit_to_menu->draw(shaderHolder);
+			}
 
 			glFinish();
 
@@ -506,9 +535,6 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
-		glfwSetWindowShouldClose(window, GL_TRUE);
-	}
-	if (key == GLFW_KEY_Z && action == GLFW_PRESS) {
 		if (game_state == STATE_RUNNING) {
 			game_state = STATE_PAUSED;
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
