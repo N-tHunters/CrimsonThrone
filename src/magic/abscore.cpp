@@ -1,6 +1,6 @@
 #include <magic/abscore.h>
 #include <magic/protocore.h>
-#include <base/location.hpp>
+#include <base/location/location.hpp>
 
 AbstractCore::AbstractCore() {
   for(int i = 0; i < 256; i++)

@@ -1,12 +1,12 @@
 #ifndef PHYSICALOBJ_H
 #define PHYSICALOBJ_H
 
-#include "../render/mesh.hpp"
+#include <render/mesh.hpp>
 #include "boundary.hpp"
 #include <glm/glm.hpp>
-#include "../render/camera.hpp"
-#include "../render/shaderLoader.hpp"
-#include "../render/shaderHolder.hpp"
+#include <render/camera.hpp>
+#include <render/shaderLoader.hpp>
+#include <render/shaderHolder.hpp>
 #include "../debug.hpp"
 
 class Chunk;

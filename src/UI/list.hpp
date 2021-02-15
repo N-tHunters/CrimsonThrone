@@ -4,7 +4,7 @@
 #include "frame.hpp"
 #include "column.hpp"
 #include "abstractListElement.hpp"
-#include "../base/item.hpp"
+#include <base/items/item.hpp>
 
 class List: public Frame {
 	std::vector<Column*>* columns;

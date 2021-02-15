@@ -1,6 +1,6 @@
 #include "flatgenerator.hpp"
-#include <base/location.hpp>
-#include <base/chunk.hpp>
+#include <base/location/location.hpp>
+#include <base/location/chunk.hpp>
 
 FlatGenerator::FlatGenerator() {}
 
