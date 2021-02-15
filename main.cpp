@@ -258,7 +258,7 @@ int main()
 	        width, height);
 
 	// ----------------------------------------------- CODE ------------------------------------------
-	location = new Location(5, 5, 10, 10, new DungeonA1Generator3D(5));
+	location = new Location(3, 3, 10, 10, new DungeonA1Generator3D(10));
 
 	SetCurrentLocation(location);
 
