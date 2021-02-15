@@ -1,5 +1,4 @@
-#ifndef ABSCORE_H
-#define ABSCORE_H
+#pragma once
 
 #include <physics/physicalObj.hpp>
 #include <render/model.hpp>
@@ -25,4 +24,3 @@ class AbstractCore {
   AbstractCore * GetChildCore(int);
 };
 
-#endif

@@ -1,8 +1,6 @@
-#ifndef PROTOCORE_H
-#define PROTOCORE_H
+#pragma once
 
 #include "abscore.h"
-
 #include <map>
 
 class ProtoMagicCore : public AbstractCore {
@@ -15,4 +13,3 @@ class ProtoMagicCore : public AbstractCore {
 char proto_call(char, char, char, AbstractCore *);
 void init_protocores();
 
-#endif

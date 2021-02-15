@@ -1,5 +1,4 @@
-#ifndef WORLDCORE_H
-#define WORLDCORE_H
+#pragma once
 
 #include "protocore.h"
 
@@ -12,4 +11,3 @@ class WorldMagicCore : public ProtoMagicCore {
   PhysicalObj * GetPhyiscalObj();
 };
 
-#endif
