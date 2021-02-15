@@ -10,11 +10,12 @@ FIND_PATH( OPENALSOFT_INCLUDE_DIR AL/al.h
 	/opt/local/include
 	"${CMAKE_SOURCE_DIR}/include"
 )
-FIND_LIBRARY( OPENALSOFT_LIBRARY OpenAL32
+FIND_LIBRARY( OPENALSOFT_LIBRARY NAMES OpenAL32 libopenal.so
 	/usr/lib64
 	/usr/lib
 	/usr/local/lib
 	/opt/local/lib
+	/usr/lib/x86_64-linux-gnu
 	"${CMAKE_SOURCE_DIR}/lib"
 )
 IF(OPENALSOFT_INCLUDE_DIR AND OPENALSOFT_LIBRARY)

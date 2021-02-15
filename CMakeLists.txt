@@ -55,6 +55,10 @@ if(NOT GLEW_FOUND)
   set(GLEW_LIBRARY "${CMAKE_SOURCE_DIR}/lib/glew32.lib")
 endif()
 
+if (NOT WIN32)
+  target_link_libraries(CrimsonThrone GLEW::GLEW)
+endif()
+
 message(STATUS "GLEW library found at ${GLEW_LIBRARY}")
 
 # Assimp
