@@ -1,6 +1,6 @@
 #include "physicalObj.hpp"
 #include "terrain.hpp"
-#include "../base/chunk.hpp"
+#include <base/location/chunk.hpp>
 
 PhysicalObj::PhysicalObj() {}
 

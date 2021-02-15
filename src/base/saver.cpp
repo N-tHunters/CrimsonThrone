@@ -2,9 +2,9 @@
  * \file
  * \brief This file contains implementation for Saver
  */
-#include "saver.hpp"
-#include "actor.hpp"
-#include "item.hpp"
+#include <base/saver.hpp>
+#include <base/actors/actor.hpp>
+#include <base/items/item.hpp>
 #include <stdio.h>
 
 /**

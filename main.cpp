@@ -35,12 +35,12 @@
 #include <physics/boundary.hpp>
 #include <physics/terrain.hpp>
 
-#include <base/player.hpp>
-#include <base/npc.hpp>
-#include <base/item.hpp>
-#include <base/chunk.hpp>
-#include <base/location.hpp>
-#include <base/shortjumptrigger.hpp>
+#include <base/actors/player.hpp>
+#include <base/actors/npc.hpp>
+#include <base/items/item.hpp>
+#include <base/location/chunk.hpp>
+#include <base/location/location.hpp>
+#include <base/triggers/shortjumptrigger.hpp>
 
 #include <magic/core.h>
 #include <magic/symbols.h>

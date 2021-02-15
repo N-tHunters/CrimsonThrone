@@ -13,7 +13,7 @@
 #include "../render/shaderHolder.hpp"
 
 // Base includes
-#include "../base/item.hpp"
+#include <base/items/item.hpp>
 
 #include "character.hpp"
 

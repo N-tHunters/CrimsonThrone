@@ -10,8 +10,8 @@
 #include <fstream>
 #include <sstream>
 #include <map>
-#include "actor.hpp"
-#include "item.hpp"
+#include <base/actors/actor.hpp>
+#include <base/items/item.hpp>
 
 /**
  * \brief Loader is an abstract class used to load binary saves

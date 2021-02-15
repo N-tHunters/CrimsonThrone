@@ -2,7 +2,7 @@
 
 #include <physics/physicalObj.hpp>
 #include <render/model.hpp>
-#include <base/location.hpp>
+#include <base/location/location.hpp>
 
 class ProtoMagicCore;
 

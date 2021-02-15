@@ -1,5 +1,5 @@
 #include "dungeona1generator3d.hpp"
-#include <base/location.hpp>
+#include <base/location/location.hpp>
 #include <utility>
 #include <base/configuration.hpp>
 
