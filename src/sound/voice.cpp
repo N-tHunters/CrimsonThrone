@@ -1,5 +1,6 @@
 #include "voice.h"
-#include <unistd.h>
+#include <chrono>
+#include <thread>
 
 Voice::Voice(SoundEngine * engine, ALuint * source, std::string voice_path) {
   this->engine = engine;
@@ -17,7 +18,7 @@ Voice::Voice(SoundEngine * engine, ALuint * source, std::string voice_path) {
 void Voice::Say(std::string phrase) {
   for(size_t i = 0; i < phrase.size(); i ++) {
     if(phrase[i] == ' ') {
-      sleep(0.5);
+      std::this_thread::sleep_for(std::chrono::milliseconds(500));
     } else 
       this->sounds[phrase[i] - 'a'].PlayToEnd();
   }

@@ -4,18 +4,16 @@
 #include <ctime>
 #include <stdio.h>
 #include <map>
-#include <unistd.h>
 #ifdef _WIN32
 #include <windows.h>
 #endif
 
-#define GLFW_INCLUDE_NONE
-#define GLFW_DLL
 // GLEW
-#define GLEW_STATIC
 #include <GL/glew.h>
 
 // GLFW
+#define GLFW_INCLUDE_NONE
+#define GLFW_DLL
 #ifndef GLWF_ALREADY_INCLUDED
 #define GLWF_ALREADY_INCLUDED
 #include <GLFW/glfw3.h>
@@ -44,8 +42,8 @@
 #include <base/location.hpp>
 #include <base/shortjumptrigger.hpp>
 
-#include <base/magic/core.h>
-#include <base/magic/symbols.h>
+#include <magic/core.h>
+#include <magic/symbols.h>
 
 #include <sound/soundengine.h>
 #include <sound/filesound.h>
@@ -325,6 +323,8 @@ int main()
 
 	game_state = STATE_MAIN_MENU;
 
+	float dt = 0.0f;
+
 	while (!glfwWindowShouldClose(window))
 	{
 		if (camera->getRotationX() > 180.0f) {
@@ -346,7 +346,6 @@ int main()
 			camera->setRotationZ(180.0f);
 		}
 
-		float dt;
 		float current_frame;
 		float lastXPos = xpos;
 		float lastYPos = ypos;

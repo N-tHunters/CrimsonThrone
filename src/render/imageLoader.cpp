@@ -1,5 +1,5 @@
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include <stb_image.cpp>
 #include "imageLoader.hpp"
 
 unsigned char * loadImage(std::string path, int* width, int* height) {
