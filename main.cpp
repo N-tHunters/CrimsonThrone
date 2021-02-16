@@ -319,7 +319,7 @@ int main()
 
 	//Text* title = new Text("CrimsonThrone", glm::vec4(100, 100, 1, 1), Characters)
 
-	Image* title = new Image(glm::vec4(width / 2 - 100 / 2, height - 100, 100, 100), "resources/textures/title.png");
+	Image* title = new Image(glm::vec4(width / 2 - 200 / 2, height - 200, 200, 200), "resources/textures/test.jpg");
 	Button* play_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "start game", Characters, 14.0f, glm::vec3(255), width, height);
 	Button* exit_button = new Button(glm::vec4(-0.1, -0.2, 0.2, 0.1), (function)close_window, "exit game", Characters, 14.0f, glm::vec3(255), width, height);
 

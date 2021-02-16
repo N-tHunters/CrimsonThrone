@@ -126,6 +126,9 @@ void PhysicalObj::changeRotationZ(float delta) { rotation.z += delta; }
 std::string PhysicalObj::getName() { return name; }
 
 void PhysicalObj::jump(Chunk* chunk) {
+	if (isActive == false) {
+		return;
+	}
 	if (abs(velocity.y) < 1.0f) {
 		bool t = false;
 		for (int i = 0; i < chunk->GetObjsCount(); i++) {
@@ -159,7 +162,7 @@ float PhysicalObj::detectCollision(Terrain* terrain, glm::vec3 position) {
 }
 
 void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
-	if (this->isActive != true) {
+	if (isActive == false) {
 		return;
 	}
 	float height = this->detectCollision(terrain);
@@ -209,6 +212,9 @@ void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
 }
 
 void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocity, bool isPlayer) {
+	if (isActive == false) {
+		return;
+	}
 	glm::vec3 this_velocity_x = glm::vec3(velocity.x * dt, 0.0f, 0.0f);
 	glm::vec3 this_velocity_y = glm::vec3(0.0f, velocity.y * dt, 0.0f);
 	glm::vec3 this_velocity_z = glm::vec3(0.0f, 0.0f, velocity.z * dt);
@@ -222,7 +228,12 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 	bool collided = false;
 
 	if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_x, this->getRotation(), other_object->getPosition() + other_velocity_x, other_object->getRotation())) {
-		this->velocity.x = 0.0f;
+		if (this->boundary->Collide(other_object->boundary, this->getPosition() + glm::vec3(0, 1, 0) + this_velocity_x, this->getRotation(), other_object->getPosition() + other_velocity_z, other_object->getRotation()))
+		{
+			this->velocity.x = 0.0f;
+		} else {
+			this->position.y += 0.5f;
+		}
 		//this->velocity.x = (this->position.x - other_object->getPositionX()) * 2.0f;
 		//this->force.x = (this->position.x - other_object->getPositionX()) * 10.0f;
 		collided = true;
@@ -237,7 +248,12 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 	}
 
 	if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_z, this->getRotation(), other_object->getPosition() + other_velocity_z, other_object->getRotation())) {
-		this->velocity.z = 0.0f;
+		if (this->boundary->Collide(other_object->boundary, this->getPosition() + glm::vec3(0, 1, 0) + this_velocity_z, this->getRotation(), other_object->getPosition() + other_velocity_z, other_object->getRotation()))
+		{
+			this->velocity.z = 0.0f;
+		} else {
+			this->position.y += 0.5f;
+		}
 		//this->velocity.z = (this->position.z - other_object->getPositionZ()) * 2.0f;
 		//this->force.z = (this->position.z - other_object->getPositionZ()) * 10.0f;
 		this->force.z = 0.0f;
