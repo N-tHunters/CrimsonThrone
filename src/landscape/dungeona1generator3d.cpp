@@ -5,6 +5,7 @@
 
 const float wall_height = 6.0f;
 const float wall_width = 0.5f;
+const int step_count = 10;
 
 DungeonA1Generator3D::DungeonA1Generator3D(size_t floors) : DungeonGenerator(floors) {}
 
@@ -88,7 +89,7 @@ void DungeonA1Generator3D::Generate(Location * location, size_t width, size_t he
 	if(walls[ROOF_3D(j, i, z)])
 	  location->GetChunk(j, i)
 	    ->AddObj(create_wall(glm::vec3(chunk_width * 0.5f + chunk_width * j,
-					   wall_height + wall_height * z,
+					   wall_height + wall_height * z - wall_width * 0.5 + 0.05f,
 					   chunk_height * i + 0.5f * chunk_height),
 				 glm::vec3(chunk_width,
 					   wall_width,
@@ -98,55 +99,57 @@ void DungeonA1Generator3D::Generate(Location * location, size_t width, size_t he
     }
   }
 
+  float step_size = chunk_width * 0.5f / (float)step_count;
+
   // Ladders
   for (size_t z = 0; z < floors; z ++) {
     for (size_t i = 0; i < height; i ++) {
       for (size_t j = 0; j < width; j ++) {
 	if(ladders[z * width * height + i * width + j] == LADDER_BACKWARD) {
-	  for(short unsigned int k = 1; k < 4; k++) {
+	  for(short unsigned int k = 1; k < step_count; k++) {
 	    location->GetChunk(j, i)
-	      ->AddObj(create_wall(glm::vec3(chunk_width * j + chunk_width * 0.5 + chunk_width * 0.5 * 0.3 * k,
-					     wall_height * z + wall_height * 0.3 * k - wall_height * 0.1,
+	      ->AddObj(create_wall(glm::vec3(chunk_width * j + chunk_width - wall_height + step_size * k,
+					     wall_height * z + step_size * k - wall_height * 0.1,
 					     chunk_height * i + 0.5f * chunk_height),
-				   glm::vec3(chunk_width * 0.5 * 0.3,
-					     wall_height * 0.3,
+				   glm::vec3(step_size,
+					     step_size,
 					     chunk_height),
 				   GetDefaultTexture()));
 	    
 	  }
 	} else if(ladders[z * width * height + i * width + j] == LADDER_FORWARD) {
-	  for(short unsigned int k = 1; k < 4; k++) {
+	  for(short unsigned int k = 1; k < step_count; k++) {
 	    location->GetChunk(j, i)
-	      ->AddObj(create_wall(glm::vec3(chunk_width * j + chunk_width * 0.5 - chunk_width * 0.5 * 0.3 * k,
-					     wall_height * z + wall_height * 0.3 * k - wall_height * 0.1,
+	      ->AddObj(create_wall(glm::vec3(chunk_width * j + chunk_width * 0.5 - step_size * k,
+					     wall_height * z + step_size * k - wall_height * 0.1,
 					     chunk_height * i + 0.5f * chunk_height),
-				   glm::vec3(chunk_width * 0.5 * 0.3,
-					     wall_height * 0.3,
+				   glm::vec3(step_size,
+					     step_size,
 					     chunk_height),
 				   GetDefaultTexture()));
 	    
 	  }
 	} else if(ladders[z * width * height + i * width + j] == LADDER_LEFT) {
-	  for(short unsigned int k = 1; k < 4; k++) {
+	  for(short unsigned int k = 1; k < step_count; k++) {
 	    location->GetChunk(j, i)
 	      ->AddObj(create_wall(glm::vec3(chunk_width * j + chunk_width * 0.5,
-					     wall_height * z + wall_height * 0.3 * k - wall_height * 0.1,
-					     chunk_height * i + 0.5f * chunk_height + chunk_height * 0.5 * 0.3 * k),
+					     wall_height * z + step_size * k - wall_height * 0.1,
+					     chunk_height * i + 0.5f * chunk_height + step_size * k),
 				   glm::vec3(chunk_width,
-					     wall_height * 0.3,
-					     chunk_height * 0.5 * 0.3),
+					     step_size,
+					     step_size),
 				   GetDefaultTexture()));
 	    
 	  }
 	} else if(ladders[z * width * height + i * width + j] == LADDER_RIGHT) {
-	  for(short unsigned int k = 1; k < 4; k++) {
+	  for(short unsigned int k = 1; k < step_count; k++) {
 	    location->GetChunk(j, i)
 	      ->AddObj(create_wall(glm::vec3(chunk_width * j + chunk_width * 0.5,
-					     wall_height * z + wall_height * 0.3 * k - wall_height * 0.1,
-					     chunk_height * i + 0.5f * chunk_height - chunk_height * 0.5 * 0.3 * k),
+					     wall_height * z + step_size * k - wall_height * 0.1,
+					     chunk_height * i + 0.5f * chunk_height - step_size * k),
 				   glm::vec3(chunk_width,
-					     wall_height * 0.3,
-					     chunk_height * 0.5 * 0.3),
+					     step_size,
+					     step_size),
 				   GetDefaultTexture()));
 	    
 	  }

@@ -126,6 +126,9 @@ void PhysicalObj::changeRotationZ(float delta) { rotation.z += delta; }
 std::string PhysicalObj::getName() { return name; }
 
 void PhysicalObj::jump(Chunk* chunk) {
+	if (isActive == false) {
+		return;
+	}
 	if (abs(velocity.y) < 1.0f) {
 		bool t = false;
 		for (int i = 0; i < chunk->GetObjsCount(); i++) {
@@ -159,7 +162,7 @@ float PhysicalObj::detectCollision(Terrain* terrain, glm::vec3 position) {
 }
 
 void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
-	if (this->isActive != true) {
+	if (isActive == false) {
 		return;
 	}
 	float height = this->detectCollision(terrain);
@@ -209,7 +212,7 @@ void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
 }
 
 void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocity, bool isPlayer) {
-	if (this->isActive == false) {
+	if (isActive == false) {
 		return;
 	}
 	glm::vec3 this_velocity_x = glm::vec3(velocity.x * dt, 0.0f, 0.0f);
