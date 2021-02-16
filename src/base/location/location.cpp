@@ -3,6 +3,7 @@
  * \brief This file contains implementation of Location and its helper functions
  */
 #include "location.hpp"
+#include <unordered_map>
 
 const int PROCESS_RADIUS = 3;
 const int RENDER_RADIUS = 5;
@@ -152,17 +153,6 @@ void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_wid
   }
 }
 
-// Global functions and objects
-
-Location * current_location;
-
-Location * GetCurrentLocation() {
-  return current_location;
-}
-
-void SetCurrentLocation(Location *loc) {
-  current_location = loc;
-}
 
 void Location::Update(float dt) {
   int lx = std::max((int)current_x - PROCESS_RADIUS, 0); // Most left row
@@ -179,4 +169,15 @@ void Location::Update(float dt) {
     }
   }
 
+}
+// Global functions and objects
+
+static Location * current_location;
+
+Location * GetCurrentLocation() {
+  return current_location;
+}
+
+void SetCurrentLocation(Location *loc) {
+  current_location = loc;
 }

@@ -72,6 +72,7 @@ class Chunk {
   void Update(float);
 
   void CheckAllTriggers(PhysicalObj *);
+  void CheckAllTriggersAsPlayer(PhysicalObj *);
   void TriggerAll();
 
   bool IsWaterPresent();

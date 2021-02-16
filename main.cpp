@@ -59,6 +59,7 @@
 
 #include <landscape/dungeona1generator3d.hpp>
 #include <base/configuration.hpp>
+#include <base/location/worldmap.hpp>
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
@@ -256,9 +257,10 @@ int main()
 	        width, height);
 
 	// ----------------------------------------------- CODE ------------------------------------------
-	location = new Location(3, 3, 10, 10, new DungeonA1Generator3D(10));
+	init_demo_locations();
+	//	location = new Location(3, 3, 10, 10, new DungeonA1Generator3D(10));
 
-	SetCurrentLocation(location);
+	//SetCurrentLocation(location);
 
 	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
 
@@ -438,11 +440,13 @@ int main()
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			if (game_state != STATE_PAUSED) {
-				location->UpdatePosition(player->GetPhysicalObj()->getPosition());
 
-				Chunk * chunk_ptr = location->GetCurrentChunk();
+			  GetCurrentLocation()->UpdatePosition(player->GetPhysicalObj()->getPosition());
+
+			  Chunk * chunk_ptr = GetCurrentLocation()->GetCurrentChunk();
+
 				if (chunk_ptr == nullptr)
-					chunk_ptr = location->GetChunkByPosition(0, 0);
+				  chunk_ptr = GetCurrentLocation()->GetChunkByPosition(0, 0);
 
 				if (player_wants_to_jump) {
 					player->GetPhysicalObj()->jump(chunk_ptr);
@@ -450,6 +454,8 @@ int main()
 
 
 				player->GetPhysicalObj()->setSpeed(speed + speedSide);
+				chunk_ptr->CheckAllTriggersAsPlayer(player->GetPhysicalObj());
+
 				int chunk_ix = chunk_ptr->GetX();
 				int chunk_iy = chunk_ptr->GetY();
 				for (int dx = -1; dx <= 1; dx++) {
@@ -459,6 +465,7 @@ int main()
 						Chunk * nchunk = chunk_ptr->GetLocation()->GetChunk(nx, ny);
 						if (nchunk == nullptr) continue;
 						nchunk->CollideWithAll(player->GetPhysicalObj(), dt, true);
+
 					}
 				}
 				player->Update(dt);
@@ -466,10 +473,9 @@ int main()
 				/* Collide player with all objects in chunk */
 				player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
 
-				chunk_ptr->CheckAllTriggers(player->GetPhysicalObj());
 			}
 
-			location->Draw(shaderHolder, camera, width, height);
+			GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
 
 			// второй проход
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // возвращаем буфер кадра по умолчанию
@@ -502,7 +508,7 @@ int main()
 
 			if (game_state != STATE_PAUSED) {
 				player_core->Step();
-				location->Update(dt);
+				GetCurrentLocation()->Update(dt);
 				current_frame = glfwGetTime();
 				dt = (current_frame - last_frame);
 				last_frame = current_frame;

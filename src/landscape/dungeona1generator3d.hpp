@@ -13,9 +13,11 @@
 class DungeonA1Generator3D : public DungeonGenerator {
   void GenerateDungeon(int, int, int, int, int, int);
   std::vector<uint8_t>ladders;
+  std::vector<std::tuple<Chunk *, glm::vec3>> * exits;
 
 public:
   DungeonA1Generator3D(size_t);
+  DungeonA1Generator3D(size_t, std::vector<std::tuple<Chunk *, glm::vec3>>*);
 
   void Generate(Location *, size_t, size_t, int, int, int) override;
 };

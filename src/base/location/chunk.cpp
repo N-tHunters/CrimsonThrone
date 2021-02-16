@@ -397,10 +397,20 @@ void Chunk::CollideAll(float dt) {
 
 void Chunk::CheckAllTriggers(PhysicalObj * obj) {
   for(BoundaryTrigger * trigger : triggers) {
+    if(obj == trigger->GetLink()) continue;
     if(obj->boundary->Collide(trigger->GetBoundary(), obj->getPosition(), obj->getRotation(), trigger->GetPosition(), glm::vec3(0.f, 0.f, 0.f)))
       trigger->Trig(this, obj);
   }
 }
+
+void Chunk::CheckAllTriggersAsPlayer(PhysicalObj * obj) {
+  for(BoundaryTrigger * trigger : triggers) {
+    if(obj == trigger->GetLink()) continue;
+    if(obj->boundary->Collide(trigger->GetBoundary(), obj->getPosition(), obj->getRotation(), trigger->GetPosition(), glm::vec3(0.f, 0.f, 0.f)))
+      trigger->TrigPlayer(this, obj);
+  }
+}
+
 
 void Chunk::TriggerAll() {
   for(size_t actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {

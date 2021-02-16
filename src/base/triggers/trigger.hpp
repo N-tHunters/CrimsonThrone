@@ -10,6 +10,7 @@ class Trigger {
  public:
   Trigger();
   virtual void Trig(Chunk *, PhysicalObj *);
+  virtual void TrigPlayer(Chunk *, PhysicalObj *);
 };
 
 

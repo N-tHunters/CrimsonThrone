@@ -34,6 +34,7 @@ class Location {
 };
 
 
+void init_demo_locations();
 Location * GetCurrentLocation();
 void SetCurrentLocation(Location *);
 
