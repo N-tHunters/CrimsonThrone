@@ -107,7 +107,8 @@ enum {
 	STATE_LOADING,
 	STATE_RUNNING,
 	STATE_PAUSED,
-	STATE_MAIN_MENU
+	STATE_MAIN_MENU,
+	STATE_CLOSING
 } game_state;
 
 GLFWwindow* window;
@@ -122,7 +123,8 @@ void change_to_main_menu() {
 }
 
 void close_window() {
-	glfwSetWindowShouldClose(window, GL_TRUE);
+	// glfwSetWindowShouldClose(window, GL_TRUE);
+	game_state = STATE_CLOSING;
 }
 
 void loading_screen() {
@@ -362,7 +364,7 @@ int main()
 	Mesh* coin_mesh = new Mesh("resources/textures/septim.jpg", coin_model);
 	PhysicalObj* coin = new PhysicalObj(coin_mesh, false, true, false, false, glm::vec3(0, 0, -10), glm::vec3(0), "Coin");
 
-	while (!glfwWindowShouldClose(window))
+	while (game_state != STATE_CLOSING) //!glfwWindowShouldClose(window))
 	{
 		if (camera->getRotationX() > 180.0f) {
 			camera->setRotationX(-180.0f);
@@ -388,7 +390,7 @@ int main()
 		float lastYPos = ypos;
 		glfwGetCursorPos(window, &xpos, &ypos);
 
-		if (game_state == STATE_MAIN_MENU)  {
+		if (game_state == STATE_MAIN_MENU) {
 			ypos = height - ypos;
 			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -555,6 +557,12 @@ int main()
 				}
 			} else {
 				last_frame = glfwGetTime();
+			}
+
+			if (glfwWindowShouldClose(window)) {
+				game_state = STATE_PAUSED;
+				glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+				glfwSetWindowShouldClose(window, GL_FALSE);
 			}
 		}
 
