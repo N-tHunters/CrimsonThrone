@@ -4,6 +4,8 @@
 #include <ctime>
 #include <stdio.h>
 #include <map>
+#include <thread>
+#include <future>
 #ifdef _WIN32
 #include <windows.h>
 #endif
@@ -86,7 +88,7 @@ Location * location;
 
 int direction = 1;
 float directionSide = 0;
-float velocity = 10.0f;
+float velocity = 20.0f;
 bool player_wants_to_jump = false;
 
 std::map<GLchar, Character> Characters;
@@ -95,6 +97,11 @@ bool push = false;
 float push_m = 0.0f;
 void load_characters();
 bool clicked;
+
+ShaderHolder* shaderHolder;
+int width, height;
+
+typedef void (*function)();
 
 enum {
 	STATE_LOADING,
@@ -118,12 +125,21 @@ void close_window() {
 	glfwSetWindowShouldClose(window, GL_TRUE);
 }
 
+void loading_screen() {
+
+}
+
+void loading() {
+	init_demo_locations();
+	game_state = STATE_MAIN_MENU;
+}
+
 int main()
 {
 	clicked = false;
 	game_state = STATE_LOADING;
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-	player = new Player("player", 10, new PhysicalObj(glm::vec3(3.0f, 1.0f, 3.0f), new BoundaryBox(0.25f, 1.0f, 0.25f)), camera);
+	player = new Player("player", 10, new PhysicalObj(glm::vec3(3.0f, 100.0f, 3.0f), new BoundaryBox(0.25f, 1.0f, 0.25f)), camera);
 	player_core = new MagicCore();
 	player_core->SetPhysicalObj(player->GetPhysicalObj());
 
@@ -188,7 +204,6 @@ int main()
 	// Initialize GLEW to setup the OpenGL Function pointers
 	glewInit();
 
-	int width, height;
 	glfwGetWindowSize(window, &width, &height);
 
 	// Define the viewport dimensions
@@ -231,16 +246,11 @@ int main()
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
-
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
-
 
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-
-	load_characters();
 
 	// Build and compile our shader program
 	Shader ourShader("resources/shaders/vertex_shader.glsl", "resources/shaders/fragment_shader.glsl");
@@ -249,15 +259,38 @@ int main()
 	Shader waterShader("resources/shaders/water_vertex_shader.glsl", "resources/shaders/water_fragment_shader.glsl");
 	Shader postShader("resources/shaders/post_vertex_shader.glsl", "resources/shaders/post_fragment_shader.glsl");
 
-	ShaderHolder* shaderHolder = new ShaderHolder(&ourShader,
-	        &GUIShader,
-	        &textShader,
-	        &waterShader,
-	        &postShader,
-	        width, height);
+	shaderHolder = new ShaderHolder(&ourShader,
+	                                &GUIShader,
+	                                &textShader,
+	                                &waterShader,
+	                                &postShader,
+	                                width, height);
+
+	load_characters();
+	// std::async loading_thread((func)loading);
+	// std::async(std::launch::async, (func)loading);
+
+	Image* image_loading = new Image(glm::vec4(0, 0, 200, 200), "resources/textures/water.png");
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glfwPollEvents();
+
+	image_loading->draw(shaderHolder);
+
+	glFinish();
+
+	glfwSwapBuffers(window);
+
+	loading();
+
+	// game_state = STATE_LOADING;
+
+	while (game_state == STATE_LOADING) {
+	}
 
 	// ----------------------------------------------- CODE ------------------------------------------
-	init_demo_locations();
+
 	//	location = new Location(3, 3, 10, 10, new DungeonA1Generator3D(10));
 
 	//SetCurrentLocation(location);
@@ -312,20 +345,22 @@ int main()
 
 	glfwSetCursorPos(window, (double)width / 2.0, (double)height / 2.0);
 
-	typedef void (*function)();
-	printf("%s\n", "1");
 	Button* resume_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "resume", Characters, 14.0f, glm::vec3(255), width, height);
 	Button* exit_to_menu = new Button(glm::vec4(-0.1, -0.20, 0.2, 0.1), (function)change_to_main_menu, "exit to menu", Characters, 14.0f, glm::vec3(255), width, height);
 
 	//Text* title = new Text("CrimsonThrone", glm::vec4(100, 100, 1, 1), Characters)
 
-	Image* title = new Image(glm::vec4(width / 2 - 200 / 2, height - 200, 200, 200), "resources/textures/test.jpg");
-	Button* play_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "start game", Characters, 14.0f, glm::vec3(255), width, height);
-	Button* exit_button = new Button(glm::vec4(-0.1, -0.2, 0.2, 0.1), (function)close_window, "exit game", Characters, 14.0f, glm::vec3(255), width, height);
+	//Image* title = new Image(glm::vec4(width / 2 - 200 / 2, height - 200, 200, 200), GetStrOption("Textures", "Title"));
+	Button* play_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "START GAME", Characters, 24.0f, glm::vec3(255), width, height);
+	Button* exit_button = new Button(glm::vec4(-0.1, -0.2, 0.2, 0.1), (function)close_window, "exit game", Characters, 24.0f, glm::vec3(255), width, height);
 
 	game_state = STATE_MAIN_MENU;
 
 	float dt = 0.0f;
+
+	Model* coin_model = new Model("resources/models/coin.obj");
+	Mesh* coin_mesh = new Mesh("resources/textures/septim.jpg", coin_model);
+	PhysicalObj* coin = new PhysicalObj(coin_mesh, false, true, false, false, glm::vec3(0, 0, -10), glm::vec3(0), "Coin");
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -377,7 +412,8 @@ int main()
 				exit_button->click(glm::vec2(xpos, ypos));
 			}
 
-			title->draw(shaderHolder);
+			// title->draw(shaderHolder);
+			coin->draw(shaderHolder, camera, width, height);
 			play_button->draw(shaderHolder);
 			exit_button->draw(shaderHolder);
 
@@ -441,12 +477,12 @@ int main()
 
 			if (game_state != STATE_PAUSED) {
 
-			  GetCurrentLocation()->UpdatePosition(player->GetPhysicalObj()->getPosition());
+				GetCurrentLocation()->UpdatePosition(player->GetPhysicalObj()->getPosition());
 
-			  Chunk * chunk_ptr = GetCurrentLocation()->GetCurrentChunk();
+				Chunk * chunk_ptr = GetCurrentLocation()->GetCurrentChunk();
 
 				if (chunk_ptr == nullptr)
-				  chunk_ptr = GetCurrentLocation()->GetChunkByPosition(0, 0);
+					chunk_ptr = GetCurrentLocation()->GetChunkByPosition(0, 0);
 
 				if (player_wants_to_jump) {
 					player->GetPhysicalObj()->jump(chunk_ptr);
@@ -483,9 +519,9 @@ int main()
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			shaderHolder->getPost()->Use();
-			glUniform1f(glGetUniformLocation(shaderHolder->getPost()->Program, "speed"), sqrt(player->GetPhysicalObj()->velocity.x * player->GetPhysicalObj()->velocity.x +
+			/*glUniform1f(glGetUniformLocation(shaderHolder->getPost()->Program, "speed"), sqrt(player->GetPhysicalObj()->velocity.x * player->GetPhysicalObj()->velocity.x +
 			            player->GetPhysicalObj()->velocity.y * player->GetPhysicalObj()->velocity.y +
-			            player->GetPhysicalObj()->velocity.z * player->GetPhysicalObj()->velocity.z));
+			            player->GetPhysicalObj()->velocity.z * player->GetPhysicalObj()->velocity.z));*/
 
 			glBindVertexArray(quadVAO);
 			glDisable(GL_DEPTH_TEST);
@@ -623,11 +659,11 @@ void load_characters() {
 	if (FT_Init_FreeType(&ft))
 		std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
 	FT_Face face;
-	if (FT_New_Face(ft, "resources/fonts/hamburger.ttf", 0, &face))
+	if (FT_New_Face(ft, "resources/fonts/Benne-Regular.ttf", 0, &face))
 		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 
 
-	FT_Set_Pixel_Sizes(face, 0, 64);
+	FT_Set_Pixel_Sizes(face, 0, 24);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
 

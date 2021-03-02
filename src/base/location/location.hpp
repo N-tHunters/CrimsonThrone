@@ -33,8 +33,6 @@ class Location {
   void Update(float);
 };
 
-
-void init_demo_locations();
 Location * GetCurrentLocation();
 void SetCurrentLocation(Location *);
 

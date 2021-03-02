@@ -90,6 +90,7 @@ Mesh::Mesh(const std::string& texturePath, std::vector<GLfloat> *vertices, std::
  * @param[in]  texturePath  The texture path
  * @param[in]  vertices     The vertices
  * @param[in]  indices      The indices
+ * @param[in]  type			The type
  */
 Mesh::Mesh(const std::string& texturePath, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices, int type) {
 	this->type = type;
@@ -144,10 +145,10 @@ Mesh::Mesh(const std::string& texturePath, std::vector<GLfloat> *vertices, std::
 
 /**
  * \brief Function that draw mesh
- * \param shaderHolder A holder for all the shaders
- * \param camera Player camera
- * \param width Screen width
- * \param height Screen height
+ * \param[in] shaderHolder 	A holder for all the shaders
+ * \param[in] camera 		Player camera
+ * \param[in] width 		Screen width
+ * \param[in] height 		Screen height
  */
 void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height) {
 	assert(this->obj != nullptr);

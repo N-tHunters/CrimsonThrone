@@ -3,13 +3,27 @@
 Button::Button(glm::vec4 rect, func function, std::string text, std::map<GLchar, Character> Characters, float scale, glm::vec3 color, int screen_width, int screen_height): Frame(rect) {
 	this->rect = rect;
 	this->function = function;
-	this->text = new Text(text, glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), Characters, scale / 32.0f, color);
+	this->text = new Text(text, glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), Characters, scale / 24.0f, color);
 
 	this->rect.x = (rect.x + 1.0f) / 2.0f * screen_width;
 	this->rect.y = (rect.y + 1.0f) / 2.0f * screen_height;
 	this->rect.z = rect.z / 2.0f * screen_width;
 	this->rect.w = rect.w / 2.0f * screen_height;
 	rect = this->rect;
+
+	glm::vec2 center = glm::vec2(rect.x + rect.z / 2.0f, rect.y + rect.w / 2.0f);
+
+	glm::vec2 text_size = glm::vec2(this->text->getRect().z, this->text->getRect().w);
+
+	if (text_size.x > rect.z) {
+		rect.z = text_size.x + 20.0f;
+		rect.x = center.x - text_size.x / 2.0f - 10.0f;
+	}
+
+	if (text_size.y > rect.w) {
+		rect.w = text_size.y + 20.0f;
+		rect.y = center.y - text_size.y / 2.0f - 10.0f;
+	}
 
 	vertices = {rect.x,     	 rect.y + rect.w, 0.0f, 0.0f, 1.0f,
 	            rect.x,     	 rect.y,     	  0.0f, 0.0f, 0.0f,
@@ -19,8 +33,6 @@ Button::Button(glm::vec4 rect, func function, std::string text, std::map<GLchar,
 	indices = {0, 1, 2,
 	           1, 2, 3
 	          };
-
-	glm::vec2 center = glm::vec2(rect.x + rect.z / 2.0f, rect.y + rect.w / 2.0f);
 
 	glm::vec2 textPosition = glm::vec2(center.x - this->text->getRect().z / 2.0f, center.y - this->text->getRect().w / 2.0f);
 

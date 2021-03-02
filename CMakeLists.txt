@@ -74,6 +74,8 @@ endif()
 
 message(STATUS "Freetype library found at ${FREETYPE_LIBRARY}")
 
+# Threading
+find_package(Threads)
 
 # STB_IMAGE
 add_library(STB_IMAGE "thirdparty/stb_image.cpp")
@@ -94,6 +96,7 @@ set(LIBS
   ${FREETYPE_LIBRARY}
   STB_IMAGE
   GLAD
+  Threads::Threads
   )
 
 

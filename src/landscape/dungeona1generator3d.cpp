@@ -27,13 +27,15 @@ void DungeonA1Generator3D::Generate(Location * location, size_t width, size_t he
   for (size_t i = 0; i < (height + width * (height * 2 + 1) + width * height) * floors; i ++)
     walls.push_back(true);
 
+  Model* portal_model = new Model("resources/models/portal.obj");
+
   ladders.clear();
   for (size_t i = 0; i < width * height * floors; i++)
     ladders.push_back(NO_LADDER);
 
   GenerateDungeon(0, 0, 0, width, height, floors);
 
-  PrintDungeon3D(height, width, floors);
+  // PrintDungeon3D(height, width, floors);
 
   for(size_t z = 0; z < floors; z++) {
     for(size_t i = 0; i < width + 1; i ++) {
@@ -184,7 +186,7 @@ void DungeonA1Generator3D::Generate(Location * location, size_t width, size_t he
     std::tuple<int, int, int> coords = visited_cells[choice];
     printf("%d %d %d\n", std::get<0>(coords), std::get<1>(coords), std::get<2>(coords));
 
-    PhysicalObj * portal = new PhysicalObj(new Mesh("resources/textures/fire.png", new Model("resources/models/portal.obj")),
+    PhysicalObj * portal = new PhysicalObj(new Mesh("resources/textures/fire.png", portal_model),
 					   false, true, false, false,
 					   glm::vec3(chunk_width * 0.5f + chunk_width * std::get<0>(coords), 3.f + wall_height * std::get<2>(coords), chunk_height * 0.5f + chunk_height * std::get<1>(coords)),
 					   glm::vec3(0.0f, 0.0f, 0.0f),

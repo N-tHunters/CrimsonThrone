@@ -4,7 +4,7 @@ out vec4 FragColor;
 in vec2 TexCoords;
 
 uniform sampler2D screenTexture;
-uniform float speed;
+// uniform float speed;
 
 const float offset = 1.0 / 300.0;
 
@@ -22,18 +22,24 @@ void main()
         vec2( offset, -offset)  // bottom-right    
     );
 
-    float speed2 = speed * (length((TexCoords - vec2(0.5)) * 2.0) / sqrt(2.0));
+    // float speed2 = speed * (length((TexCoords - vec2(0.5)) * 2.0) / sqrt(2.0));
 
-    if (speed2 < 0.5) {
-        speed2 = 0.0;
-    }
+    // if (speed2 < 0.5) {
+    //     speed2 = 0.0;
+    // }
 
-    speed2 = 0.0;
+    // speed2 = 0.0;
+
+    // float kernel[9] = float[](
+    //     speed2, speed2, speed2,
+    //     speed2, max(speed2, 1.0), speed2,
+    //     speed2, speed2, speed2
+    // );
 
     float kernel[9] = float[](
-        speed2, speed2, speed2,
-        speed2, max(speed2, 1.0), speed2,
-        speed2, speed2, speed2
+        0, 0, 0,
+        0, 1, 0,
+        0, 0, 0
     );
     
     vec3 sampleTex[9];
@@ -45,11 +51,7 @@ void main()
     vec3 col = vec3(0.0);
     for(int i = 0; i < 9; i++)
         col += sampleTex[i] * kernel[i];
-
-    if (speed2 >= 0.5) {
-        col /= speed * 9.0;
-    }
-
+    
     // vec3 col = texture(screenTexture, TexCoords).xyz;
 
     // float l = length((TexCoords - vec2(0.5)) * 2.0);
