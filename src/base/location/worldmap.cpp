@@ -2,16 +2,17 @@
 #include <base/location/location.hpp>
 #include <base/triggers/longjumptrigger.hpp>
 #include <landscape/flatgenerator.hpp>
+#include <landscape/overworldgenerator.hpp>
 #include <landscape/dungeona1generator3d.hpp>
 #include <unordered_map>
 
 std::unordered_map<int, Location *> location_map;
 
 void init_demo_locations() {
-  Location * open_world = new Location(10, 10, 10, 10, new FlatGenerator());
+  Location * open_world = new Location(10, 10, 1000, 1000, new OverWorldGenerator());
   location_map[0] = open_world;
 
-  std::vector<std::tuple<Chunk *, glm::vec3>> exits;
+  /*std::vector<std::tuple<Chunk *, glm::vec3>> exits;
   exits.push_back(std::make_tuple(open_world->GetChunk(0, 0), glm::vec3(2.0f, 2.0f, 2.0f)));
 
   Model* portal_model = new Model("resources/models/portal.obj");
@@ -28,8 +29,7 @@ void init_demo_locations() {
       location_map[0]->GetChunk(i, j)->AddObj(portal);
       location_map[0]->GetChunk(i, j)->AddTrigger(new LongJumpTrigger(portal, glm::vec3(2.0f, 2.0f, 2.0f), location_map[(i - 1) * 4 + j]->GetChunk(0, 0)));
     }
-  }
+  }*/
 
-  
   SetCurrentLocation(open_world);
 }

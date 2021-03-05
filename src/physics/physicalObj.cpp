@@ -171,8 +171,8 @@ void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
 	float b_length = reinterpret_cast<BoundaryBox*>(this->boundary)->length * 2.0f;
 	float b_height = reinterpret_cast<BoundaryBox*>(this->boundary)->height * 2.0f;
 
-	for (int i = 0; i < ceil(b_width / width) + 1; i ++) {
-		for (int j = 0; j < ceil(b_length / width) + 1; j ++) {
+	/*for (int i = 0; i < floor(b_width / width) + 1; i ++) {
+		for (int j = 0; j < floor(b_length / width) + 1; j ++) {
 			float x = this->position.x - (i - (ceil(b_width / width) + 1.0f) / 2.0f) * width;
 			float y = this->position.y;
 			float z = this->position.z - (j - (ceil(b_length / width) + 1.0f) / 2.0f) * width;
@@ -181,7 +181,7 @@ void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
 				height = temp_height;
 			}
 		}
-	}
+	}*/
 
 	//height -= this->position.y;// + reinterpret_cast<BoundaryBox*>(this->boundary)->height / 2.0f;
 

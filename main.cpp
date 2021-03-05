@@ -120,6 +120,8 @@ void change_to_running() {
 
 void change_to_main_menu() {
 	game_state = STATE_MAIN_MENU;
+	camera->setPosition(glm::vec3(0.0));
+	camera->setRotation(glm::vec3(0.0));
 }
 
 void close_window() {
@@ -141,7 +143,7 @@ int main()
 	clicked = false;
 	game_state = STATE_LOADING;
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-	player = new Player("player", 10, new PhysicalObj(glm::vec3(3.0f, 100.0f, 3.0f), new BoundaryBox(0.25f, 1.0f, 0.25f)), camera);
+	player = new Player("player", 10, new PhysicalObj(glm::vec3(3.0f, 100.0f, 3.0f), new BoundaryBox(0.1f, 1.0f, 0.1f)), camera);
 	player_core = new MagicCore();
 	player_core->SetPhysicalObj(player->GetPhysicalObj());
 
@@ -286,6 +288,10 @@ int main()
 
 	loading();
 
+	// Model* player_model = new Model("resources/models/player.obj");
+	// Mesh* player_mesh = new Mesh("resources/textures/test.jpg", player_model);
+	// PhysicalObj* player_obj = new PhysicalObj(player_mesh, false, true, false, false, glm::vec3(0.0f), glm::vec3(0.0f), "player");
+
 	// game_state = STATE_LOADING;
 
 	while (game_state == STATE_LOADING) {
@@ -415,13 +421,14 @@ int main()
 			}
 
 			// title->draw(shaderHolder);
-			coin->draw(shaderHolder, camera, width, height);
+			// coin->draw(shaderHolder, camera, width, height);
 			play_button->draw(shaderHolder);
 			exit_button->draw(shaderHolder);
 
 			glFinish();
 
 			glfwSwapBuffers(window);
+			last_frame = glfwGetTime();
 		} else {
 			glm::vec2 cursorMotion = glm::vec2(lastXPos - xpos, lastYPos - ypos);
 			if (game_state != STATE_PAUSED) {
@@ -463,6 +470,8 @@ int main()
 					exit_to_menu->click(glm::vec2(xpos, ypos));
 				}
 			}
+
+
 
 			/*glClearColor(0.5f, 0.7f, 0.7f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
@@ -511,9 +520,14 @@ int main()
 				/* Collide player with all objects in chunk */
 				player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
 
+				// player_obj->setPosition(player->GetPhysicalObj()->getPosition());
+				// player_obj->setRotation(player->GetPhysicalObj()->getRotation());
+
 			}
 
 			GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
+
+			// player_obj->draw(shaderHolder, camera, width, height);
 
 			// второй проход
 			glBindFramebuffer(GL_FRAMEBUFFER, 0); // возвращаем буфер кадра по умолчанию

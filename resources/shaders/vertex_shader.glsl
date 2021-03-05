@@ -16,8 +16,8 @@ uniform vec3 objectPos;
 
 void main()
 {
-	vec3 norm = normalize((model * vec4(normal, 1.0)).xyz);;
-	vec3 lightDir = lightPos - (model * vec4(position, 1.0f)).xyz;
+	vec3 norm = normalize((model * vec4(normal, 1.0)).xyz);
+	vec3 lightDir = lightPos - (model * vec4(position, 1.0f)).xyz - objectPos;
 	float lightVecL = length(lightDir);
 	lightDir = normalize(lightDir);
 
