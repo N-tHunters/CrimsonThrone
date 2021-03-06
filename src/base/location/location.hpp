@@ -31,6 +31,7 @@ class Location {
 
   void Draw(ShaderHolder *, Camera *, int, int);
   void Update(float);
+  void LoadABS();
 };
 
 Location * GetCurrentLocation();
