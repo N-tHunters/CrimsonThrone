@@ -14,6 +14,7 @@
  */
 Chunk::Chunk() {
   this->is_water_present = false;
+  this->is_abstract = false;
   this->water_obj = nullptr;
   this->location = nullptr;
 }
@@ -499,3 +500,5 @@ void Chunk::SetLocation(Location * location) { this->location = location; }
 
 int Chunk::GetX() { return this->x; }
 int Chunk::GetY() { return this->y; }
+
+void Chunk::LoadABS() {}

@@ -56,6 +56,8 @@ Location::Location(size_t width, size_t height, int chunk_width, int chunk_heigh
 
   generator->Generate(this, width, height, chunk_width, chunk_height, 5);
 
+  delete generator;
+  
   this->current_x = 0;
   this->current_y = 0;
 }
@@ -130,6 +132,7 @@ void Location::UpdatePosition(glm::vec3 pos) {
  * \param screen_height Height of screen
  */
 void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_width, int screen_height) {
+  LoadABS();
   int lx = std::max((int)current_x - RENDER_RADIUS, 0); // Most left row
   int uy = std::max((int)current_y - RENDER_RADIUS, 0); // Most up column
   int rx = std::min((int)current_x + RENDER_RADIUS, (int)width - 1); // Most right row
@@ -155,6 +158,7 @@ void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_wid
 
 
 void Location::Update(float dt) {
+  LoadABS();
   int lx = std::max((int)current_x - PROCESS_RADIUS, 0); // Most left row
   int uy = std::max((int)current_y - PROCESS_RADIUS, 0); // Most up column
   int rx = std::min((int)current_x + PROCESS_RADIUS, (int)width - 1); // Most right row
@@ -170,6 +174,23 @@ void Location::Update(float dt) {
   }
 
 }
+
+
+void Location::LoadABS() {
+  int lx = std::max((int)current_x - RENDER_RADIUS, 0); // Most left row
+  int uy = std::max((int)current_y - RENDER_RADIUS, 0); // Most up column
+  int rx = std::min((int)current_x + RENDER_RADIUS, (int)width - 1); // Most right row
+  int dy = std::min((int)current_y + RENDER_RADIUS, (int)height - 1); // Most down column
+
+  for(int ix = lx; ix <= rx; ix++) {
+    for(int iy = uy; iy <= dy; iy++) {
+      if(this->chunks[ix][iy] != nullptr) {
+	this->chunks[ix][iy]->LoadABS();
+      }
+    }
+  }
+}
+
 // Global functions and objects
 
 static Location * current_location;

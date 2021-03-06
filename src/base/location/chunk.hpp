@@ -20,8 +20,9 @@ class Location;
  * Chunks are heavily used to interact with player with enviroment. \warning Consider that player is not part of chunk, it's separate object.
  */
 class Chunk {
- private:
+ protected:
   bool is_water_present;
+  bool is_abstract;
   float water_height;
   Terrain * terrain;
   std::vector<Item *>items;
@@ -84,6 +85,8 @@ class Chunk {
 
   int GetX();
   int GetY();
+
+  virtual void LoadABS();
 };
 
 #endif
