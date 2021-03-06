@@ -7,7 +7,8 @@ Model::Model(const std::string& path) {
 void Model::loadModel(const std::string& path) {
 
 	Assimp::Importer import;
-	const aiScene *scene = import.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs);
+
+	const aiScene *scene = import.ReadFile(path, aiProcess_Triangulate);
 
 
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
@@ -22,37 +23,37 @@ void Model::loadModel(const std::string& path) {
 
 void Model::processNode(aiNode *node, const aiScene *scene)
 {
-	aiMesh *mesh = scene->mMeshes[0];
-	bool isTexCoords = false;
+	for (unsigned int m = 0; m < scene->mNumMeshes; ++m) {
+		const aiMesh *mesh = scene->mMeshes[m];
+		// iterate over all faces in this mesh
+		for (unsigned int j = 0; j < mesh->mNumFaces; ++j) {
+			auto const &face = mesh->mFaces[j];
+			//normally you want just triangles, so iterate over all 3 vertices of the face:
+			for (int k = 0; k < 3; ++k) {
+				// Now do the magic with 'face.mIndices[k]'
+				auto const &vertex = mesh->mVertices[face.mIndices[k]];
+				vertices.push_back(vertex.x);
+				vertices.push_back(vertex.y);
+				vertices.push_back(vertex.z);
 
-	if (mesh->mTextureCoords[0]) {
-		isTexCoords = true;
-	}
+				// Same for the normals.
+				auto const &normal = mesh->mNormals[face.mIndices[k]];
+				vertices.push_back(normal.x);
+				vertices.push_back(normal.y);
+				vertices.push_back(normal.z);
 
-	for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
+				// Color of material
+				// ...
 
-		this->vertices.push_back(mesh->mVertices[i].x);
-		this->vertices.push_back(mesh->mVertices[i].y);
-		this->vertices.push_back(mesh->mVertices[i].z);
-
-		this->vertices.push_back(mesh->mNormals[i].x);
-		this->vertices.push_back(mesh->mNormals[i].y);
-		this->vertices.push_back(mesh->mNormals[i].z);
-
-		if (isTexCoords) {
-			this->vertices.push_back(mesh->mTextureCoords[0][i].x);
-			this->vertices.push_back(mesh->mTextureCoords[0][i].y);
-		} else {
-			this->vertices.push_back(0.0f);
-			this->vertices.push_back(0.0f);
-		}
-	}
-	for (unsigned int i = 0; i < mesh->mNumFaces; i++)
-	{
-		aiFace face = mesh->mFaces[i];
-		for (unsigned int j = 0; j < face.mNumIndices; j++)
-		{
-			this->indices.push_back(face.mIndices[j]);
+				// And FINALLY: The UV coordinates!
+				if (mesh->HasTextureCoords(0)) {
+					// The following line fixed the issue for me now:
+					auto const &uv = mesh->mTextureCoords[0][face.mIndices[k]];
+					vertices.push_back(uv.x);
+					vertices.push_back(uv.y);
+				}
+				indices.push_back(face.mIndices[k]);
+			}
 		}
 	}
 }

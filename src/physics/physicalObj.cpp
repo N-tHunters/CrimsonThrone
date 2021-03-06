@@ -129,7 +129,7 @@ void PhysicalObj::jump(Chunk* chunk) {
 	if (isActive == false) {
 		return;
 	}
-	if (abs(velocity.y) < 1.0f) {
+	if (velocity.y <= 0.0f) {
 		bool t = false;
 		for (int i = 0; i < chunk->GetObjsCount(); i++) {
 			if (this->boundary->Collide(chunk->GetObj(i)->boundary, this->getPosition() - glm::vec3(0.0f, 0.5f, 0.0f), this->getRotation(), chunk->GetObj(i)->getPosition(), chunk->GetObj(i)->getRotation())) {
@@ -158,7 +158,7 @@ float PhysicalObj::detectCollision(Terrain* terrain) {
 }
 
 float PhysicalObj::detectCollision(Terrain* terrain, glm::vec3 position) {
-	return terrain->getHeight(position) - position.y + reinterpret_cast<BoundaryBox*>(this->boundary)->height / 2.0f;
+	return terrain->getHeight(position) - position.y + reinterpret_cast<BoundaryBox*>(this->boundary)->height;
 }
 
 void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {

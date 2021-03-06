@@ -274,7 +274,7 @@ int main()
 	// std::async loading_thread((func)loading);
 	// std::async(std::launch::async, (func)loading);
 
-	Image* image_loading = new Image(glm::vec4(0, 0, 200, 200), "resources/textures/water.png");
+	Image* image_loading = new Image(glm::vec4(width / 2 - 100, height / 2 - 100, 200, 200), "resources/textures/water.png");
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -366,9 +366,9 @@ int main()
 
 	float dt = 0.0f;
 
-	Model* coin_model = new Model("resources/models/coin.obj");
+	Model* coin_model = new Model("resources/models/coin.fbx");
 	Mesh* coin_mesh = new Mesh("resources/textures/septim.jpg", coin_model);
-	PhysicalObj* coin = new PhysicalObj(coin_mesh, false, true, false, false, glm::vec3(0, 0, -10), glm::vec3(0), "Coin");
+	PhysicalObj* coin = new PhysicalObj(coin_mesh, false, true, false, false, glm::vec3(0, 2, -10), glm::vec3(0), "Coin");
 
 	while (game_state != STATE_CLOSING) //!glfwWindowShouldClose(window))
 	{
@@ -421,9 +421,11 @@ int main()
 			}
 
 			// title->draw(shaderHolder);
-			// coin->draw(shaderHolder, camera, width, height);
+			coin->draw(shaderHolder, camera, width, height);
 			play_button->draw(shaderHolder);
 			exit_button->draw(shaderHolder);
+
+			coin->changeRotationY(1.0f);
 
 			glFinish();
 
@@ -470,8 +472,6 @@ int main()
 					exit_to_menu->click(glm::vec2(xpos, ypos));
 				}
 			}
-
-
 
 			/*glClearColor(0.5f, 0.7f, 0.7f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
@@ -524,6 +524,8 @@ int main()
 				// player_obj->setRotation(player->GetPhysicalObj()->getRotation());
 
 			}
+
+			coin->draw(shaderHolder, camera, width, height);
 
 			GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
 
