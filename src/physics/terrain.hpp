@@ -26,8 +26,8 @@ class Terrain {
 public:
   Terrain(float, int, glm::vec3, std::string);
   Terrain(float, int, glm::vec3);
-  Terrain(float, int, glm::vec3, std::vector<std::vector<float>> *, std::string);
-  Terrain(float, int, glm::vec3, std::vector<std::vector<float>> *);
+  Terrain(float, int, glm::vec3, std::vector<std::vector<float>> *, std::string, float texture_scale);
+  Terrain(float, int, glm::vec3, std::vector<std::vector<float>> *, float texture_scale);
 	Terrain(Terrain&);
 
 	glm::vec3 getPosition();

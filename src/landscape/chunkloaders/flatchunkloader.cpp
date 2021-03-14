@@ -16,5 +16,5 @@ void FlatChunkLoader::Load(AbstractChunk * chunk) {
     }
     height_map.push_back(v);
   }
-  chunk->LoadTerrain(new Terrain(size, vertices_number, position, &height_map));
+  chunk->LoadTerrain(new Terrain(size, vertices_number, position, &height_map, 1.0f));
 }

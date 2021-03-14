@@ -7,7 +7,7 @@
  * @param[in]  vertices_number  The number of vertices
  * @param[in]  position         The position
  */
-Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>> * height, std::string texture) {
+Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>> * height, std::string texture, float texture_scale) {
 	this->size = size;
 	this->vertices_number = vertices_number;
 	this->position = position;
@@ -25,8 +25,13 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 	std::vector<std::array<float, 5>> coords;
 	std::vector<glm::vec3> normals;
 
+	float texture_step = 1.0f / texture_scale;
+
+	float texture_coords_x = 0.0f;
+	float texture_coords_y = 0.0f;
 
 	for (int i = 0; i < vertices_number - 1; i ++) {
+		texture_coords_y = 0.0f;
 		for (int j = 0; j < vertices_number - 1; j ++) {
 			int index = i * (vertices_number - 1) + j;
 
@@ -51,22 +56,22 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 			coords[6 * index][1] = this->height[i][j] * tile_width;
 			coords[6 * index][2] = j * tile_width;
 
-			coords[6 * index][3] = 0.0f;
-			coords[6 * index][4] = 0.0f;
+			coords[6 * index][3] = texture_coords_x;
+			coords[6 * index][4] = texture_coords_y;
 
 			coords[6 * index + 1][0] = (i + 1) * tile_width;
 			coords[6 * index + 1][1] = this->height[i + 1][j] * tile_width;
 			coords[6 * index + 1][2] = j * tile_width;
 
-			coords[6 * index + 1][3] = 1.0f;
-			coords[6 * index + 1][4] = 0.0f;
+			coords[6 * index + 1][3] = texture_coords_x + texture_step;
+			coords[6 * index + 1][4] = texture_coords_y;
 
 			coords[6 * index + 2][0] = i * tile_width;
 			coords[6 * index + 2][1] = this->height[i][j + 1] * tile_width;
 			coords[6 * index + 2][2] = (j + 1) * tile_width;
 
-			coords[6 * index + 2][3] = 0.0f;
-			coords[6 * index + 2][4] = 1.0f;
+			coords[6 * index + 2][3] = texture_coords_x;
+			coords[6 * index + 2][4] = texture_coords_y + texture_step;
 
 			this->indices.push_back(i * (vertices_number - 1) * 6 + j * 6);
 			this->indices.push_back(i * (vertices_number - 1) * 6  + j * 6 + 1);
@@ -84,22 +89,22 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 			coords[6 * index + 3][1] = this->height[i + 1][j] * tile_width;
 			coords[6 * index + 3][2] = j * tile_width;
 
-			coords[6 * index + 3][3] = 1.0f;
-			coords[6 * index + 3][4] = 0.0f;
+			coords[6 * index + 3][3] = texture_coords_x + texture_step;
+			coords[6 * index + 3][4] = texture_coords_y;
 
 			coords[6 * index + 4][0] = (i + 1) * tile_width;
 			coords[6 * index + 4][1] = this->height[i + 1][j + 1] * tile_width;
 			coords[6 * index + 4][2] = (j + 1) * tile_width;
 
-			coords[6 * index + 4][3] = 1.0f;
-			coords[6 * index + 4][4] = 1.0f;
+			coords[6 * index + 4][3] = texture_coords_x + texture_step;
+			coords[6 * index + 4][4] = texture_coords_y + texture_step;
 
 			coords[6 * index + 5][0] = i * tile_width;
 			coords[6 * index + 5][1] = this->height[i][j + 1] * tile_width;
 			coords[6 * index + 5][2] = (j + 1) * tile_width;
 
-			coords[6 * index + 5][3] = 0.0f;
-			coords[6 * index + 5][4] = 1.0f;
+			coords[6 * index + 5][3] = texture_coords_x;
+			coords[6 * index + 5][4] = texture_coords_y + texture_step;
 
 			this->indices.push_back(i * (vertices_number - 1) * 6 + j * 6 + 3);
 			this->indices.push_back(i * (vertices_number - 1) * 6  + j * 6 + 4);
@@ -114,6 +119,14 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 			normals[2 * index + 1] = get_normal(glm::vec3(i + 1, this->height[i + 1][j + 1], j + 1),
 			                                    glm::vec3(i + 1, this->height[i + 1][j], j),
 			                                    glm::vec3(i, this->height[i][j + 1], j + 1));
+			texture_coords_y += texture_step;
+			while (texture_coords_y > 1.0f) {
+				texture_coords_y -= 1.0f;
+			}
+		}
+		texture_coords_x += texture_step;
+		while (texture_coords_x > 1.0f) {
+			texture_coords_x -= 1.0f;
 		}
 	}
 
@@ -252,11 +265,11 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::strin
 		}
 		height.push_back(v);
 	}
-	Terrain(size, vertices_number, position, &height, texture);
+	Terrain(size, vertices_number, position, &height, texture, 1.0f);
 }
 
 Terrain::Terrain(float size, int vertices_number, glm::vec3 position) : Terrain(size, vertices_number, position, GetDefaultTexture()) {}
-Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>>* height) : Terrain(size, vertices_number, position, height, GetDefaultTexture()) {}
+Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>>* height, float texture_scale) : Terrain(size, vertices_number, position, height, GetDefaultTexture(), texture_scale) {}
 
 
 Terrain::Terrain(Terrain& terrain) {
