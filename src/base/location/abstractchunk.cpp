@@ -1,5 +1,6 @@
 #include "abstractchunk.hpp"
 #include "chunkloader.hpp"
+#include <thread>
 
 /**
  * Basic constructor
@@ -20,8 +21,13 @@ void AbstractChunk::LoadTerrain(Terrain * terrain) {
 void AbstractChunk::LoadABS() {
   if(is_loaded) return;
   
-  chunk_loader->Load(this);
-  delete chunk_loader;
-  
-  is_loaded = true;
+  std::thread(&ChunkLoader::Load, chunk_loader, this);
+}
+
+void AbstractChunk::SetLoaded() {
+  this->is_loaded = true;
+}
+
+bool AbstractChunk::IsLoaded() {
+  return this->is_loaded;
 }

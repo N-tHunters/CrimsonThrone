@@ -4,9 +4,6 @@
 #include <noise/noise.h>
 
 class HillChunkLoader : public ChunkLoader {
-  float size;
-  int vertices_number;
-  glm::vec3 position;
   int seed;
   noise::module::Perlin* perlin;
 public:

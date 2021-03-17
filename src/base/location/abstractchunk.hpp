@@ -14,4 +14,6 @@ public:
   virtual void LoadABS() override;
 
   void LoadTerrain(Terrain * terrain);
+  bool IsLoaded();
+  void SetLoaded();
 };

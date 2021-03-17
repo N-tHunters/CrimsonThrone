@@ -22,6 +22,8 @@ class Location {
  public:
   Location(size_t, size_t, int, int);
   Location(size_t, size_t, int, int, LandscapeGenerator *);
+  Location(size_t, size_t, int, int, int, LandscapeGenerator *);
+  
   void FillEmptyChunks();
   void SetChunk(size_t, size_t, Chunk *);
   Chunk * GetChunk(size_t, size_t);

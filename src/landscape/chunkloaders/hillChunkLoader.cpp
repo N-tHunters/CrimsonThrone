@@ -9,7 +9,7 @@ HillChunkLoader::HillChunkLoader(float size, int vertices_number, glm::vec3 posi
 }
 
 void HillChunkLoader::Load(AbstractChunk * chunk) {
-  std::vector<std::vector<float>> height_map;
+  std::vector<std::vector<float>> * height_map;
   std::vector<float> v;
   for (int i = 0; i < vertices_number; i ++) {
     v.clear();
@@ -18,7 +18,7 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
       float y = chunk->GetY() * (vertices_number - 1) + j + seed / 65536;
       v.push_back(this->perlin->GetValue(x / 100.0, y / 100.0, 0.0) * 10.0);
     }
-    height_map.push_back(v);
+    height_map->push_back(v);
   }
-  chunk->LoadTerrain(new Terrain(size, vertices_number, position, &height_map, 10.0f));
+  this->LoadEnd(height_map, chunk);
 }
