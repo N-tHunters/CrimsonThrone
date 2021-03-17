@@ -217,7 +217,7 @@ void Location::LoadABS() {
   for(int ix = lx; ix <= rx; ix++) {
     for(int iy = uy; iy <= dy; iy++) {
       if(this->chunks[ix][iy] != nullptr && this->chunks[ix][iy]->IsLoaded()) {
-	this->chunks[ix][iy]->LoadABS();
+      	this->chunks[ix][iy]->LoadABS();
       }
     }
   }

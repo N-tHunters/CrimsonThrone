@@ -104,7 +104,7 @@ target_link_libraries(${PROJECT_NAME} ${LIBS})
 
 
 # Set variables that are needed
-set(CMAKE_CXX_FLAGS, "${CMAKE_CXX_FLAGS} -Wall -O3 -s")
+set(CMAKE_CXX_FLAGS, "${CMAKE_CXX_FLAGS} -Wall -g")
 
 # Copy dlls
 if(WIN32)
