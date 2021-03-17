@@ -29,7 +29,7 @@ void Model::processNode(aiNode *node, const aiScene *scene)
 		for (unsigned int j = 0; j < mesh->mNumFaces; ++j) {
 			auto const &face = mesh->mFaces[j];
 			//normally you want just triangles, so iterate over all 3 vertices of the face:
-			for (int k = 0; k < 3; ++k) {
+			for (int k = 0; k < face.mNumIndices; ++k) {
 				// Now do the magic with 'face.mIndices[k]'
 				auto const &vertex = mesh->mVertices[face.mIndices[k]];
 				vertices.push_back(vertex.x);
@@ -41,9 +41,6 @@ void Model::processNode(aiNode *node, const aiScene *scene)
 				vertices.push_back(normal.x);
 				vertices.push_back(normal.y);
 				vertices.push_back(normal.z);
-
-				// Color of material
-				// ...
 
 				// And FINALLY: The UV coordinates!
 				if (mesh->HasTextureCoords(0)) {

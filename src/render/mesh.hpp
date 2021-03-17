@@ -36,9 +36,10 @@ class Mesh {
 	int type;
 public:
 	bool activeDebug;
-  Mesh(const std::string&, Model*);
-  Mesh(const std::string&, std::vector<GLfloat>*, std::vector<unsigned int>*);
-  Mesh(const std::string&, std::vector<GLfloat>*, std::vector<unsigned int>*, int);
+	Mesh(const std::string&, Model*);
+	Mesh(const std::string&, Model*, float);
+	Mesh(const std::string&, std::vector<GLfloat>*, std::vector<unsigned int>*);
+	Mesh(const std::string&, std::vector<GLfloat>*, std::vector<unsigned int>*, int);
 	Mesh();
 	void init(PhysicalObj*);
 	void draw(ShaderHolder*, Camera*, GLuint, GLuint);

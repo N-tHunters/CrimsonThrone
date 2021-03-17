@@ -366,8 +366,8 @@ int main()
 
 	float dt = 0.0f;
 
-	Model* coin_model = new Model("resources/models/coin.fbx");
-	Mesh* coin_mesh = new Mesh("resources/textures/septim.jpg", coin_model);
+	Model* coin_model = new Model("resources/models/tree.obj");
+	Mesh* coin_mesh = new Mesh("resources/textures/tree.png", coin_model);
 	PhysicalObj* coin = new PhysicalObj(coin_mesh, false, true, false, false, glm::vec3(0, 2, -10), glm::vec3(0), "Coin");
 
 	while (game_state != STATE_CLOSING) //!glfwWindowShouldClose(window))

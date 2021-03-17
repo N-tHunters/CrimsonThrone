@@ -7,7 +7,7 @@
  * @param[in]  vertices_number  The number of vertices
  * @param[in]  position         The position
  */
-Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>> * height, std::string texture, float texture_scale) {
+Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>> * height_map, std::string texture, float texture_scale) {
 	this->size = size;
 	this->vertices_number = vertices_number;
 	this->position = position;
@@ -17,7 +17,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 	for (int i = 0; i < vertices_number; i ++) {
 		v.clear();
 		for (int j = 0; j < vertices_number; j ++) {
-		  v.push_back(height->at(i)[j]);
+		  v.push_back(height_map->at(i)[j]);
 		}
 		this->height.push_back(v);
 	}
@@ -239,7 +239,6 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 			}
 		}
 
-
 		normal /= c;
 
 		this->vertices.push_back(normal.x);
@@ -250,7 +249,9 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 		this->vertices.push_back(coords[i][4]);
 	}
 
-	this->obj = new PhysicalObj(new Mesh(texture, &(this->vertices), &(this->indices)), false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
+	Mesh* terrain_mesh = new Mesh(texture, &(this->vertices), &(this->indices));
+
+	this->obj = new PhysicalObj(terrain_mesh, false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
 }
 
 Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::string texture) {
