@@ -14,6 +14,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 	this->tile_width = size / (vertices_number - 1);
 	
 	std::vector<float> v;
+
 	for (int i = 0; i < vertices_number; i ++) {
 		v.clear();
 		for (int j = 0; j < vertices_number; j ++) {
@@ -29,6 +30,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 
 	float texture_coords_x = 0.0f;
 	float texture_coords_y = 0.0f;
+
 
 	for (int i = 0; i < vertices_number - 1; i ++) {
 		texture_coords_y = 0.0f;

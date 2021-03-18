@@ -11,7 +11,7 @@ HillChunkLoader::HillChunkLoader(float size, int vertices_number, glm::vec3 posi
 
 void HillChunkLoader::Load(AbstractChunk * chunk) {
   printf("Hill Chunk loader thread started\n");
-	std::vector<std::vector<float>> height_map;
+  std::vector<std::vector<float>> * height_map = new std::vector<std::vector<float>>();
 	std::vector<float> v;
 
 	for (int i = 0; i < vertices_number; i ++) {
@@ -24,9 +24,10 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
 			
 			v.push_back(this->perlin->GetValue(x / 100.0f, y / 100.0f, 0.0f) * 10.0f + biome_height);
 		}
-		height_map.push_back(v);
+		height_map->push_back(v);
 	}
-
+	LoadEnd(height_map, chunk);
+	/*
 	int biome = biomeGenerator->getBiome(chunk->GetX(), chunk->GetY());
 
 	std::string texture_path;
@@ -49,6 +50,6 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
 			chunk->AddObj(new PhysicalObj(tree_mesh, false, true, false, false, pos, glm::vec3(0.0f, rand() % 360, 0.0f), "tree"));
 		}
 		delete tree_model;
-	}
+	}*/
 	printf("Hill Thread chunk loader ended\n");
 }
