@@ -6,7 +6,7 @@
 #include <unordered_map>
 
 const int PROCESS_RADIUS = 3;
-const int RENDER_RADIUS = 5;
+const int RENDER_RADIUS = 3;
 const int DEFAULT_VERTICES_NUMBER = 10;
 
 
@@ -173,7 +173,7 @@ void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_wid
   
   for(int ix = lx; ix <= rx; ix++) {
     for(int iy = uy; iy <= dy; iy++) {
-      if(this->chunks[ix][iy] != nullptr) {
+      if(this->chunks[ix][iy] != nullptr && this->chunks[ix][iy]->IsLoaded()) {
         this->chunks[ix][iy]->Draw(shaderHolder, camera, screen_width, screen_height);
       }
     }
@@ -181,7 +181,7 @@ void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_wid
 
   for(int ix = lx; ix <= rx; ix++) {
     for(int iy = uy; iy <= dy; iy++) {
-      if(this->chunks[ix][iy] != nullptr) {
+      if(this->chunks[ix][iy] != nullptr && this->chunks[ix][iy]->IsLoaded()) {
         this->chunks[ix][iy]->DrawWater(shaderHolder, camera, screen_width, screen_height);
       }
     }
@@ -195,11 +195,11 @@ void Location::Update(float dt) {
   int uy = std::max((int)current_y - PROCESS_RADIUS, 0); // Most up column
   int rx = std::min((int)current_x + PROCESS_RADIUS, (int)width - 1); // Most right row
   int dy = std::min((int)current_y + PROCESS_RADIUS, (int)height - 1); // Most down column
-
+  
   
   for(int ix = lx; ix <= rx; ix++) {
     for(int iy = uy; iy <= dy; iy++) {
-      if(this->chunks[ix][iy] != nullptr) {
+      if(this->chunks[ix][iy] != nullptr && this->chunks[ix][iy]->IsLoaded()) {
         this->chunks[ix][iy]->Update(dt);
       }
     }
@@ -209,6 +209,7 @@ void Location::Update(float dt) {
 
 
 void Location::LoadABS() {
+  float start_time = glfwGetTime();
   int lx = std::max((int)current_x - RENDER_RADIUS - 1, 0); // Most left row
   int uy = std::max((int)current_y - RENDER_RADIUS - 1, 0); // Most up column
   int rx = std::min((int)current_x + RENDER_RADIUS + 1, (int)width - 1); // Most right row
@@ -216,9 +217,11 @@ void Location::LoadABS() {
 
   for(int ix = lx; ix <= rx; ix++) {
     for(int iy = uy; iy <= dy; iy++) {
-      if(this->chunks[ix][iy] != nullptr && this->chunks[ix][iy]->IsLoaded()) {
+      if(this->chunks[ix][iy] != nullptr && !this->chunks[ix][iy]->IsLoaded()) {
       	this->chunks[ix][iy]->LoadABS();
       }
+      if(glfwGetTime() - start_time > 0.01f)
+	return;
     }
   }
 }

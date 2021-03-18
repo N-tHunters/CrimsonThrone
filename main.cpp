@@ -487,13 +487,14 @@ int main()
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			if (game_state != STATE_PAUSED) {
-
 				GetCurrentLocation()->UpdatePosition(player->GetPhysicalObj()->getPosition());
 
 				Chunk * chunk_ptr = GetCurrentLocation()->GetCurrentChunk();
 
 				if (chunk_ptr == nullptr)
 					chunk_ptr = GetCurrentLocation()->GetChunkByPosition(0, 0);
+				while (!chunk_ptr->IsLoaded())
+				  GetCurrentLocation()->LoadABS();
 
 				if (player_wants_to_jump) {
 					player->GetPhysicalObj()->jump(chunk_ptr);

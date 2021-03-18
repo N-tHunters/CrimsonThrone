@@ -9,6 +9,7 @@ HillChunkLoader::HillChunkLoader(float size, int vertices_number, glm::vec3 posi
 }
 
 void HillChunkLoader::Load(AbstractChunk * chunk) {
+  printf("Hill Chunk loader thread started\n");
 	std::vector<std::vector<float>> height_map;
 	std::vector<float> v;
 	for (int i = 0; i < vertices_number; i ++) {
@@ -49,4 +50,5 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
 		}
 		delete house_model;
 	}
+	printf("Hill Thread chunk loader ended\n");
 }
