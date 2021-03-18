@@ -12,4 +12,6 @@ public:
   ChunkLoader() {}
   virtual void Load(AbstractChunk *); // Need to be called as a thread
   void LoadEnd(std::vector<std::vector<float>> * height_map, AbstractChunk * chunk); // This is called in the end
+  virtual void LoadObjects(AbstractChunk *);
+  virtual bool AreObjectsLoaded();
 };
