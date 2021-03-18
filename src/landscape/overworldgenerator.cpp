@@ -22,9 +22,9 @@ void OverWorldGenerator::Generate(Location * location, size_t width, size_t heig
 
   for (size_t i = 0; i < height; i++) {
     for (size_t j = 0; j < width; j++) {
-      //      Chunk * new_chunk = new AbstractChunk(location, i, j, new HillChunkLoader((float)chunk_width, vertices_number, glm::vec3(chunk_width * i, 0.0f, chunk_height * j), this->seed, perlin, biomeGenerator));
+      Chunk * new_chunk = new AbstractChunk(location, i, j, new HillChunkLoader((float)chunk_width, vertices_number, glm::vec3(chunk_width * i, 0.0f, chunk_height * j), this->seed, perlin, biomeGenerator));
 
-      Chunk * new_chunk = new AbstractChunk(location, i, j, new FlatChunkLoader((float)chunk_width, vertices_number, glm::vec3(chunk_width * i, 0.0f, chunk_height * j)));
+      //Chunk * new_chunk = new AbstractChunk(location, i, j, new FlatChunkLoader((float)chunk_width, vertices_number, glm::vec3(chunk_width * i, 0.0f, chunk_height * j)));
 
       location->SetChunk(i, j, new_chunk);
     }

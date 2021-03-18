@@ -5,3 +5,6 @@ void ChunkLoader::LoadEnd(std::vector<std::vector<float>> * height_map, Abstract
 }
 
 void ChunkLoader::Load(AbstractChunk *) {}
+
+void ChunkLoader::LoadObjects(AbstractChunk *) {}
+bool ChunkLoader::AreObjectsLoaded() { return true; }
