@@ -88,8 +88,9 @@ Location * location;
 
 int direction = 1;
 float directionSide = 0;
-float velocity = 20.0f;
+float velocity = 5.0f;
 bool player_wants_to_jump = false;
+bool isRunning = false;
 
 std::map<GLchar, Character> Characters;
 
@@ -500,7 +501,11 @@ int main()
 				}
 
 
-				player->GetPhysicalObj()->setSpeed(speed + speedSide);
+				if (isRunning)
+					player->GetPhysicalObj()->setSpeed((speed + speedSide) * 2.0f);
+				else
+					player->GetPhysicalObj()->setSpeed(speed + speedSide);
+
 				chunk_ptr->CheckAllTriggersAsPlayer(player->GetPhysicalObj());
 
 				int chunk_ix = chunk_ptr->GetX();
@@ -675,6 +680,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		pseudo_to_prog(pseudo, prog);
 
 		player_core->LoadProgram(prog, pseudo.length() + 1);
+	}
+
+	if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_PRESS) {
+		isRunning = true;
+	}
+
+	if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_RELEASE) {
+		isRunning = false;
 	}
 }
 

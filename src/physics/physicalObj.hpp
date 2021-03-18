@@ -17,12 +17,12 @@ class PhysicalObj {
 	Mesh* mesh;
 	bool isActive;
 	bool isVisible;
-	bool isTransparent;
 	bool isFlying;
 	glm::vec3 position;
 	glm::vec3 rotation;
 	bool onGround;
 public:
+	bool isTransparent;
 	Boundary* boundary;
 	float lastHeight;
 	std::string name;

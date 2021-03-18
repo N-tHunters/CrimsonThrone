@@ -36,7 +36,7 @@ PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTrans
 	this->mesh->init(this);
 	this->onGround = true;
 	this->mass = 1.0f;
-	this->boundary = new BoundaryBox(1.0f, 1.0f, 1.0f);
+	this->boundary = new BoundaryBox(0.1f, 0.1f, 0.1f);
 }
 
 PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, bool isFlying, glm::vec3 position, glm::vec3 rotation, const std::string& name, Boundary* boundary) {
@@ -162,6 +162,10 @@ float PhysicalObj::detectCollision(Terrain* terrain, glm::vec3 position) {
 }
 
 void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
+	if (isFlying) {
+		return;
+	}
+
 	if (isActive == false) {
 		return;
 	}
@@ -215,6 +219,11 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 	if (isActive == false) {
 		return;
 	}
+
+	if (isTransparent == true || other_object->isTransparent == true) {
+		return;
+	}
+
 	glm::vec3 this_velocity_x = glm::vec3(velocity.x * dt, 0.0f, 0.0f);
 	glm::vec3 this_velocity_y = glm::vec3(0.0f, velocity.y * dt, 0.0f);
 	glm::vec3 this_velocity_z = glm::vec3(0.0f, 0.0f, velocity.z * dt);

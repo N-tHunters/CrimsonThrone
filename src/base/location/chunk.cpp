@@ -39,7 +39,7 @@ Chunk::Chunk(Location * location, unsigned short x, unsigned short y, Terrain * 
 Chunk::Chunk(Location * location, unsigned short x, unsigned short y, Terrain * terrain, float water_height) : Chunk(location, x, y, terrain) {
   this->is_water_present = true;
   this->water_height = water_height;
-  
+
   std::vector<float> *vertices = new std::vector<float>;
   std::vector<unsigned int> *indices = new std::vector<unsigned int>;
 
@@ -50,8 +50,8 @@ Chunk::Chunk(Location * location, unsigned short x, unsigned short y, Terrain * 
 
   float tile_width = terrain->getSize() / (vertices_number - 1);
 
-  for(int i = 0; i < vertices_number - 1; i ++) {
-    for(int j = 0; j < vertices_number - 1; j ++) {
+  for (int i = 0; i < vertices_number - 1; i ++) {
+    for (int j = 0; j < vertices_number - 1; j ++) {
       vertices->push_back(i * tile_width);
       vertices->push_back(water_height);
       vertices->push_back(j * tile_width);
@@ -155,19 +155,19 @@ Terrain * Chunk::GetTerrain() {
  */
 void Chunk::Draw(ShaderHolder * shaderHolder, Camera * camera, int width, int height) {
   this->terrain->draw(shaderHolder, camera, width, height);
-  for(size_t i = 0; i <  this->GetObjsCount(); i ++) {
+  for (size_t i = 0; i <  this->GetObjsCount(); i ++) {
     this->objects[i]->draw(shaderHolder, camera, width, height);
   }
-  for(size_t i = 0; i <  this->GetActorsCount(); i ++) {
+  for (size_t i = 0; i <  this->GetActorsCount(); i ++) {
     this->actors[i]->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
   }
-  for(size_t i = 0; i <  this->GetItemsCount(); i ++) {
+  for (size_t i = 0; i <  this->GetItemsCount(); i ++) {
     this->items[i]->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
   }
 }
 
 void Chunk::DrawWater(ShaderHolder * shaderHolder, Camera * camera, int width, int height) {
-  if(this->water_obj != nullptr) {
+  if (this->water_obj != nullptr) {
     this->water_obj->draw(shaderHolder, camera, width, height);
   }
 }
@@ -230,7 +230,7 @@ void Chunk::AddObj(PhysicalObj * object) {
 
 /**
  * Add trigger to chunk
- * \param trigger BoundaryTrigger to add 
+ * \param trigger BoundaryTrigger to add
  */
 void Chunk::AddTrigger(BoundaryTrigger * trigger) {
   this->triggers.push_back(trigger);
@@ -325,8 +325,8 @@ void Chunk::DeleteTriggerByIndex(size_t index) {
  * \param object Pointer to object
  */
 void Chunk::DeleteObj(PhysicalObj * object) {
-  for(size_t i = 0; i < objects.size(); i++)
-    if(objects[i] == object) {
+  for (size_t i = 0; i < objects.size(); i++)
+    if (objects[i] == object) {
       objects.erase(objects.begin() + i);
       return;
     }
@@ -337,8 +337,8 @@ void Chunk::DeleteObj(PhysicalObj * object) {
  * \param actor Pointer to actor
  */
 void Chunk::DeleteActor(Actor * actor) {
-  for(size_t i = 0; i < actors.size(); i++)
-    if(actors[i] == actor) {
+  for (size_t i = 0; i < actors.size(); i++)
+    if (actors[i] == actor) {
       actors.erase(actors.begin() + i);
       return;
     }
@@ -350,8 +350,8 @@ void Chunk::DeleteActor(Actor * actor) {
  * \param item Pointer to item
  */
 void Chunk::DeleteItem(Item * item) {
-  for(size_t i = 0; i < items.size(); i++)
-    if(items[i] == item) {
+  for (size_t i = 0; i < items.size(); i++)
+    if (items[i] == item) {
       items.erase(items.begin() + i);
       return;
     }
@@ -365,13 +365,13 @@ void Chunk::DeleteItem(Item * item) {
 void Chunk::CollideWithAll(PhysicalObj * obj, float dt, bool isPlayer) {
   // glm::vec3 result(1.0f);
 
-  for(size_t object_i = 0; object_i < this->GetObjsCount(); object_i++) {
-    if(this->GetObj(object_i) != obj)
+  for (size_t object_i = 0; object_i < this->GetObjsCount(); object_i++) {
+    if (this->GetObj(object_i) != obj)
       obj->collide(this->GetObj(object_i), dt, obj->velocity, isPlayer);
   }
-		
-  for(size_t actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
-    if(this->GetActor(actor_i)->GetPhysicalObj() != obj)
+
+  for (size_t actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
+    if (this->GetActor(actor_i)->GetPhysicalObj() != obj)
       obj->collide(this->GetActor(actor_i)->GetPhysicalObj(), dt, obj->velocity, isPlayer);
   }
   // obj->velocity *= result;
@@ -382,47 +382,47 @@ void Chunk::CollideWithAll(PhysicalObj * obj, float dt, bool isPlayer) {
  * \param dt Time passed since last call
  */
 void Chunk::CollideAll(float dt) {
-  for(size_t actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
+  for (size_t actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
     this->CollideWithAll(this->GetActor(actor_i)->GetPhysicalObj(), dt, false);
   }
 
-  for(size_t object_i = 0; object_i < this->GetObjsCount(); object_i++) {
+  for (size_t object_i = 0; object_i < this->GetObjsCount(); object_i++) {
     this->CollideWithAll(this->GetObj(object_i), dt, false);
   }
-  
-  for(size_t item_i = 0; item_i < this->GetItemsCount(); item_i++) {
+
+  for (size_t item_i = 0; item_i < this->GetItemsCount(); item_i++) {
     this->CollideWithAll(this->GetItem(item_i)->GetPhysicalObj(), dt, false);
   }
 }
 
 
 void Chunk::CheckAllTriggers(PhysicalObj * obj) {
-  for(BoundaryTrigger * trigger : triggers) {
-    if(obj == trigger->GetLink()) continue;
-    if(obj->boundary->Collide(trigger->GetBoundary(), obj->getPosition(), obj->getRotation(), trigger->GetPosition(), glm::vec3(0.f, 0.f, 0.f)))
+  for (BoundaryTrigger * trigger : triggers) {
+    if (obj == trigger->GetLink()) continue;
+    if (obj->boundary->Collide(trigger->GetBoundary(), obj->getPosition(), obj->getRotation(), trigger->GetPosition(), glm::vec3(0.f, 0.f, 0.f)))
       trigger->Trig(this, obj);
   }
 }
 
 void Chunk::CheckAllTriggersAsPlayer(PhysicalObj * obj) {
-  for(BoundaryTrigger * trigger : triggers) {
-    if(obj == trigger->GetLink()) continue;
-    if(obj->boundary->Collide(trigger->GetBoundary(), obj->getPosition(), obj->getRotation(), trigger->GetPosition(), glm::vec3(0.f, 0.f, 0.f)))
+  for (BoundaryTrigger * trigger : triggers) {
+    if (obj == trigger->GetLink()) continue;
+    if (obj->boundary->Collide(trigger->GetBoundary(), obj->getPosition(), obj->getRotation(), trigger->GetPosition(), glm::vec3(0.f, 0.f, 0.f)))
       trigger->TrigPlayer(this, obj);
   }
 }
 
 
 void Chunk::TriggerAll() {
-  for(size_t actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
+  for (size_t actor_i = 0; actor_i < this->GetActorsCount(); actor_i++) {
     this->CheckAllTriggers(this->GetActor(actor_i)->GetPhysicalObj());
   }
 
-  for(size_t object_i = 0; object_i < this->GetObjsCount(); object_i++) {
+  for (size_t object_i = 0; object_i < this->GetObjsCount(); object_i++) {
     this->CheckAllTriggers(this->GetObj(object_i));
   }
-  
-  for(size_t item_i = 0; item_i < this->GetItemsCount(); item_i++) {
+
+  for (size_t item_i = 0; item_i < this->GetItemsCount(); item_i++) {
     this->CheckAllTriggers(this->GetItem(item_i)->GetPhysicalObj());
   }
 }
@@ -435,58 +435,58 @@ void Chunk::TriggerAll() {
 void Chunk::Update(float dt) {
   CollideAll(dt);
   TriggerAll();
-  
-  for(Actor * actor : actors)
+
+  for (Actor * actor : actors)
     actor->GetPhysicalObj()->update(dt);
 
-  for(PhysicalObj * object : objects)
+  for (PhysicalObj * object : objects)
     object->update(dt);
-  
-  for(Item * item : items)
+
+  for (Item * item : items)
     item->GetPhysicalObj()->update(dt);
 
-  for(Actor * actor : actors)
+  for (Actor * actor : actors)
     actor->GetPhysicalObj()->collideTerrain(terrain, dt, this);
 
-  for(PhysicalObj * object : objects)
+  for (PhysicalObj * object : objects)
     object->collideTerrain(terrain, dt, this);
-  
-  for(Item * item : items)
+
+  for (Item * item : items)
     item->GetPhysicalObj()->collideTerrain(terrain, dt, this);
 
 
   // Check if any object went into another chunk
-  
-  for(Actor * actor: actors) {
+
+  for (Actor * actor : actors) {
     glm::vec3 position = actor->GetPhysicalObj()->getPosition();
     Chunk * chunk_ptr = this->location->GetChunkByPosition(position.x, position.z);
-    if(chunk_ptr != this) {
+    if (chunk_ptr != this) {
       this->DeleteActor(actor);
-      if(chunk_ptr != nullptr)
-	chunk_ptr->AddActor(actor);
-    }
-  }
-  
-  for(PhysicalObj * object: objects) {
-    glm::vec3 position = object->getPosition();
-    Chunk * chunk_ptr = this->location->GetChunkByPosition(position.x, position.z);
-    if(chunk_ptr != this) {
-      this->DeleteObj(object);
-      if(chunk_ptr != nullptr)
-	chunk_ptr->AddObj(object);
+      if (chunk_ptr != nullptr)
+        chunk_ptr->AddActor(actor);
     }
   }
 
-  for(Item * item: items) {
-    glm::vec3 position = item->GetPhysicalObj()->getPosition();
+  for (PhysicalObj * object : objects) {
+    glm::vec3 position = object->getPosition();
     Chunk * chunk_ptr = this->location->GetChunkByPosition(position.x, position.z);
-    if(chunk_ptr != this) {
-      this->DeleteItem(item);
-      if(chunk_ptr != nullptr)
-	chunk_ptr->AddItem(item);
+    if (chunk_ptr != this) {
+      this->DeleteObj(object);
+      if (chunk_ptr != nullptr)
+        chunk_ptr->AddObj(object);
     }
   }
-  
+
+  for (Item * item : items) {
+    glm::vec3 position = item->GetPhysicalObj()->getPosition();
+    Chunk * chunk_ptr = this->location->GetChunkByPosition(position.x, position.z);
+    if (chunk_ptr != this) {
+      this->DeleteItem(item);
+      if (chunk_ptr != nullptr)
+        chunk_ptr->AddItem(item);
+    }
+  }
+
 }
 
 
