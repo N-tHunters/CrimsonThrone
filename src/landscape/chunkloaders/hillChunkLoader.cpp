@@ -38,7 +38,7 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
 
 	chunk->LoadTerrain(new Terrain(size, vertices_number, position, &height_map, texture_path, 10.0f));
 
-	if (biome == 2) {
+	if (biome == 0) {
 		Model* tree_model = new Model("resources/models/tree.obj");
 		float size = chunk->GetTerrain()->getSize();
 		for (int i = 0; i < rand() % 100; i ++) {
