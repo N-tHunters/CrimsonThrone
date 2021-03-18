@@ -12,7 +12,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 	this->vertices_number = vertices_number;
 	this->position = position;
 	this->tile_width = size / (vertices_number - 1);
-
+	
 	std::vector<float> v;
 	for (int i = 0; i < vertices_number; i ++) {
 		v.clear();

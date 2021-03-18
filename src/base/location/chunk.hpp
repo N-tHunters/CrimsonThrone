@@ -87,6 +87,7 @@ class Chunk {
   int GetY();
 
   virtual void LoadABS();
+  virtual bool IsLoaded();
 };
 
 #endif

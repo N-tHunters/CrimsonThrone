@@ -6,7 +6,9 @@
 #include <unordered_map>
 
 const int PROCESS_RADIUS = 3;
-const int RENDER_RADIUS = 5;
+const int RENDER_RADIUS = 3;
+const int DEFAULT_VERTICES_NUMBER = 10;
+
 
 /**
  * Default constructor
@@ -54,7 +56,37 @@ Location::Location(size_t width, size_t height, int chunk_width, int chunk_heigh
     this->chunks.push_back(row);
   }
 
-  generator->Generate(this, width, height, chunk_width, chunk_height, 20);
+  generator->Generate(this, width, height, chunk_width, chunk_height, DEFAULT_VERTICES_NUMBER);
+
+  delete generator;
+  
+  this->current_x = 0;
+  this->current_y = 0;
+}
+
+/**
+ * Construct location from landscape generator
+ * \param width Width of this location (in chunks)
+ * \param height Height of this location (in chunks)
+ * \param chunk_width Width of chunk (in meters)
+ * \param chunk_height Height of chunk (in meters)
+ * \param vertices_number Number of vertices in chunk (not always used)
+ */
+Location::Location(size_t width, size_t height, int chunk_width, int chunk_height, int vertices_number, LandscapeGenerator * generator) {
+  this->width = width;
+  this->height = height;
+  this->chunk_width = chunk_width;
+  this->chunk_height = chunk_height;
+
+  for(size_t i = 0; i < height; i++) {
+    std::vector<Chunk *> row;
+    for(size_t j = 0; j < width; j++) {
+      row.push_back(nullptr);
+    }
+    this->chunks.push_back(row);
+  }
+
+  generator->Generate(this, width, height, chunk_width, chunk_height, vertices_number);
 
   delete generator;
   
@@ -70,7 +102,7 @@ void Location::FillEmptyChunks() {
   for(size_t i = 0; i < height; i++)
     for(size_t j = 0; j < width; j++)
       if(chunks[i][j] == nullptr)
-	chunks[i][j] = new Chunk(this, i, j, new Terrain(chunk_width, 11, glm::vec3(chunk_width * i, -1.0f, chunk_height * j)), 1.0f);
+	chunks[i][j] = new Chunk(this, i, j, new Terrain(chunk_width, DEFAULT_VERTICES_NUMBER, glm::vec3(chunk_width * i, -1.0f, chunk_height * j)), 1.0f);
 }
 
 /**
@@ -141,7 +173,7 @@ void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_wid
   
   for(int ix = lx; ix <= rx; ix++) {
     for(int iy = uy; iy <= dy; iy++) {
-      if(this->chunks[ix][iy] != nullptr) {
+      if(this->chunks[ix][iy] != nullptr && this->chunks[ix][iy]->IsLoaded()) {
         this->chunks[ix][iy]->Draw(shaderHolder, camera, screen_width, screen_height);
       }
     }
@@ -149,7 +181,7 @@ void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_wid
 
   for(int ix = lx; ix <= rx; ix++) {
     for(int iy = uy; iy <= dy; iy++) {
-      if(this->chunks[ix][iy] != nullptr) {
+      if(this->chunks[ix][iy] != nullptr && this->chunks[ix][iy]->IsLoaded()) {
         this->chunks[ix][iy]->DrawWater(shaderHolder, camera, screen_width, screen_height);
       }
     }
@@ -163,11 +195,11 @@ void Location::Update(float dt) {
   int uy = std::max((int)current_y - PROCESS_RADIUS, 0); // Most up column
   int rx = std::min((int)current_x + PROCESS_RADIUS, (int)width - 1); // Most right row
   int dy = std::min((int)current_y + PROCESS_RADIUS, (int)height - 1); // Most down column
-
+  
   
   for(int ix = lx; ix <= rx; ix++) {
     for(int iy = uy; iy <= dy; iy++) {
-      if(this->chunks[ix][iy] != nullptr) {
+      if(this->chunks[ix][iy] != nullptr && this->chunks[ix][iy]->IsLoaded()) {
         this->chunks[ix][iy]->Update(dt);
       }
     }
@@ -177,16 +209,19 @@ void Location::Update(float dt) {
 
 
 void Location::LoadABS() {
-  int lx = std::max((int)current_x - RENDER_RADIUS, 0); // Most left row
-  int uy = std::max((int)current_y - RENDER_RADIUS, 0); // Most up column
-  int rx = std::min((int)current_x + RENDER_RADIUS, (int)width - 1); // Most right row
-  int dy = std::min((int)current_y + RENDER_RADIUS, (int)height - 1); // Most down column
+  float start_time = glfwGetTime();
+  int lx = std::max((int)current_x - RENDER_RADIUS - 1, 0); // Most left row
+  int uy = std::max((int)current_y - RENDER_RADIUS - 1, 0); // Most up column
+  int rx = std::min((int)current_x + RENDER_RADIUS + 1, (int)width - 1); // Most right row
+  int dy = std::min((int)current_y + RENDER_RADIUS + 1, (int)height - 1); // Most down column
 
   for(int ix = lx; ix <= rx; ix++) {
     for(int iy = uy; iy <= dy; iy++) {
-      if(this->chunks[ix][iy] != nullptr) {
+      if(this->chunks[ix][iy] != nullptr && !this->chunks[ix][iy]->IsLoaded()) {
       	this->chunks[ix][iy]->LoadABS();
       }
+      if(glfwGetTime() - start_time > 0.01f)
+	return;
     }
   }
 }

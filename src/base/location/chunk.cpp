@@ -501,4 +501,6 @@ void Chunk::SetLocation(Location * location) { this->location = location; }
 int Chunk::GetX() { return this->x; }
 int Chunk::GetY() { return this->y; }
 
+
+bool Chunk::IsLoaded() { return true; }
 void Chunk::LoadABS() {}
