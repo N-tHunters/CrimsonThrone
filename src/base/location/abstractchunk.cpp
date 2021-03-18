@@ -26,13 +26,13 @@ void AbstractChunk::LoadABS() {
   if(load_state == 0) {
     loading_thread = new std::thread(&ChunkLoader::Load, chunk_loader, this);
     load_state = 1;
-  } else {
+  } else if(load_state == 1) {
     if (height_map != nullptr){
       LoadTerrain(new Terrain(size, vertices_number, position, height_map, 1.0f));
       this->SetLoaded();
-    } else if(chunk_loader->NeedObjectLoading()) {
-      chunk_loader->LoadObjects(this);
     }
+  } else {
+    //    chunk_loader->LoadObjects(this);
   }
 }
 
