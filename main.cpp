@@ -565,7 +565,7 @@ int main()
 				player_core->Step();
 				GetCurrentLocation()->Update(dt);
 				current_frame = glfwGetTime();
-				dt = (current_frame - last_frame);
+				dt = std::min((current_frame - last_frame), 0.1f);
 				last_frame = current_frame;
 
 				if (glfwGetTime() - fps_change_last > 0.1) {
