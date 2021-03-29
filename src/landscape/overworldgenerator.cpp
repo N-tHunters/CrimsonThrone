@@ -20,6 +20,17 @@ void OverWorldGenerator::Generate(Location * location, size_t width, size_t heig
 
   BiomeGenerator* biomeGenerator = new BiomeGenerator(rand(), big_perlin);
 
+  std::vector<std::string> model_names = {
+    "tree"
+  };
+
+  std::vector<std::string> texture_names = {
+    "tree"
+  };
+
+  load_models(model_names);
+  load_textures(texture_names);
+
   for (size_t i = 0; i < height; i++) {
     for (size_t j = 0; j < width; j++) {
       Chunk * new_chunk = new AbstractChunk(location, i, j, new HillChunkLoader((float)chunk_width, vertices_number, glm::vec3(chunk_width * i, 0.0f, chunk_height * j), this->seed, perlin, biomeGenerator));

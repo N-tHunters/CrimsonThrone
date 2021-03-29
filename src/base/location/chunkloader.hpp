@@ -1,7 +1,8 @@
 #pragma once
 
 #include "abstractchunk.hpp"
-
+#include <render/models.hpp>
+#include <render/textures.hpp>
 
 class ChunkLoader {
 protected:

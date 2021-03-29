@@ -20,6 +20,7 @@
 #include <string>
 #include <vector>
 #include <math.h>
+#include <chrono>
 
 class PhysicalObj;
 class Model;
@@ -40,6 +41,7 @@ public:
 	Mesh(const std::string&, Model*, float);
 	Mesh(const std::string&, std::vector<GLfloat>*, std::vector<unsigned int>*);
 	Mesh(const std::string&, std::vector<GLfloat>*, std::vector<unsigned int>*, int);
+	Mesh(Model*, float, GLuint);
 	Mesh();
 	void init(PhysicalObj*);
 	void draw(ShaderHolder*, Camera*, GLuint, GLuint);

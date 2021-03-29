@@ -6,7 +6,7 @@
 #include <unordered_map>
 
 const int PROCESS_RADIUS = 3;
-const int RENDER_RADIUS = 2;
+const int RENDER_RADIUS = 10;
 const int DEFAULT_VERTICES_NUMBER = 10;
 
 
@@ -178,6 +178,7 @@ void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_wid
       }
     }
   }
+
 
   for(int ix = lx; ix <= rx; ix++) {
     for(int iy = uy; iy <= dy; iy++) {

@@ -12,7 +12,7 @@ HillChunkLoader::HillChunkLoader(float size, int vertices_number, glm::vec3 posi
 }
 
 void HillChunkLoader::Load(AbstractChunk * chunk) {
-    std::vector<std::vector<float>> * height_map = new std::vector<std::vector<float>>();
+	std::vector<std::vector<float>> * height_map = new std::vector<std::vector<float>>();
 	std::vector<float> v;
 
 	for (int i = 0; i < vertices_number; i ++) {
@@ -22,7 +22,7 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
 			float y = chunk->GetY() * (vertices_number - 1) + j + seed / 65536;
 
 			float biome_height = biomeGenerator->getHeight(x / 100.0f, y / 100.0f);
-			
+
 			v.push_back(this->perlin->GetValue(x / 100.0f, y / 100.0f, 0.0f) * 10.0f + biome_height);
 		}
 		height_map->push_back(v);
@@ -44,20 +44,22 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
 }
 
 void HillChunkLoader::LoadObjects(AbstractChunk *chunk) {
-  Model* tree_model = new Model("resources/models/tree.obj");
-  float size = chunk->GetTerrain()->getSize();
-  int new_quote = quote;
-  while(trees_num > 0 && new_quote > 0) {
-    Mesh* tree_mesh = new Mesh("resources/textures/tree.png", tree_model, (rand() % 10 + 10) / 10.0f);
-    glm::vec3 pos = chunk->GetTerrain()->getPosition() + glm::vec3((rand() % (int(size) * 10)) / 10.0f, 0.0f, (rand() % (int(size) * 10)) / 10.0f);
-    pos.y = chunk->GetTerrain()->getHeight(pos);
-    chunk->AddObj(new PhysicalObj(tree_mesh, false, true, false, false, pos, glm::vec3(0.0f, rand() % 360, 0.0f), "tree"));
+	Model* tree_model = get_model("tree");
+	GLuint tree_texture = get_texture("tree");
+	float size = chunk->GetTerrain()->getSize();
+	int new_quote = quote;
 
-    trees_num--; new_quote--;
-  }
-  delete tree_model;
+	while (trees_num > 0 && new_quote > 0) {
+		Mesh* tree_mesh = new Mesh(tree_model, (rand() % 10 + 10) / 10.0f, tree_texture);
+		glm::vec3 pos = chunk->GetTerrain()->getPosition() + glm::vec3((rand() % (int(size) * 10)) / 10.0f, 0.0f, (rand() % (int(size) * 10)) / 10.0f);
+		pos.y = chunk->GetTerrain()->getHeight(pos);
+		chunk->AddObj(new PhysicalObj(tree_mesh, false, true, false, false, pos, glm::vec3(0.0f, rand() % 360, 0.0f), "tree"));
+
+		trees_num--; new_quote--;
+	}
+	// delete tree_model;
 }
 
 bool HillChunkLoader::AreObjectsLoaded() {
-  return trees_num == 0;
+	return trees_num == 0;
 }

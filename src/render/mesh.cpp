@@ -132,7 +132,52 @@ Mesh::Mesh(const std::string& texturePath, Model* model, float scale) {
 	glEnableVertexAttribArray(2);
 
 	glBindVertexArray(0); // Unbind VAO
+}
 
+Mesh::Mesh(Model* model, float scale, GLuint texture) {
+	activeDebug = false;
+	this->type = 1;
+	this->obj = nullptr;
+	this->size = model->indices.size();
+
+	this->texture = texture;
+
+	// Vertices
+
+	std::vector<float> vertices;
+
+	for (int i = 0; i < model->vertices.size(); i ++) {
+		if (i % 8 < 3) {
+			vertices.push_back(model->vertices[i] * scale);
+		} else {
+			vertices.push_back(model->vertices[i]);
+		}
+	}
+
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
+
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	// glBufferData(GL_ARRAY_BUFFER, sizeof(model->vertices[0]) * model->vertices.size(), &(model->vertices[0]), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), &(vertices[0]), GL_STATIC_DRAW);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(model->indices[0]) * model->indices.size(), &(model->indices[0]), GL_STATIC_DRAW);
+
+	// Position attribute
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+	glEnableVertexAttribArray(0);
+	// Normals
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(1);
+	// TexCoord attribute
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(6 * sizeof(GLfloat)));
+	glEnableVertexAttribArray(2);
+
+	glBindVertexArray(0); // Unbind VAO
 }
 
 
@@ -225,7 +270,7 @@ void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint
 	cameraRot = glm::rotate(cameraRot, glm::radians(camera->getRotation().y), glm::vec3(0.0f, 1.0f, 0.0f));
 	cameraRot = glm::rotate(cameraRot, glm::radians(camera->getRotation().z), glm::vec3(0.0f, 0.0f, 1.0f));
 	view = glm::translate(view, this->obj->getPosition() - cameraPosition);
-	projection = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
+	projection = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 100.0f);
 
 	glm::vec3 lightPos = glm::vec3(20, 1, 20);
 
