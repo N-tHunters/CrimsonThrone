@@ -12,7 +12,7 @@ OverWorldGenerator::OverWorldGenerator() {
 void OverWorldGenerator::Generate(Location * location, size_t width, size_t height, int chunk_width, int chunk_height, int vertices_number) {
 
   noise::module::Perlin* perlin = new noise::module::Perlin();
-  perlin->SetOctaveCount(4);
+  perlin->SetOctaveCount(8);
 
   noise::module::Perlin* big_perlin = new noise::module::Perlin();
   big_perlin->SetOctaveCount(4);

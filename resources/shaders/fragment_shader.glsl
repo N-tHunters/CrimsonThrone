@@ -14,7 +14,7 @@ void main()
 
 	vec4 color_2 = vec4(objectColor.rgb * (diffuse + vec3(0.7)), objectColor.a);
 
-	color_2 = mix(color_2, vec4(0.5f, 0.7f, 0.7f, 1.0f), min(distance / 100.0, 1.0));
+	// color_2 = mix(color_2, vec4(0.5f, 0.7f, 0.7f, 1.0f), min(distance / 100.0, 1.0));
 
 	color = color_2;
 	

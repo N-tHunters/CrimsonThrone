@@ -6,7 +6,7 @@
 #include <unordered_map>
 
 const int PROCESS_RADIUS = 3;
-const int RENDER_RADIUS = 10;
+const int RENDER_RADIUS = 100;
 const int DEFAULT_VERTICES_NUMBER = 10;
 
 

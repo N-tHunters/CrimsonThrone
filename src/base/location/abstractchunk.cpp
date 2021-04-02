@@ -29,8 +29,8 @@ void AbstractChunk::LoadABS() {
   } else if(load_state == 1) {
     if (height_map != nullptr){
       LoadTerrain(new Terrain(size, vertices_number, position, height_map, 1.0f));
+      load_state = 2;
     }
-    load_state = 2;
   } else {
     if(chunk_loader->AreObjectsLoaded())
       this->SetLoaded();

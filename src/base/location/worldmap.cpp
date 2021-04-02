@@ -9,7 +9,7 @@
 std::unordered_map<int, Location *> location_map;
 
 void init_demo_locations() {
-  Location * open_world = new Location(100, 100, 10, 10, new OverWorldGenerator());
+  Location * open_world = new Location(100, 100, 100, 100, new OverWorldGenerator());
   location_map[0] = open_world;
 
   /*std::vector<std::tuple<Chunk *, glm::vec3>> exits;

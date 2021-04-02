@@ -1,6 +1,6 @@
 #include "hillChunkLoader.hpp"
 
-const int quote = 30;
+const int quote = 1;
 
 HillChunkLoader::HillChunkLoader(float size, int vertices_number, glm::vec3 position, int seed, noise::module::Perlin* perlin, BiomeGenerator* biomeGenerator) {
 	this->size = size;
@@ -15,15 +15,25 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
 	std::vector<std::vector<float>> * height_map = new std::vector<std::vector<float>>();
 	std::vector<float> v;
 
+	float chunkX = chunk->GetX();
+	float chunkY = chunk->GetY();
+	float w = vertices_number - 1;
+
 	for (int i = 0; i < vertices_number; i ++) {
 		v.clear();
 		for (int j = 0; j < vertices_number; j ++) {
-			float x = chunk->GetX() * (vertices_number - 1) + i + seed % 65536;
-			float y = chunk->GetY() * (vertices_number - 1) + j + seed / 65536;
 
-			float biome_height = biomeGenerator->getHeight(x / 100.0f, y / 100.0f);
+			// float x = chunk->GetX() * (vertices_number - 1) + i + seed % 65536;
+			// float y = chunk->GetY() * (vertices_number - 1) + j + seed / 65536;
 
-			v.push_back(this->perlin->GetValue(x / 100.0f, y / 100.0f, 0.0f) * 10.0f + biome_height);
+			float x = chunkX + i / w;
+			float y = chunkY + j / w;
+
+			// float biome_height = biomeGenerator->getHeight(x / 100.0f, y / 100.0f);
+
+			float h = this->perlin->GetValue(x / 100.0, y / 100.0, seed);
+
+			v.push_back(h * 100.0f);
 		}
 		height_map->push_back(v);
 	}
@@ -40,7 +50,8 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
 	chunk->LoadTerrain(new Terrain(size, vertices_number, position, &height_map, texture_path, 10.0f));
 	*/
 	LoadEnd(height_map, chunk);
-	trees_num = rand() % 30 + 10;
+	// trees_num = rand() % 3 + 1;
+	trees_num = 0;
 }
 
 void HillChunkLoader::LoadObjects(AbstractChunk *chunk) {

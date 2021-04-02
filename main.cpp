@@ -371,6 +371,8 @@ int main()
 	Mesh* coin_mesh = new Mesh("resources/textures/tree.png", coin_model);
 	PhysicalObj* coin = new PhysicalObj(coin_mesh, false, true, false, false, glm::vec3(0, 2, -10), glm::vec3(0), "Coin");
 
+	// printf("%s\n", );
+
 	while (game_state != STATE_CLOSING) //!glfwWindowShouldClose(window))
 	{
 		if (camera->getRotationX() > 180.0f) {
@@ -570,7 +572,7 @@ int main()
 				player_core->Step();
 				GetCurrentLocation()->Update(dt);
 				current_frame = glfwGetTime();
-				dt = std::min((current_frame - last_frame), 0.1f);
+				dt = std::min((current_frame - last_frame), 0.01f);
 				last_frame = current_frame;
 
 				if (glfwGetTime() - fps_change_last > 0.1) {
