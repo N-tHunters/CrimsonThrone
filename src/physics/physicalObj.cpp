@@ -14,7 +14,7 @@ PhysicalObj::PhysicalObj(glm::vec3 position, Boundary* boundary) {
 	this->mesh = nullptr;
 	this->isActive = true;
 	this->isVisible = true;
-	this->isTransparent = true;
+	this->isTransparent = false;
 	this->isFlying = false;
 	this->boundary = boundary;
 	this->mass = 1.0f;
@@ -280,8 +280,8 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 			other_object->force -= this->getPosition() - other_object->getPosition();
 	}
 
-
-	/*if (isPlayer) {
+	/*
+	if (isPlayer) {
 		if (collided)
 		{
 			other_object->getMesh()->changeTexture("resources/textures/fire.png");

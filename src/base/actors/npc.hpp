@@ -1,4 +1,3 @@
-
 /**
  * \file
  * \brief This file contains declaration of NPC
@@ -7,12 +6,14 @@
 #define NPC_H
 
 #include "actor.hpp"
+#include "npcai/npcai.hpp"
 
 /**
  * \brief NPC represents non-playable character (Characters created to interact with player, making the game more 'live')
  */
 class NPC : public Actor {
- private:
+protected:
+  NPCAI * ai;
  public:
   NPC();
   NPC(std::string, int, PhysicalObj *);

@@ -1,4 +1,5 @@
 #include "worldmap.hpp"
+#include <base/actors/actor.hpp>
 #include <base/location/location.hpp>
 #include <base/triggers/longjumptrigger.hpp>
 #include <landscape/flatgenerator.hpp>
@@ -30,6 +31,12 @@ void init_demo_locations() {
       location_map[0]->GetChunk(i, j)->AddTrigger(new LongJumpTrigger(portal, glm::vec3(2.0f, 2.0f, 2.0f), location_map[(i - 1) * 4 + j]->GetChunk(0, 0)));
     }
   }*/
+
+  Actor * test_actor = new Actor("totacres", 10,
+			     new PhysicalObj(new Mesh("resources/textures/test.jpg", new Model("resources/models/waterelement.obj")),
+					     true, true, false, false, glm::vec3(5.0f, 10.0f, 5.0f), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
+					     new BoundaryBox(1.0f, 1.0f, 1.0f)));
+  open_world->GetChunk(0, 0)->AddActor(test_actor);
 
   SetCurrentLocation(open_world);
   open_world->LoadABS();
