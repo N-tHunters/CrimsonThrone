@@ -28,7 +28,7 @@ void AbstractChunk::LoadABS() {
     load_state = 1;
   } else if(load_state == 1) {
     if (height_map != nullptr){
-      LoadTerrain(new Terrain(size, vertices_number, position, height_map, 1.0f));
+      LoadTerrain(new Terrain(size, vertices_number, position, height_map, texture1, texture2, 1.0f, texture_map));
       load_state = 2;
     }
   } else {
@@ -47,9 +47,12 @@ bool AbstractChunk::IsLoaded() {
   return this->is_loaded;
 }
 
-void AbstractChunk::SetHeightMap(std::vector<std::vector<float>> * height_map, float size, int vertices_number, glm::vec3 position) {
+void AbstractChunk::SetHeightMap(std::vector<std::vector<float>> * height_map, float size, int vertices_number, glm::vec3 position, GLuint texture1, GLuint texture2, std::vector<std::vector<float>> texture_map) {
   this->height_map = height_map;
   this->size = size;
   this->vertices_number = vertices_number;
   this->position = position;
+  this->texture1 = texture1;
+  this->texture2 = texture2;
+  this->texture_map = texture_map;
 }

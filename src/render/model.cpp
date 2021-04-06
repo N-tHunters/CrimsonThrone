@@ -49,6 +49,8 @@ void Model::processNode(aiNode *node, const aiScene *scene)
 					vertices.push_back(uv.x);
 					vertices.push_back(uv.y);
 				}
+
+				vertices.push_back(0);
 				indices.push_back(face.mIndices[k]);
 			}
 		}

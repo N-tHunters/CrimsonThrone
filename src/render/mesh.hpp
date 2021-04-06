@@ -30,7 +30,8 @@ class Model;
  */
 
 class Mesh {
-	GLuint texture;
+	GLuint texture1;
+	GLuint texture2;
 	GLuint VBO, VAO, EBO;
 	PhysicalObj* obj;
 	int size;
@@ -41,6 +42,7 @@ public:
 	Mesh(const std::string&, Model*, float);
 	Mesh(const std::string&, std::vector<GLfloat>*, std::vector<unsigned int>*);
 	Mesh(const std::string&, std::vector<GLfloat>*, std::vector<unsigned int>*, int);
+	Mesh(GLuint texture1, GLuint texture2, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices);
 	Mesh(Model*, float, GLuint);
 	Mesh();
 	void init(PhysicalObj*);

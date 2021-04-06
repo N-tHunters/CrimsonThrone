@@ -32,6 +32,7 @@
 #include <render/constants.hpp>
 #include <render/model.hpp>
 #include <render/imageLoader.hpp>
+#include <render/textures.hpp>
 
 #include <physics/physicalObj.hpp>
 #include <physics/boundary.hpp>
@@ -215,7 +216,6 @@ int main()
 	glViewport(0, 0, width, height);
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
 	// LOADING ICON
 
 	/*int icon_width, icon_height;
@@ -481,9 +481,9 @@ int main()
 
 
 			// первый проход
-			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			// glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+			// glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+			// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glEnable(GL_DEPTH_TEST);
 
 			glClearColor(0.5f, 0.7f, 0.7f, 1.0f);
@@ -505,7 +505,7 @@ int main()
 
 
 				if (isRunning)
-					player->GetPhysicalObj()->setSpeed((speed + speedSide) * 2.0f);
+					player->GetPhysicalObj()->setSpeed((speed + speedSide) * 10.0f);
 				else
 					player->GetPhysicalObj()->setSpeed(speed + speedSide);
 
@@ -540,24 +540,24 @@ int main()
 			// player_obj->draw(shaderHolder, camera, width, height);
 
 			// второй проход
-			glBindFramebuffer(GL_FRAMEBUFFER, 0); // возвращаем буфер кадра по умолчанию
-			glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			// glBindFramebuffer(GL_FRAMEBUFFER, 0); // возвращаем буфер кадра по умолчанию
+			// glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+			// glClear(GL_COLOR_BUFFER_BIT);
 
-			shaderHolder->getPost()->Use();
-			/*glUniform1f(glGetUniformLocation(shaderHolder->getPost()->Program, "speed"), sqrt(player->GetPhysicalObj()->velocity.x * player->GetPhysicalObj()->velocity.x +
-			            player->GetPhysicalObj()->velocity.y * player->GetPhysicalObj()->velocity.y +
-			            player->GetPhysicalObj()->velocity.z * player->GetPhysicalObj()->velocity.z));*/
+			// shaderHolder->getPost()->Use();
+			// glUniform1f(glGetUniformLocation(shaderHolder->getPost()->Program, "speed"), sqrt(player->GetPhysicalObj()->velocity.x * player->GetPhysicalObj()->velocity.x +
+			//             player->GetPhysicalObj()->velocity.y * player->GetPhysicalObj()->velocity.y +
+			//             player->GetPhysicalObj()->velocity.z * player->GetPhysicalObj()->velocity.z));
 
-			glBindVertexArray(quadVAO);
-			glDisable(GL_DEPTH_TEST);
-			glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-			glBindVertexArray(0);
+			// glBindVertexArray(quadVAO);
+			// glDisable(GL_DEPTH_TEST);
+			// glBindTexture(GL_TEXTURE_2D, texColorBuffer);
+			// glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			// glBindVertexArray(0);
 
 			// inventory->draw(shaderHolder);
-			fps_counter->draw(shaderHolder);
-			test_frame.draw(shaderHolder, width, height);
+			// fps_counter->draw(shaderHolder);
+			// test_frame.draw(shaderHolder, width, height);
 
 			if (game_state == STATE_PAUSED) {
 				resume_button->draw(shaderHolder);
@@ -572,7 +572,7 @@ int main()
 				player_core->Step();
 				GetCurrentLocation()->Update(dt);
 				current_frame = glfwGetTime();
-				dt = std::min((current_frame - last_frame), 0.01f);
+				dt = std::min((current_frame - last_frame), 0.1f);
 				last_frame = current_frame;
 
 				if (glfwGetTime() - fps_change_last > 0.1) {

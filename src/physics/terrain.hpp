@@ -1,3 +1,8 @@
+/**
+ * \file
+ * \brief This file contains the declaration of Terrain
+ */
+
 #ifndef TERRAIN_H
 #define TERRAIN_H
 
@@ -11,31 +16,46 @@
 #include <render/shaderLoader.hpp>
 #include <render/camera.hpp>
 #include <render/shaderHolder.hpp>
+#include <render/textures.hpp>
 
 #include <math/vectors.hpp>
 
+/**
+ * @brief The physical ground that everyone collides with
+ * @details Consists of small triangle tiles that are used to get it's height in certain position
+ * @author Altrul
+ * @
+ */
 class Terrain {
-	float size;
-	float tile_width;
-	int vertices_number;
-	std::vector<GLfloat> vertices;
-	std::vector<unsigned int> indices;
-	std::vector<std::vector<float>> height;
-	PhysicalObj* obj;
-	glm::vec3 position;
+protected:
+	float size; /**< The width of the whole Terrain in meters */
+	float tile_width; /**< The width of one tile in meters */
+	
+	int vertices_number; /**< The number of vertices in one line */
+	
+	std::vector<GLfloat> vertices; /**< Vertices in Terrain's Mesh */
+	std::vector<unsigned int> indices; /**< Indices in Terrain's Mesh */
+	std::vector<std::vector<float>> height; /**< The height map */
+
+	PhysicalObj* obj; /**< The object that contains Mesh and collides */
+	
+	glm::vec3 position; /**< Global position in one Location */
+
 public:
-	Terrain(float, int, glm::vec3, std::string);
-	Terrain(float, int, glm::vec3);
-	Terrain(float, int, glm::vec3, std::vector<std::vector<float>> *, std::string, float texture_scale);
-	Terrain(float, int, glm::vec3, std::vector<std::vector<float>> *, float texture_scale);
-	Terrain(Terrain&);
+	// Terrain(float, int, glm::vec3, GLuint texture1, GLuint texture2, std::vector<std::vector<float>> texture_map);
+	// Terrain(float, int, glm::vec3);
+	Terrain(float, int, glm::vec3, std::vector<std::vector<float>> *, GLuint texture1, GLuint texture2, float texture_scale, std::vector<std::vector<float>>);
+	// Terrain(float, int, glm::vec3, std::vector<std::vector<float>> *, float texture_scale);
 
 	glm::vec3 getPosition();
-	float getHeight(glm::vec3);
 	glm::vec3 getOutVector(glm::vec3);
-	float getSize();
+	
 	PhysicalObj* getPhysicalObj();
+
 	int getVerticesNumber();
+
+	float getHeight(glm::vec3);
+	float getSize();
 	float getHeightMap(int x, int y);
 	float getTileWidth();
 

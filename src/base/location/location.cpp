@@ -6,7 +6,7 @@
 #include <unordered_map>
 
 const int PROCESS_RADIUS = 3;
-const int RENDER_RADIUS = 100;
+const int RENDER_RADIUS = 3;
 const int DEFAULT_VERTICES_NUMBER = 10;
 
 
@@ -99,10 +99,13 @@ Location::Location(size_t width, size_t height, int chunk_width, int chunk_heigh
  * Fill empty chunks with plain terrain
  */
 void Location::FillEmptyChunks() {
-  for(size_t i = 0; i < height; i++)
+  /*for(size_t i = 0; i < height; i++)
     for(size_t j = 0; j < width; j++)
       if(chunks[i][j] == nullptr)
-	chunks[i][j] = new Chunk(this, i, j, new Terrain(chunk_width, DEFAULT_VERTICES_NUMBER, glm::vec3(chunk_width * i, -1.0f, chunk_height * j)), 1.0f);
+      	chunks[i][j] = new Chunk(this, i, j, new Terrain(chunk_width,
+                                                         DEFAULT_VERTICES_NUMBER,
+                                                         glm::vec3(chunk_width * i, -1.0f, chunk_height * j)),
+                                 1.0f);*/
 }
 
 /**

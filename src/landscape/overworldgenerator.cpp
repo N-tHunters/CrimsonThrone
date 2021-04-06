@@ -14,18 +14,20 @@ void OverWorldGenerator::Generate(Location * location, size_t width, size_t heig
   noise::module::Perlin* perlin = new noise::module::Perlin();
   perlin->SetOctaveCount(8);
 
-  noise::module::Perlin* big_perlin = new noise::module::Perlin();
-  big_perlin->SetOctaveCount(4);
-  big_perlin->SetLacunarity(10.0f);
+  // noise::module::Perlin* big_perlin = new noise::module::Perlin();
+  // big_perlin->SetOctaveCount(4);
+  // big_perlin->SetLacunarity(10.0f);
 
-  BiomeGenerator* biomeGenerator = new BiomeGenerator(rand(), big_perlin);
+  BiomeGenerator* biomeGenerator = new BiomeGenerator(this->seed, perlin);
 
   std::vector<std::string> model_names = {
     "tree"
   };
 
   std::vector<std::string> texture_names = {
-    "tree"
+    "tree",
+    "grass",
+    "rock"
   };
 
   load_models(model_names);

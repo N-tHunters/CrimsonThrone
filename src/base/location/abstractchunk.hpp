@@ -2,6 +2,7 @@
 
 #include "chunk.hpp"
 #include <thread>
+#include <render/textures.hpp>
 
 class ChunkLoader;
 
@@ -15,6 +16,8 @@ private:
   float size;
   int vertices_number;
   glm::vec3 position;
+  GLuint texture1, texture2;
+  std::vector<std::vector<float>> texture_map;
 public:
   AbstractChunk(Location * location, unsigned short x, unsigned short y, ChunkLoader * chunk_loader);
 
@@ -23,5 +26,5 @@ public:
   void LoadTerrain(Terrain * terrain);
   bool IsLoaded() override;
   void SetLoaded();
-  void SetHeightMap(std::vector<std::vector<float>> *, float, int, glm::vec3);
+  void SetHeightMap(std::vector<std::vector<float>> *, float, int, glm::vec3, GLuint texture1, GLuint texture2, std::vector<std::vector<float>> texture_map);
 };
