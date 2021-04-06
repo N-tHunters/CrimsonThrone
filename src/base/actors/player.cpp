@@ -47,3 +47,4 @@ Camera * Player::GetCamera() {
 void Player::SetCamera(Camera * camera) {
   this->camera = camera;
 }
+

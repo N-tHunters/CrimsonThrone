@@ -17,6 +17,10 @@ protected:
  public:
   NPC();
   NPC(std::string, int, PhysicalObj *);
+  NPC(std::string, int, PhysicalObj *, NPCAI *);
+
+  NPCAI * GetAI();
+  void Process();
 };
 
 #endif

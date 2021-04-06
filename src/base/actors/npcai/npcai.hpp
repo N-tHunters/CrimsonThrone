@@ -1,8 +1,15 @@
 #pragma once
 
+#include <base/actors/actor.hpp>
+
 class NPCAI {
+protected:
+  Actor * actor;
 public:
   NPCAI();
 
-  virtual void process();
+  void SetActor(Actor *);
+  
+  virtual void Process();
+  virtual void Communicate(Actor *);
 };

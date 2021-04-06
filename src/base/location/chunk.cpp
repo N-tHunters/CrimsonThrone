@@ -439,6 +439,10 @@ void Chunk::Update(float dt) {
   for (Actor * actor : actors)
     actor->GetPhysicalObj()->update(dt);
 
+  for (Actor * actor : actors)
+    actor->Process();
+
+
   for (PhysicalObj * object : objects)
     object->update(dt);
 

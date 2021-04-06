@@ -401,3 +401,5 @@ std::stringstream * Actor::Save(Saver * saver) {
 
   return ss;
 }
+
+void Actor::Process() {}
