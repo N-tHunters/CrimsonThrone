@@ -7,7 +7,7 @@
  * @param[in]  vertices_number  The number of vertices
  * @param[in]  position         The position
  */
-Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>> * height_map, GLuint texture1, GLuint texture2, float texture_scale, std::vector<std::vector<float>> texture_map) {
+Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>> * height_map, GLuint texture1, GLuint texture2, float texture_scale, GLuint blend_texture) {
 	this->size = size;
 	this->vertices_number = vertices_number;
 	this->position = position;
@@ -249,8 +249,6 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 
 		this->vertices.push_back(coords[i][3]);
 		this->vertices.push_back(coords[i][4]);
-
-		this->vertices.push_back(texture_map[x][y]);
 	}
 
 	Mesh* terrain_mesh = new Mesh(texture1, texture2, &(this->vertices), &(this->indices));

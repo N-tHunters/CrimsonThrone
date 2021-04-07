@@ -42,10 +42,14 @@ protected:
 	glm::vec3 position; /**< Global position in one Location */
 
 public:
-	// Terrain(float, int, glm::vec3, GLuint texture1, GLuint texture2, std::vector<std::vector<float>> texture_map);
-	// Terrain(float, int, glm::vec3);
-	Terrain(float, int, glm::vec3, std::vector<std::vector<float>> *, GLuint texture1, GLuint texture2, float texture_scale, std::vector<std::vector<float>>);
-	// Terrain(float, int, glm::vec3, std::vector<std::vector<float>> *, float texture_scale);
+	Terrain(float,
+			int,
+			glm::vec3,
+			std::vector<std::vector<float>> *,
+			GLuint texture1,
+			GLuint texture2,
+			float texture_scale,
+			GLuint blend_texture);
 
 	glm::vec3 getPosition();
 	glm::vec3 getOutVector(glm::vec3);

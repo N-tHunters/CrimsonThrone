@@ -19,40 +19,35 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
 	float chunkY = chunk->GetY();
 	float w = vertices_number - 1;
 
-	std::vector<std::vector<float>> texture_map;
-	std::vector<float> v2;
-
 	for (int i = 0; i < vertices_number; i ++) {
 		v.clear();
-		v2.clear();
 		for (int j = 0; j < vertices_number; j ++) {
-
-			// float x = chunk->GetX() * (vertices_number - 1) + i + seed % 65536;
-			// float y = chunk->GetY() * (vertices_number - 1) + j + seed / 65536;
 
 			float x = chunkX + i / w;
 			float y = chunkY + j / w;
 
-			// float biome_height = biomeGenerator->getHeight(x / 100.0f, y / 100.0f);
-
-			int biome = biomeGenerator->getBiome(x, y);
-
 			float h = this->perlin->GetValue(x / 100.0, y / 100.0, seed);
 
-			// printf("%f\n", h);
-
 			v.push_back(h * 100.0f);
-			// printf("%d\n", biome);
-			v2.push_back(biome);
 		}
 		height_map->push_back(v);
-		texture_map.push_back(v2);
 	}
+
+	std::vector<int> pixels;
+
+	for (int i = 0; i < 32; i ++ ) {
+		for (int j = 0; j < 32; j ++) {
+			int biome = biomeGenerator->getBiome(chunkX + i / 32.0f, chunkY / 32.0f);
+			pixels.push_back(biome * 255);
+		}
+	}
+
+	GLuint blend_texture = createTexture(pixels, 32);
 
 	GLuint texture1 = get_texture("grass");
 	GLuint texture2 = get_texture("rock");
 
-	LoadEnd(height_map, chunk, texture1, texture2, texture_map);
+	LoadEnd(height_map, chunk, texture1, texture2, blend_texture);
 	// trees_num = rand() % 3 + 1;
 	trees_num = 0;
 }
