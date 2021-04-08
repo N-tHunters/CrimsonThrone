@@ -8,6 +8,8 @@ out vec4 color;
 
 uniform sampler2D Texture1;
 uniform sampler2D Texture2;
+uniform sampler2D blend_texture;
+
 uniform vec2 resolution;
 
 void main()
@@ -20,7 +22,9 @@ void main()
 
 	// color_2 = mix(color_2, vec4(0.5f, 0.7f, 0.7f, 1.0f), min(distance / 100.0, 1.0));
 
-	color = mix(color_1, color_2, texBlendOut);
+	float blending = texture(blend_texture, TexCoord / 2.0f).r;
+
+	color = mix(color_1, color_2, blending);
 	
 	//vec2 uv = vec2(gl_FragCoord.x / resolution.x - 0.5, gl_FragCoord.y / resolution.y - 0.5);
 	//float len = max(min(0.4 / length(uv), 1.0), 0.0);

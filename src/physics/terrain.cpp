@@ -26,11 +26,10 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 	std::vector<std::array<float, 5>> coords;
 	std::vector<glm::vec3> normals;
 
-	float texture_step = 1.0f / texture_scale;
+	float texture_step = 1.0f / texture_scale * texture_scale;
 
 	float texture_coords_x = 0.0f;
 	float texture_coords_y = 0.0f;
-
 
 	for (int i = 0; i < vertices_number - 1; i ++) {
 		texture_coords_y = 0.0f;
@@ -122,14 +121,8 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 			                                    glm::vec3(i + 1, this->height[i + 1][j], j),
 			                                    glm::vec3(i, this->height[i][j + 1], j + 1));
 			texture_coords_y += texture_step;
-			while (texture_coords_y > 1.0f) {
-				texture_coords_y -= 1.0f;
-			}
 		}
 		texture_coords_x += texture_step;
-		while (texture_coords_x > 1.0f) {
-			texture_coords_x -= 1.0f;
-		}
 	}
 
 
@@ -251,7 +244,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 		this->vertices.push_back(coords[i][4]);
 	}
 
-	Mesh* terrain_mesh = new Mesh(texture1, texture2, &(this->vertices), &(this->indices));
+	Mesh* terrain_mesh = new Mesh(texture1, texture2, &(this->vertices), &(this->indices), blend_texture);
 
 	this->obj = new PhysicalObj(terrain_mesh, false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
 }

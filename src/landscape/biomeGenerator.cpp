@@ -7,10 +7,9 @@ BiomeGenerator::BiomeGenerator(int seed, noise::module::Perlin* perlin) {
 
 int BiomeGenerator::getBiome(int x, int y) {
 	float value = perlin->GetValue(x / 100.0, y / 100.0, seed);
-	if (value > 0.0f) {
+	if (value > -0.1f) {
 		return 1;
 	}
-
 	return 0;
 
 }

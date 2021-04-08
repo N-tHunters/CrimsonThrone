@@ -37,7 +37,10 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
 
 	for (int i = 0; i < 32; i ++ ) {
 		for (int j = 0; j < 32; j ++) {
-			int biome = biomeGenerator->getBiome(chunkX + i / 32.0f, chunkY / 32.0f);
+			int biome = biomeGenerator->getBiome(chunkX + i / 32.0f, chunkY + j / 32.0f);
+			// printf("%d\n", biome);
+			pixels.push_back(biome * 255);
+			pixels.push_back(biome * 255);
 			pixels.push_back(biome * 255);
 		}
 	}

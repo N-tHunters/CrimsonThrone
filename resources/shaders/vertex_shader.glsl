@@ -2,12 +2,10 @@
 layout (location = 0) in vec3 position;
 layout (location = 1) in vec3 normal;
 layout (location = 2) in vec2 texCoord;
-layout (location = 3) in float texBlend;
 
 out vec2 TexCoord;
 out vec3 diffuse;
 out float distance;
-out float texBlendOut;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -33,6 +31,4 @@ void main()
 	TexCoord = vec2(texCoord.x, 1.0 - texCoord.y);
 
 	gl_Position = projection * cameraRot * view * model * vec4(position, 1.0f);
-
-	texBlendOut = texBlend;
 }

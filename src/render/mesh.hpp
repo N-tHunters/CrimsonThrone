@@ -11,11 +11,11 @@
 #endif
 
 // Render includes
-
-#include "shaderLoader.hpp"
-#include "shaderHolder.hpp"
-#include "constants.hpp"
-#include "camera.hpp"
+#include <render/shaderLoader.hpp>
+#include <render/shaderHolder.hpp>
+#include <render/constants.hpp>
+#include <render/camera.hpp>
+#include <render/texture.hpp>
 
 #include <string>
 #include <vector>
@@ -26,25 +26,35 @@ class PhysicalObj;
 class Model;
 
 /**
- * \brief Object with vertices and textures
+ * @brief Object that renders
+ * @author Altrul
  */
-
 class Mesh {
-	GLuint texture1;
-	GLuint texture2;
-	GLuint VBO, VAO, EBO;
-	PhysicalObj* obj;
-	int size;
-	int type;
+protected:
+	GLuint texture1; /**< The first texture of the object */
+	GLuint texture2; /**< The second texture of the object */
+	GLuint blend_texture; /**< The texture used to blend textures in needed way */
+	GLuint VBO; /**< Vertex Buffer Object */
+	GLuint VAO; /**< Vertex Array Object */
+	GLuint EBO; /**< Element Buffer Object */
+	PhysicalObj* obj; /**< PhysicalObj that this mesh is bond to */
+	int size; /**< The number of indices this mesh has */
+	int type; /**< The type. 0 = water, 1 = object. Later will be removed */
 public:
 	bool activeDebug;
 	Mesh(const std::string&, Model*);
 	Mesh(const std::string&, Model*, float);
 	Mesh(const std::string&, std::vector<GLfloat>*, std::vector<unsigned int>*);
 	Mesh(const std::string&, std::vector<GLfloat>*, std::vector<unsigned int>*, int);
-	Mesh(GLuint texture1, GLuint texture2, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices);
+	Mesh(GLuint texture1,
+		 GLuint texture2,
+		 std::vector<GLfloat> *vertices,
+		 std::vector<unsigned int> *indices,
+		 GLuint blend_texture);
 	Mesh(Model*, float, GLuint);
 	Mesh();
+
+	void loadObject(std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices);
 	void init(PhysicalObj*);
 	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
 	void rotate(glm::vec3);
