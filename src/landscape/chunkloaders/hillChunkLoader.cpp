@@ -35,8 +35,8 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
 
 	std::vector<int> pixels;
 
-	for (int i = 0; i < 32; i ++ ) {
-		for (int j = 0; j < 32; j ++) {
+	for (int i = 0; i < 2; i ++ ) {
+		for (int j = 0; j < 2; j ++) {
 			int biome = biomeGenerator->getBiome(chunkX + i / 32.0f, chunkY + j / 32.0f);
 			// printf("%d\n", biome);
 			pixels.push_back(biome * 255);
@@ -45,7 +45,10 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
 		}
 	}
 
-	GLuint blend_texture = createTexture(pixels, 32);
+	// GLuint blend_texture = createTexture(pixels, 32, 3);
+	GLuint blend_texture;
+	createTexture("resources/textures/septim.jpg", 1, &blend_texture);
+	// GLuint blend_texture = get_texture("rock");
 
 	GLuint texture1 = get_texture("grass");
 	GLuint texture2 = get_texture("rock");

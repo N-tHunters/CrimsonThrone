@@ -32,8 +32,9 @@ Mesh::Mesh(const std::string& texturePath, Model* model) {
 	this->obj = nullptr;
 	this->size = model->indices.size();
 
-	this->texture1 = createTexture(texturePath);
-	this->texture2 = createTexture("resources/textures/dark.png");
+	createTexture(texturePath, 0, &(this->texture1));
+	createTexture("resources/textures/dark.png", 1, &(this->texture2));
+	createTexture("resources/textures/blend.png", 2, &(this->blend_texture));
 
 	loadObject(&(model->vertices), &(model->indices));
 }
@@ -43,9 +44,10 @@ Mesh::Mesh(const std::string& texturePath, Model* model, float scale) {
 	this->type = 1;
 	this->obj = nullptr;
 	this->size = model->indices.size();
-	
-	this->texture1 = createTexture(texturePath);
-	this->texture2 = createTexture("resources/textures/dark.png");
+
+	createTexture(texturePath, 0, &(this->texture1));
+	createTexture("resources/textures/dark.png", 1, &(this->texture2));
+	createTexture("resources/textures/blend.png", 2, &(this->blend_texture));
 
 	// Vertices
 	std::vector<float> vertices;
@@ -68,7 +70,8 @@ Mesh::Mesh(Model* model, float scale, GLuint texture1) {
 	this->size = model->indices.size();
 
 	this->texture1 = texture1;
-	this->texture2 = createTexture("resources/textures/dark.png");
+	createTexture("resources/textures/dark.png", 1, &(this->texture2));
+	createTexture("resources/textures/blend.png", 2, &(this->blend_texture));
 
 	std::vector<float> vertices;
 
@@ -91,8 +94,8 @@ Mesh::Mesh(GLuint texture1, GLuint texture2, std::vector<GLfloat> *vertices, std
 
 	this->texture1 = texture1;
 	this->texture2 = texture2;
-	this->blend_texture = blend_texture;
-
+	// this->blend_texture = blend_texture;
+	
 	loadObject(vertices, indices);
 }
 
@@ -119,9 +122,10 @@ Mesh::Mesh(const std::string& texturePath, std::vector<GLfloat> *vertices, std::
 	this->obj = nullptr;
 	activeDebug = false;
 	this->size = indices->size();
-	
-	this->texture1 = createTexture(texturePath);
-	this->texture2 = createTexture("resources/textures/dark.png");
+
+	createTexture(texturePath, 0, &(this->texture1));
+	createTexture("resources/textures/dark.png", 1, &(this->texture2));
+	createTexture("resources/textures/blend.png", 2, &(this->blend_texture));
 
 	loadObject(vertices, indices);
 }
@@ -182,7 +186,11 @@ void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint
 	glActiveTexture(GL_TEXTURE1);
 	glBindTexture(GL_TEXTURE_2D, texture2);
 	glActiveTexture(GL_TEXTURE2);
+	
+	// printf("First: %04x\n", glGetError());
 	glBindTexture(GL_TEXTURE_2D, blend_texture);
+	// printf("%04x\n", blend_texture);
+	// printf("Second: %04x\n", glGetError());
 
 
 	GLint modelLoc, viewLoc, projLoc, camRotLoc;
@@ -226,7 +234,7 @@ void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint
 }
 
 void Mesh::changeTexture(const std::string& texturePath) {
-	this->texture1 = createTexture(texturePath);
+	// this->texture1 = createTexture(texturePath, 0);
 }
 
 

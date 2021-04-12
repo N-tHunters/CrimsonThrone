@@ -26,7 +26,8 @@ void FlatChunkLoader::Load(AbstractChunk * chunk) {
     }
   }
 
-  GLuint blend_texture = createTexture(pixels, 32);
+  GLuint blend_texture;
+  createTexture(pixels, 32, 2, &blend_texture);
 
   GLuint texture1 = get_texture("grass");
   GLuint texture2 = get_texture("grass");

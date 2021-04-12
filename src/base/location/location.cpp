@@ -167,6 +167,7 @@ void Location::UpdatePosition(glm::vec3 pos) {
  * \param screen_height Height of screen
  */
 void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_width, int screen_height) {
+
   LoadABS();
   int lx = std::max((int)current_x - RENDER_RADIUS, 0); // Most left row
   int uy = std::max((int)current_y - RENDER_RADIUS, 0); // Most up column

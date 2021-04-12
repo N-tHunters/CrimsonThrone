@@ -74,6 +74,7 @@ const std::string CONFIG_FILE = "resources/settings.ini";
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+void MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 
 // Global variabels
 glm::vec2 speed = glm::vec2(0.0f, 0.0f);
@@ -200,6 +201,7 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_DEBUG_OUTPUT);
 
 	// Set the required callback functions
 	glfwSetKeyCallback(window, key_callback);
@@ -216,6 +218,7 @@ int main()
 	glViewport(0, 0, width, height);
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+	glDebugMessageCallback(MessageCallback, 0);
 	// LOADING ICON
 
 	/*int icon_width, icon_height;
@@ -367,9 +370,9 @@ int main()
 
 	float dt = 0.0f;
 
-	Model* coin_model = new Model("resources/models/tree.obj");
-	Mesh* coin_mesh = new Mesh("resources/textures/tree.png", coin_model);
-	PhysicalObj* coin = new PhysicalObj(coin_mesh, false, true, false, false, glm::vec3(0, 2, -10), glm::vec3(0), "Coin");
+	// Model* coin_model = new Model("resources/models/tree.obj");
+	// Mesh* coin_mesh = new Mesh("resources/textures/tree.png", coin_model);
+	// PhysicalObj* coin = new PhysicalObj(coin_mesh, false, true, false, false, glm::vec3(0, 2, -10), glm::vec3(0), "Coin");
 
 	// printf("%s\n", );
 
@@ -424,11 +427,11 @@ int main()
 			}
 
 			// title->draw(shaderHolder);
-			coin->draw(shaderHolder, camera, width, height);
+			// coin->draw(shaderHolder, camera, width, height);
 			play_button->draw(shaderHolder);
 			exit_button->draw(shaderHolder);
 
-			coin->changeRotationY(1.0f);
+			// coin->changeRotationY(1.0f);
 
 			glFinish();
 
@@ -533,7 +536,7 @@ int main()
 
 			}
 
-			coin->draw(shaderHolder, camera, width, height);
+			// coin->draw(shaderHolder, camera, width, height);
 
 			GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
 
@@ -748,4 +751,8 @@ void load_characters() {
 
 	FT_Done_Face(face);   // Завершение работы с шрифтом face
 	FT_Done_FreeType(ft); // Завершение работы FreeType
+}
+
+void MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+	// fprintf(stderr, "GL ERROR: source = 0x%x, type = 0x%x, id = 0x%x, severity = 0x%x, message = %s\n", source, type, id, severity, message);
 }

@@ -3,22 +3,7 @@
 std::unordered_map<std::string, GLuint> textures;
 
 void load_textures(std::vector<std::string> texture_names) {
-	for (auto texture : textures) {
-		bool isLoaded = false;
-		for (int j = 0; j < texture_names.size(); j ++) {
-			if (texture_names[j] == texture.first) {
-				isLoaded = true;
-				texture_names.erase(texture_names.begin() + j);
-				break;
-			}
-		}
-		if (!isLoaded) {
-			textures.erase(texture.first);
-		}
-	}
-
 	for (int i = 0; i < texture_names.size(); i ++) {
-		// textures[texture_names[i]] = new Model("resources/textures/" + texture_names[i] + ".png");
 		glGenTextures(1, &(textures[texture_names[i]]));
 		glBindTexture(GL_TEXTURE_2D, textures[texture_names[i]]); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
 		// Set our texture parameters
@@ -40,7 +25,6 @@ void load_textures(std::vector<std::string> texture_names) {
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 		glGenerateMipmap(GL_TEXTURE_2D);
 		freeImage(image);
-		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 }
 

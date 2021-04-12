@@ -2,6 +2,7 @@
 
 #include <GL/glew.h>
 #include <render/imageLoader.hpp>
+#include <render/texture.hpp>
 
 #include <unordered_map>
 #include <vector>
