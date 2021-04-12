@@ -7,6 +7,10 @@ WanderAI::WanderAI() {
 }
 
 void WanderAI::Process() {
+  Wander();
+}
+
+void WanderAI::Wander() {
   glm::vec3 position = this->actor->GetPhysicalObj()->getPosition();
   
   if (position.x < target_position.x)

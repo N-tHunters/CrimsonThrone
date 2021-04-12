@@ -9,4 +9,5 @@ protected:
 public:
   WanderAI();
   virtual void Process();
+  virtual void Wander();
 };
