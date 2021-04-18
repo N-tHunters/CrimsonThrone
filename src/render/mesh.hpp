@@ -42,16 +42,15 @@ protected:
 	int type; /**< The type. 0 = water, 1 = object. Later will be removed */
 public:
 	bool activeDebug;
-	Mesh(const std::string&, Model*);
-	Mesh(const std::string&, Model*, float);
 	Mesh(const std::string&, std::vector<GLfloat>*, std::vector<unsigned int>*);
 	Mesh(const std::string&, std::vector<GLfloat>*, std::vector<unsigned int>*, int);
 	Mesh(GLuint texture1,
 		 GLuint texture2,
 		 std::vector<GLfloat> *vertices,
 		 std::vector<unsigned int> *indices,
-		 GLuint blend_texture);
-	Mesh(Model*, float, GLuint);
+		 std::vector<unsigned char> pixels);
+	Mesh(Model*, GLuint, float);
+	Mesh(Model*, GLuint);
 	Mesh();
 
 	void loadObject(std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices);

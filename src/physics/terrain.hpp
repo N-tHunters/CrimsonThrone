@@ -49,7 +49,7 @@ public:
 			GLuint texture1,
 			GLuint texture2,
 			float texture_scale,
-			GLuint blend_texture);
+			std::vector<unsigned char> blend_pixels);
 
 	glm::vec3 getPosition();
 	glm::vec3 getOutVector(glm::vec3);

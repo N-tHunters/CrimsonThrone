@@ -186,7 +186,7 @@ void DungeonA1Generator3D::Generate(Location * location, size_t width, size_t he
     std::tuple<int, int, int> coords = visited_cells[choice];
     printf("%d %d %d\n", std::get<0>(coords), std::get<1>(coords), std::get<2>(coords));
 
-    PhysicalObj * portal = new PhysicalObj(new Mesh("resources/textures/fire.png", portal_model),
+    PhysicalObj * portal = new PhysicalObj(new Mesh(portal_model, get_texture("fire")),
 					   false, true, false, false,
 					   glm::vec3(chunk_width * 0.5f + chunk_width * std::get<0>(coords), 3.f + wall_height * std::get<2>(coords), chunk_height * 0.5f + chunk_height * std::get<1>(coords)),
 					   glm::vec3(0.0f, 0.0f, 0.0f),

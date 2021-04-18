@@ -7,7 +7,7 @@
  * @param[in]  vertices_number  The number of vertices
  * @param[in]  position         The position
  */
-Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>> * height_map, GLuint texture1, GLuint texture2, float texture_scale, GLuint blend_texture) {
+Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>> * height_map, GLuint texture1, GLuint texture2, float texture_scale, std::vector<unsigned char> blend_pixels) {
 	this->size = size;
 	this->vertices_number = vertices_number;
 	this->position = position;
@@ -23,13 +23,13 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 		this->height.push_back(v);
 	}
 
-	std::vector<std::array<float, 5>> coords;
+	std::vector<std::array<double, 5>> coords;
 	std::vector<glm::vec3> normals;
 
-	float texture_step = 1.0f / texture_scale * texture_scale;
+	double texture_step = 1.0 / (vertices_number - 1);
 
-	float texture_coords_x = 0.0f;
-	float texture_coords_y = 0.0f;
+	double texture_coords_x = 0.0;
+	double texture_coords_y = 0.0;
 
 	for (int i = 0; i < vertices_number - 1; i ++) {
 		texture_coords_y = 0.0f;
@@ -37,7 +37,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 			int index = i * (vertices_number - 1) + j;
 
 			for (int k = 0; k < 6; k ++) {
-				coords.push_back({0.0f, 0.0f, 0.0f, 0.0f, 0.0f});
+				coords.push_back({0.0, 0.0, 0.0, 0.0, 0.0});
 			}
 
 			for (int k = 0; k < 2; k ++) {
@@ -244,7 +244,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 		this->vertices.push_back(coords[i][4]);
 	}
 
-	Mesh* terrain_mesh = new Mesh(texture1, texture2, &(this->vertices), &(this->indices), blend_texture);
+	Mesh* terrain_mesh = new Mesh(texture1, texture2, &(this->vertices), &(this->indices), blend_pixels);
 
 	this->obj = new PhysicalObj(terrain_mesh, false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
 }

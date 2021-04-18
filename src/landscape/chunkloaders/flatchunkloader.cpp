@@ -18,7 +18,7 @@ void FlatChunkLoader::Load(AbstractChunk * chunk) {
     height_map->push_back(v);
   }
 
-  std::vector<int> pixels;
+  std::vector<unsigned char> pixels;
 
   for (int i = 0; i < 32; i ++ ) {
     for (int j = 0; j < 32; j ++) {
@@ -26,11 +26,10 @@ void FlatChunkLoader::Load(AbstractChunk * chunk) {
     }
   }
 
-  GLuint blend_texture;
-  createTexture(pixels, 32, 2, &blend_texture);
+  // GLuint blend_texture = createTexture(pixels, 32);
 
   GLuint texture1 = get_texture("grass");
   GLuint texture2 = get_texture("grass");
 
-  LoadEnd(height_map, chunk, texture1, texture2, blend_texture);
+  LoadEnd(height_map, chunk, texture1, texture2, pixels);
 }

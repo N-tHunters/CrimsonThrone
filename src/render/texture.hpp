@@ -5,5 +5,5 @@
 #include <render/imageLoader.hpp>
 #include <string>
 
-void createTexture(std::vector<int>, int width, int number, GLuint* texture_ptr);
-void createTexture(std::string texturePath, int number, GLuint* texture_ptr);
+GLuint createTexture(std::vector<int>, int width);
+GLuint createTexture(std::string texturePath);

@@ -17,7 +17,7 @@ public:
 	             AbstractChunk * chunk,
 	             GLuint texture1,
 	             GLuint texture2,
-	             GLuint blend_map); // This is called in the end
+	             std::vector<unsigned char> blend_pixels); // This is called in the end
 	virtual void LoadObjects(AbstractChunk *);
 	virtual bool AreObjectsLoaded();
 };

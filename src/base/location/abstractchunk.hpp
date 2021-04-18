@@ -17,7 +17,7 @@ private:
   int vertices_number;
   glm::vec3 position;
   GLuint texture1, texture2;
-  GLuint blend_texture;
+  std::vector<unsigned char> blend_pixels;
 public:
   AbstractChunk(Location * location, unsigned short x, unsigned short y, ChunkLoader * chunk_loader);
 
@@ -32,5 +32,5 @@ public:
                     glm::vec3,
                     GLuint texture1,
                     GLuint texture2,
-                    GLuint blend_texture);
+                    std::vector<unsigned char> blend_pixels);
 };

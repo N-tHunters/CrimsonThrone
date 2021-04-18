@@ -20,58 +20,17 @@ void Mesh::init(PhysicalObj* obj) {
  */
 Mesh::Mesh() {};
 
-/**
- * @brief      Constructs a new instance.
- *
- * @param[in]  texturePath  The texture path
- * @param      model        The model
- */
-Mesh::Mesh(const std::string& texturePath, Model* model) {
-	activeDebug = false;
-	this->type = 1;
-	this->obj = nullptr;
-	this->size = model->indices.size();
+Mesh::Mesh(Model* model, GLuint texture) : Mesh(model, texture, 1.0f) {}
 
-	createTexture(texturePath, 0, &(this->texture1));
-	createTexture("resources/textures/dark.png", 1, &(this->texture2));
-	createTexture("resources/textures/blend.png", 2, &(this->blend_texture));
-
-	loadObject(&(model->vertices), &(model->indices));
-}
-
-Mesh::Mesh(const std::string& texturePath, Model* model, float scale) {
-	activeDebug = false;
-	this->type = 1;
-	this->obj = nullptr;
-	this->size = model->indices.size();
-
-	createTexture(texturePath, 0, &(this->texture1));
-	createTexture("resources/textures/dark.png", 1, &(this->texture2));
-	createTexture("resources/textures/blend.png", 2, &(this->blend_texture));
-
-	// Vertices
-	std::vector<float> vertices;
-
-	for (int i = 0; i < model->vertices.size(); i ++) {
-		if (i % 9 < 3) {
-			vertices.push_back(model->vertices[i] * scale);
-		} else {
-			vertices.push_back(model->vertices[i]);
-		}
-	}
-
-	loadObject(&vertices, &(model->indices));
-}
-
-Mesh::Mesh(Model* model, float scale, GLuint texture1) {
+Mesh::Mesh(Model* model, GLuint texture1, float scale) {
 	activeDebug = false;
 	this->type = 1;
 	this->obj = nullptr;
 	this->size = model->indices.size();
 
 	this->texture1 = texture1;
-	createTexture("resources/textures/dark.png", 1, &(this->texture2));
-	createTexture("resources/textures/blend.png", 2, &(this->blend_texture));
+	createTexture("resources/textures/dark.png");
+	createTexture("resources/textures/blend.png");
 
 	std::vector<float> vertices;
 
@@ -86,7 +45,7 @@ Mesh::Mesh(Model* model, float scale, GLuint texture1) {
 	loadObject(&vertices, &(model->indices));
 }
 
-Mesh::Mesh(GLuint texture1, GLuint texture2, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices, GLuint blend_texture) {
+Mesh::Mesh(GLuint texture1, GLuint texture2, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices, std::vector<unsigned char> pixels) {
 	this->type = 1;
 	this->obj = nullptr;
 	activeDebug = false;
@@ -95,6 +54,36 @@ Mesh::Mesh(GLuint texture1, GLuint texture2, std::vector<GLfloat> *vertices, std
 	this->texture1 = texture1;
 	this->texture2 = texture2;
 	// this->blend_texture = blend_texture;
+
+	int width = 32;
+	int height = 32;
+	unsigned char* image = (unsigned char *)malloc(sizeof(GL_FLOAT) * pixels.size());
+
+	/*for (int i = 0; i < pixels.size(); i ++) {
+		image[i] = pixels[i];
+	}*/
+
+	for (int i = 0; i < width; i ++) {
+		for (int j = 0; j < height; j ++) {
+			image[(i * width + j) * 4] = pixels[(i + j * width) * 4];
+			image[(i * width + j) * 4 + 1] = pixels[(i + j * width) * 4 + 1];
+			image[(i * width + j) * 4 + 2] = pixels[(i + j * width) * 4 + 2];
+			image[(i * width + j) * 4 + 3] = pixels[(i + j * width) * 4 + 3];
+		}
+	}
+
+	glGenTextures(1, &blend_texture);
+	glBindTexture(GL_TEXTURE_2D, blend_texture);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	freeImage(image);
 	
 	loadObject(vertices, indices);
 }
@@ -123,9 +112,9 @@ Mesh::Mesh(const std::string& texturePath, std::vector<GLfloat> *vertices, std::
 	activeDebug = false;
 	this->size = indices->size();
 
-	createTexture(texturePath, 0, &(this->texture1));
-	createTexture("resources/textures/dark.png", 1, &(this->texture2));
-	createTexture("resources/textures/blend.png", 2, &(this->blend_texture));
+	createTexture(texturePath);
+	createTexture("resources/textures/dark.png");
+	createTexture("resources/textures/blend.png");
 
 	loadObject(vertices, indices);
 }
@@ -157,7 +146,7 @@ void Mesh::loadObject(std::vector<GLfloat> *vertices, std::vector<unsigned int> 
 }
 
 /**
- * \brief Function that draw mesh
+ * \brief Function that draws mesh
  * \param[in] shaderHolder 	A holder for all the shaders
  * \param[in] camera 		Player camera
  * \param[in] width 		Screen width
