@@ -1,5 +1,4 @@
-#ifndef MODELS_H
-#define MODELS_H
+#pragma once
 
 #include <unordered_map>
 #include <vector>
@@ -7,8 +6,5 @@
 
 #include <render/model.hpp>
 
-std::unordered_map<std::string, Model*> models;
-
 void load_models(std::vector<std::string> model_names);
-
-#endif
+Model* get_model(std::string model_name);

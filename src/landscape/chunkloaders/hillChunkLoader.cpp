@@ -1,6 +1,6 @@
 #include "hillChunkLoader.hpp"
 
-const int quote = 30;
+const int quote = 1;
 
 HillChunkLoader::HillChunkLoader(float size, int vertices_number, glm::vec3 position, int seed, noise::module::Perlin* perlin, BiomeGenerator* biomeGenerator) {
 	this->size = size;
@@ -12,52 +12,75 @@ HillChunkLoader::HillChunkLoader(float size, int vertices_number, glm::vec3 posi
 }
 
 void HillChunkLoader::Load(AbstractChunk * chunk) {
-    std::vector<std::vector<float>> * height_map = new std::vector<std::vector<float>>();
+	std::vector<std::vector<float>> * height_map = new std::vector<std::vector<float>>();
 	std::vector<float> v;
+
+	float chunkX = chunk->GetX();
+	float chunkY = chunk->GetY();
+	float w = vertices_number - 1;
 
 	for (int i = 0; i < vertices_number; i ++) {
 		v.clear();
 		for (int j = 0; j < vertices_number; j ++) {
-			float x = chunk->GetX() * (vertices_number - 1) + i + seed % 65536;
-			float y = chunk->GetY() * (vertices_number - 1) + j + seed / 65536;
 
-			float biome_height = biomeGenerator->getHeight(x / 100.0f, y / 100.0f);
-			
-			v.push_back(this->perlin->GetValue(x / 100.0f, y / 100.0f, 0.0f) * 10.0f + biome_height);
+			float x = chunkX + i / w;
+			float y = chunkY + j / w;
+
+			float h = this->perlin->GetValue(x / 100.0, y / 100.0, seed);
+
+			v.push_back(h * 100.0f);
 		}
 		height_map->push_back(v);
 	}
-	/*	int biome = biomeGenerator->getBiome(chunk->GetX(), chunk->GetY());
 
-	std::string texture_path;
+	std::vector<unsigned char> pixels;
 
-	if (biome == 0) {
-		texture_path = "resources/textures/grass.jpeg";
-	} else {
-		texture_path = "resources/textures/wood.png";
+	float pixel_count = 32.0f;
+
+	for (float i = 0; i < pixel_count; i ++ ) {
+		for (float j = 0; j < pixel_count; j ++) {
+			// char biome = biomeGenerator->getBiome(chunkX + i / 32.0f, chunkY + j / 32.0f);
+			float h = this->perlin->GetValue((chunkX + i / pixel_count) / 100.0f, (chunkY + j / pixel_count) / 100.0, seed);
+			char biome;
+			if (h > 0.0) {
+				biome = 1;
+			} else {
+				biome = 0;
+			}
+			pixels.push_back(biome * 255);
+			pixels.push_back(biome * 255);
+			pixels.push_back(biome * 255);
+			pixels.push_back(biome * 255);
+			printf("%d\n", biome);
+		}
 	}
 
-	chunk->LoadTerrain(new Terrain(size, vertices_number, position, &height_map, texture_path, 10.0f));
-	*/
-	LoadEnd(height_map, chunk);
-	trees_num = rand() % 30 + 10;
+	// GLuint blend_texture = createTexture("resources/textures/rock.png");
+	// GLuint blend_texture = get_texture("rock");
+
+	GLuint texture1 = get_texture("grass");
+	GLuint texture2 = get_texture("rock");
+
+	LoadEnd(height_map, chunk, texture1, texture2, pixels);
+	trees_num = 0;
 }
 
 void HillChunkLoader::LoadObjects(AbstractChunk *chunk) {
-  Model* tree_model = new Model("resources/models/tree.obj");
-  float size = chunk->GetTerrain()->getSize();
-  int new_quote = quote;
-  while(trees_num > 0 && new_quote > 0) {
-    Mesh* tree_mesh = new Mesh("resources/textures/tree.png", tree_model, (rand() % 10 + 10) / 10.0f);
-    glm::vec3 pos = chunk->GetTerrain()->getPosition() + glm::vec3((rand() % (int(size) * 10)) / 10.0f, 0.0f, (rand() % (int(size) * 10)) / 10.0f);
-    pos.y = chunk->GetTerrain()->getHeight(pos);
-    chunk->AddObj(new PhysicalObj(tree_mesh, false, true, false, false, pos, glm::vec3(0.0f, rand() % 360, 0.0f), "tree"));
+	Model* tree_model = get_model("tree");
+	GLuint tree_texture = get_texture("tree");
+	float size = chunk->GetTerrain()->getSize();
+	int new_quote = quote;
 
-    trees_num--; new_quote--;
-  }
-  delete tree_model;
+	while (trees_num > 0 && new_quote > 0) {
+		Mesh* tree_mesh = new Mesh(tree_model, (rand() % 10 + 10) / 10.0f, tree_texture);
+		glm::vec3 pos = chunk->GetTerrain()->getPosition() + glm::vec3((rand() % (int(size) * 10)) / 10.0f, 0.0f, (rand() % (int(size) * 10)) / 10.0f);
+		pos.y = chunk->GetTerrain()->getHeight(pos);
+		chunk->AddObj(new PhysicalObj(tree_mesh, false, true, false, false, pos, glm::vec3(0.0f, rand() % 360, 0.0f), "tree"));
+
+		trees_num--; new_quote--;
+	}
 }
 
 bool HillChunkLoader::AreObjectsLoaded() {
-  return trees_num == 0;
+	return trees_num == 0;
 }

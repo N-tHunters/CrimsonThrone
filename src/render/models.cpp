@@ -1,5 +1,7 @@
 #include <render/models.hpp>
 
+std::unordered_map<std::string, Model*> models;
+
 void load_models(std::vector<std::string> model_names) {
 	for (auto model: models) {
 		bool isLoaded = false;
@@ -18,4 +20,8 @@ void load_models(std::vector<std::string> model_names) {
 	for (int i = 0; i < model_names.size(); i ++) {
 		models[model_names[i]] = new Model("resources/models/" + model_names[i] + ".obj");
 	}
+}
+
+Model* get_model(std::string model_name) {
+	return models[model_name];
 }

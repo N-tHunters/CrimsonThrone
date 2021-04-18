@@ -156,7 +156,12 @@ Terrain * Chunk::GetTerrain() {
 void Chunk::Draw(ShaderHolder * shaderHolder, Camera * camera, int width, int height) {
   this->terrain->draw(shaderHolder, camera, width, height);
   for (size_t i = 0; i <  this->GetObjsCount(); i ++) {
+
+      // auto t1 = std::chrono::high_resolution_clock::now();
     this->objects[i]->draw(shaderHolder, camera, width, height);
+
+      // auto t2 = std::chrono::high_resolution_clock::now();
+      // printf("%f\n", std::chrono::duration<double, std::milli>(t2 - t1));
   }
   for (size_t i = 0; i <  this->GetActorsCount(); i ++) {
     this->actors[i]->GetPhysicalObj()->draw(shaderHolder, camera, width, height);

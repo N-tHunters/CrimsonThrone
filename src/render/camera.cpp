@@ -42,7 +42,7 @@ void Camera::setPositionZ(float value) {
 }
 
 void Camera::setRotation(glm::vec3 newRotation) {
-	this->rotation = newRotation;
+	this->rotation = newRotation;	
 }
 
 void Camera::setRotationX(float value) {
