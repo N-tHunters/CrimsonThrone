@@ -10,4 +10,5 @@ public:
   WanderAI();
   virtual void Process();
   virtual void Wander();
+  virtual bool GoToTarget();
 };

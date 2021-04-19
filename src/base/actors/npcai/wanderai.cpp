@@ -1,16 +1,18 @@
 #include "wanderai.hpp"
 #include <random>
+#include <cmath>
+#include <cstdlib>
 
 WanderAI::WanderAI() {
   target_position = glm::vec3(rand() % 100 * 1.0f, 0.0f, rand() % 100 * 1.0f);
-  target_follow_speed = rand() % 100 + 1;
+  target_follow_speed = rand() % 20 + 10;
 }
 
 void WanderAI::Process() {
   Wander();
 }
 
-void WanderAI::Wander() {
+bool WanderAI::GoToTarget() {
   glm::vec3 position = this->actor->GetPhysicalObj()->getPosition();
   
   if (position.x < target_position.x)
@@ -28,8 +30,14 @@ void WanderAI::Wander() {
     this->actor->GetPhysicalObj()->velocity.z = 0;
 
   
-  if (fabs(position.z - target_position.z) < 1.0f && fabs(position.x - target_position.x) < 1.0f) {
+  if (fabs(position.z - target_position.z) < 1.0f && fabs(position.x - target_position.x) < 1.0f)
+    return true;
+  return false;
+}
+
+void WanderAI::Wander() {
+  if(this->GoToTarget()) {
     target_position = glm::vec3(rand() % 100 * 1.0f, 0.0f, rand() % 100 * 1.0f);
-    target_follow_speed = rand() % 100 + 1;
+    target_follow_speed = rand() % 20 + 10;
   }
 }
