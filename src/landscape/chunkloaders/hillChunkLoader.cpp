@@ -51,7 +51,6 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
 			pixels.push_back(biome * 255);
 			pixels.push_back(biome * 255);
 			pixels.push_back(biome * 255);
-			printf("%d\n", biome);
 		}
 	}
 

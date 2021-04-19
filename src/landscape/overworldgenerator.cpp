@@ -21,13 +21,15 @@ void OverWorldGenerator::Generate(Location * location, size_t width, size_t heig
   BiomeGenerator* biomeGenerator = new BiomeGenerator(this->seed, perlin);
 
   std::vector<std::string> model_names = {
-    "tree"
+    "tree",
+    "human"
   };
 
   std::vector<std::string> texture_names = {
     "tree",
     "grass",
-    "rock"
+    "rock",
+    "water"
   };
 
   load_models(model_names);
