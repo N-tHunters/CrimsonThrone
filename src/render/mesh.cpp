@@ -58,8 +58,6 @@ Mesh::Mesh(GLuint texture1, GLuint texture2, std::vector<GLfloat> *vertices, std
 	int width = 32;
 	int height = 32;
 
-	printf("%d\n", pixels.size());
-
 	unsigned char* image = (unsigned char *)malloc(sizeof(GL_FLOAT) * pixels.size());
 
 	/*for (int i = 0; i < pixels.size(); i ++) {

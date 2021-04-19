@@ -3,7 +3,7 @@
 Button::Button(glm::vec4 rect, func function, std::string text, std::map<GLchar, Character> Characters, float scale, glm::vec3 color, int screen_width, int screen_height): Frame(rect) {
 	this->rect = rect;
 	this->function = function;
-	this->text = new Text(text, glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), Characters, scale / 24.0f, color);
+	this->text = new Text(text, Characters, scale / 24.0f, color);
 
 	this->rect.x = (rect.x + 1.0f) / 2.0f * screen_width;
 	this->rect.y = (rect.y + 1.0f) / 2.0f * screen_height;

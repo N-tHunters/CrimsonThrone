@@ -47,9 +47,11 @@ Image::Image(glm::vec4 rect, std::string texturePath): Frame(rect) {
 	glEnableVertexAttribArray(2);
 
 	glBindVertexArray(0);
+
+	this->m_position = glm::vec2(0.0f, 0.0f);
 }
 
-Image::Image(glm::vec4 rect, GLuint textureID): Frame(rect) {
+Image::Image(glm::vec4 rect, GLuint textureID, glm::vec2 position): Frame(rect) {
 	vertices = {rect.x,     	 rect.y + rect.w, 0.0f, 0.0f, 1.0f,
 	            rect.x,     	 rect.y,     	  0.0f, 0.0f, 0.0f,
 	            rect.x + rect.z, rect.y + rect.w, 0.0f, 1.0f, 1.0f,
@@ -60,6 +62,7 @@ Image::Image(glm::vec4 rect, GLuint textureID): Frame(rect) {
 	          };
 
 	this->texture = textureID;
+	this->m_position = position;
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
@@ -111,9 +114,14 @@ void Image::draw(ShaderHolder* shaderHolder, glm::vec3 drawColor) {
 	glUniform1i(glGetUniformLocation(shaderHolder->getText()->Program, "text"), 0);
 	glUniform3fv(glGetUniformLocation(shaderHolder->getText()->Program, "textColor"), 1, glm::value_ptr(drawColor));
 	glUniform2fv(glGetUniformLocation(shaderHolder->getGUI()->Program, "resolution"), 1, glm::value_ptr(shaderHolder->getResolution()));
+	glUniform2fv(glGetUniformLocation(shaderHolder->getGUI()->Program, "objectpos"), 1, glm::value_ptr(m_position));
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
+}
+
+void Image::setPosition(float x, float y) {
+	this->m_position = glm::vec2(x, y);
 }

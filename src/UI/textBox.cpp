@@ -83,6 +83,10 @@ TextBox::TextBox(glm::vec4 rect, std::map<GLchar, Character> Characters, float s
 	glBindVertexArray(0);
 
 	this->characters = Characters;
+	this->max_lines = std::floor(this->rect.w / (20.0f + 10.0f));
+	this->index = 0;
+
+	printf("%d\n", this->max_lines);
 }
 
 void TextBox::draw(ShaderHolder* shaderHolder) {
@@ -101,13 +105,25 @@ void TextBox::draw(ShaderHolder* shaderHolder) {
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
-	for (int i = 0; i < this->lines.size(); i ++) {
+	for (int i = index; i < this->lines.size(); i ++) {
 		this->lines[i]->draw(shaderHolder);
 	}
+
+	m_position = glm::vec2(rect.x, rect.y);
 }
 
 void TextBox::addLine(const std::string& line) {
-	rect = glm::vec4(this->rect.x + 10.0f, this->rect.y + this->rect.w - 14.0f - 10.0f, this->rect.z, this->rect.w);
-	Text* text = new Text(line, this->rect, characters, 20.0f / 24.0f, glm::vec3(255, 255, 255));
+	Text* text = new Text(line, characters, 20.0f / 24.0f, glm::vec3(255, 255, 255), m_position);
+	text->changePosition(glm::vec2(10.0f + text->getRect().z / 2.0f, this->rect.w - 10.0f - 10.0f - (10.0f + 20.0f) * this->lines.size()));
 	this->lines.push_back(text);
+
+	if (this->lines.size() > max_lines) {
+		this->index += 1;
+		for (int i = 0; i < this->lines.size(); i ++) {
+			this->lines[i]->setPosition(m_position.x, m_position.y + index * (20.0f + 10.0f));
+			this->lines[i]->changePosition(glm::vec2(10.0f + this->lines[i]->getRect().z / 2.0f, this->rect.w - 10.0f - 10.0f - (10.0f + 20.0f) * i));
+		}
+	}
+
+	print_vector(this->lines[0]->getPosition());
 }

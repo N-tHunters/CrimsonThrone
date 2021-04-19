@@ -91,7 +91,6 @@ Column::Column(glm::vec4 rect, std::vector<AbstractListElement*>* list, const st
 
 
 	this->column->push_back(new Text(header,
-	                                 header_rect,
 	                                 Characters,
 	                                 0.001f,
 	                                 glm::vec3(0)));
@@ -99,7 +98,7 @@ Column::Column(glm::vec4 rect, std::vector<AbstractListElement*>* list, const st
 	// Inserting valuse one by one
 	for (uint16_t i = 0; i < list->size(); i ++) {
 		this->column->push_back(new Text(list->at(i)->getValues()->at(index),
-		                                 glm::vec4(rect.x, rect.y + rect.w / (float)maxCount * (i + 1), rect.z, rect.w / (float)maxCount),
+		                                 // glm::vec4(rect.x, rect.y + rect.w / (float)maxCount * (i + 1), rect.z, rect.w / (float)maxCount),
 		                                 Characters,
 		                                 0.001f,
 		                                 glm::vec3(1.0, 1.0, 0)));
@@ -115,7 +114,6 @@ void Column::update() {
 	this->column->clear();
 
 	this->column->push_back(new Text(this->header,
-	                                 header_rect,
 	                                 characters,
 	                                 0.001f,
 	                                 glm::vec3(0)));
@@ -123,7 +121,7 @@ void Column::update() {
 	// Inserting valuse one by one
 	for (uint16_t i = 0; i < this->list->size(); i ++) {
 		this->column->push_back(new Text(this->list->at(i)->getValues()->at(this->index),
-		                                 glm::vec4(this->rect.x, this->rect.y + tile_width * (i + 1), this->rect.z, tile_width),
+		                                 // glm::vec4(this->rect.x, this->rect.y + tile_width * (i + 1), this->rect.z, tile_width),
 		                                 characters,
 		                                 0.001f,
 		                                 glm::vec3(1.0, 1.0, 0)));

@@ -1,17 +1,30 @@
 #include "text.hpp"
 
-Text::Text(std::string text, glm::vec4 rect, std::map<GLchar, Character> Characters, float scale, glm::vec3 color): Frame(rect) {
+Text::Text(std::string text,
+		   std::map<GLchar, Character> Characters,
+		   float scale,
+		   glm::vec3 color,
+		   glm::vec2 position
+		): Frame(glm::vec4(0.0f)) {
 	this->text = text;
 	this->rect = rect;
 	this->scale = scale;
 	this->color = color;
 	this->letters = new std::vector<Image*>;
-
-	float x = this->rect.x;
-	float y = this->rect.y;
+	m_position = position;
 
 	float width = 0.0f;
 	int height = 0;
+
+	for (size_t c = 0; c < text.size(); c ++) {
+		Character ch = Characters[text[c]];
+
+		width += ch.Bearing.x * scale + (ch.Advance >> 6) * scale;
+		height = std::max(int(ch.Bearing.y / 2 * scale), height);
+	}
+
+	float x = - width / 2.0f;
+	float y = - height / 2.0f;
 
 	for (size_t c = 0; c < text.size(); c ++) {
 		float xpos;
@@ -21,17 +34,20 @@ Text::Text(std::string text, glm::vec4 rect, std::map<GLchar, Character> Charact
 
 		xpos = x + ch.Bearing.x * scale;
 		ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
-		height = std::max(int(ch.Bearing.y / 2 * scale), height);
-		width += ch.Bearing.x * scale + (ch.Advance >> 6) * scale;
 
 		w = ch.Size.x * scale;
 		h = ch.Size.y * scale;
-		this->letters->push_back(new Image(glm::vec4(xpos, ypos, w, h), ch.TextureID));
+		this->letters->push_back(new Image(glm::vec4(xpos, ypos, w, h), ch.TextureID, m_position));
 		x += (ch.Advance >> 6) * scale;
 	}
 	this->rect.z = width;
 	this->rect.w = height;
 }
+
+Text::Text(std::string text,
+		   std::map<GLchar, Character> Characters,
+		   float scale,
+		   glm::vec3 color) : Text(text, Characters, scale, color, glm::vec2(0.0f)) {}
 
 void Text::update(std::string text, std::map<GLchar, Character> Characters, glm::vec4 rect) {
 	this->text = text;
@@ -60,7 +76,7 @@ void Text::update(std::string text, std::map<GLchar, Character> Characters, glm:
 
 		w = ch.Size.x * scale;
 		h = ch.Size.y * scale;
-		this->letters->push_back(new Image(glm::vec4(xpos, ypos, w, h), ch.TextureID));
+		this->letters->push_back(new Image(glm::vec4(xpos, ypos, w, h), ch.TextureID, m_position));
 		x += (ch.Advance >> 6) * scale;
 	}
 
@@ -87,7 +103,7 @@ void Text::update(std::string text, std::map<GLchar, Character> Characters) {
 
 		w = ch.Size.x * scale;
 		h = ch.Size.y * scale;
-		this->letters->push_back(new Image(glm::vec4(xpos, ypos, w, h), ch.TextureID));
+		this->letters->push_back(new Image(glm::vec4(xpos, ypos, w, h), ch.TextureID, m_position));
 		x += (ch.Advance >> 6) * scale;
 	}
 }
@@ -99,4 +115,24 @@ void Text::draw(ShaderHolder* shaderHolder) {
 
 glm::vec4 Text::getRect() {
 	return this->rect;
+}
+
+void Text::setPosition(float x, float y) {
+	for (int i = 0; i < this->letters->size(); i ++) {
+		this->letters->at(i)->setPosition(x, y);
+	}
+
+	m_position = glm::vec2(x, y);
+}
+
+void Text::changePosition(glm::vec2 delta) {
+	this->m_position += delta;
+
+	for (int i = 0; i < this->letters->size(); i ++) {
+		this->letters->at(i)->setPosition(m_position.x, m_position.y);
+	}
+}
+
+glm::vec2 Text::getPosition() {
+	return m_position;
 }

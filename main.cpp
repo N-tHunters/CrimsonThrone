@@ -105,6 +105,8 @@ bool clicked;
 ShaderHolder* shaderHolder;
 int width, height;
 
+TextBox* logs;
+
 typedef void (*function)();
 
 enum {
@@ -286,7 +288,7 @@ int main()
 
 	// ----------------------------------------------- CODE ------------------------------------------
 
-	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
+	// Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
 
 	float last_frame = glfwGetTime();
 	int hp = player->GetHealth();
@@ -343,9 +345,9 @@ int main()
 
 	float dt = 0.0f;
 
-	TextBox* logs = new TextBox(glm::vec4(-0.9, -0.9, 0.6, 0.8), Characters, 14.0f, glm::vec3(255), width, height);
+	logs = new TextBox(glm::vec4(-0.9, -0.9, 0.6, 0.8), Characters, 14.0f, glm::vec3(255), width, height);
 
-	logs->addLine("Help me!");
+	// logs->addLine("Help me!");
 
 	while (game_state != STATE_CLOSING)
 	{
@@ -487,8 +489,11 @@ int main()
 					for (int dy = -1; dy <= 1; dy++) {
 						int nx = chunk_ix + dx;
 						int ny = chunk_iy + dy;
+
 						Chunk * nchunk = chunk_ptr->GetLocation()->GetChunk(nx, ny);
+						
 						if (nchunk == nullptr) continue;
+						
 						nchunk->CollideWithAll(player->GetPhysicalObj(), dt, true);
 
 					}
@@ -537,7 +542,7 @@ int main()
 				last_frame = current_frame;
 
 				if (glfwGetTime() - fps_change_last > 0.1) {
-					fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
+					// fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
 					fps_change_last = glfwGetTime();
 				}
 			} else {
@@ -617,10 +622,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
 		player_wants_to_jump = true;
+		logs->addLine("Pressed SPACE");
 	}
 
 	if (key == GLFW_KEY_P && action == GLFW_PRESS) {
 		//player->PickupItem(chunk);
+		logs->addLine("Pressed P");
 	}
 
 	if (key == GLFW_KEY_E) {
@@ -706,5 +713,5 @@ void load_characters() {
 }
 
 void MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
-	fprintf(stderr, "GL ERROR: source = 0x%x, type = 0x%x, id = 0x%x, severity = 0x%x, message = %s\n", source, type, id, severity, message);
+	// fprintf(stderr, "GL ERROR: source = 0x%x, type = 0x%x, id = 0x%x, severity = 0x%x, message = %s\n", source, type, id, severity, message);
 }
