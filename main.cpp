@@ -32,6 +32,7 @@
 #include <render/constants.hpp>
 #include <render/model.hpp>
 #include <render/imageLoader.hpp>
+#include <render/textures.hpp>
 
 #include <physics/physicalObj.hpp>
 #include <physics/boundary.hpp>
@@ -73,6 +74,7 @@ const std::string CONFIG_FILE = "resources/settings.ini";
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+void MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 
 // Global variabels
 glm::vec2 speed = glm::vec2(0.0f, 0.0f);
@@ -126,7 +128,6 @@ void change_to_main_menu() {
 }
 
 void close_window() {
-	// glfwSetWindowShouldClose(window, GL_TRUE);
 	game_state = STATE_CLOSING;
 }
 
@@ -144,7 +145,7 @@ int main()
 	clicked = false;
 	game_state = STATE_LOADING;
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-	player = new Player("player", 10, new PhysicalObj(glm::vec3(3.0f, 100.0f, 3.0f), new BoundaryBox(0.1f, 1.0f, 0.1f)), camera);
+	player = new Player("player", 10, new PhysicalObj(glm::vec3(100.0f, 10.0f, 10.0f), new BoundaryBox(0.1f, 1.0f, 0.1f)), camera);
 	player_core = new MagicCore();
 	player_core->SetPhysicalObj(player->GetPhysicalObj());
 
@@ -199,6 +200,9 @@ int main()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glEnable(GL_DEBUG_OUTPUT);
+	// glEnable(GL_CULL_FACE);
+	// glEnable(GL_BACK);
 
 	// Set the required callback functions
 	glfwSetKeyCallback(window, key_callback);
@@ -215,18 +219,7 @@ int main()
 	glViewport(0, 0, width, height);
 
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-
-	// LOADING ICON
-
-	/*int icon_width, icon_height;
-	unsigned char * icon = loadImage("resources/textures/icon.jpeg", &icon_width, &icon_height);
-	GLFWimage icon_image[1];
-	icon_image[0].pixels = icon;
-	icon_image[0].width = 32;
-	icon_image[0].height = 32;
-	glfwSetWindowIcon(window, 1, icon_image);
-	freeImage(icon);*/
-
+	glDebugMessageCallback(MessageCallback, 0);
 	// Frame buffer
 
 	unsigned int framebuffer;
@@ -272,8 +265,6 @@ int main()
 	                                width, height);
 
 	load_characters();
-	// std::async loading_thread((func)loading);
-	// std::async(std::launch::async, (func)loading);
 
 	Image* image_loading = new Image(glm::vec4(width / 2 - 100, height / 2 - 100, 200, 200), "resources/textures/water.png");
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -289,20 +280,10 @@ int main()
 
 	loading();
 
-	// Model* player_model = new Model("resources/models/player.obj");
-	// Mesh* player_mesh = new Mesh("resources/textures/test.jpg", player_model);
-	// PhysicalObj* player_obj = new PhysicalObj(player_mesh, false, true, false, false, glm::vec3(0.0f), glm::vec3(0.0f), "player");
-
-	// game_state = STATE_LOADING;
-
 	while (game_state == STATE_LOADING) {
 	}
 
 	// ----------------------------------------------- CODE ------------------------------------------
-
-	//	location = new Location(3, 3, 10, 10, new DungeonA1Generator3D(10));
-
-	//SetCurrentLocation(location);
 
 	Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
 
@@ -344,9 +325,7 @@ int main()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(quad_indices->at(0)) * quad_indices->size(), &(quad_indices->at(0)), GL_STATIC_DRAW);
 
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)0);
-	glEnableVertexAttribArray(0);
-
-	// TexCoord attribute
+	glEnableVertexAttribArray(0);\
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
 	glEnableVertexAttribArray(1);
 
@@ -356,10 +335,6 @@ int main()
 
 	Button* resume_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "resume", Characters, 14.0f, glm::vec3(255), width, height);
 	Button* exit_to_menu = new Button(glm::vec4(-0.1, -0.20, 0.2, 0.1), (function)change_to_main_menu, "exit to menu", Characters, 14.0f, glm::vec3(255), width, height);
-
-	//Text* title = new Text("CrimsonThrone", glm::vec4(100, 100, 1, 1), Characters)
-
-	//Image* title = new Image(glm::vec4(width / 2 - 200 / 2, height - 200, 200, 200), GetStrOption("Textures", "Title"));
 	Button* play_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "START GAME", Characters, 24.0f, glm::vec3(255), width, height);
 	Button* exit_button = new Button(glm::vec4(-0.1, -0.2, 0.2, 0.1), (function)close_window, "exit game", Characters, 24.0f, glm::vec3(255), width, height);
 
@@ -367,11 +342,8 @@ int main()
 
 	float dt = 0.0f;
 
-	Model* coin_model = new Model("resources/models/tree.obj");
-	Mesh* coin_mesh = new Mesh("resources/textures/tree.png", coin_model);
-	PhysicalObj* coin = new PhysicalObj(coin_mesh, false, true, false, false, glm::vec3(0, 2, -10), glm::vec3(0), "Coin");
 
-	while (game_state != STATE_CLOSING) //!glfwWindowShouldClose(window))
+	while (game_state != STATE_CLOSING)
 	{
 		if (camera->getRotationX() > 180.0f) {
 			camera->setRotationX(-180.0f);
@@ -421,12 +393,8 @@ int main()
 				exit_button->click(glm::vec2(xpos, ypos));
 			}
 
-			// title->draw(shaderHolder);
-			coin->draw(shaderHolder, camera, width, height);
 			play_button->draw(shaderHolder);
 			exit_button->draw(shaderHolder);
-
-			coin->changeRotationY(1.0f);
 
 			glFinish();
 
@@ -479,9 +447,9 @@ int main()
 
 
 			// первый проход
-			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			// glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+			// glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+			// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glEnable(GL_DEPTH_TEST);
 
 			glClearColor(0.5f, 0.7f, 0.7f, 1.0f);
@@ -495,7 +463,7 @@ int main()
 				if (chunk_ptr == nullptr)
 					chunk_ptr = GetCurrentLocation()->GetChunkByPosition(0, 0);
 				while (!chunk_ptr->IsLoaded())
-				  GetCurrentLocation()->LoadABS();
+					GetCurrentLocation()->LoadABS();
 
 				if (player_wants_to_jump) {
 					player->GetPhysicalObj()->jump(chunk_ptr);
@@ -503,7 +471,7 @@ int main()
 
 
 				if (isRunning)
-					player->GetPhysicalObj()->setSpeed((speed + speedSide) * 2.0f);
+					player->GetPhysicalObj()->setSpeed((speed + speedSide) * 10.0f);
 				else
 					player->GetPhysicalObj()->setSpeed(speed + speedSide);
 
@@ -526,36 +494,25 @@ int main()
 				/* Collide player with all objects in chunk */
 				player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
 
-				// player_obj->setPosition(player->GetPhysicalObj()->getPosition());
-				// player_obj->setRotation(player->GetPhysicalObj()->getRotation());
-
 			}
-
-			coin->draw(shaderHolder, camera, width, height);
 
 			GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
 
-			// player_obj->draw(shaderHolder, camera, width, height);
-
 			// второй проход
-			glBindFramebuffer(GL_FRAMEBUFFER, 0); // возвращаем буфер кадра по умолчанию
-			glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			// glBindFramebuffer(GL_FRAMEBUFFER, 0); // возвращаем буфер кадра по умолчанию
+			// glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+			// glClear(GL_COLOR_BUFFER_BIT);
 
-			shaderHolder->getPost()->Use();
-			/*glUniform1f(glGetUniformLocation(shaderHolder->getPost()->Program, "speed"), sqrt(player->GetPhysicalObj()->velocity.x * player->GetPhysicalObj()->velocity.x +
-			            player->GetPhysicalObj()->velocity.y * player->GetPhysicalObj()->velocity.y +
-			            player->GetPhysicalObj()->velocity.z * player->GetPhysicalObj()->velocity.z));*/
+			// shaderHolder->getPost()->Use();
+			// glUniform1f(glGetUniformLocation(shaderHolder->getPost()->Program, "speed"), sqrt(player->GetPhysicalObj()->velocity.x * player->GetPhysicalObj()->velocity.x +
+			//             player->GetPhysicalObj()->velocity.y * player->GetPhysicalObj()->velocity.y +
+			//             player->GetPhysicalObj()->velocity.z * player->GetPhysicalObj()->velocity.z));
 
-			glBindVertexArray(quadVAO);
-			glDisable(GL_DEPTH_TEST);
-			glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-			glBindVertexArray(0);
-
-			// inventory->draw(shaderHolder);
-			fps_counter->draw(shaderHolder);
-			test_frame.draw(shaderHolder, width, height);
+			// glBindVertexArray(quadVAO);
+			// glDisable(GL_DEPTH_TEST);
+			// glBindTexture(GL_TEXTURE_2D, texColorBuffer);
+			// glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+			// glBindVertexArray(0);
 
 			if (game_state == STATE_PAUSED) {
 				resume_button->draw(shaderHolder);
@@ -588,7 +545,7 @@ int main()
 			}
 		}
 
-		player_wants_to_jump = false; // What the fuck
+		player_wants_to_jump = false;
 		push = false;
 		clicked = false;
 	}
@@ -602,7 +559,6 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 	}
 }
 
-// Is called whenever a key is pressed/released via GLFW
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
@@ -654,7 +610,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-		// player->GetPhysicalObj()->jump();//velocity.y = 10.0f;
 		player_wants_to_jump = true;
 	}
 
@@ -703,17 +658,15 @@ void load_characters() {
 
 	FT_Set_Pixel_Sizes(face, 0, 24);
 
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 	for (GLubyte c = 0; c < 128; c++)
 	{
-		// Load character glyph
 		if (FT_Load_Char(face, c, FT_LOAD_RENDER))
 		{
 			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
 			continue;
 		}
-		// Generate texture
 		GLuint texture;
 		glGenTextures(1, &texture);
 		glBindTexture(GL_TEXTURE_2D, texture);
@@ -728,12 +681,11 @@ void load_characters() {
 		    GL_UNSIGNED_BYTE,
 		    face->glyph->bitmap.buffer
 		);
-		// Set texture options
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		// Now store character for later use
+
 		Character character = {
 			texture,
 			glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
@@ -741,9 +693,12 @@ void load_characters() {
 			(GLuint)face->glyph->advance.x
 		};
 		Characters.insert(std::pair<GLchar, Character>(c, character));
-		// Characters[c] = character;
 	}
 
-	FT_Done_Face(face);   // Завершение работы с шрифтом face
-	FT_Done_FreeType(ft); // Завершение работы FreeType
+	FT_Done_Face(face);
+	FT_Done_FreeType(ft);
+}
+
+void MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam) {
+	fprintf(stderr, "GL ERROR: source = 0x%x, type = 0x%x, id = 0x%x, severity = 0x%x, message = %s\n", source, type, id, severity, message);
 }

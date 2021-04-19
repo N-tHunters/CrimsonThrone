@@ -7,7 +7,7 @@
  * @param[in]  vertices_number  The number of vertices
  * @param[in]  position         The position
  */
-Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>> * height_map, std::string texture, float texture_scale) {
+Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>> * height_map, GLuint texture1, GLuint texture2, float texture_scale, std::vector<unsigned char> blend_pixels) {
 	this->size = size;
 	this->vertices_number = vertices_number;
 	this->position = position;
@@ -23,14 +23,13 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 		this->height.push_back(v);
 	}
 
-	std::vector<std::array<float, 5>> coords;
+	std::vector<std::array<double, 5>> coords;
 	std::vector<glm::vec3> normals;
 
-	float texture_step = 1.0f / texture_scale;
+	double texture_step = 1.0 / (vertices_number - 1);
 
-	float texture_coords_x = 0.0f;
-	float texture_coords_y = 0.0f;
-
+	double texture_coords_x = 0.0;
+	double texture_coords_y = 0.0;
 
 	for (int i = 0; i < vertices_number - 1; i ++) {
 		texture_coords_y = 0.0f;
@@ -38,7 +37,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 			int index = i * (vertices_number - 1) + j;
 
 			for (int k = 0; k < 6; k ++) {
-				coords.push_back({0.0f, 0.0f, 0.0f, 0.0f, 0.0f});
+				coords.push_back({0.0, 0.0, 0.0, 0.0, 0.0});
 			}
 
 			for (int k = 0; k < 2; k ++) {
@@ -122,14 +121,8 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 			                                    glm::vec3(i + 1, this->height[i + 1][j], j),
 			                                    glm::vec3(i, this->height[i][j + 1], j + 1));
 			texture_coords_y += texture_step;
-			while (texture_coords_y > 1.0f) {
-				texture_coords_y -= 1.0f;
-			}
 		}
 		texture_coords_x += texture_step;
-		while (texture_coords_x > 1.0f) {
-			texture_coords_x -= 1.0f;
-		}
 	}
 
 
@@ -251,12 +244,12 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 		this->vertices.push_back(coords[i][4]);
 	}
 
-	Mesh* terrain_mesh = new Mesh(texture, &(this->vertices), &(this->indices));
+	Mesh* terrain_mesh = new Mesh(texture1, texture2, &(this->vertices), &(this->indices), blend_pixels);
 
 	this->obj = new PhysicalObj(terrain_mesh, false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "terrain");
 }
 
-Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::string texture) {
+/*Terrain::Terrain(float size, int vertices_number, glm::vec3 position, GLuint texture1, GLuint texture2, std::vector<std::vector<float>> texture_map) {
 	std::vector<std::vector<float>> height;
 	std::vector<float> v;
 	for (int i = 0; i < vertices_number; i ++) {
@@ -268,14 +261,15 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::strin
 		}
 		height.push_back(v);
 	}
-	Terrain(size, vertices_number, position, &height, texture, 1.0f);
-}
 
-Terrain::Terrain(float size, int vertices_number, glm::vec3 position) : Terrain(size, vertices_number, position, GetDefaultTexture()) {}
-Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>>* height, float texture_scale) : Terrain(size, vertices_number, position, height, GetDefaultTexture(), texture_scale) {}
+	Terrain(size, vertices_number, position, &height, texture1, texture2, 1.0f, texture_map);
+}*/
+
+// Terrain::Terrain(float size, int vertices_number, glm::vec3 position) : Terrain(size, vertices_number, position, get_texture(GetDefaultTexture()), get_texture(GetDefaultTexture())) {}
+// Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vector<std::vector<float>>* height, float texture_scale) : Terrain(size, vertices_number, position, height, get_texture(GetDefaultTexture()), get_texture(GetDefaultTexture()), texture_scale) {}
 
 
-Terrain::Terrain(Terrain& terrain) {
+/*Terrain::Terrain(Terrain& terrain) {
 	this->size = terrain.getSize();
 	this->vertices_number = terrain.getVerticesNumber();
 	this->position = terrain.getPosition();
@@ -290,7 +284,7 @@ Terrain::Terrain(Terrain& terrain) {
 		this->height.push_back(v);
 	}
 	this->obj = terrain.obj;
-}
+}*/
 
 PhysicalObj* Terrain::getPhysicalObj() {
 	return this->obj;

@@ -12,3 +12,19 @@ void print_vector(glm::vec3 vec) {
 void print_vector(glm::vec4 vec) {
 	printf("x: %f \t y: %f \t z: %f \t w: %f\n", vec.x, vec.y, vec.z, vec.w);
 }
+
+void print_vector(std::vector<float> vec) {
+	for (int i = 0; i < vec.size(); i ++) {
+		printf("%f", vec[i]);
+		if (i < vec.size() - 1) {
+			printf(" ");
+		}
+	}
+	printf("\n");
+}
+
+void print_vector(std::vector<std::vector<float>> vec) {
+	for (int i = 0; i < vec.size(); i ++) {
+		print_vector(vec[i]);
+	}
+}

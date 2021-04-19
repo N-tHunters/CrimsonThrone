@@ -8,7 +8,7 @@ unsigned char * loadImage(std::string path, int* width, int* height) {
 	unsigned char * result = stbi_load(path.c_str(), width, height, &channels, STBI_rgb);
 
 	if (result == nullptr) {
-		result = stbi_load("resources/textures/error.png", width, height, &channels, STBI_rgb);		
+		result = stbi_load("resources/textures/error.png", width, height, &channels, STBI_rgb);
 	}
 
 	return result;
