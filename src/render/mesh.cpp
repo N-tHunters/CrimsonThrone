@@ -29,8 +29,8 @@ Mesh::Mesh(Model* model, GLuint texture1, float scale) {
 	this->size = model->indices.size();
 
 	this->texture1 = texture1;
-	createTexture("resources/textures/dark.png");
-	createTexture("resources/textures/blend.png");
+	this->loadTexture("resources/textures/dark.png", 1);
+	this->loadTexture("resources/textures/blend.png", 2);
 
 	std::vector<float> vertices;
 
@@ -57,6 +57,9 @@ Mesh::Mesh(GLuint texture1, GLuint texture2, std::vector<GLfloat> *vertices, std
 
 	int width = 32;
 	int height = 32;
+
+	printf("%d\n", pixels.size());
+
 	unsigned char* image = (unsigned char *)malloc(sizeof(GL_FLOAT) * pixels.size());
 
 	/*for (int i = 0; i < pixels.size(); i ++) {
@@ -112,9 +115,13 @@ Mesh::Mesh(const std::string& texturePath, std::vector<GLfloat> *vertices, std::
 	activeDebug = false;
 	this->size = indices->size();
 
-	createTexture(texturePath);
-	createTexture("resources/textures/dark.png");
-	createTexture("resources/textures/blend.png");
+	// createTexture(texturePath);
+	// createTexture("resources/textures/dark.png");
+	// createTexture("resources/textures/blend.png");
+
+	this->loadTexture(texturePath, 0);
+	this->loadTexture("resources/textures/dark.png", 1);
+	this->loadTexture("resources/textures/blend.png", 2);
 
 	loadObject(vertices, indices);
 }
@@ -224,6 +231,32 @@ void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint
 
 void Mesh::changeTexture(const std::string& texturePath) {
 	// this->texture1 = createTexture(texturePath, 0);
+}
+
+void Mesh::loadTexture(const std::string& texturePath, char number) {
+	if (number == 0) {
+		glGenTextures(1, &texture1);
+		glBindTexture(GL_TEXTURE_2D, texture1);
+	} else if (number == 1) {
+		glGenTextures(1, &texture2);
+		glBindTexture(GL_TEXTURE_2D, texture2);
+	} else {
+		glGenTextures(1, &blend_texture);
+		glBindTexture(GL_TEXTURE_2D, blend_texture);
+	}
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	int width, height;
+	unsigned char* image = loadImage(texturePath, &width, &height);
+
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	freeImage(image);
 }
 
 

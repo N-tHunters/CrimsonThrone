@@ -8,6 +8,6 @@ class BiomeGenerator {
 	noise::module::Perlin* perlin;
 public:
 	BiomeGenerator(int seed, noise::module::Perlin* perlin);
-	int getBiome(int x, int y);
-	float getHeight(int x, int y);
+	float getBiome(float x, float y);
+	float getHeight(float x, float y);
 };

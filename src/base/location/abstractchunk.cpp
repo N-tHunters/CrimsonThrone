@@ -27,7 +27,8 @@ void AbstractChunk::LoadABS() {
     loading_thread = new std::thread(&ChunkLoader::Load, chunk_loader, this);
     load_state = 1;
   } else if(load_state == 1) {
-    if (height_map != nullptr){
+    if (height_map != nullptr) {
+      assert(blend_pixels.size() != 0);
       LoadTerrain(new Terrain(size, vertices_number, position, height_map, texture1, texture2, 1.0f, blend_pixels));
       load_state = 2;
     }
@@ -54,11 +55,11 @@ void AbstractChunk::SetHeightMap(std::vector<std::vector<float>> * height_map,
                                  GLuint texture1,
                                  GLuint texture2,
                                  std::vector<unsigned char> blend_pixels) {
-  this->height_map = height_map;
   this->size = size;
   this->vertices_number = vertices_number;
   this->position = position;
   this->texture1 = texture1;
   this->texture2 = texture2;
   this->blend_pixels = blend_pixels;
+  this->height_map = height_map;
 }

@@ -39,18 +39,18 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
 
 	for (float i = 0; i < pixel_count; i ++ ) {
 		for (float j = 0; j < pixel_count; j ++) {
-			// char biome = biomeGenerator->getBiome(chunkX + i / 32.0f, chunkY + j / 32.0f);
-			float h = this->perlin->GetValue((chunkX + i / pixel_count) / 100.0f, (chunkY + j / pixel_count) / 100.0, seed);
+			float biome = biomeGenerator->getBiome(chunkX + i / pixel_count, chunkY + j / pixel_count);
+			/*float h = this->perlin->GetValue((chunkX + i / pixel_count) / 100.0f, (chunkY + j / pixel_count) / 100.0, seed);
 			char biome;
 			if (h > 0.0) {
 				biome = 1;
 			} else {
 				biome = 0;
-			}
-			pixels.push_back(biome * 255);
-			pixels.push_back(biome * 255);
-			pixels.push_back(biome * 255);
-			pixels.push_back(biome * 255);
+			}*/
+			pixels.push_back(std::round(biome * 255));
+			pixels.push_back(0);
+			pixels.push_back(0);
+			pixels.push_back(255);
 		}
 	}
 

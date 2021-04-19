@@ -59,6 +59,7 @@
 #include <UI/text.hpp>
 #include <UI/abstractListElement.hpp>
 #include <UI/button.hpp>
+#include <UI/textBox.hpp>
 
 #include <landscape/dungeona1generator3d.hpp>
 #include <base/configuration.hpp>
@@ -342,6 +343,9 @@ int main()
 
 	float dt = 0.0f;
 
+	TextBox* logs = new TextBox(glm::vec4(-0.9, -0.9, 0.6, 0.8), Characters, 14.0f, glm::vec3(255), width, height);
+
+	logs->addLine("Help me!");
 
 	while (game_state != STATE_CLOSING)
 	{
@@ -497,6 +501,8 @@ int main()
 			}
 
 			GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
+
+			logs->draw(shaderHolder);
 
 			// второй проход
 			// glBindFramebuffer(GL_FRAMEBUFFER, 0); // возвращаем буфер кадра по умолчанию

@@ -22,7 +22,7 @@ void main()
 
 	// color_2 = mix(color_2, vec4(0.5f, 0.7f, 0.7f, 1.0f), min(distance / 100.0, 1.0));
 
-	float blending = texture(blend_texture, vec2(TexCoord.x, 1.0 - TexCoord.y)).b;
+	float blending = texture(blend_texture, vec2(TexCoord.x, 1.0 - TexCoord.y)).r;
 
 	color = mix(color_1, color_2, blending);
 	
