@@ -40,6 +40,7 @@ protected:
 	PhysicalObj* obj; /**< PhysicalObj that this mesh is bond to */
 	int size; /**< The number of indices this mesh has */
 	int type; /**< The type. 0 = water, 1 = object. Later will be removed */
+	float m_scale;
 public:
 	bool activeDebug;
 	Mesh(const std::string&, std::vector<GLfloat>*, std::vector<unsigned int>*);

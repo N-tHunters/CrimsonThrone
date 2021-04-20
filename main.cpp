@@ -60,6 +60,8 @@
 #include <UI/abstractListElement.hpp>
 #include <UI/button.hpp>
 #include <UI/textBox.hpp>
+#include <UI/text3d.hpp>
+#include <UI/image3d.hpp>
 
 #include <landscape/dungeona1generator3d.hpp>
 #include <base/configuration.hpp>
@@ -259,12 +261,14 @@ int main()
 	Shader textShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/text_fragment_shader.glsl");
 	Shader waterShader("resources/shaders/water_vertex_shader.glsl", "resources/shaders/water_fragment_shader.glsl");
 	Shader postShader("resources/shaders/post_vertex_shader.glsl", "resources/shaders/post_fragment_shader.glsl");
+	Shader text3dShader("resources/shaders/text3d_vertex_shader.glsl", "resources/shaders/text3d_fragment_shader.glsl");
 
 	shaderHolder = new ShaderHolder(&ourShader,
 	                                &GUIShader,
 	                                &textShader,
 	                                &waterShader,
 	                                &postShader,
+	                                &text3dShader,
 	                                width, height);
 
 	load_characters();
@@ -345,9 +349,15 @@ int main()
 
 	float dt = 0.0f;
 
-	logs = new TextBox(glm::vec4(-0.9, -0.9, 0.6, 0.8), Characters, 14.0f, glm::vec3(255), width, height);
+	logs = new TextBox(glm::vec4(-0.9, -0.9, 0.6, 0.8), Characters, 20.0f, glm::vec3(255), width, height);
 
 	// logs->addLine("Help me!");
+
+	Text3D* floating_text = new Text3D("Hi, I am text!", glm::vec3(10.0f, 10.0f, 30.0f), Characters, 0.1f);
+
+	load_textures({"grass"});
+
+	// Image3D* floating_image = new Image3D(glm::vec4(-10.0f, -10.0f, 20.0f, 20.0f), glm::vec3(10.0f, 10.0f, 30.0f), get_texture("grass"));
 
 	while (game_state != STATE_CLOSING)
 	{
@@ -503,9 +513,19 @@ int main()
 				/* Collide player with all objects in chunk */
 				player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
 
+				Actor* actor = chunk_ptr->GetActor(0);
+
+				if (actor != nullptr) {
+					floating_text->setPosition(actor->GetPhysicalObj()->getPosition());
+				}
+
 			}
 
 			GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
+
+			floating_text->draw(shaderHolder, camera, width, height);
+
+			// floating_image->draw(shaderHolder, camera, width, height);
 
 			logs->draw(shaderHolder);
 
@@ -622,12 +642,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
 		player_wants_to_jump = true;
-		logs->addLine("Pressed SPACE");
+		logs->addLine("Tried to jump");
 	}
 
 	if (key == GLFW_KEY_P && action == GLFW_PRESS) {
-		//player->PickupItem(chunk);
-		logs->addLine("Pressed P");
+		logs->addLine("Some logs, they need to be very long, I am sorry for this text");
 	}
 
 	if (key == GLFW_KEY_E) {

@@ -13,11 +13,12 @@ uniform mat4 projection;
 uniform mat4 cameraRot;
 uniform vec3 lightPos;
 uniform vec3 objectPos;
+uniform float scale;
 
 void main()
 {
 	vec3 norm = normalize((model * vec4(normal, 1.0)).xyz);
-	vec3 lightDir = lightPos - (model * vec4(position, 1.0f)).xyz - objectPos;
+	vec3 lightDir = lightPos - (model * vec4(position * scale, 1.0f)).xyz - objectPos;
 	float lightVecL = length(lightDir);
 	lightDir = normalize(lightDir);
 	vec3 sunDir = normalize(vec3(0, 1, 0));
@@ -30,5 +31,5 @@ void main()
 
 	TexCoord = vec2(texCoord.x, 1.0 - texCoord.y);
 
-	gl_Position = projection * cameraRot * view * model * vec4(position, 1.0f);
+	gl_Position = projection * cameraRot * view * model * vec4(position * scale, 1.0f);
 }
