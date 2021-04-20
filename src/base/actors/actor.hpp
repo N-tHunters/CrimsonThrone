@@ -55,7 +55,7 @@ public:
   Actor();
   Actor(std::string, int, PhysicalObj *);
 
-  virtual void Process();
+  virtual void Process(float dt);
 
   int GetHealth();
   int GetMaxHealth();

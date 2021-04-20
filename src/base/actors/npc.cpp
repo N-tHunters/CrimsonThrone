@@ -39,7 +39,7 @@ NPCAI* NPC::GetAI() {
   return ai;
 }
 
-void NPC::Process() {
+void NPC::Process(float dt) {
   if(this->ai != nullptr) 
-    this->ai->Process();
+    this->ai->Process(dt);
 }

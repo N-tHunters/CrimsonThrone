@@ -472,7 +472,10 @@ int main()
 					GetCurrentLocation()->LoadABS();
 
 				if (player_wants_to_jump) {
-					player->GetPhysicalObj()->jump(chunk_ptr);
+				  if(GetMultijump())
+					player->GetPhysicalObj()->jumpAnyway(chunk_ptr);
+				  else
+				    player->GetPhysicalObj()->jump(chunk_ptr);
 				}
 
 
