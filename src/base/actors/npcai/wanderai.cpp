@@ -8,7 +8,7 @@ WanderAI::WanderAI() {
   target_follow_speed = rand() % 20 + 10;
 }
 
-void WanderAI::Process() {
+void WanderAI::Process(float dt) {
   Wander();
 }
 

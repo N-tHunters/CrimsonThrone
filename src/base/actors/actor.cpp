@@ -402,4 +402,4 @@ std::stringstream * Actor::Save(Saver * saver) {
   return ss;
 }
 
-void Actor::Process() {}
+void Actor::Process(float dt) {}

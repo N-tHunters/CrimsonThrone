@@ -4,7 +4,7 @@
 
 #define SATISFY_HUNGER 1
 
-class HumanlikeAI : WanderAI {
+class HumanlikeAI : public WanderAI {
 protected:
   double hunger;
   double fatigue;
@@ -28,5 +28,7 @@ public:
   
   void SetFlag(int flag);
   void UnsetFlag(int flag);
-  //  virtual void Process();
+  virtual void Process(float dt);
+
+  void SetActor(Actor *);
 };

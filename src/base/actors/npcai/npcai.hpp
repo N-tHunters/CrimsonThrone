@@ -8,8 +8,8 @@ protected:
 public:
   NPCAI();
 
-  void SetActor(Actor *);
+  virtual void SetActor(Actor *);
   
-  virtual void Process();
+  virtual void Process(float dt);
   virtual void Communicate(Actor *);
 };

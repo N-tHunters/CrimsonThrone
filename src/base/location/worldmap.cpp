@@ -1,6 +1,7 @@
 #include "worldmap.hpp"
 #include <base/actors/npc.hpp>
 #include <base/actors/npcai/wanderai.hpp>
+#include <base/actors/npcai/humanlikeai.hpp>
 #include <base/location/location.hpp>
 #include <base/triggers/longjumptrigger.hpp>
 #include <landscape/flatgenerator.hpp>
@@ -9,6 +10,7 @@
 #include <unordered_map>
 #include <render/models.hpp>
 #include <render/textures.hpp>
+#include <cstdlib>
 
 std::unordered_map<int, Location *> location_map;
 
@@ -35,12 +37,12 @@ void init_demo_locations() {
     }
     }*/
 
-  for(int i = 0; i < rand() % 100; i++){
+  for(int i = 0; i < rand() % 10; i++){
     Actor * test_actor = (Actor *)new NPC("totacres", 10,
-					  new PhysicalObj(new Mesh(get_model("human"), get_texture("water")),
-							  true, true, false, false, glm::vec3(5.0f, 10.0f, 5.0f), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
+					  new PhysicalObj(new Mesh(get_model("human"), get_texture("icon")),
+							  true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
 							  new BoundaryBox(1.0f, 1.0f, 1.0f)),
-					  (NPCAI *)new WanderAI());
+					  (NPCAI *)new HumanlikeAI());
     open_world->GetChunk(0, 0)->AddActor(test_actor);
   }
 

@@ -1,4 +1,5 @@
 #include <UI/button.hpp>
+#include <base/configuration.hpp>
 
 Button::Button(glm::vec4 rect, func function, std::string text, std::map<GLchar, Character> Characters, float scale, glm::vec3 color, int screen_width, int screen_height): Frame(rect) {
 	this->rect = rect;
@@ -60,7 +61,7 @@ Button::Button(glm::vec4 rect, func function, std::string text, std::map<GLchar,
 
 	for (int i = 0; i < height; i ++) {
 		for (int j = 0; j < width; j ++) {
-			if (i <= 3 || j <= 3 || i >= height - 4 || j >= width - 4) {
+		  if (i <= GetBorderWidth() || j <= GetBorderWidth() || i >= height - 1 - GetBorderWidth() || j >= width - 1 - GetBorderWidth()) {
 				image[(i * width + j) * 3] = 255.0f;
 				image[(i * width + j) * 3 + 1] = 255.0f;
 				image[(i * width + j) * 3 + 2] = 255.0f;
@@ -120,9 +121,14 @@ void Button::update(glm::vec3 color) {
 	// image[1] = 255.0f;
 	// image[2] = 0.0f;
 
+
 	for (int i = 0; i < height; i ++) {
 		for (int j = 0; j < width; j ++) {
-			if (i <= 3 || j <= 3 || i >= height - 4 || j >= width - 4) {
+		  if (i <= GetBorderWidth() ||
+		      j <= GetBorderWidth() ||
+		      i >= height - 1 - GetBorderWidth() ||
+		      j >= width - 1 - GetBorderWidth())
+		    {
 				image[(i * width + j) * 3] = 255.0f;
 				image[(i * width + j) * 3 + 1] = 255.0f;
 				image[(i * width + j) * 3 + 2] = 255.0f;
