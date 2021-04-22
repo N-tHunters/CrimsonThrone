@@ -42,6 +42,7 @@ class Chunk {
 
   void Draw(ShaderHolder *, Camera *, int, int);
   void DrawWater(ShaderHolder *, Camera *, int, int);
+  void DrawAfter(ShaderHolder *, Camera *, int, int);
 
   size_t GetItemsCount();
   size_t GetActorsCount();

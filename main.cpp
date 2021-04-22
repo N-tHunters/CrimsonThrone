@@ -356,8 +356,6 @@ int main()
 
 	// logs->addLine("Help me!");
 
-	Text3D* floating_text = new Text3D("Hi, I am text!", glm::vec3(10.0f, 10.0f, 30.0f), Characters, 0.1f);
-
 	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 
 	MousePicker* mouse_picker = new MousePicker(camera, projection_matrix);
@@ -520,20 +518,11 @@ int main()
 
 				/* Collide player with all objects in chunk */
 				player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
-
-				Actor* actor = chunk_ptr->GetActor(0);
-
-				if (actor != nullptr) {
-					floating_text->setPosition(actor->GetPhysicalObj()->getPosition());
-				}
-
 			}
 
 			mouse_picker->update();
 
 			GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
-
-			floating_text->draw(shaderHolder, camera, width, height);
 
 			logs->draw(shaderHolder);
 
