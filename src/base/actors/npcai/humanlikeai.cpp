@@ -17,7 +17,7 @@ unsigned int HumanlikeAI::GetFlags() {
 
 void HumanlikeAI::Process(float dt) {
   this->hunger -= (double)dt * work_intensity;
-  printf("%f\n", this->hunger);
+  //  printf("%f\n", this->hunger);
 
   if(this->hunger <= this->hunger_threshold) {
     printf("I want eat!\n");
