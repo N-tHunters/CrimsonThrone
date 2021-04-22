@@ -28,4 +28,8 @@ public:
 	glm::vec2 getPosition();
 };
 
+void setDefaultCharacters(std::map<GLchar, Character>);
+std::map<GLchar, Character> getDefaultCharacters();
+
+
 #endif

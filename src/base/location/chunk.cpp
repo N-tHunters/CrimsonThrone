@@ -164,7 +164,7 @@ void Chunk::Draw(ShaderHolder * shaderHolder, Camera * camera, int width, int he
       // printf("%f\n", std::chrono::duration<double, std::milli>(t2 - t1));
   }
   for (size_t i = 0; i <  this->GetActorsCount(); i ++) {
-    this->actors[i]->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
+    this->actors[i]->draw(shaderHolder, camera, width, height);
   }
   for (size_t i = 0; i <  this->GetItemsCount(); i ++) {
     this->items[i]->GetPhysicalObj()->draw(shaderHolder, camera, width, height);

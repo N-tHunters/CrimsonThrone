@@ -1,5 +1,18 @@
 #include "text.hpp"
 
+std::map<GLchar, Character> __Characters;
+
+void setDefaultCharacters(std::map<GLchar, Character> _Characters) {
+  __Characters = _Characters;
+}
+
+std::map<GLchar, Character> getDefaultCharacters() {
+  return __Characters;
+}
+
+
+
+
 Text::Text(std::string text,
 		   std::map<GLchar, Character> Characters,
 		   float scale,
