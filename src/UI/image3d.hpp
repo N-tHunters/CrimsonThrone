@@ -25,4 +25,6 @@ public:
 	Image3D(glm::vec4 rect, glm::vec3 position, GLuint texture);
 
 	void draw(Shader* shader, Camera* camera, GLuint width, GLuint height);
+
+	void setPosition(glm::vec3 position);
 };

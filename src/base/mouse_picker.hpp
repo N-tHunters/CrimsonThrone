@@ -21,4 +21,13 @@ class MousePicker
 
 public:
 	MousePicker(Camera* camera, glm::mat4 projection_matrix);
+
+	glm::vec3 getCurrentRay();
+
+	void update();
+
+	glm::vec3 calculateMouseRay();
+	glm::vec3 toWorldSpace(glm::vec4 eye_coords);
+	glm::vec4 toEyeCoords(glm::vec4 clip_coords);
+	
 };
