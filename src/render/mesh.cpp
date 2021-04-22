@@ -27,22 +27,13 @@ Mesh::Mesh(Model* model, GLuint texture1, float scale) {
 	this->type = 1;
 	this->obj = nullptr;
 	this->size = model->indices.size();
+	m_scale = scale;
 
 	this->texture1 = texture1;
 	this->loadTexture("resources/textures/dark.png", 1);
 	this->loadTexture("resources/textures/blend.png", 2);
 
-	std::vector<float> vertices;
-
-	for (int i = 0; i < model->vertices.size(); i ++) {
-		if (i % 8 < 3) {
-			vertices.push_back(model->vertices[i] * scale);
-		} else {
-			vertices.push_back(model->vertices[i]);
-		}
-	}
-
-	loadObject(&vertices, &(model->indices));
+	loadObject(&(model->vertices), &(model->indices));
 }
 
 Mesh::Mesh(GLuint texture1, GLuint texture2, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices, std::vector<unsigned char> pixels) {
@@ -50,6 +41,8 @@ Mesh::Mesh(GLuint texture1, GLuint texture2, std::vector<GLfloat> *vertices, std
 	this->obj = nullptr;
 	activeDebug = false;
 	this->size = indices->size();
+
+	m_scale = 1.0f;
 
 	this->texture1 = texture1;
 	this->texture2 = texture2;
@@ -112,6 +105,8 @@ Mesh::Mesh(const std::string& texturePath, std::vector<GLfloat> *vertices, std::
 	this->obj = nullptr;
 	activeDebug = false;
 	this->size = indices->size();
+
+	m_scale = 1.0f;
 
 	// createTexture(texturePath);
 	// createTexture("resources/textures/dark.png");
@@ -194,6 +189,7 @@ void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint
 		glUniform3fv(glGetUniformLocation(shaderHolder->get3D()->Program, "objectPos"), 1, glm::value_ptr(this->obj->getPosition()));
 		glUniform3fv(glGetUniformLocation(shaderHolder->get3D()->Program, "lightPos"), 1, glm::value_ptr(lightPos));
 		glUniform1f(glGetUniformLocation(shaderHolder->get3D()->Program, "underWater"), (float)(shaderHolder->getUnderWater()));
+		glUniform1f(glGetUniformLocation(shaderHolder->get3D()->Program, "scale"), m_scale);
 		modelLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "model");
 		viewLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "view");
 		projLoc = glGetUniformLocation(shaderHolder->get3D()->Program, "projection");
@@ -207,6 +203,7 @@ void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint
 		glUniform1f(glGetUniformLocation(shaderHolder->getWater()->Program, "time"), glfwGetTime());
 		glUniform3fv(glGetUniformLocation(shaderHolder->getWater()->Program, "objectPos"), 1, glm::value_ptr(this->obj->getPosition()));
 		glUniform3fv(glGetUniformLocation(shaderHolder->getWater()->Program, "lightPos"), 1, glm::value_ptr(lightPos));
+		glUniform1f(glGetUniformLocation(shaderHolder->getWater()->Program, "scale"), m_scale);
 		modelLoc = glGetUniformLocation(shaderHolder->getWater()->Program, "model");
 		viewLoc = glGetUniformLocation(shaderHolder->getWater()->Program, "view");
 		projLoc = glGetUniformLocation(shaderHolder->getWater()->Program, "projection");
