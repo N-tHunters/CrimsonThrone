@@ -44,6 +44,7 @@
 #include <base/location/chunk.hpp>
 #include <base/location/location.hpp>
 #include <base/triggers/shortjumptrigger.hpp>
+#include <base/mouse_picker.hpp>
 
 #include <magic/core.h>
 #include <magic/symbols.h>
