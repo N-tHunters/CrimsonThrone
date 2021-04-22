@@ -44,6 +44,7 @@
 #include <base/location/chunk.hpp>
 #include <base/location/location.hpp>
 #include <base/triggers/shortjumptrigger.hpp>
+#include <base/mouse_picker.hpp>
 
 #include <magic/core.h>
 #include <magic/symbols.h>
@@ -357,6 +358,12 @@ int main()
 
 	Text3D* floating_text = new Text3D("Hi, I am text!", glm::vec3(10.0f, 10.0f, 30.0f), Characters, 0.1f);
 
+	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
+
+	MousePicker* mouse_picker = new MousePicker(camera, projection_matrix);
+
+	// Image3D* floating_image = new Image3D(glm::vec4(-10.0f, -10.0f, 20.0f, 20.0f), glm::vec3(10.0f, 10.0f, 30.0f), get_texture("grass"));
+
 	while (game_state != STATE_CLOSING)
 	{
 		if (camera->getRotationX() > 180.0f) {
@@ -521,6 +528,8 @@ int main()
 				}
 
 			}
+
+			mouse_picker->update();
 
 			GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
 

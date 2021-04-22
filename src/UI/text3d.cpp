@@ -48,6 +48,9 @@ std::string Text3D::getString() {
 
 void Text3D::setPosition(glm::vec3 position) {
 	m_position = position;
+	for (int i = 0; i < m_letters.size(); i ++) {
+		m_letters[i]->setPosition(m_position);
+	}
 }
 
 glm::vec3 Text3D::getPosition() {

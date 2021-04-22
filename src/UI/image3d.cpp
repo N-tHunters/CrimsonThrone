@@ -85,3 +85,7 @@ void Image3D::draw(Shader* shader, Camera* camera, GLuint width, GLuint height) 
 	glDrawElements(GL_TRIANGLES, m_size, GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 }
+
+void Image3D::setPosition(glm::vec3 position) {
+	m_position = position;
+}
