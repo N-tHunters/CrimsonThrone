@@ -152,10 +152,6 @@ int main()
 {
 	clicked = false;
 	game_state = STATE_LOADING;
-	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-	player = new Player("player", 10, new PhysicalObj(glm::vec3(100.0f, 10.0f, 10.0f), new BoundaryBox(0.1f, 1.0f, 0.1f)), camera);
-	player_core = new MagicCore();
-	player_core->SetPhysicalObj(player->GetPhysicalObj());
 
 	init_translators();
 	init_protocores();
@@ -275,6 +271,12 @@ int main()
 	                                width, height);
 
 	load_characters();
+	setDefaultCharacters(Characters);
+
+	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
+	player = new Player("player", 10, new PhysicalObj(glm::vec3(100.0f, 10.0f, 10.0f), new BoundaryBox(0.1f, 1.0f, 0.1f)), camera);
+	player_core = new MagicCore();
+	player_core->SetPhysicalObj(player->GetPhysicalObj());
 
 	Image* image_loading = new Image(glm::vec4(width / 2 - 100, height / 2 - 100, 200, 200), "resources/textures/water.png");
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
@@ -357,8 +359,6 @@ int main()
 	// logs->addLine("Help me!");
 
 	Text3D* floating_text = new Text3D("Hi, I am text!", glm::vec3(10.0f, 10.0f, 30.0f), Characters, 0.1f);
-
-	load_textures({"grass"});
 
 	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 
@@ -491,7 +491,10 @@ int main()
 					GetCurrentLocation()->LoadABS();
 
 				if (player_wants_to_jump) {
-					player->GetPhysicalObj()->jump(chunk_ptr);
+				  if(GetMultijump())
+					player->GetPhysicalObj()->jumpAnyway(chunk_ptr);
+				  else
+				    player->GetPhysicalObj()->jump(chunk_ptr);
 				}
 
 
@@ -542,8 +545,6 @@ int main()
 			GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
 
 			floating_text->draw(shaderHolder, camera, width, height);
-
-			// floating_image->draw(shaderHolder, camera, width, height);
 
 			logs->draw(shaderHolder);
 

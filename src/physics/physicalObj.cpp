@@ -142,6 +142,10 @@ void PhysicalObj::jump(Chunk* chunk) {
 	}
 }
 
+void PhysicalObj::jumpAnyway(Chunk* chunk) {
+  velocity.y = 20.0f;
+}
+
 void PhysicalObj::setOnGround(bool value) { onGround = value; }
 
 bool PhysicalObj::getOnGround() { return onGround; }

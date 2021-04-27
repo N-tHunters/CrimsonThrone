@@ -72,6 +72,7 @@ public:
 
 	virtual void update(float);
 	void jump(Chunk*);
+  void jumpAnyway(Chunk *);
 	void setSpeed(glm::vec2 speed);
 	void setSpeed(glm::vec3 speed);
 	void setOnGround(bool);

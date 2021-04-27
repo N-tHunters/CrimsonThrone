@@ -20,7 +20,7 @@ protected:
   NPC(std::string, int, PhysicalObj *, NPCAI *);
 
   NPCAI * GetAI();
-  void Process();
+  void Process(float dt);
 };
 
 #endif

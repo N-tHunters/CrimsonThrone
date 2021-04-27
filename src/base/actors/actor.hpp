@@ -9,7 +9,10 @@
 #include <sstream>
 #include <vector>
 
+#include <UI/text3d.hpp>
+#include <UI/text.hpp>
 #include <physics/physicalObj.hpp>
+
 
 class Item;
 class StackableItem;
@@ -48,6 +51,8 @@ private:
 
   PhysicalObj * obj;
 
+  Text3D *floating_text = nullptr;
+
 	
   void JustifyHealth();
 
@@ -55,7 +60,7 @@ public:
   Actor();
   Actor(std::string, int, PhysicalObj *);
 
-  virtual void Process();
+  virtual void Process(float dt);
 
   int GetHealth();
   int GetMaxHealth();
@@ -112,5 +117,7 @@ public:
   int GetItemIndex(Item *);
 
   std::stringstream * Save(Saver *);
+
+  void draw(ShaderHolder *, Camera *, int, int);
 };
 #endif
