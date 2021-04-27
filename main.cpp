@@ -101,6 +101,7 @@ bool isRunning = false;
 std::map<GLchar, Character> Characters;
 
 bool push = false;
+bool pressed_e = false;
 float push_m = 0.0f;
 void load_characters();
 bool clicked;
@@ -109,6 +110,7 @@ ShaderHolder* shaderHolder;
 int width, height;
 
 TextBox* logs;
+MousePicker* mouse_picker;
 
 typedef void (*function)();
 
@@ -360,7 +362,9 @@ int main()
 
 	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 
-	MousePicker* mouse_picker = new MousePicker(camera, projection_matrix);
+	mouse_picker = new MousePicker(camera, projection_matrix);
+
+	Text* press_e_text = new Text("Press [E]", Characters, 14.0f / 24.0f, glm::vec3(0), glm::vec2(width / 2.0f, width / 2.0f));
 
 	// Image3D* floating_image = new Image3D(glm::vec4(-10.0f, -10.0f, 20.0f, 20.0f), glm::vec3(10.0f, 10.0f, 30.0f), get_texture("grass"));
 
@@ -522,6 +526,13 @@ int main()
 
 				if (actor != nullptr) {
 					floating_text->setPosition(actor->GetPhysicalObj()->getPosition());
+					glm::vec3 ray = mouse_picker->getCurrentRay();
+					float collided = CollideRayWithBox(player->GetPhysicalObj()->getPosition(), ray, (BoundaryBox*)(actor->GetPhysicalObj()->boundary), actor->GetPhysicalObj()->getPosition(), actor->GetPhysicalObj()->getRotation());
+					if (collided) {
+						if (collided < 10.0f) {
+							press_e_text->draw(shaderHolder);
+						}
+					}
 				}
 
 			}
@@ -586,6 +597,7 @@ int main()
 		player_wants_to_jump = false;
 		push = false;
 		clicked = false;
+		pressed_e = false;
 	}
 	glfwTerminate();
 	return 0;
@@ -657,8 +669,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 
 	if (key == GLFW_KEY_E) {
-		push = true;
-		push_m = -1.0;
+		pressed_e = true;
 	}
 
 	if (key == GLFW_KEY_R) {

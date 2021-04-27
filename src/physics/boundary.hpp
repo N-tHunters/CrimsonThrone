@@ -1,7 +1,7 @@
-#ifndef BOUNDARY_H
-#define BOUNDARY_H
+#pragma once
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 class Boundary {
 public:
@@ -36,4 +36,4 @@ public:
 	bool Collide(Boundary*, glm::vec3, glm::vec3, glm::vec3, glm::vec3) override;
 };
 
-#endif
+float CollideRayWithBox(glm::vec3 ray_position, glm::vec3 ray_direction, BoundaryBox* box, glm::vec3 box_position, glm::vec3 box_rotation);
