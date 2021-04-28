@@ -71,7 +71,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#define NO_SOUND
+//#define NO_SOUND
 
 const std::string CONFIG_FILE = "resources/settings.ini";
 
@@ -170,11 +170,13 @@ int main()
 	alSourcef(source, AL_GAIN, 1);
 	alSource3f(source, AL_POSITION, 0, 0, 0);
 	alSource3f(source, AL_VELOCITY, 0, 0, 0);
-	alSourcei(source, AL_LOOPING, AL_TRUE);
+	//	alSourcei(source, AL_LOOPING, AL_TRUE);
 
 #ifndef NO_SOUND
 	FileSound sound(&sound_engine, &source, "resources/sounds/happierburial.wav");
 	sound.Play();
+	//	Voice voice(&sound_engine, &source, "resources/voices/asto/");
+	//	voice.Say("zizn eto igra igra pod nazvaniem bez pravil");
 #endif
 
 	// Init GLFW
@@ -358,8 +360,6 @@ int main()
 
 	// logs->addLine("Help me!");
 
-	Text3D* floating_text = new Text3D("Hi, I am text!", glm::vec3(10.0f, 10.0f, 30.0f), Characters, 0.1f);
-
 	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 
 	mouse_picker = new MousePicker(camera, projection_matrix);
@@ -524,27 +524,11 @@ int main()
 
 				/* Collide player with all objects in chunk */
 				player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
-
-				Actor* actor = chunk_ptr->GetActor(0);
-
-				if (actor != nullptr) {
-					floating_text->setPosition(actor->GetPhysicalObj()->getPosition());
-					glm::vec3 ray = mouse_picker->getCurrentRay();
-					float collided = CollideRayWithBox(player->GetPhysicalObj()->getPosition(), ray, (BoundaryBox*)(actor->GetPhysicalObj()->boundary), actor->GetPhysicalObj()->getPosition(), actor->GetPhysicalObj()->getRotation());
-					if (collided) {
-						if (collided < 10.0f) {
-							press_e_text->draw(shaderHolder);
-						}
-					}
-				}
-
 			}
 
 			mouse_picker->update();
 
 			GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
-
-			floating_text->draw(shaderHolder, camera, width, height);
 
 			logs->draw(shaderHolder);
 
