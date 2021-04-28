@@ -505,7 +505,14 @@ void Chunk::Update(float dt) {
 
 }
 
-
+Actor* Chunk::CollideActorsWithRay(glm::vec3 position, glm::vec3 ray) {
+  for (Actor * actor : actors) {
+    if(CollideRayWithBox(position, ray, (BoundaryBox *)actor->GetPhysicalObj()->boundary,
+			 actor->GetPhysicalObj()->getPosition(), actor->GetPhysicalObj()->getRotation()) != 0.0f)
+      return actor;
+  }
+  return nullptr;
+}
 
 bool Chunk::IsWaterPresent() { return this->is_water_present; }
 void Chunk::SetWaterHeight(float water_height) { this->water_height = water_height; }

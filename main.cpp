@@ -368,7 +368,7 @@ int main()
 
 	mouse_picker = new MousePicker(camera, projection_matrix);
 
-	Text* press_e_text = new Text("Press [E]", Characters, 14.0f / 24.0f, glm::vec3(0), glm::vec2(width / 2.0f, width / 2.0f));
+	Text* press_e_text = new Text("[nope]", Characters, 20.0f / 24.0f, glm::vec3(0), glm::vec2(width / 2.0f, width / 2.0f));
 
 	// Image3D* floating_image = new Image3D(glm::vec4(-10.0f, -10.0f, 20.0f, 20.0f), glm::vec3(10.0f, 10.0f, 30.0f), get_texture("grass"));
 
@@ -530,11 +530,19 @@ int main()
 				player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
 			}
 
-			mouse_picker->update();
 
 			GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
 
 			logs->draw(shaderHolder);
+
+			
+			mouse_picker->update();
+			Actor *picked_actor = GetCurrentLocation()->CollideActorsWithRay(player->GetPhysicalObj()->getPosition(), mouse_picker->getCurrentRay());
+			if(picked_actor != nullptr){
+			  press_e_text->update("[" + picked_actor->GetName() + "]", Characters);
+			  press_e_text->draw(shaderHolder);
+			}
+			  
 
 			// второй проход
 			// glBindFramebuffer(GL_FRAMEBUFFER, 0); // возвращаем буфер кадра по умолчанию
