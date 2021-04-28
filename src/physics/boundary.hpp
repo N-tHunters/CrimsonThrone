@@ -9,10 +9,13 @@ public:
 };
 
 class BoundaryBox: public Boundary {
+	glm::vec3 m_min;
+	glm::vec3 m_max;
 public:
-	float width, height, length;
-	BoundaryBox(float, float, float);
-	bool Collide(Boundary*, glm::vec3, glm::vec3, glm::vec3, glm::vec3) override;
+	BoundaryBox(glm::vec3 min, glm::vec3 max);
+	bool Collide(BoundaryBox*, glm::vec3, glm::vec3, glm::vec3, glm::vec3);
+	glm::vec3 getMin();
+	glm::vec3 getMax();
 };
 
 class BoundaryCapsule: public Boundary {

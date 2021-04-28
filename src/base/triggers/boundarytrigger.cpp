@@ -7,9 +7,8 @@ BoundaryTrigger::BoundaryTrigger(Boundary * boundary, glm::vec3 position) : Trig
 }
 
 BoundaryTrigger::BoundaryTrigger(PhysicalObj * link) : Trigger() {
-  this->boundary = new BoundaryBox(((BoundaryBox*)link->boundary)->width + 0.1f,
-				   ((BoundaryBox*)link->boundary)->height + 0.1f,
-				   ((BoundaryBox*)link->boundary)->length + 0.1f);
+  this->boundary = new BoundaryBox(((BoundaryBox*)link->boundary)->getMin() - 0.1f,
+				   ((BoundaryBox*)link->boundary)->getMax() + 0.1f);
   this->position = link->getPosition();
   this->link = link;
 }

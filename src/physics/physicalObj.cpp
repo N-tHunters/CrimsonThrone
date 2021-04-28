@@ -36,7 +36,7 @@ PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTrans
 	this->mesh->init(this);
 	this->onGround = true;
 	this->mass = 1.0f;
-	this->boundary = new BoundaryBox(0.1f, 0.1f, 0.1f);
+	this->boundary = new BoundaryBox(-glm::vec3(0.5f), glm::vec3(0.5f));
 }
 
 PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, bool isFlying, glm::vec3 position, glm::vec3 rotation, const std::string& name, Boundary* boundary) {
@@ -158,11 +158,11 @@ void PhysicalObj::setSpeed(glm::vec2 speed) {
 void PhysicalObj::setSpeed(glm::vec3 speed) { velocity = speed; }
 
 float PhysicalObj::detectCollision(Terrain* terrain) {
-	return terrain->getHeight(getPosition()) - this->getPositionY() + reinterpret_cast<BoundaryBox*>(this->boundary)->height;
+	return terrain->getHeight(getPosition()) - this->getPositionY() - reinterpret_cast<BoundaryBox*>(this->boundary)->getMin().y;
 }
 
 float PhysicalObj::detectCollision(Terrain* terrain, glm::vec3 position) {
-	return terrain->getHeight(position) - position.y + reinterpret_cast<BoundaryBox*>(this->boundary)->height;
+	return terrain->getHeight(position) - position.y - reinterpret_cast<BoundaryBox*>(this->boundary)->getMin().y;
 }
 
 void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
@@ -175,9 +175,6 @@ void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
 	}
 	float height = this->detectCollision(terrain);
 	float width = terrain->getTileWidth() / 2.0f;
-	float b_width = reinterpret_cast<BoundaryBox*>(this->boundary)->width * 2.0f;
-	float b_length = reinterpret_cast<BoundaryBox*>(this->boundary)->length * 2.0f;
-	float b_height = reinterpret_cast<BoundaryBox*>(this->boundary)->height * 2.0f;
 
 	/*for (int i = 0; i < floor(b_width / width) + 1; i ++) {
 		for (int j = 0; j < floor(b_length / width) + 1; j ++) {

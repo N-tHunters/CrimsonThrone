@@ -41,7 +41,7 @@ void init_demo_locations() {
     Actor * test_actor = (Actor *)new NPC("totacres", 10,
 					  new PhysicalObj(new Mesh(get_model("human"), get_texture("icon")),
 							  true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
-							  new BoundaryBox(1.0f, 1.0f, 1.0f)),
+							  new BoundaryBox(glm::vec3(-0.5f), glm::vec3(0.5f))),
 					  (NPCAI *)new HumanlikeAI());
     open_world->GetChunk(0, 0)->AddActor(test_actor);
   }

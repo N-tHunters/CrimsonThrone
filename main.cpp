@@ -276,7 +276,11 @@ int main()
 	setDefaultCharacters(Characters);
 
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
-	player = new Player("player", 10, new PhysicalObj(glm::vec3(100.0f, 10.0f, 10.0f), new BoundaryBox(0.1f, 1.0f, 0.1f)), camera);
+	player = new Player("player",
+						10,
+						new PhysicalObj(glm::vec3(100.0f, 10.0f, 10.0f),
+										new BoundaryBox(glm::vec3(-0.1f, -0.5f, -0.1f), glm::vec3(0.1f, 0.5f, 0.1f))),
+						camera);
 	player_core = new MagicCore();
 	player_core->SetPhysicalObj(player->GetPhysicalObj());
 

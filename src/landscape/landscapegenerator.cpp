@@ -91,5 +91,12 @@ PhysicalObj * create_wall(glm::vec3 position, glm::vec3 size, std::string textur
 
   
   return new PhysicalObj(new Mesh(texture_path, &vertices, &indices),
-			 false, true, false, false, position, glm::vec3(0.0f, 0.0f, 0.0f), "wall", new BoundaryBox(size.x / 2.f, size.y / 2.f, size.z / 2.f));
+			 false,
+       true,
+       false,
+       false,
+       position,
+       glm::vec3(0.0f, 0.0f, 0.0f),
+       "wall",
+       new BoundaryBox(-size * 0.5f, size * 0.5f));
 }
