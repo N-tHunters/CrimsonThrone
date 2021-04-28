@@ -191,7 +191,7 @@ void DungeonA1Generator3D::Generate(Location * location, size_t width, size_t he
 					   glm::vec3(chunk_width * 0.5f + chunk_width * std::get<0>(coords), 3.f + wall_height * std::get<2>(coords), chunk_height * 0.5f + chunk_height * std::get<1>(coords)),
 					   glm::vec3(0.0f, 0.0f, 0.0f),
 					   "portal",
-					   new BoundaryBox(1.0f, 1.0f, 1.0f));
+					   new BoundaryBox(glm::vec3(-0.5f), glm::vec3(0.5f)));
     location->GetChunk(0, 0)->AddObj(portal);
     Chunk * chunk = location->GetChunkByPosition(portal->getPosition().x, portal->getPosition().z);
     chunk->AddTrigger(new LongJumpTrigger(portal, std::get<1>(exits->at(i)), std::get<0>(exits->at(i))));

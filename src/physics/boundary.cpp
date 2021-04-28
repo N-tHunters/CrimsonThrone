@@ -2,11 +2,18 @@
 #include <iostream>
 #include <glm/glm.hpp>
 
-BoundaryBox::BoundaryBox(float width, float height, float length) {
-	this->width = width;
-	this->height = height;
-	this->length = length;
+BoundaryBox::BoundaryBox(glm::vec3 min, glm::vec3 max) {
+	m_min = min;
+	m_max = max;
 };
+
+glm::vec3 BoundaryBox::getMin() {
+	return m_min;
+}
+
+glm::vec3 BoundaryBox::getMax() {
+	return m_max;
+}
 
 BoundaryCapsule::BoundaryCapsule(float height, float radius) {
 	this->height = height;
@@ -22,61 +29,53 @@ BoundarySphere::BoundarySphere(float radius) {
 	this->radius = radius;
 };
 
-bool BoundaryBox::Collide(Boundary* other_boundary,
-                          glm::vec3 position_of_first_object,
-                          glm::vec3 rotation_of_first_object,
-                          glm::vec3 position_of_second_object,
-                          glm::vec3 rotation_of_second_object) {
-	bool a1 = position_of_first_object.x + this->width >=
-	          position_of_second_object.x - reinterpret_cast<BoundaryBox*>(other_boundary)->width;
+bool BoundaryBox::Collide(BoundaryBox* other_boundary,
+						  glm::vec3 position,
+						  glm::vec3 rotation,
+						  glm::vec3 other_position,
+						  glm::vec3 other_rotation) {
 
-	bool a2 = position_of_second_object.x + reinterpret_cast<BoundaryBox*>(other_boundary)->width >=
-	          position_of_first_object.x - this->width;
+	glm::vec3 my_p0 = position + m_min;
+	glm::vec3 my_p1 = position + m_max;
+	glm::vec3 other_p0 = other_position + other_boundary->getMin();
+	glm::vec3 other_p1 = other_position + other_boundary->getMax();
 
-	bool b1 = position_of_first_object.y + this->height >=
-	          position_of_second_object.y - reinterpret_cast<BoundaryBox*>(other_boundary)->height;
+	bool x = my_p1.x >= other_p0.x && other_p1.x >= my_p0.x;
+	bool y = my_p1.y >= other_p0.y && other_p1.y >= my_p0.y;
+	bool z = my_p1.z >= other_p0.z && other_p1.z >= my_p0.z;
 
-	bool b2 = position_of_second_object.y + reinterpret_cast<BoundaryBox*>(other_boundary)->height >=
-	          position_of_first_object.y - this->height;
-
-	bool c1 = position_of_first_object.z + this->length >=
-	          position_of_second_object.z - reinterpret_cast<BoundaryBox*>(other_boundary)->length;
-
-	bool c2 = position_of_second_object.z + reinterpret_cast<BoundaryBox*>(other_boundary)->length >=
-	          position_of_first_object.z - this->length;
-
-	return a1 && a2 && b1 && b2 && c1 && c2;
+	return x && y && z;
 }
 
 bool BoundaryPlane::Collide(Boundary* other_boundary,
-                            glm::vec3 position_of_first_object,
-                            glm::vec3 rotation_of_first_object,
-                            glm::vec3 position_of_second_object,
-                            glm::vec3 rotation_of_second_object) {
+							glm::vec3 position,
+							glm::vec3 rotation,
+							glm::vec3 other_position,
+							glm::vec3 other_rotation) {
 	return false;
 }
 
 bool BoundaryCapsule::Collide(Boundary* other_boundary,
-                              glm::vec3 position_of_first_object,
-                              glm::vec3 rotation_of_first_object,
-                              glm::vec3 position_of_second_object,
-                              glm::vec3 rotation_of_second_object) {
+							  glm::vec3 position,
+							  glm::vec3 rotation,
+							  glm::vec3 other_position,
+							  glm::vec3 other_rotation) {
 	return false;
 }
 
 bool BoundarySphere::Collide(Boundary* other_boundary,
-                             glm::vec3 position_of_first_object,
-                             glm::vec3 rotation_of_first_object,
-                             glm::vec3 position_of_second_object,
-                             glm::vec3 rotation_of_second_object) {
+							 glm::vec3 position,
+							 glm::vec3 rotation,
+							 glm::vec3 other_position,
+							 glm::vec3 other_rotation) {
 	return false;
 }
 
 bool Boundary::Collide(Boundary* other_boundary,
-                       glm::vec3 position_of_first_object,
-                       glm::vec3 rotation_of_first_object,
-                       glm::vec3 position_of_second_object,
-                       glm::vec3 rotation_of_second_object) {
+					   glm::vec3 position,
+					   glm::vec3 rotation,
+					   glm::vec3 other_position,
+					   glm::vec3 other_rotation) {
 	return false;
 }
 
@@ -92,8 +91,8 @@ float CollideRayWithBox(glm::vec3 ray_position, glm::vec3 ray_direction, Boundar
 	temp_vec = rotation_matrix * glm::vec4(box_position, 1.0f);
 	box_position = glm::vec3(temp_vec.x, temp_vec.y, temp_vec.z);
 
-	glm::vec3 p0 = box_position - glm::vec3(box->width, box->height, box->length);
-	glm::vec3 p1 = box_position + glm::vec3(box->width, box->height, box->length);
+	glm::vec3 p0 = box_position + box->getMin();
+	glm::vec3 p1 = box_position + box->getMax();
 
 	glm::vec3 bounds[2] = {p0, p1};
 
@@ -141,7 +140,13 @@ float CollideRayWithBox(glm::vec3 ray_position, glm::vec3 ray_direction, Boundar
 		tmax = tzmax;
 	}
 
-	return std::max(std::max(tmin, tymin), tzmin);
+	tmin = std::max(std::max(tmin, tymin), tzmin);
+
+	if (tmin < 0.0f) {
+		return 0.0f;
+	}
+
+	return tmin;
 }
 
 /*
