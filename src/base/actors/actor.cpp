@@ -14,6 +14,7 @@
 #include <base/items/item.hpp>
 #include <base/items/stackableitem.hpp>
 #include <base/saver.hpp>
+#include <physics/boundary.hpp>
 
 
 /**
@@ -32,7 +33,7 @@ Actor::Actor(std::string name, int max_health, PhysicalObj * obj) : Actor() {
   this->max_health = max_health;
   this->health = max_health;
   this->obj = obj;
-  this->floating_text = new Text3D(name, obj->getPosition(), getDefaultCharacters(), 0.01f);
+  this->floating_text = new Text3D(name, obj->getPosition() + glm::vec3(0.0f, ((BoundaryBox*)obj->boundary)->height, 0.0f), getDefaultCharacters(), 0.01f);
 }
 
 // Getters
@@ -411,7 +412,7 @@ void Actor::draw(ShaderHolder * shaderHolder, Camera * camera, int width, int he
 
 void Actor::drawAfter(ShaderHolder * shaderHolder, Camera * camera, int width, int height) {
   if (this->floating_text != nullptr) {
-    this->floating_text->setPosition(this->obj->getPosition());
+    this->floating_text->setPosition(this->obj->getPosition() + glm::vec3(0.0f, ((BoundaryBox*)obj->boundary)->height, 0.0f));
     this->floating_text->draw(shaderHolder, camera, width, height);
   }
 }

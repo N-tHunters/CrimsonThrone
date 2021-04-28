@@ -71,7 +71,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-#define NO_SOUND
+//#define NO_SOUND
 
 const std::string CONFIG_FILE = "resources/settings.ini";
 
@@ -168,11 +168,13 @@ int main()
 	alSourcef(source, AL_GAIN, 1);
 	alSource3f(source, AL_POSITION, 0, 0, 0);
 	alSource3f(source, AL_VELOCITY, 0, 0, 0);
-	alSourcei(source, AL_LOOPING, AL_TRUE);
+	//	alSourcei(source, AL_LOOPING, AL_TRUE);
 
 #ifndef NO_SOUND
 	FileSound sound(&sound_engine, &source, "resources/sounds/happierburial.wav");
 	sound.Play();
+	//	Voice voice(&sound_engine, &source, "resources/voices/asto/");
+	//	voice.Say("zizn eto igra igra pod nazvaniem bez pravil");
 #endif
 
 	// Init GLFW
