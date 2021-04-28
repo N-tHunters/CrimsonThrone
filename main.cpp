@@ -170,13 +170,13 @@ int main()
 	alSourcef(source, AL_GAIN, 1);
 	alSource3f(source, AL_POSITION, 0, 0, 0);
 	alSource3f(source, AL_VELOCITY, 0, 0, 0);
-	//	alSourcei(source, AL_LOOPING, AL_TRUE);
+	alSourcei(source, AL_LOOPING, AL_TRUE);
 
 #ifndef NO_SOUND
-	FileSound sound(&sound_engine, &source, "resources/sounds/happierburial.wav");
+	FileSound sound(&sound_engine, &source, "resources/sounds/firetail.wav");
 	sound.Play();
-	//	Voice voice(&sound_engine, &source, "resources/voices/asto/");
-	//	voice.Say("zizn eto igra igra pod nazvaniem bez pravil");
+	//		Voice voice(&sound_engine, &source, "resources/voices/asto/");
+	//	voice.Say("sunyu huy sosy  sunyu huy sosi huy sunyux");
 #endif
 
 	// Init GLFW
