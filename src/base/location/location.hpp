@@ -34,7 +34,7 @@ class Location {
   void Draw(ShaderHolder *, Camera *, int, int);
   void Update(float);
   void LoadABS();
-  Actor *CollideActorsWithRay(glm::vec3, glm::vec3);
+  std::pair<Actor *, float> CollideActorsWithRay(glm::vec3, glm::vec3);
 };
 
 Location * GetCurrentLocation();

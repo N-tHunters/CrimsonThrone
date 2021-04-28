@@ -537,7 +537,8 @@ int main()
 
 			
 			mouse_picker->update();
-			Actor *picked_actor = GetCurrentLocation()->CollideActorsWithRay(player->GetPhysicalObj()->getPosition(), mouse_picker->getCurrentRay());
+			std::pair<Actor *, float> result = GetCurrentLocation()->CollideActorsWithRay(player->GetPhysicalObj()->getPosition(), mouse_picker->getCurrentRay());
+			Actor * picked_actor = result.first;
 			if(picked_actor != nullptr){
 			  press_e_text->update("[" + picked_actor->GetName() + "]", Characters);
 			  press_e_text->draw(shaderHolder);

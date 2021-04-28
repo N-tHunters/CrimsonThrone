@@ -4,19 +4,18 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <physics/boundary.hpp>
 #include "mesh.hpp"
 
-class Model
+struct Model
 {
-public:
 	std::vector<GLfloat> vertices;
 	std::vector<GLuint> indices;
 	explicit Model(const std::string& path);
-private:
 	void loadModel(const std::string& path);
 	void processNode(aiNode *node, const aiScene *scene);
 
-	std::pair<glm::vec3, glm::vec3> getBoundaryBox(float scale);
+	BoundaryBox * getBoundaryBox(float scale);
 };
 
 #endif

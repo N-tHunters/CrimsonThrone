@@ -505,13 +505,19 @@ void Chunk::Update(float dt) {
 
 }
 
-Actor* Chunk::CollideActorsWithRay(glm::vec3 position, glm::vec3 ray) {
+std::pair<Actor*, float> Chunk::CollideActorsWithRay(glm::vec3 position, glm::vec3 ray) {
+  Actor * return_actor = nullptr;
+  float distance = 0.0f;
   for (Actor * actor : actors) {
-    if(CollideRayWithBox(position, ray, (BoundaryBox *)actor->GetPhysicalObj()->boundary,
-			 actor->GetPhysicalObj()->getPosition(), actor->GetPhysicalObj()->getRotation()) != 0.0f)
-      return actor;
+    float cur_dist = CollideRayWithBox(position, ray, (BoundaryBox *)actor->GetPhysicalObj()->boundary,
+				       actor->GetPhysicalObj()->getPosition(), actor->GetPhysicalObj()->getRotation());
+    if(cur_dist != 0.0f && (return_actor == nullptr || (cur_dist < distance))) {
+      return_actor = actor;
+      distance = cur_dist;
+    }
+  
   }
-  return nullptr;
+  return std::make_pair(return_actor, distance);
 }
 
 bool Chunk::IsWaterPresent() { return this->is_water_present; }
