@@ -239,6 +239,33 @@ void Location::LoadABS() {
   }
 }
 
+std::pair<Actor*, float> Location::CollideActorsWithRay(glm::vec3 position, glm::vec3 ray) {
+  int lx = std::max((int)current_x - RENDER_RADIUS - 1, 0); // Most left row
+  int uy = std::max((int)current_y - RENDER_RADIUS - 1, 0); // Most up column
+  int rx = std::min((int)current_x + RENDER_RADIUS + 1, (int)width - 1); // Most right row
+  int dy = std::min((int)current_y + RENDER_RADIUS + 1, (int)height - 1); // Most down column
+
+  Actor * return_actor = nullptr;
+  float distance = 0.0f;
+
+  for(int ix = lx; ix <= rx; ix++) {
+    for(int iy = uy; iy <= dy; iy++) {
+      if(this->chunks[ix][iy] != nullptr && this->chunks[ix][iy]->IsLoaded()) {
+	std::pair<Actor *, float> res = this->chunks[ix][iy]->CollideActorsWithRay(position, ray);
+	if (res.first != nullptr) {
+	  if(return_actor == nullptr || (res.second < distance)) {
+	    return_actor = res.first;
+	    distance = res.second;
+	  }
+	}
+      }
+    }
+  }
+  return std::make_pair(return_actor, distance);
+}
+
+
+
 // Global functions and objects
 
 static Location * current_location;
