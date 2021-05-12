@@ -10,6 +10,7 @@ class Column: public Frame {
 	glm::vec4 rect;
 	int maxCount;
 	std::string header;
+	Text* header_text;
 	int index;
 	std::vector<AbstractListElement*>* list;
 	std::map<GLchar, Character> characters;
@@ -19,7 +20,10 @@ public:
 	       const std::string& texturePath,
 	       int maxCount,
 	       std::map<GLchar, Character> Characters,
-	       std::string header);
+	       std::string header,
+	       int width,
+	       int height,
+	       int index);
 
 	void update();
 

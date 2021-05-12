@@ -5,6 +5,7 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 #include "mesh.hpp"
+#include <physics/boundary.hpp>
 
 class Model
 {
@@ -12,11 +13,11 @@ public:
 	std::vector<GLfloat> vertices;
 	std::vector<GLuint> indices;
 	explicit Model(const std::string& path);
+
+	BoundaryBox* getBoundaryBox(float scale);
 private:
 	void loadModel(const std::string& path);
 	void processNode(aiNode *node, const aiScene *scene);
-
-	std::pair<glm::vec3, glm::vec3> getBoundaryBox(float scale);
 };
 
 #endif

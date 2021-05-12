@@ -48,6 +48,9 @@ void Model::processNode(aiNode *node, const aiScene *scene)
 					auto const &uv = mesh->mTextureCoords[0][face.mIndices[k]];
 					vertices.push_back(uv.x);
 					vertices.push_back(uv.y);
+				} else {
+					vertices.push_back(0.0f);
+					vertices.push_back(0.0f);
 				}
 				indices.push_back(face.mIndices[k]);
 			}
@@ -55,7 +58,7 @@ void Model::processNode(aiNode *node, const aiScene *scene)
 	}
 }
 
-std::pair<glm::vec3, glm::vec3> Model::getBoundaryBox(float scale) {
+BoundaryBox* Model::getBoundaryBox(float scale) {
 	glm::vec3 min = glm::vec3(0.0f);
 	glm::vec3 max = glm::vec3(0.0f);
 
@@ -82,5 +85,5 @@ std::pair<glm::vec3, glm::vec3> Model::getBoundaryBox(float scale) {
 		}
 	}
 
-	return std::pair<glm::vec3, glm::vec3>(min * scale, max * scale);
+	return new BoundaryBox(min * scale, max * scale);
 }

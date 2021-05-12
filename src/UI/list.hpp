@@ -15,10 +15,11 @@ class List: public Frame {
 public:
 	List(glm::vec4 rect,
 		std::vector<AbstractListElement*>* list,
-		std::string texturePath,
+		const std::string& texturePath,
 		int maxCount,
 		std::map<GLchar, Character> Characters,
-		std::vector<std::string>* headers);
+		std::vector<std::string>* headers,
+		std::vector<float> column_ratio);
 
 	void update();
 

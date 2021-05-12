@@ -9,7 +9,7 @@
 #include <map>
 
 class Text: public Frame {
-	std::string text;
+	std::string m_text;
 	glm::vec3 color;
 	float scale;
 	std::vector<Image*>* letters;
@@ -26,6 +26,7 @@ public:
 	void setPosition(float x, float y);
 	void changePosition(glm::vec2 delta);
 	glm::vec2 getPosition();
+	std::string getText();
 };
 
 void setDefaultCharacters(std::map<GLchar, Character>);

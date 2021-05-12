@@ -97,6 +97,7 @@ float directionSide = 0;
 float velocity = 5.0f;
 bool player_wants_to_jump = false;
 bool isRunning = false;
+bool openedInventory = false;
 
 std::map<GLchar, Character> Characters;
 
@@ -364,13 +365,33 @@ int main()
 
 	// logs->addLine("Help me!");
 
+	std::vector<std::string> inventory_headers = {
+		"Name", "Value"
+	};
+
+	List* inventory_list = new List(glm::vec4(10, 10, width - 20, height - 20),
+		(std::vector<AbstractListElement*>*)player->GetInventoryPointer(),
+		"resources/textures/list.png",
+		20,
+		Characters,
+		&inventory_headers,
+		{0.9f, 0.1f});
+
 	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 
 	mouse_picker = new MousePicker(camera, projection_matrix);
 
+	load_textures({"house"});
+
+	Model* hammer_model = new Model("resources/models/hammah.obj");
+	Mesh* hammer_mesh = new Mesh(hammer_model, get_texture("house"));
+	PhysicalObj* hammer = new PhysicalObj(hammer_mesh, false, true, false, false, glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), "hammer", hammer_model->getBoundaryBox(1.0f));
+
 	Text* press_e_text = new Text("Press [E]", Characters, 14.0f / 24.0f, glm::vec3(0), glm::vec2(width / 2.0f, width / 2.0f));
 
 	// Image3D* floating_image = new Image3D(glm::vec4(-10.0f, -10.0f, 20.0f, 20.0f), glm::vec3(10.0f, 10.0f, 30.0f), get_texture("grass"));
+
+	Item* hammer_item = new Item("hammer", hammer);
 
 	while (game_state != STATE_CLOSING)
 	{
@@ -532,9 +553,23 @@ int main()
 
 			mouse_picker->update();
 
+			if (CollideRayWithBox(player->GetPhysicalObj()->getPosition(), mouse_picker->getCurrentRay(), (BoundaryBox*)(hammer->boundary), hammer->getPosition(), hammer->getRotation())) {
+				press_e_text->draw(shaderHolder);
+				if (pressed_e) {
+					player->PickupItem(hammer_item);
+					inventory_list->update();
+				}
+			}
+
 			GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
 
+			hammer_mesh->draw(shaderHolder, camera, width, height);
+
 			logs->draw(shaderHolder);
+
+			if (openedInventory) {
+				inventory_list->draw(shaderHolder);
+			}
 
 			// второй проход
 			// glBindFramebuffer(GL_FRAMEBUFFER, 0); // возвращаем буфер кадра по умолчанию
@@ -650,11 +685,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
 		player_wants_to_jump = true;
-		logs->addLine("Tried to jump");
 	}
 
 	if (key == GLFW_KEY_P && action == GLFW_PRESS) {
-		logs->addLine("Some logs, they need to be very long, I am sorry for this text");
 	}
 
 	if (key == GLFW_KEY_E) {
@@ -683,6 +716,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_RELEASE) {
 		isRunning = false;
+	}
+
+	if (key == GLFW_KEY_I && action == GLFW_RELEASE) {
+		openedInventory = !openedInventory;
 	}
 }
 
@@ -722,8 +759,8 @@ void load_characters() {
 		);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		Character character = {
 			texture,

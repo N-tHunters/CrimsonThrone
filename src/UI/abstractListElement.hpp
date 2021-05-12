@@ -8,7 +8,7 @@ class AbstractListElement {
 
 public:
 	AbstractListElement();
-	std::vector<std::string>* getValues();
+	virtual std::vector<std::string>* getValues();
 };
 
 #endif
