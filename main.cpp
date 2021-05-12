@@ -391,8 +391,6 @@ int main()
 
 	// Image3D* floating_image = new Image3D(glm::vec4(-10.0f, -10.0f, 20.0f, 20.0f), glm::vec3(10.0f, 10.0f, 30.0f), get_texture("grass"));
 
-	Item* hammer_item = new Item("hammer", hammer);
-
 	while (game_state != STATE_CLOSING)
 	{
 		if (camera->getRotationX() > 180.0f) {
@@ -552,17 +550,9 @@ int main()
 			}
 
 
-			if (CollideRayWithBox(player->GetPhysicalObj()->getPosition(), mouse_picker->getCurrentRay(), (BoundaryBox*)(hammer->boundary), hammer->getPosition(), hammer->getRotation())) {
-				press_e_text->draw(shaderHolder);
-				if (pressed_e) {
-					player->PickupItem(hammer_item);
-					inventory_list->update();
-				}
-			}
-
+			
 			GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
 
-			hammer_mesh->draw(shaderHolder, camera, width, height);
 
 			logs->draw(shaderHolder);
 
@@ -571,11 +561,15 @@ int main()
 			}
 			
 			mouse_picker->update();
-			std::pair<Actor *, float> result = GetCurrentLocation()->CollideActorsWithRay(player->GetPhysicalObj()->getPosition(), mouse_picker->getCurrentRay());
-			Actor * picked_actor = result.first;
-			if(picked_actor != nullptr){
-			  press_e_text->update("[" + picked_actor->GetName() + "]", Characters);
-			  press_e_text->draw(shaderHolder);
+			std::pair<Item *, float> result = GetCurrentLocation()->CollideItemsWithRay(player->GetPhysicalObj()->getPosition(), mouse_picker->getCurrentRay());
+			Item * picked_item = result.first;
+			if(picked_item != nullptr){
+				press_e_text->draw(shaderHolder);
+				if (pressed_e) {
+					player->PickupItem(picked_item);
+					inventory_list->update();
+					GetCurrentLocation()->GetCurrentChunk()->DeleteItem(picked_item);
+				}
 			}
 
 			// второй проход

@@ -520,6 +520,21 @@ std::pair<Actor*, float> Chunk::CollideActorsWithRay(glm::vec3 position, glm::ve
   return std::make_pair(return_actor, distance);
 }
 
+std::pair<Item*, float> Chunk::CollideItemsWithRay(glm::vec3 position, glm::vec3 ray) {
+  Item * return_item = nullptr;
+  float distance = 0.0f;
+  for (Item * item : items) {
+    float cur_dist = CollideRayWithBox(position, ray, (BoundaryBox *)item->GetPhysicalObj()->boundary,
+				       item->GetPhysicalObj()->getPosition(), item->GetPhysicalObj()->getRotation());
+    if(cur_dist != 0.0f && (return_item == nullptr || (cur_dist < distance))) {
+      return_item = item;
+      distance = cur_dist;
+    }
+  
+  }
+  return std::make_pair(return_item, distance);
+}
+
 bool Chunk::IsWaterPresent() { return this->is_water_present; }
 void Chunk::SetWaterHeight(float water_height) { this->water_height = water_height; }
 float Chunk::GetWaterHeight() { return this->water_height; }

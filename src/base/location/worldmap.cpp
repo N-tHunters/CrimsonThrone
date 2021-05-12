@@ -46,6 +46,15 @@ void init_demo_locations() {
     open_world->GetChunk(0, 0)->AddActor(test_actor);
   }
 
+  
+  for(int i = 0; i < rand() % 10; i++){
+    Item * test_item = (Item *)new Item("totacres",
+					  new PhysicalObj(new Mesh(get_model("human"), get_texture("icon")),
+							  true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_item_po",
+							  get_model("human")->getBoundaryBox(1.0f)));
+    open_world->GetChunk(0, 0)->AddItem(test_item);
+  }
+
   SetCurrentLocation(open_world);
   open_world->LoadABS();
 }

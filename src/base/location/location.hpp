@@ -35,6 +35,7 @@ class Location {
   void Update(float);
   void LoadABS();
   std::pair<Actor *, float> CollideActorsWithRay(glm::vec3, glm::vec3);
+  std::pair<Item *, float> CollideItemsWithRay(glm::vec3, glm::vec3);
 };
 
 Location * GetCurrentLocation();

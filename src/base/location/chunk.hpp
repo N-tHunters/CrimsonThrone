@@ -91,6 +91,7 @@ class Chunk {
   virtual bool IsLoaded();
 
   std::pair<Actor *, float> CollideActorsWithRay(glm::vec3, glm::vec3);
+  std::pair<Item *, float> CollideItemsWithRay(glm::vec3, glm::vec3);
 };
 
 #endif
