@@ -19,7 +19,11 @@ Text::Text(std::string text,
 		   glm::vec3 color,
 		   glm::vec2 position
 		): Frame(glm::vec4(0.0f)) {
-	this->text = text;
+
+	// printf("%s: ", text.c_str());
+	// print_vector()
+
+	m_text = text;
 	this->rect = rect;
 	this->scale = scale;
 	this->color = color;
@@ -63,7 +67,7 @@ Text::Text(std::string text,
 		   glm::vec3 color) : Text(text, Characters, scale, color, glm::vec2(0.0f)) {}
 
 void Text::update(std::string text, std::map<GLchar, Character> Characters, glm::vec4 rect) {
-	this->text = text;
+	m_text = text;
 	this->rect = rect;
 
 	float x = this->rect.x;
@@ -79,7 +83,7 @@ void Text::update(std::string text, std::map<GLchar, Character> Characters, glm:
 		float xpos;
 		float ypos;
 		float w, h;
-		Character ch = Characters[text[c]];
+		Character ch = Characters[m_text[c]];
 
 		xpos = x + ch.Bearing.x * this->scale;
 		ypos = y - (ch.Size.y - ch.Bearing.y) * this->scale;
@@ -98,7 +102,7 @@ void Text::update(std::string text, std::map<GLchar, Character> Characters, glm:
 }
 
 void Text::update(std::string text, std::map<GLchar, Character> Characters) {
-	this->text = text;
+	m_text = text;
 
 	float x = this->rect.x;
 	float y = this->rect.y;
@@ -148,4 +152,8 @@ void Text::changePosition(glm::vec2 delta) {
 
 glm::vec2 Text::getPosition() {
 	return m_position;
+}
+
+std::string Text::getText() {
+	return m_text;
 }
