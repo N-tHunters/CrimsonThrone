@@ -71,7 +71,7 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
-//#define NO_SOUND
+#define NO_SOUND
 
 const std::string CONFIG_FILE = "resources/settings.ini";
 
