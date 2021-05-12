@@ -4,12 +4,12 @@
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <physics/boundary.hpp>
 #include "mesh.hpp"
 #include <physics/boundary.hpp>
 
-class Model
+struct Model
 {
-public:
 	std::vector<GLfloat> vertices;
 	std::vector<GLuint> indices;
 	explicit Model(const std::string& path);

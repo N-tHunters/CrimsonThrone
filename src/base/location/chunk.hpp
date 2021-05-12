@@ -89,6 +89,8 @@ class Chunk {
 
   virtual void LoadABS();
   virtual bool IsLoaded();
+
+  std::pair<Actor *, float> CollideActorsWithRay(glm::vec3, glm::vec3);
 };
 
 #endif
