@@ -171,13 +171,13 @@ int main()
 	alSourcef(source, AL_GAIN, 1);
 	alSource3f(source, AL_POSITION, 0, 0, 0);
 	alSource3f(source, AL_VELOCITY, 0, 0, 0);
-	//	alSourcei(source, AL_LOOPING, AL_TRUE);
+	alSourcei(source, AL_LOOPING, AL_TRUE);
 
 #ifndef NO_SOUND
-	FileSound sound(&sound_engine, &source, "resources/sounds/happierburial.wav");
+	FileSound sound(&sound_engine, &source, "resources/sounds/firetail.wav");
 	sound.Play();
-	//	Voice voice(&sound_engine, &source, "resources/voices/asto/");
-	//	voice.Say("zizn eto igra igra pod nazvaniem bez pravil");
+	//		Voice voice(&sound_engine, &source, "resources/voices/asto/");
+	//	voice.Say("sunyu huy sosy  sunyu huy sosi huy sunyux");
 #endif
 
 	// Init GLFW
@@ -380,7 +380,7 @@ int main()
 	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 
 	mouse_picker = new MousePicker(camera, projection_matrix);
-
+  
 	load_textures({"house"});
 
 	Model* hammer_model = new Model("resources/models/hammah.obj");
@@ -551,7 +551,6 @@ int main()
 				player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
 			}
 
-			mouse_picker->update();
 
 			if (CollideRayWithBox(player->GetPhysicalObj()->getPosition(), mouse_picker->getCurrentRay(), (BoundaryBox*)(hammer->boundary), hammer->getPosition(), hammer->getRotation())) {
 				press_e_text->draw(shaderHolder);
@@ -569,6 +568,14 @@ int main()
 
 			if (openedInventory) {
 				inventory_list->draw(shaderHolder);
+			}
+			
+			mouse_picker->update();
+			std::pair<Actor *, float> result = GetCurrentLocation()->CollideActorsWithRay(player->GetPhysicalObj()->getPosition(), mouse_picker->getCurrentRay());
+			Actor * picked_actor = result.first;
+			if(picked_actor != nullptr){
+			  press_e_text->update("[" + picked_actor->GetName() + "]", Characters);
+			  press_e_text->draw(shaderHolder);
 			}
 
 			// второй проход

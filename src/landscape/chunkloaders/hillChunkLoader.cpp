@@ -1,6 +1,6 @@
 #include "hillChunkLoader.hpp"
 
-const int quote = 1;
+const int quote = 10;
 
 HillChunkLoader::HillChunkLoader(float size, int vertices_number, glm::vec3 position, int seed, noise::module::Perlin* perlin, BiomeGenerator* biomeGenerator) {
 	this->size = size;
@@ -57,11 +57,11 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
 	// GLuint blend_texture = createTexture("resources/textures/rock.png");
 	// GLuint blend_texture = get_texture("rock");
 
-	GLuint texture1 = get_texture("grass");
-	GLuint texture2 = get_texture("rock");
+	GLuint texture1 = get_texture("void");
+	GLuint texture2 = get_texture("void");
 
 	LoadEnd(height_map, chunk, texture1, texture2, pixels);
-	trees_num = 0;
+	trees_num = 10;
 }
 
 void HillChunkLoader::LoadObjects(AbstractChunk *chunk) {
@@ -71,7 +71,7 @@ void HillChunkLoader::LoadObjects(AbstractChunk *chunk) {
 	int new_quote = quote;
 
 	while (trees_num > 0 && new_quote > 0) {
-		Mesh* tree_mesh = new Mesh(tree_model, (rand() % 10 + 10) / 10.0f, tree_texture);
+	  Mesh* tree_mesh = new Mesh(tree_model, tree_texture, (rand() % 10 + 10) / 10.0f);
 		glm::vec3 pos = chunk->GetTerrain()->getPosition() + glm::vec3((rand() % (int(size) * 10)) / 10.0f, 0.0f, (rand() % (int(size) * 10)) / 10.0f);
 		pos.y = chunk->GetTerrain()->getHeight(pos);
 		chunk->AddObj(new PhysicalObj(tree_mesh, false, true, false, false, pos, glm::vec3(0.0f, rand() % 360, 0.0f), "tree"));

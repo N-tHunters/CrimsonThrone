@@ -29,7 +29,7 @@ Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * cam
  */
 void Player::Update(float dt) {
   this->GetPhysicalObj()->update(dt);
-  this->camera->setPosition(this->GetPhysicalObj()->getPosition());
+  this->camera->setPosition(this->GetPhysicalObj()->getPosition() + glm::vec3(0.0f, 1.0f, 0.0f));
 }
 
 /**
