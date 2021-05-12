@@ -558,6 +558,7 @@ int main()
 				if (pressed_e) {
 					player->PickupItem(hammer_item);
 					inventory_list->update();
+					pressed_e = false;
 				}
 			}
 
@@ -690,7 +691,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_P && action == GLFW_PRESS) {
 	}
 
-	if (key == GLFW_KEY_E) {
+	if (key == GLFW_KEY_E && action == GLFW_PRESS) {
 		pressed_e = true;
 	}
 
