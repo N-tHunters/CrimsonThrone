@@ -502,7 +502,7 @@ public:
      *
      * @note The returned value remains valid until one of the
      * following methods is called: #ReadFile(), #FreeScene(). */
-    const std::exception_ptr& GetException() const;
+    const std::exception& GetException() const;
 
     // -------------------------------------------------------------------
     /** Returns the scene loaded by the last successful call to ReadFile()
