@@ -217,11 +217,7 @@ void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
 }
 
 void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocity, bool isPlayer) {
-	if (isActive == false) {
-		return;
-	}
-
-	if (isTransparent == true || other_object->isTransparent == true) {
+	if (isActive == false || isTransparent == true || other_object->isTransparent == true) {
 		return;
 	}
 
@@ -233,11 +229,9 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 	glm::vec3 other_velocity_y = glm::vec3(0.0f, other_object->velocity.y * dt, 0.0f);
 	glm::vec3 other_velocity_z = glm::vec3(0.0f, 0.0f, other_object->velocity.z * dt);
 
-	// glm::vec3 result = glm::vec3(1.0f, 1.0f, 1.0f);
-
 	bool collided = false;
 
-	if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_x, this->getRotation(), other_object->getPosition() + other_velocity_x, other_object->getRotation())) {
+	/*if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_x, this->getRotation(), other_object->getPosition() + other_velocity_x, other_object->getRotation())) {
 		if (this->boundary->Collide(other_object->boundary, this->getPosition() + glm::vec3(0, 1, 0) + this_velocity_x, this->getRotation(), other_object->getPosition() + other_velocity_z, other_object->getRotation()) || this_velocity_x.x == 0.0f)
 		{
 			this->velocity.x = 0.0f;
@@ -264,10 +258,7 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 		} else {
 			this->position.y += 0.5f;
 		}
-		//this->velocity.z = (this->position.z - other_object->getPositionZ()) * 2.0f;
-		//this->force.z = (this->position.z - other_object->getPositionZ()) * 10.0f;
 		this->force.z = 0.0f;
-		//other_object->velocity.z -= (this->position.z - other_object->getPositionZ()) * 2.0f;
 		collided = true;
 	}
 
@@ -276,24 +267,9 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 	                            this->getRotation(),
 	                            other_object->getPosition(),
 	                            other_object->getRotation())) {
-		//this->force += this->getPosition() - other_object->getPosition();
 		if (other_object->isActive)
 			other_object->force -= this->getPosition() - other_object->getPosition();
-	}
-
-	/*
-	if (isPlayer) {
-		if (collided)
-		{
-			other_object->getMesh()->changeTexture("resources/textures/fire.png");
-			other_object->getMesh()->activeDebug = true;
-		} else if (other_object->getMesh()->activeDebug) {
-			other_object->getMesh()->activeDebug = false;
-			other_object->getMesh()->changeTexture("resources/textures/wood.png");
-		}
-		}*/
-
-	// return result;
+	}*/
 }
 
 Mesh* PhysicalObj::getMesh() {
