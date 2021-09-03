@@ -33,6 +33,7 @@
 #include <render/model.hpp>
 #include <render/imageLoader.hpp>
 #include <render/textures.hpp>
+#include <render/models.hpp>
 
 #include <physics/physicalObj.hpp>
 #include <physics/boundary.hpp>
@@ -45,6 +46,7 @@
 #include <base/location/location.hpp>
 #include <base/triggers/shortjumptrigger.hpp>
 #include <base/mouse_picker.hpp>
+#include <base/items/weapon.hpp>
 
 #include <magic/core.h>
 #include <magic/symbols.h>
@@ -189,7 +191,8 @@ int main()
 	glfwWindowHint(GLFW_MAXIMIZED, GL_TRUE);
 
 	// Create a GLFWwindow object that we can use for GLFW's functions
-	window = glfwCreateWindow(WIDTH, HEIGHT, "Crimson Throne", nullptr, nullptr);
+	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+	window = glfwCreateWindow(mode->width, mode->height, "Crimson Throne", glfwGetPrimaryMonitor(), nullptr);
 
 	glfwMakeContextCurrent(window);
 
@@ -220,8 +223,10 @@ int main()
 	// Initialize GLEW to setup the OpenGL Function pointers
 	glewInit();
 
-	glfwGetWindowSize(window, &width, &height);
-
+	//	glfwGetWindowSize(window, &width, &height);
+	width = mode->width;
+	height = mode->height;
+	printf("Windows size is %ix%i\n", width, height);
 	// Define the viewport dimensions
 	glViewport(0, 0, width, height);
 
@@ -276,6 +281,9 @@ int main()
 	load_characters();
 	setDefaultCharacters(Characters);
 
+
+	/// Initialize game objects
+
 	camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
 	player = new Player("player",
 						10,
@@ -285,6 +293,8 @@ int main()
 	player_core = new MagicCore();
 	player_core->SetPhysicalObj(player->GetPhysicalObj());
 
+
+	
 	Image* image_loading = new Image(glm::vec4(width / 2 - 100, height / 2 - 100, 200, 200), "resources/textures/water.png");
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -638,8 +648,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
 		if (game_state == STATE_RUNNING) {
+		  if(openedInventory)
+		    openedInventory = false;
+		  else {
 			game_state = STATE_PAUSED;
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		  }
 		} else if (game_state == STATE_PAUSED) {
 			game_state = STATE_RUNNING;
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);

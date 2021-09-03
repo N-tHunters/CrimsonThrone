@@ -29,8 +29,7 @@ void OverWorldGenerator::Generate(Location * location, size_t width, size_t heig
     "tree",
     "grass",
     "rock",
-    "icon",
-    "void"
+    "icon"
   };
 
   load_models(model_names);

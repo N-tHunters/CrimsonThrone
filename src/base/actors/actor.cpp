@@ -34,6 +34,7 @@ Actor::Actor(std::string name, int max_health, PhysicalObj * obj) : Actor() {
   this->health = max_health;
   this->obj = obj;
   this->floating_text = new Text3D(name, obj->getPosition() + glm::vec3(0.0f, ((BoundaryBox*)obj->boundary)->getMax().y, 0.0f), getDefaultCharacters(), 0.01f);
+  this->weapon = nullptr;
 }
 
 // Getters
@@ -408,6 +409,11 @@ void Actor::Process(float dt) {}
 
 void Actor::draw(ShaderHolder * shaderHolder, Camera * camera, int width, int height) {
   this->obj->draw(shaderHolder, camera, width, height);
+  if(this->weapon != nullptr) {
+    this->weapon->GetPhysicalObj()->setPosition(this->obj->getPosition() + glm::vec3(0.1f, -0.2f, 0.5f));
+    this->weapon->GetPhysicalObj()->changeRotation(glm::vec3(0.0f, 0.0f, (rand() % 100) / 1.0f));
+    this->weapon->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
+  }
 }
 
 void Actor::drawAfter(ShaderHolder * shaderHolder, Camera * camera, int width, int height) {
