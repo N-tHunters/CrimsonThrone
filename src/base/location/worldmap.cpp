@@ -4,6 +4,7 @@
 #include <base/actors/npcai/humanlikeai.hpp>
 #include <base/location/location.hpp>
 #include <base/triggers/longjumptrigger.hpp>
+#include <base/items/weapon.hpp>
 #include <landscape/flatgenerator.hpp>
 #include <landscape/overworldgenerator.hpp>
 #include <landscape/dungeona1generator3d.hpp>
@@ -43,6 +44,13 @@ void init_demo_locations() {
 							  true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
 							  get_model("human")->getBoundaryBox(1.0f)),
 					  (NPCAI *)new HumanlikeAI());
+    
+    Weapon * totacres_wep = new Weapon("totacres", 
+				       new PhysicalObj(new Mesh(get_model("human"), get_texture("icon"), (rand() % 10 + 10) / 20.0f),
+						       true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
+						       get_model("human")->getBoundaryBox(1.0f)), 0, 0);
+    test_actor->SetWeapon(totacres_wep);
+    
     open_world->GetChunk(0, 0)->AddActor(test_actor);
   }
 
