@@ -43,7 +43,7 @@ void init_demo_locations() {
 					  new PhysicalObj(new Mesh(get_model("runner"), get_texture("grass")),
 							  true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
 							  get_model("runner")->getBoundaryBox(1.0f)),
-					  (NPCAI *)new HumanlikeAI());
+					  (NPCAI *)new WanderAI());
     
     Weapon * totacres_wep = new Weapon("totacres", 
 				       new PhysicalObj(new Mesh(get_model("human"), get_texture("icon"), (rand() % 10 + 10) / 20.0f),
