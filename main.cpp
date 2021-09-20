@@ -558,8 +558,6 @@ int main()
 				/* Collide player with all objects in chunk */
 				player->GetPhysicalObj()->collideTerrain(chunk_ptr->GetTerrain(), dt, chunk_ptr);
 			}
-
-
 			
 			GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
 

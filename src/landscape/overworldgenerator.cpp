@@ -22,7 +22,8 @@ void OverWorldGenerator::Generate(Location * location, size_t width, size_t heig
 
   std::vector<std::string> model_names = {
     "tree",
-    "human"
+    "human",
+    "runner"
   };
 
   std::vector<std::string> texture_names = {
