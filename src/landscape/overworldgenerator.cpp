@@ -23,6 +23,7 @@ void OverWorldGenerator::Generate(Location * location, size_t width, size_t heig
   std::vector<std::string> model_names = {
     "tree",
     "human",
+    "bob",
     "runner"
   };
 
@@ -30,7 +31,8 @@ void OverWorldGenerator::Generate(Location * location, size_t width, size_t heig
     "tree",
     "grass",
     "rock",
-    "icon"
+    "icon",
+    "fire"
   };
 
   load_models(model_names);
