@@ -1,4 +1,5 @@
 #include <render/particle.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 Particle::Particle(float scale) : pos(0.0f), vel(0.0f), color(1.0f), life(0.0f), scale(scale) {
   float vertices[16] = {
@@ -52,7 +53,7 @@ void Particle::draw(ShaderHolder *shaderHolder, Camera * camera, int width, int 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texture);
 
-  shaderHolder->getParticle()->use();
+  shaderHolder->getParticle()->Use();
 
   GLuint _offset = glGetUniformLocation(shaderHolder->getParticle()->Program, "offset");
   GLuint _color = glGetUniformLocation(shaderHolder->getParticle()->Program, "color");
