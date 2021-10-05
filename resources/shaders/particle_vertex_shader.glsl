@@ -6,6 +6,8 @@ out vec2 TexCoords;
 out vec4 ParticleColor;
 
 uniform mat4 projection;
+uniform mat4 view;
+uniform mat4 cameraRot;
 uniform vec3 offset;
 uniform vec4 color;
 
@@ -14,5 +16,5 @@ void main()
     float scale = 10.0f;
     ParticleColor = color;
     TexCords = texCords;
-    gl_Position = projection * vec4((vertex * scale) + offset, 1.0);
+    gl_Position = projection * cameraRot * view * vec4((position * scale) + offset, 1.0);
 }

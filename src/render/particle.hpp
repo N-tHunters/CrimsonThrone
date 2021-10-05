@@ -10,8 +10,10 @@ public:
   glm::vec3 pos, vel;
   glm::vec4 color;
   float life;
+  float scale;
 
-  Particle():
-    pos(0.0f), vel(0.0f), color(1.0f), life(0.0f) {}
+  GLuint VAO, EBO, VBO;
+
+  Particle();
   void draw(ShaderHolder *, Camera *, int, int);
 };

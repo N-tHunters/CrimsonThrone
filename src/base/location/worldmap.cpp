@@ -42,16 +42,20 @@ void init_demo_locations() {
     Actor * test_actor = (Actor *)new NPC("totacres", 10,
 					  new PhysicalObj(new Mesh(get_model("runner"), get_texture("fire")),
 							  true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
-							  get_model("bob")->getBoundaryBox(1.0f)),
+							  get_model("runner")->getBoundaryBox(1.0f)),
 					  (NPCAI *)new WanderAI());
     
-    Weapon * totacres_wep = new Weapon("totacres", 
+    Weapon * totacres_wep = new Weapon("sercatot", 
 				       new PhysicalObj(new Mesh(get_model("human"), get_texture("icon"), (rand() % 10 + 10) / 20.0f),
 						       true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
 						       get_model("human")->getBoundaryBox(1.0f)), 0, 0);
     test_actor->SetWeapon(totacres_wep);
     
     open_world->GetChunk(0, 0)->AddActor(test_actor);
+
+    ParticleEmitter* test_particle_emitter = new ParticleEmitter()
+
+    open_world->GetChunk(0, 0)->AddParticleEmitter()
   }
 
   
