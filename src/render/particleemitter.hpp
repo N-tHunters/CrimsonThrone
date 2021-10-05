@@ -10,6 +10,7 @@ class ParticleEmitter {
   std::vector<Particle> particles;
   unsigned int lastUsedParticle = 0;
 
+public:
   ParticleEmitter(PhysicalObj &target):
     target(target) { init(); }
 
