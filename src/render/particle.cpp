@@ -1,7 +1,7 @@
 #include <render/particle.hpp>
 
 
-void Particle::draw(ShaderHolder *shaderHolder) {
+void Particle::draw(ShaderHolder *shaderHolder, Camera *, int width, int height) {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE);
   shaderHolder->getParticle()->use();
 
