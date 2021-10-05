@@ -5,10 +5,11 @@
 #include <render/camera.hpp>
 
 class Inventory {
-  Actor * actor;
+  Actor& actor;
   int index = 0;
 
 public:
-  Inventory(Actor * actor);
-  void draw(ShaderHolder* shaderHolder, Camera* camera, int width, int height);
+  Inventory(Actor& actor);
+  void draw(ShaderHolder* shaderHolder);
+  void update();
 };

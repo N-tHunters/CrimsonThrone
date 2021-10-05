@@ -65,6 +65,7 @@
 #include <UI/textBox.hpp>
 #include <UI/text3d.hpp>
 #include <UI/image3d.hpp>
+#include <UI/inventory.hpp>
 
 #include <landscape/dungeona1generator3d.hpp>
 #include <base/configuration.hpp>
@@ -382,13 +383,14 @@ int main()
 		"Name", "Value"
 	};
 
-	List* inventory_list = new List(glm::vec4(10, 10, width - 20, height - 20),
+	/*List* inventory_list = new List(glm::vec4(10, 10, width - 20, height - 20),
 		(std::vector<AbstractListElement*>*)player->GetInventoryPointer(),
 		"resources/textures/list.png",
 		20,
 		Characters,
 		&inventory_headers,
-		{0.9f, 0.1f});
+		{0.9f, 0.1f});*/
+	Inventory inventory(*player);
 
 	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 
@@ -568,7 +570,7 @@ int main()
 			logs->draw(shaderHolder);
 
 			if (openedInventory) {
-				inventory_list->draw(shaderHolder);
+				inventory.draw(shaderHolder);
 			}
 			
 			mouse_picker->update();
@@ -578,7 +580,7 @@ int main()
 				press_e_text->draw(shaderHolder);
 				if (pressed_e) {
 					player->PickupItem(picked_item);
-					inventory_list->update();
+					inventory.update();
 					GetCurrentLocation()->GetCurrentChunk()->DeleteItem(picked_item);
 				}
 			}
