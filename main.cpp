@@ -279,7 +279,7 @@ int main()
 	                                &waterShader,
 	                                &postShader,
 	                                &text3dShader,
-					&particleShader,
+									&particleShader,
 	                                width, height);
 
 	load_characters();

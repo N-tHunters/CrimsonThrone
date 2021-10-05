@@ -10,9 +10,11 @@ class ParticleEmitter {
   std::vector<Particle> particles;
   unsigned int lastUsedParticle = 0;
 
+  GLuint texture;
+
 public:
-  ParticleEmitter(PhysicalObj &target):
-    target(target) { init(); }
+  ParticleEmitter(PhysicalObj &target, GLuint texture):
+    target(target), texture(texture) { init(); }
 
   void update(float dt);
   void respawn(Particle &particle, glm::vec3 offset);

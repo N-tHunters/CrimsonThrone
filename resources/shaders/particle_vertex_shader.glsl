@@ -10,11 +10,11 @@ uniform mat4 view;
 uniform mat4 cameraRot;
 uniform vec3 offset;
 uniform vec4 color;
+uniform float scale;
 
 void main()
 {
-    float scale = 10.0f;
     ParticleColor = color;
-    TexCords = texCords;
+    TexCoords = texCords;
     gl_Position = projection * cameraRot * view * vec4((position * scale) + offset, 1.0);
 }

@@ -6,7 +6,7 @@ ShaderHolder::ShaderHolder(Shader* shader3D,
                            Shader* shaderWater,
                            Shader* shaderPost,
                            Shader* shaderText3D,
-			   Shader* shaderParticle,
+						   Shader* shaderParticle,
                            int screen_width,
                            int screen_height) {
 	this->shader3D = shader3D;
@@ -43,6 +43,10 @@ Shader* ShaderHolder::getPost() {
 
 Shader* ShaderHolder::getText3D() {
 	return this->shaderText3D;
+}
+
+Shader* ShaderHolder::getParticle() {
+	return this->shaderParticle;
 }
 
 void ShaderHolder::setUnderWater(bool input) {

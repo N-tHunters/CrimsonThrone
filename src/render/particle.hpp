@@ -12,8 +12,11 @@ public:
   float life;
   float scale;
 
+  GLuint texture;
+
   GLuint VAO, EBO, VBO;
 
-  Particle(float scale);
+  Particle(float scale, GLuint texture);
   void draw(ShaderHolder *, Camera *, int, int);
+  void update(float dt);
 };

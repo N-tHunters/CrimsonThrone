@@ -483,6 +483,10 @@ void Chunk::Update(float dt) {
   for (Item * item : items)
     item->GetPhysicalObj()->collideTerrain(terrain, dt, this);
 
+  for (ParticleEmitter * particle_emitter : particle_emitters) {
+    particle_emitter->update(dt);
+  }
+
 
   // Check if any object went into another chunk
 

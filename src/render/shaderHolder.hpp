@@ -17,7 +17,7 @@ class ShaderHolder {
 	int screen_height;
 
 public:
-  ShaderHolder(Shader*, Shader*, Shader*, Shader*, Shader*, Shader*, Shader *, int, int);
+  ShaderHolder(Shader*, Shader*, Shader*, Shader*, Shader*, Shader*, Shader*, int, int);
 	Shader* get3D();
 	Shader* getGUI();
 	Shader* getText();
