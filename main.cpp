@@ -34,6 +34,7 @@
 #include <render/imageLoader.hpp>
 #include <render/textures.hpp>
 #include <render/models.hpp>
+#include <render/animatedModel.hpp>
 
 #include <physics/physicalObj.hpp>
 #include <physics/boundary.hpp>
@@ -269,6 +270,7 @@ int main()
 	Shader waterShader("resources/shaders/water_vertex_shader.glsl", "resources/shaders/water_fragment_shader.glsl");
 	Shader postShader("resources/shaders/post_vertex_shader.glsl", "resources/shaders/post_fragment_shader.glsl");
 	Shader text3dShader("resources/shaders/text3d_vertex_shader.glsl", "resources/shaders/text3d_fragment_shader.glsl");
+	Shader animatedShader("resources/shaders/text3d_vertex_shader.glsl", "resources/shaders/text3d_fragment_shader.glsl");
 
 	shaderHolder = new ShaderHolder(&ourShader,
 	                                &GUIShader,
@@ -276,6 +278,7 @@ int main()
 	                                &waterShader,
 	                                &postShader,
 	                                &text3dShader,
+	                                &animatedShader,
 	                                width, height);
 
 	load_characters();

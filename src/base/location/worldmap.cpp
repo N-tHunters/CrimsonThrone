@@ -40,7 +40,7 @@ void init_demo_locations() {
 
   for(int i = 0; i < rand() % 10; i++){
     Actor * test_actor = (Actor *)new NPC("totacres", 10,
-					  new PhysicalObj(new Mesh(get_model("runner"), get_texture("fire")),
+					  new PhysicalObj(new Mesh(get_model("bob"), get_texture("fire")),
 							  true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
 							  get_model("bob")->getBoundaryBox(1.0f)),
 					  (NPCAI *)new WanderAI());

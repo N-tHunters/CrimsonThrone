@@ -11,18 +11,20 @@ class ShaderHolder {
 	Shader * shaderWater;
 	Shader * shaderPost;
 	Shader * shaderText3D;
+	Shader * shaderAnimated;
 	bool underWater;
 	int screen_width;
 	int screen_height;
 
 public:
-	ShaderHolder(Shader*, Shader*, Shader*, Shader*, Shader*, Shader*, int, int);
+	ShaderHolder(Shader*, Shader*, Shader*, Shader*, Shader*, Shader*, Shader*, int, int);
 	Shader* get3D();
 	Shader* getGUI();
 	Shader* getText();
 	Shader* getWater();
 	Shader* getPost();
 	Shader* getText3D();
+	Shader* getAnimated();
 
 	void setUnderWater(bool input);
 	bool getUnderWater();

@@ -6,6 +6,7 @@ ShaderHolder::ShaderHolder(Shader* shader3D,
                            Shader* shaderWater,
                            Shader* shaderPost,
                            Shader* shaderText3D,
+                           Shader* shaderAnimated,
                            int screen_width,
                            int screen_height) {
 	this->shader3D = shader3D;
@@ -14,6 +15,7 @@ ShaderHolder::ShaderHolder(Shader* shader3D,
 	this->shaderWater = shaderWater;
 	this->shaderPost = shaderPost;
 	this->shaderText3D = shaderText3D;
+	this->shaderAnimated = shaderAnimated;
 	this->underWater = false;
 	this->screen_width = screen_width;
 	this->screen_height = screen_height;
@@ -41,6 +43,10 @@ Shader* ShaderHolder::getPost() {
 
 Shader* ShaderHolder::getText3D() {
 	return this->shaderText3D;
+}
+
+Shader* ShaderHolder::getAnimated() {
+	return this->shaderAnimated;
 }
 
 void ShaderHolder::setUnderWater(bool input) {

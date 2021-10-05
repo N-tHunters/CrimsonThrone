@@ -1,0 +1,10 @@
+#include "animatedMesh.hpp"
+
+AnimatedMesh::AnimatedMesh(const std::string& texture_path, std::vector<GLfloat>* vertices, std::vector<unsigned int>* indices) {
+	glGenTextures(1, &texture_id);
+	glBindTexture(GL_TEXTURE_2D, texture_id);
+}
+
+void AnimatedMesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height) {
+
+}

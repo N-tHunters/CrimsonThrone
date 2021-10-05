@@ -1,0 +1,15 @@
+class AnimatedMesh {
+protected:
+	GLuint texture_id;
+
+	GLuint VBO;
+	GLuint VAO;
+	GLuint EBO;
+
+	int size;
+
+public:
+	AnimatedMesh(const std::string& texture_path, std::vector<GLfloat>*, std::vector<unsigned int>*);
+
+	void draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height);
+};
