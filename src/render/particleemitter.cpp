@@ -20,7 +20,7 @@ void ParticleEmitter::update(float dt) {
 
 void ParticleEmitter::init() {
   for (unsigned int i = 0; i < 50; ++i)
-    particles.push_back(Particle());
+    particles.push_back(Particle(1.0f));
 }
 
 void ParticleEmitter::respawn(Particle &particle, glm::vec3 offset) {

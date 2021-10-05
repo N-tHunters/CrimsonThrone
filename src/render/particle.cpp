@@ -62,13 +62,13 @@ void Particle::draw(ShaderHolder *shaderHolder, Camera * camera, int width, int 
   GLuint _view = glGetUniformLocation(shaderHolder->getParticle()->Program, "view");
 
   if (life > 0.0f) {
-    glUniform3fv(_offset, 1, glm::value_ptr(offset));
+    glUniform3fv(_offset, 1, glm::value_ptr(glm::vec3(0.0f, 0.0f, 0.0f)));
     glUniform4fv(_color, 1, glm::value_ptr(color));
     glUniformMatrix4fv(_projection, 1, glm::value_ptr(projection));
     glUniformMatrix4fv(_cameraRot, 1, glm::value_ptr(cameraRot));
     glUniformMatrix4fv(_view, 1, glm::value_ptr(view));
 
-    glBindVertexArray(particleVAO);
+    glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
     glBindVertexArray(0);
   }

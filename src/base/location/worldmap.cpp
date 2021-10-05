@@ -53,9 +53,9 @@ void init_demo_locations() {
     
     open_world->GetChunk(0, 0)->AddActor(test_actor);
 
-    ParticleEmitter* test_particle_emitter = new ParticleEmitter()
+    ParticleEmitter* test_particle_emitter = new ParticleEmitter(*(test_actor->GetPhysicalObj()));
 
-    open_world->GetChunk(0, 0)->AddParticleEmitter()
+    open_world->GetChunk(0, 0)->AddParticleEmitter(test_particle_emitter);
   }
 
   

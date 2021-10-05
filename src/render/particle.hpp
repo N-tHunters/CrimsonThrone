@@ -14,6 +14,6 @@ public:
 
   GLuint VAO, EBO, VBO;
 
-  Particle();
+  Particle(float scale);
   void draw(ShaderHolder *, Camera *, int, int);
 };
