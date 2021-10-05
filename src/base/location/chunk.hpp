@@ -12,6 +12,7 @@
 #include <base/items/item.hpp>
 #include <base/actors/actor.hpp>
 #include <vector>
+#include <render/particleemitter.hpp>
 
 class Location;
 
@@ -29,6 +30,7 @@ class Chunk {
   std::vector<Actor *>actors;
   std::vector<PhysicalObj *>objects;
   std::vector<BoundaryTrigger *>triggers;
+  std::vector<ParticleEmitter *>particle_emitters;
   PhysicalObj* water_obj;
   Location * location;
   unsigned short x, y;
@@ -48,11 +50,13 @@ class Chunk {
   size_t GetActorsCount();
   size_t GetObjsCount();
   size_t GetTriggersCount();
+  size_t GetParticleEmittersCount();
 
   void AddItem(Item *);
   void AddActor(Actor *);
   void AddObj(PhysicalObj *);
   void AddTrigger(BoundaryTrigger *);
+  void AddParticleEmitter(ParticleEmitter *);
 
   Item * GetItem(size_t);
   Actor * GetActor(size_t);

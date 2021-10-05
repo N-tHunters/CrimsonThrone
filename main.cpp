@@ -269,6 +269,8 @@ int main()
 	Shader waterShader("resources/shaders/water_vertex_shader.glsl", "resources/shaders/water_fragment_shader.glsl");
 	Shader postShader("resources/shaders/post_vertex_shader.glsl", "resources/shaders/post_fragment_shader.glsl");
 	Shader text3dShader("resources/shaders/text3d_vertex_shader.glsl", "resources/shaders/text3d_fragment_shader.glsl");
+	Shader particleShader("resources/shaders/particle_vertex_shader.glsl", "resources/shaders/particle_fragment_shader.glsl");
+
 
 	shaderHolder = new ShaderHolder(&ourShader,
 	                                &GUIShader,
@@ -276,6 +278,7 @@ int main()
 	                                &waterShader,
 	                                &postShader,
 	                                &text3dShader,
+					&particleShader,
 	                                width, height);
 
 	load_characters();

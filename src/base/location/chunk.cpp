@@ -169,6 +169,10 @@ void Chunk::Draw(ShaderHolder * shaderHolder, Camera * camera, int width, int he
   for (size_t i = 0; i <  this->GetItemsCount(); i ++) {
     this->items[i]->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
   }
+
+  for (size_t i = 0; i < this->GetParticleEmittersCount(); i ++) {
+    this->particle_emitters[i]->draw(shaderHolder, camera, width, height);
+  }
 }
   
 
@@ -216,6 +220,11 @@ size_t Chunk::GetTriggersCount() {
   return this->triggers.size();
 }
 
+
+size_t Chunk::GetParticleEmittersCount() {
+  return this->particle_emitters.size();
+}
+
 /**
  * Add item to chunk
  * \param item Item to add
@@ -246,6 +255,10 @@ void Chunk::AddObj(PhysicalObj * object) {
  */
 void Chunk::AddTrigger(BoundaryTrigger * trigger) {
   this->triggers.push_back(trigger);
+}
+
+void Chunk::AddParticleEmitter(ParticleEmitter * pe) {
+  this->particle_emitters.push_back(pe);
 }
 
 /**
