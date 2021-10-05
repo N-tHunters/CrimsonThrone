@@ -26,7 +26,7 @@ Terrain::Terrain(float size, int vertices_number, glm::vec3 position, std::vecto
 	std::vector<std::array<double, 5>> coords;
 	std::vector<glm::vec3> normals;
 
-	double texture_step = 1.0 / (vertices_number - 1);
+	double texture_step = texture_scale / (vertices_number - 1);
 
 	double texture_coords_x = 0.0;
 	double texture_coords_y = 0.0;

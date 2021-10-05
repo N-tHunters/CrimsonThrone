@@ -29,7 +29,7 @@ void AbstractChunk::LoadABS() {
   } else if(load_state == 1) {
     if (height_map != nullptr) {
       assert(blend_pixels.size() != 0);
-      LoadTerrain(new Terrain(size, vertices_number, position, height_map, texture1, texture2, 1.0f, blend_pixels));
+      LoadTerrain(new Terrain(size, vertices_number, position, height_map, texture1, texture2, 10.0f, blend_pixels));
       load_state = 2;
     }
   } else {
