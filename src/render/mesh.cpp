@@ -255,6 +255,11 @@ void Mesh::loadTexture(const std::string& texturePath, char number) {
 }
 
 
+void Mesh::draw(ShaderHolder* shaderHolder) {
+  printf("not implemented\n");
+}
+
+
 void push_vertex(std::vector<float>* vec, glm::vec3 pos, glm::vec3 normal, glm::vec2 uv) {
 	vec->push_back(pos.x);
 	vec->push_back(pos.y);

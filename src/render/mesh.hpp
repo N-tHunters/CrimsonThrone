@@ -57,6 +57,7 @@ public:
 	void loadObject(std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices);
 	void init(PhysicalObj*);
 	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
+  void draw(ShaderHolder*);
 	void rotate(glm::vec3);
 	void changeTexture(const std::string&);
 	void loadTexture(const std::string& texturePath, char number);
