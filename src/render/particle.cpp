@@ -65,7 +65,7 @@ void Particle::draw(ShaderHolder *shaderHolder, Camera * camera, int width, int 
   GLuint _scale = glGetUniformLocation(shaderHolder->getParticle()->Program, "scale");
 
   if (life > 0.0f) {
-    glUniform3fv(_offset, 1, glm::value_ptr(glm::vec3(0.0f, 0.0f, 0.0f)));
+    glUniform3fv(_offset, 1, glm::value_ptr(glm::vec3(0.0f)));
     glUniform4fv(_color, 1, glm::value_ptr(color));
     glUniform1f(_scale, scale);
     glUniformMatrix4fv(_projection, 1, GL_FALSE, glm::value_ptr(projection));
