@@ -52,7 +52,7 @@ void Particle::draw(ShaderHolder *shaderHolder, Camera * camera, int width, int 
   view = glm::translate(view, pos - cameraPosition);
   projection = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 
-  glActiveTexture(GL_TEXTURE0);
+  glActiveTexture(GL_TEXTURE2);
   glBindTexture(GL_TEXTURE_2D, texture);
 
   shaderHolder->getParticle()->Use();

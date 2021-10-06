@@ -43,7 +43,7 @@ void init_demo_locations() {
 					  new PhysicalObj(new Mesh(get_model("runner"), get_texture("fire")),
 							  true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
 							  get_model("runner")->getBoundaryBox(1.0f)),
-					  (NPCAI *)new WanderAI());
+					  (NPCAI *)new WanderAI(5.0f));
     
     Weapon * totacres_wep = new Weapon("sercatot", 
 				       new PhysicalObj(new Mesh(get_model("human"), get_texture("icon"), (rand() % 10 + 10) / 20.0f),
@@ -53,7 +53,7 @@ void init_demo_locations() {
     
     open_world->GetChunk(0, 0)->AddActor(test_actor);
 
-    ParticleEmitter* test_particle_emitter = new ParticleEmitter(*(test_actor->GetPhysicalObj()), get_texture("fire"));
+    ParticleEmitter* test_particle_emitter = new ParticleEmitter(*(test_actor->GetPhysicalObj()), get_texture("icon"));
 
     open_world->GetChunk(0, 0)->AddParticleEmitter(test_particle_emitter);
   }
@@ -65,6 +65,7 @@ void init_demo_locations() {
 							  true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_item_po",
 							  get_model("human")->getBoundaryBox(1.0f)));
     open_world->GetChunk(0, 0)->AddItem(test_item);
+    
   }
 
   SetCurrentLocation(open_world);

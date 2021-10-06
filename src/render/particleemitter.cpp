@@ -1,5 +1,9 @@
 #include <render/particleemitter.hpp>
 
+
+const int N_PARTICLES = 50;
+
+
 void ParticleEmitter::update(float dt) {
   
   for (unsigned int i = 0; i < 2; ++i) {
@@ -7,19 +11,19 @@ void ParticleEmitter::update(float dt) {
     respawn(particles[unusedParticle], glm::vec3(0.0f, 0.0f, 0.0f));
   }
   // update all particles
-  for (unsigned int i = 0; i < 500; ++i) {
+  for (unsigned int i = 0; i < N_PARTICLES; ++i) {
     Particle &p = particles[i];
     p.life -= dt; // reduce life
     if (p.life > 0.0f) {	// particle is alive, thus update
       p.pos -= p.vel * dt;
-      p.color.a -= dt * 2.5f;
+      p.color.a -= dt * 0.5f;
     }
   }  
 }
 
 void ParticleEmitter::init() {
-  for (unsigned int i = 0; i < 500; ++i)
-    particles.push_back(Particle(1.0f, texture));
+  for (unsigned int i = 0; i < N_PARTICLES; ++i)
+    particles.push_back(Particle(0.5f, texture));
 }
 
 void ParticleEmitter::respawn(Particle &particle, glm::vec3 offset) {
@@ -28,7 +32,7 @@ void ParticleEmitter::respawn(Particle &particle, glm::vec3 offset) {
   
   particle.pos = target.getPosition() + random + offset;
   particle.color = glm::vec4(rColor, rColor, rColor, 1.0f);
-  particle.life = 10.0f;
+  particle.life = 1.0f;
   particle.vel = target.velocity * 0.1f;
 }
 

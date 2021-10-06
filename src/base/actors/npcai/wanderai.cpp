@@ -12,6 +12,12 @@ WanderAI::WanderAI() {
   target_follow_speed = rand() % 10 + 5;
 }
 
+WanderAI::WanderAI(float speed) {
+  target_position = glm::vec3(rand() % 100 * 1.0f, 0.0f, rand() % 100 * 1.0f);
+  target_follow_speed = speed;
+  is_const_speed = true;
+}
+
 void WanderAI::Process(float dt) {
   Wander();
 }
@@ -41,6 +47,7 @@ bool WanderAI::GoToTarget() {
 void WanderAI::Wander() {
   if(this->GoToTarget()) {
     target_position = glm::vec3(rand() % 100 * 1.0f, 0.0f, rand() % 100 * 1.0f);
-    target_follow_speed = rand() % 10 + 5;
+    if(!is_const_speed)
+      target_follow_speed = rand() % 10 + 5;
   }
 }
