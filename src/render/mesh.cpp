@@ -153,7 +153,11 @@ void Mesh::loadObject(std::vector<GLfloat> *vertices, std::vector<unsigned int> 
  * \param[in] height 		Screen height
  */
 void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height) {
-	assert(this->obj != nullptr);
+	// assert(this->obj != nullptr);
+	if (this->obj == nullptr) {
+		draw(shaderHolder, glm::vec3(0.0f), glm::vec3(0.0f), width, height);
+		return;
+	}
 	glm::mat4 model = glm::mat4(1.0f);
 	glm::mat4 view = glm::mat4(1.0f);
 	glm::mat4 cameraRot = glm::mat4(1.0f);
