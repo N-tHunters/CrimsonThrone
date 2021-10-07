@@ -202,6 +202,7 @@ void Mesh::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint
 		glUniform1i(glGetUniformLocation(shaderHolder->get3D()->Program, "Texture1"), 0);
 		glUniform1i(glGetUniformLocation(shaderHolder->get3D()->Program, "Texture2"), 1);
 		glUniform1i(glGetUniformLocation(shaderHolder->get3D()->Program, "blend_texture"), 2);
+		glUniform1f(glGetUniformLocation(shaderHolder->get3D()->Program, "ambient"), 0.0f);
 	} else {
 		shaderHolder->getWater()->Use();
 		glUniform1f(glGetUniformLocation(shaderHolder->getWater()->Program, "time"), glfwGetTime());
@@ -273,6 +274,7 @@ void Mesh::draw(ShaderHolder* shaderHolder, glm::vec3 position, glm::vec3 rotati
 	glUniform1i(glGetUniformLocation(shaderHolder->get3D()->Program, "Texture1"), 0);
 	glUniform1i(glGetUniformLocation(shaderHolder->get3D()->Program, "Texture2"), 1);
 	glUniform1i(glGetUniformLocation(shaderHolder->get3D()->Program, "blend_texture"), 2);
+	glUniform1f(glGetUniformLocation(shaderHolder->get3D()->Program, "ambient"), 1.0f);
 
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
