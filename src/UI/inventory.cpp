@@ -94,7 +94,7 @@ void Inventory::draw(ShaderHolder* shaderHolder, int width, int height) {
   if(actor.GetInventorySize() > 0) {
     PhysicalObj *po = actor.GetItemAt(0)->GetPhysicalObj();
     po->getMesh()->draw(shaderHolder, glm::vec3(3.0f, 1.5f, -7.0f), element_rotation, width, height);
-    element_rotation.y += 2.0f;
+    element_rotation.y += 10.0f;
   }
 }
 
