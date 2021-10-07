@@ -15,10 +15,18 @@ class Inventory {
   std::vector<GLfloat> vertices;
   std::vector<unsigned int> indices;
   std::vector<Text*>item_names;
+  Text* hold_weapon;
+  int weapon_index;
+  
   std::map<GLchar, Character> &characters;
 
 public:
   Inventory(Actor& actor, std::map<GLchar, Character> &Characters, int, int);
   void draw(ShaderHolder* shaderHolder, int width, int height);
-  void update();
+  void open();
+  void update(float dt);
+  void nextElement();
+  void prevElement();
+  void selectElement();
+  void updateStatus();
 };

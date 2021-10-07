@@ -157,3 +157,7 @@ glm::vec2 Text::getPosition() {
 std::string Text::getText() {
 	return m_text;
 }
+
+void Text::setColor(glm::vec3 _color) {
+  color = _color;
+}

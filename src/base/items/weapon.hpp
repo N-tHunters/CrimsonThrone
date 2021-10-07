@@ -27,6 +27,9 @@ public:
   void SetDamage(int);
   void SetRange(int);
 
+  void Use(Actor *);
+  void Wear(Actor *);
+
   virtual std::stringstream * Save(Saver *);
   std::stringstream * Save(Saver *, int);
 };

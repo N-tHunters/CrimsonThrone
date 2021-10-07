@@ -60,11 +60,11 @@ void init_demo_locations() {
 
   
   for(int i = 0; i < rand() % 10; i++){
-    Item * test_item = (Item *)new Item("totacres",
-					  new PhysicalObj(new Mesh(get_model("human"), get_texture("blood")),
-							  true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_item_po",
-							  get_model("human")->getBoundaryBox(1.0f)));
-    open_world->GetChunk(0, 0)->AddItem(test_item);
+     Weapon * totacres_wep = new Weapon("sercatot", 
+				       new PhysicalObj(new Mesh(get_model("human"), get_texture("blood"), (rand() % 10 + 10) / 20.0f),
+						       true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
+						       get_model("human")->getBoundaryBox(1.0f)), 0, 0);
+    open_world->GetChunk(0, 0)->AddItem(totacres_wep);
     
   }
 
