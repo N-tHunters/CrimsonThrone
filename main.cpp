@@ -116,6 +116,8 @@ int width, height;
 TextBox* logs;
 MousePicker* mouse_picker;
 
+Inventory* inventory;
+
 typedef void (*function)();
 
 enum {
@@ -301,7 +303,7 @@ int main()
 
 
 	
-	Image* image_loading = new Image(glm::vec4(width / 2 - 100, height / 2 - 100, 200, 200), "resources/textures/water.png");
+	Image* image_loading = new Image(glm::vec4(width / 2 - 256, height / 2 - 256, 512, 512), "resources/textures/starting.png");
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -368,10 +370,10 @@ int main()
 
 	glfwSetCursorPos(window, (double)width / 2.0, (double)height / 2.0);
 
-	Button* resume_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "resume", Characters, 14.0f, glm::vec3(255), width, height);
-	Button* exit_to_menu = new Button(glm::vec4(-0.1, -0.20, 0.2, 0.1), (function)change_to_main_menu, "exit to menu", Characters, 14.0f, glm::vec3(255), width, height);
-	Button* play_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "START GAME", Characters, 24.0f, glm::vec3(255), width, height);
-	Button* exit_button = new Button(glm::vec4(-0.1, -0.2, 0.2, 0.1), (function)close_window, "exit game", Characters, 24.0f, glm::vec3(255), width, height);
+	Button* resume_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "resume", Characters, 7.0f, glm::vec3(255), width, height);
+	Button* exit_to_menu = new Button(glm::vec4(-0.1, -0.20, 0.2, 0.1), (function)change_to_main_menu, "exit to menu", Characters, 7.0f, glm::vec3(255), width, height);
+	Button* play_button = new Button(glm::vec4(-0.1, 0.0, 0.2, 0.2), (function)change_to_running, "START GAME", Characters, 10.0f, glm::vec3(255), width, height);
+	Button* exit_button = new Button(glm::vec4(-0.1, -0.3, 0.2, 0.15), (function)close_window, "exit game", Characters, 10.0f, glm::vec3(255), width, height);
 
 	game_state = STATE_MAIN_MENU;
 
@@ -392,7 +394,7 @@ int main()
 		Characters,
 		&inventory_headers,
 		{0.9f, 0.1f});*/
-	Inventory inventory(*player, Characters, width, height);
+	inventory = new Inventory(*player, Characters, width, height);
 
 	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 
@@ -404,7 +406,7 @@ int main()
 	Mesh* hammer_mesh = new Mesh(hammer_model, get_texture("house"));
 	PhysicalObj* hammer = new PhysicalObj(hammer_mesh, false, true, false, false, glm::vec3(10.0f, 10.0f, 10.0f), glm::vec3(0.0f, 0.0f, 0.0f), "hammer", hammer_model->getBoundaryBox(1.0f));
 
-	Text* press_e_text = new Text("Press [E]", Characters, 14.0f / 24.0f, glm::vec3(0), glm::vec2(width / 2.0f, width / 2.0f));
+	Text* press_e_text = new Text("Press [E]", Characters, 0.4f, glm::vec3(0), glm::vec2(width / 2.0f, width / 2.0f));
 
 	// Image3D* floating_image = new Image3D(glm::vec4(-10.0f, -10.0f, 20.0f, 20.0f), glm::vec3(10.0f, 10.0f, 30.0f), get_texture("grass"));
 
@@ -572,7 +574,8 @@ int main()
 			logs->draw(shaderHolder);
 
 			if (openedInventory) {
-			  inventory.draw(shaderHolder, width, height);
+			  inventory->draw(shaderHolder, width, height);
+			  inventory->update(dt);
 			}
 			
 			mouse_picker->update();
@@ -582,7 +585,6 @@ int main()
 				press_e_text->draw(shaderHolder);
 				if (pressed_e) {
 					player->PickupItem(picked_item);
-					inventory.update();
 					GetCurrentLocation()->GetCurrentChunk()->DeleteItem(picked_item);
 				}
 			}
@@ -653,9 +655,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 {
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
 		if (game_state == STATE_RUNNING) {
-		  if(openedInventory)
+		  if(openedInventory) {
 		    openedInventory = false;
-		  else {
+		    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		  } else {
 			game_state = STATE_PAUSED;
 			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 		  }
@@ -673,14 +676,14 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	  }
 	}
 	if (key == GLFW_KEY_W && action == GLFW_RELEASE && direction > 0) {
-	  if(openedInventory) {}
+	  if(openedInventory) { inventory->prevElement(); }
 	  else {
 		speed.x = 0.0f;
 		speed.y = 0.0f;
 	  }
 	}
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-	  if(openedInventory) {}
+	  if(openedInventory) { inventory->nextElement(); }
 	  else {
 		speed.x = sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
 		speed.y = cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
@@ -728,7 +731,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	}
 
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-	  if(openedInventory) {}
+	  if(openedInventory) {
+	    inventory->selectElement();
+	  }
 	  else {
 		player_wants_to_jump = true;
 	  }
@@ -767,6 +772,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 	if (key == GLFW_KEY_I && action == GLFW_RELEASE) {
 		openedInventory = !openedInventory;
+		if(openedInventory) {
+		  inventory->open();
+		  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		} else {
+		  glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
 	}
 }
 
@@ -779,7 +790,7 @@ void load_characters() {
 		std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
 
 
-	FT_Set_Pixel_Sizes(face, 0, 24);
+	FT_Set_Pixel_Sizes(face, 0, 128);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 

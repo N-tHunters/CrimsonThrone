@@ -27,6 +27,7 @@ public:
 	void changePosition(glm::vec2 delta);
 	glm::vec2 getPosition();
 	std::string getText();
+  void setColor(glm::vec3 _color);
 };
 
 void setDefaultCharacters(std::map<GLchar, Character>);

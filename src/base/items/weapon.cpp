@@ -5,6 +5,7 @@
 #include <base/items/weapon.hpp>
 #include <base/entries.hpp>
 #include <base/saver.hpp>
+#include <base/actors/actor.hpp>
 
 /**
  * Basic constructor
@@ -86,4 +87,14 @@ std::stringstream * Weapon::Save(Saver * saver, int entry) {
  */
 std::stringstream * Weapon::Save(Saver * saver) {
   return this->Save(saver, ENTRY_WEAPON);
+}
+
+
+void Weapon::Wear(Actor * actor) {
+  actor->SetWeapon(this);
+}
+
+
+void Weapon::Use(Actor * actor) {
+  Wear(actor);
 }

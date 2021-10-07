@@ -6,8 +6,7 @@ Inventory::Inventory(Actor& actor, std::map<GLchar, Character> &Characters, int 
   actor(actor), characters(Characters) {
   this->rect = glm::vec4(10.0f, 10.0f, width - 20, height - 20);
   this->color = glm::vec4(0.1f, 0.1f, 0.1f, 0.0f);
-  this->element_rotation = glm::vec3(0.0f);
-
+  
   vertices = {rect.x,     	 rect.y + rect.w, 0.0f, 0.0f, 1.0f,
     rect.x,     	 rect.y,     	  0.0f, 0.0f, 0.0f,
     rect.x + rect.z, rect.y + rect.w, 0.0f, 1.0f, 1.0f,
@@ -60,14 +59,11 @@ Inventory::Inventory(Actor& actor, std::map<GLchar, Character> &Characters, int 
 
   glBindVertexArray(0);
 
-  for (uint16_t i = 0; i < actor.GetInventorySize(); i ++) {
-    item_names.push_back(new Text(actor.GetItemAt(i)->GetName(),
-				  characters,
-				  1.0f,
-				  glm::vec3(1.0, 1.0, 1.0),
-    				  glm::vec2(rect.x + 40, rect.w + rect.y - 30 - 20.0f * i)));
-
-  }
+  this->hold_weapon = new Text("wep",
+			       characters,
+			       0.6f,
+			       glm::vec3(1.0f, 0.0f, 0.0f),
+			       glm::vec2(rect.x + 400, rect.w + rect.y - 40 - 55.0f * 0));
 }
 
 void Inventory::draw(ShaderHolder* shaderHolder, int width, int height) {
@@ -90,23 +86,80 @@ void Inventory::draw(ShaderHolder* shaderHolder, int width, int height) {
   for (Text* item_name : item_names) {
     item_name->draw(shaderHolder);
   }
+
+  if(weapon_index != -1) {
+    this->hold_weapon->setPosition(rect.x + 400, rect.w + rect.y - 40 - 55.0f * weapon_index);
+    this->hold_weapon->draw(shaderHolder);
+  }
   
   if(actor.GetInventorySize() > 0) {
     PhysicalObj *po = actor.GetItemAt(0)->GetPhysicalObj();
     po->getMesh()->draw(shaderHolder, glm::vec3(3.0f, 1.5f, -7.0f), element_rotation, width, height);
-    element_rotation.y += 10.0f;
   }
 }
 
-void Inventory::update() {
+void Inventory::open() {
   element_rotation = glm::vec3(0.0f);
+  index = 0;
+
   item_names.clear();
   for (uint16_t i = 0; i < actor.GetInventorySize(); i ++) {
+    glm::vec3 col(1.0f);
+    if(i == index) col = glm::vec3(1.0f, 1.0f, 0.0f);
+    
     item_names.push_back(new Text(actor.GetItemAt(i)->GetName(),
 				  characters,
-				  1.0f,
-				  glm::vec3(1.0, 1.0, 1.0),
-    				  glm::vec2(rect.x + 50, rect.w + rect.y - 30 - 20.0f * i)));
+				  0.6f,
+				  col,
+    				  glm::vec2(rect.x + 130, rect.w + rect.y - 40 - 55.0f * i)));
 
+  }
+
+  updateStatus();
+}
+
+
+void Inventory::update(float dt) {
+    element_rotation.y += 10.0f *dt;
+}
+
+
+void Inventory::updateStatus() {
+  if(actor.GetWeapon() == nullptr)
+    weapon_index = -1;
+  else {
+    for(weapon_index = 0; weapon_index < actor.GetInventorySize() && actor.GetItemAt(weapon_index) != (Item*)actor.GetWeapon(); weapon_index++);
+  }
+}
+
+
+void Inventory::nextElement() {
+  if(actor.GetInventorySize() == 0)
+    index = 0;
+  else {
+    this->item_names[index]->setColor(glm::vec3(1.0f));
+    index = (index + 1) % actor.GetInventorySize();
+    this->item_names[index]->setColor(glm::vec3(1.0f, 1.0f, 0.0f));
+    if(actor.GetInventorySize() != 1)
+      element_rotation = glm::vec3(0.0f);
+  }
+}
+
+void Inventory::prevElement() {
+  if(actor.GetInventorySize() == 0)
+    index = 0;
+  else {
+    this->item_names[index]->setColor(glm::vec3(1.0f));
+    index = (index + actor.GetInventorySize() - 1) % actor.GetInventorySize();
+    this->item_names[index]->setColor(glm::vec3(1.0f, 1.0f, 0.0f));
+    if(actor.GetInventorySize() != 1)
+      element_rotation = glm::vec3(0.0f);
+  }
+}
+
+void Inventory::selectElement() {
+  if(actor.GetInventorySize() != 0) {
+    actor.GetItemAt(index)->Use(&actor);
+    updateStatus();
   }
 }
