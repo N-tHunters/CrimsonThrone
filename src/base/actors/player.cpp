@@ -3,6 +3,7 @@
  * \brief This file contains implementation of Player
  */
 #include "player.hpp"
+#include <base/items/weapon.hpp>
 
 /**
  * Empty constructor - calls Actor::Actor()
@@ -74,8 +75,12 @@ void Player::CalculateSideSpeed(float rotation, float velocity, float direction)
 
 void Player::draw(ShaderHolder* shaderHolder, Camera* camera, int width, int height) {
   if(this->weapon != nullptr) {
-    this->weapon->GetPhysicalObj()->setPosition(this->obj->getPosition() + glm::vec3(0.1f, -0.2f, 0.5f));
-    this->weapon->GetPhysicalObj()->changeRotation(glm::vec3(0.0f, 0.0f, (rand() % 100) / 1.0f));
+    glm::mat4 rotation_matrix = glm::mat4(1.0f);
+    rotation_matrix = glm::rotate(rotation_matrix, glm::radians(this->m_camera->getRotationY() - 90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::vec4 offset_vec4 = glm::vec4(0.1f, -0.2f, 0.5f, 1.0f) * rotation_matrix;
+    glm::vec3 offset = glm::vec3(offset_vec4);
+    this->weapon->GetPhysicalObj()->setPosition(this->obj->getPosition() + offset);
+    this->weapon->GetPhysicalObj()->setRotation(glm::vec3(0.0f, this->m_camera->getRotationY(), 0.0f));
     this->weapon->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
   }
 }
