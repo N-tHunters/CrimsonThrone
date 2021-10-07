@@ -10,6 +10,7 @@ class Inventory {
   int index = 0;
   glm::vec4 rect;
   glm::vec4 color;
+  glm::vec3 element_rotation;
   GLuint VBO, VAO, EBO, texture;
   std::vector<GLfloat> vertices;
   std::vector<unsigned int> indices;

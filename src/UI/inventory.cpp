@@ -6,6 +6,7 @@ Inventory::Inventory(Actor& actor, std::map<GLchar, Character> &Characters, int 
   actor(actor), characters(Characters) {
   this->rect = glm::vec4(10.0f, 10.0f, width - 20, height - 20);
   this->color = glm::vec4(0.1f, 0.1f, 0.1f, 0.0f);
+  this->element_rotation = glm::vec3(0.0f);
 
   vertices = {rect.x,     	 rect.y + rect.w, 0.0f, 0.0f, 1.0f,
     rect.x,     	 rect.y,     	  0.0f, 0.0f, 0.0f,
@@ -92,11 +93,13 @@ void Inventory::draw(ShaderHolder* shaderHolder, int width, int height) {
   
   if(actor.GetInventorySize() > 0) {
     PhysicalObj *po = actor.GetItemAt(0)->GetPhysicalObj();
-    po->getMesh()->draw(shaderHolder);
+    po->getMesh()->draw(shaderHolder, glm::vec3(3.0f, 1.5f, -7.0f), element_rotation, width, height);
+    element_rotation.y += 2.0f;
   }
 }
 
 void Inventory::update() {
+  element_rotation = glm::vec3(0.0f);
   item_names.clear();
   for (uint16_t i = 0; i < actor.GetInventorySize(); i ++) {
     item_names.push_back(new Text(actor.GetItemAt(i)->GetName(),
