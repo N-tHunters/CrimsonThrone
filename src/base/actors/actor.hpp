@@ -33,7 +33,7 @@ class Saver;
  */
 
 class Actor {
-private:
+protected:
   int health;
   int max_health;
 

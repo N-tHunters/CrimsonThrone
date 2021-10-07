@@ -68,6 +68,7 @@
 #include <UI/inventory.hpp>
 
 #include <landscape/dungeona1generator3d.hpp>
+
 #include <base/configuration.hpp>
 #include <base/location/worldmap.hpp>
 
@@ -84,8 +85,6 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void MessageCallback(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 
 // Global variabels
-glm::vec2 speed = glm::vec2(0.0f, 0.0f);
-glm::vec2 speedSide = glm::vec2(0.0f, 0.0f);
 
 float VCAP = 0.1f;
 Camera* camera;
@@ -469,13 +468,13 @@ int main()
 			glm::vec2 cursorMotion = glm::vec2(lastXPos - xpos, lastYPos - ypos);
 			if (game_state != STATE_PAUSED && !openedInventory) {
 				if (cursorMotion.x != 0 || cursorMotion.y != 0) {
-					if (speed.x != 0 || speed.y != 0) {
-						speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
-						speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
+					if (player->GetSpeed().x != 0 || player->GetSpeed().y != 0) {
+						player->SetSpeed(glm::vec2(-sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction,
+						-cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction));
 					}
-					if (speedSide.x != 0 || speedSide.y != 0) {
-						speedSide.x = -sin(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
-						speedSide.y = -cos(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity;
+					if (player->GetSideSpeed().x != 0 || player->GetSideSpeed().y != 0) {
+						player->SetSideSpeed(glm::vec2(-sin(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity,
+						-cos(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity));
 					}
 					cursorMotion *= sensivity;
 					player->GetCamera()->changeRotationX(-cursorMotion.y);
@@ -539,9 +538,9 @@ int main()
 
 
 				if (isRunning)
-					player->GetPhysicalObj()->setSpeed((speed + speedSide) * 10.0f);
+					player->GetPhysicalObj()->setSpeed((player->GetSpeed() + player->GetSideSpeed()) * 10.0f);
 				else
-					player->GetPhysicalObj()->setSpeed(speed + speedSide);
+					player->GetPhysicalObj()->setSpeed(player->GetSpeed() + player->GetSideSpeed());
 
 				chunk_ptr->CheckAllTriggersAsPlayer(player->GetPhysicalObj());
 
@@ -567,6 +566,8 @@ int main()
 			}
 			
 			GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
+
+			player->draw(shaderHolder, camera, width, height);
 
 
 			logs->draw(shaderHolder);
@@ -667,63 +668,57 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
 	  if(openedInventory) {}
 	  else {
-		speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
-		speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
+		player->SetSpeed(glm::vec2(-sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity,
+			-cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity));
 		direction = 1;
 	  }
 	}
 	if (key == GLFW_KEY_W && action == GLFW_RELEASE && direction > 0) {
 	  if(openedInventory) {}
 	  else {
-		speed.x = 0.0f;
-		speed.y = 0.0f;
+	  	player->SetSpeed(glm::vec2(0.0f));
 	  }
 	}
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
 	  if(openedInventory) {}
 	  else {
-		speed.x = sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
-		speed.y = cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
+	  	player->CalculateSpeed(player->GetCamera()->getRotation().y, velocity, direction);
 		direction = -1;
 	  }
 	}
 	if (key == GLFW_KEY_S && action == GLFW_RELEASE && direction < 0) {
 	  if(openedInventory) {}
 	  else {
-		speed.x = 0.0f;
-		speed.y = 0.0f;
+		player->SetSpeed(glm::vec2(0.0f));
 	  }
 	}
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
 	  if(openedInventory) {}
 	  else {
-		speedSide.x = sin(glm::radians(-(player->GetCamera()->getRotation().y + 90.0f))) * velocity;
-		speedSide.y = cos(glm::radians(-(player->GetCamera()->getRotation().y + 90.0f))) * velocity;
-		directionSide = -90.0f;
+		player->CalculateSideSpeed(player->GetCamera()->getRotation().y, velocity, -1.0f);
+		directionSide = -1.0f;
 	  }
 	}
 	if (key == GLFW_KEY_A && action == GLFW_RELEASE && directionSide < 0.0f) {
 	  if(openedInventory) {}
 	  else {
-		speedSide.x = 0.0f;
-		speedSide.y = 0.0f;
+		player->SetSideSpeed(glm::vec2(0.0f));
 	  }
 	}
 
 	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
 	  if(openedInventory) {}
 	  else {
-		speedSide.x = sin(glm::radians(-(player->GetCamera()->getRotation().y - 90.0f))) * velocity;
-		speedSide.y = cos(glm::radians(-(player->GetCamera()->getRotation().y - 90.0f))) * velocity;
-		directionSide = 90.0f;
+		player->SetSideSpeed(glm::vec2(sin(glm::radians(-(player->GetCamera()->getRotation().y - 90.0f))) * velocity,
+		cos(glm::radians(-(player->GetCamera()->getRotation().y - 90.0f))) * velocity));
+		directionSide = 1.0f;
 	  }
 	}
 
 	if (key == GLFW_KEY_D && action == GLFW_RELEASE && directionSide > 0.0f) {
 	  if(openedInventory) {}
 	  else {
-		speedSide.x = 0.0f;
-		speedSide.y = 0.0f;
+		player->SetSideSpeed(glm::vec2(0.0f));
 	  }
 	}
 
