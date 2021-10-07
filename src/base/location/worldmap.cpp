@@ -46,14 +46,14 @@ void init_demo_locations() {
 					  (NPCAI *)new WanderAI(5.0f));
     
     Weapon * totacres_wep = new Weapon("sercatot", 
-				       new PhysicalObj(new Mesh(get_model("human"), get_texture("icon"), (rand() % 10 + 10) / 20.0f),
+				       new PhysicalObj(new Mesh(get_model("human"), get_texture("blood"), (rand() % 10 + 10) / 20.0f),
 						       true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
 						       get_model("human")->getBoundaryBox(1.0f)), 0, 0);
     test_actor->SetWeapon(totacres_wep);
     
     open_world->GetChunk(0, 0)->AddActor(test_actor);
 
-    ParticleEmitter* test_particle_emitter = new ParticleEmitter(*(test_actor->GetPhysicalObj()), get_texture("icon"));
+    ParticleEmitter* test_particle_emitter = new ParticleEmitter(*(test_actor->GetPhysicalObj()), get_texture("blood"));
 
     open_world->GetChunk(0, 0)->AddParticleEmitter(test_particle_emitter);
   }
@@ -61,7 +61,7 @@ void init_demo_locations() {
   
   for(int i = 0; i < rand() % 10; i++){
     Item * test_item = (Item *)new Item("totacres",
-					  new PhysicalObj(new Mesh(get_model("human"), get_texture("icon")),
+					  new PhysicalObj(new Mesh(get_model("human"), get_texture("blood")),
 							  true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_item_po",
 							  get_model("human")->getBoundaryBox(1.0f)));
     open_world->GetChunk(0, 0)->AddItem(test_item);

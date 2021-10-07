@@ -16,7 +16,7 @@ void ParticleEmitter::update(float dt) {
     p.life -= dt; // reduce life
     if (p.life > 0.0f) {	// particle is alive, thus update
       p.pos -= p.vel * dt;
-      p.color.a -= dt * 0.5f;
+      p.color.a = 1.0f * p.life / p.max_life;
     }
   }  
 }
@@ -33,6 +33,7 @@ void ParticleEmitter::respawn(Particle &particle, glm::vec3 offset) {
   particle.pos = target.getPosition() + random + offset;
   particle.color = glm::vec4(rColor, rColor, rColor, 1.0f);
   particle.life = 1.0f;
+  particle.max_life = 1.0f;
   particle.vel = target.velocity * 0.1f;
 }
 

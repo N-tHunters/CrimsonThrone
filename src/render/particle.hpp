@@ -9,7 +9,7 @@ class Particle {
 public:
   glm::vec3 pos, vel;
   glm::vec4 color;
-  float life;
+  float life, max_life;
   float scale;
 
   GLuint texture;

@@ -40,7 +40,7 @@ Particle::Particle(float scale, GLuint texture) : pos(0.0f), vel(0.0f), color(1.
 }
 
 void Particle::draw(ShaderHolder *shaderHolder, Camera * camera, int width, int height) {
-  // glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
   glm::mat4 view = glm::mat4(1.0f);
   glm::mat4 cameraRot = glm::mat4(1.0f);
@@ -77,7 +77,7 @@ void Particle::draw(ShaderHolder *shaderHolder, Camera * camera, int width, int 
     glBindVertexArray(0);
   }
   
-  // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Particle::update(float dt) {

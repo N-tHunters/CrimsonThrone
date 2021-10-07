@@ -17,8 +17,8 @@ void main()
 	vec4 objectColor1 = texture(Texture1, TexCoord);
 	vec4 objectColor2 = texture(Texture2, TexCoord);
 
-	vec4 color_1 = vec4(objectColor1.rgb * (diffuse + vec3(0.7)), objectColor1.a);
-	vec4 color_2 = vec4(objectColor2.rgb * (diffuse + vec3(0.7)), objectColor2.a);
+	vec4 color_1 = vec4(objectColor1.rgb * diffuse, objectColor1.a);
+	vec4 color_2 = vec4(objectColor2.rgb * diffuse, objectColor2.a);
 
 	// color_2 = mix(color_2, vec4(0.5f, 0.7f, 0.7f, 1.0f), min(distance / 100.0, 1.0));
 
