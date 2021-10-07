@@ -392,7 +392,7 @@ int main()
 		Characters,
 		&inventory_headers,
 		{0.9f, 0.1f});*/
-	Inventory inventory(*player);
+	Inventory inventory(*player, Characters, width, height);
 
 	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 
@@ -467,7 +467,7 @@ int main()
 			last_frame = glfwGetTime();
 		} else {
 			glm::vec2 cursorMotion = glm::vec2(lastXPos - xpos, lastYPos - ypos);
-			if (game_state != STATE_PAUSED) {
+			if (game_state != STATE_PAUSED && !openedInventory) {
 				if (cursorMotion.x != 0 || cursorMotion.y != 0) {
 					if (speed.x != 0 || speed.y != 0) {
 						speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction;
@@ -572,7 +572,7 @@ int main()
 			logs->draw(shaderHolder);
 
 			if (openedInventory) {
-				inventory.draw(shaderHolder);
+			  inventory.draw(shaderHolder, width, height);
 			}
 			
 			mouse_picker->update();
@@ -665,46 +665,73 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 		}
 	}
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
+	  if(openedInventory) {}
+	  else {
 		speed.x = -sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
 		speed.y = -cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
 		direction = 1;
+	  }
 	}
 	if (key == GLFW_KEY_W && action == GLFW_RELEASE && direction > 0) {
+	  if(openedInventory) {}
+	  else {
 		speed.x = 0.0f;
 		speed.y = 0.0f;
+	  }
 	}
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+	  if(openedInventory) {}
+	  else {
 		speed.x = sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
 		speed.y = cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity;
 		direction = -1;
+	  }
 	}
 	if (key == GLFW_KEY_S && action == GLFW_RELEASE && direction < 0) {
+	  if(openedInventory) {}
+	  else {
 		speed.x = 0.0f;
 		speed.y = 0.0f;
+	  }
 	}
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+	  if(openedInventory) {}
+	  else {
 		speedSide.x = sin(glm::radians(-(player->GetCamera()->getRotation().y + 90.0f))) * velocity;
 		speedSide.y = cos(glm::radians(-(player->GetCamera()->getRotation().y + 90.0f))) * velocity;
 		directionSide = -90.0f;
+	  }
 	}
 	if (key == GLFW_KEY_A && action == GLFW_RELEASE && directionSide < 0.0f) {
+	  if(openedInventory) {}
+	  else {
 		speedSide.x = 0.0f;
 		speedSide.y = 0.0f;
+	  }
 	}
 
 	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
+	  if(openedInventory) {}
+	  else {
 		speedSide.x = sin(glm::radians(-(player->GetCamera()->getRotation().y - 90.0f))) * velocity;
 		speedSide.y = cos(glm::radians(-(player->GetCamera()->getRotation().y - 90.0f))) * velocity;
 		directionSide = 90.0f;
+	  }
 	}
 
 	if (key == GLFW_KEY_D && action == GLFW_RELEASE && directionSide > 0.0f) {
+	  if(openedInventory) {}
+	  else {
 		speedSide.x = 0.0f;
 		speedSide.y = 0.0f;
+	  }
 	}
 
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+	  if(openedInventory) {}
+	  else {
 		player_wants_to_jump = true;
+	  }
 	}
 
 	if (key == GLFW_KEY_P && action == GLFW_PRESS) {
