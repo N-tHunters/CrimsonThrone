@@ -392,7 +392,7 @@ int main()
 		Characters,
 		&inventory_headers,
 		{0.9f, 0.1f});*/
-	Inventory inventory(*player, width, height);
+	Inventory inventory(*player, Characters, width, height);
 
 	glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 

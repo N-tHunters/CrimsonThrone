@@ -2,8 +2,8 @@
 #include <physics/physicalObj.hpp>
 
 
-Inventory::Inventory(Actor& actor, int width, int height):
-  actor(actor) {
+Inventory::Inventory(Actor& actor, std::map<GLchar, Character> &Characters, int width, int height):
+  actor(actor), characters(Characters) {
   this->rect = glm::vec4(10.0f, 10.0f, width - 20, height - 20);
   this->color = glm::vec4(0.1f, 0.1f, 0.1f, 0.0f);
 
@@ -58,6 +58,15 @@ Inventory::Inventory(Actor& actor, int width, int height):
   glEnableVertexAttribArray(2);
 
   glBindVertexArray(0);
+
+  for (uint16_t i = 0; i < actor.GetInventorySize(); i ++) {
+    item_names.push_back(new Text(actor.GetItemAt(i)->GetName(),
+				  characters,
+				  1.0f,
+				  glm::vec3(1.0, 1.0, 1.0),
+    				  glm::vec2(rect.x + 40, rect.w + rect.y - 30 - 20.0f * i)));
+
+  }
 }
 
 void Inventory::draw(ShaderHolder* shaderHolder, int width, int height) {
@@ -76,6 +85,10 @@ void Inventory::draw(ShaderHolder* shaderHolder, int width, int height) {
   glBindVertexArray(VAO);
   glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
+
+  for (Text* item_name : item_names) {
+    item_name->draw(shaderHolder);
+  }
   
   if(actor.GetInventorySize() > 0) {
     PhysicalObj *po = actor.GetItemAt(0)->GetPhysicalObj();
@@ -84,5 +97,13 @@ void Inventory::draw(ShaderHolder* shaderHolder, int width, int height) {
 }
 
 void Inventory::update() {
+  item_names.clear();
+  for (uint16_t i = 0; i < actor.GetInventorySize(); i ++) {
+    item_names.push_back(new Text(actor.GetItemAt(i)->GetName(),
+				  characters,
+				  1.0f,
+				  glm::vec3(1.0, 1.0, 1.0),
+    				  glm::vec2(rect.x + 50, rect.w + rect.y - 30 - 20.0f * i)));
 
+  }
 }

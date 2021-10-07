@@ -3,6 +3,7 @@
 #include <base/actors/actor.hpp>
 #include <render/shaderHolder.hpp>
 #include <render/camera.hpp>
+#include <UI/text.hpp>
 
 class Inventory {
   Actor& actor;
@@ -12,9 +13,11 @@ class Inventory {
   GLuint VBO, VAO, EBO, texture;
   std::vector<GLfloat> vertices;
   std::vector<unsigned int> indices;
+  std::vector<Text*>item_names;
+  std::map<GLchar, Character> &characters;
 
 public:
-  Inventory(Actor& actor, int, int);
+  Inventory(Actor& actor, std::map<GLchar, Character> &Characters, int, int);
   void draw(ShaderHolder* shaderHolder, int width, int height);
   void update();
 };
