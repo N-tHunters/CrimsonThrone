@@ -170,15 +170,16 @@ void Chunk::Draw(ShaderHolder * shaderHolder, Camera * camera, int width, int he
     this->items[i]->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
   }
 
-  for (size_t i = 0; i < this->GetParticleEmittersCount(); i ++) {
-    this->particle_emitters[i]->draw(shaderHolder, camera, width, height);
-  }
 }
   
 
 void Chunk::DrawWater(ShaderHolder * shaderHolder, Camera * camera, int width, int height) {
   if (this->water_obj != nullptr) {
     this->water_obj->draw(shaderHolder, camera, width, height);
+  }
+  
+  for (size_t i = 0; i < this->GetParticleEmittersCount(); i ++) {
+    this->particle_emitters[i]->draw(shaderHolder, camera, width, height);
   }
 }
 

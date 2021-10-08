@@ -12,5 +12,5 @@ public:
   WanderAI(float speed);
   virtual void Process(float dt);
   virtual void Wander();
-  virtual bool GoToTarget();
+  virtual bool GoToTargetPosition();
 };

@@ -23,7 +23,7 @@ void HumanlikeAI::Process(float dt) {
     printf("I want eat!\n");
   }
   
-  GoToTarget();
+  GoToTargetPosition();
 }
 
 

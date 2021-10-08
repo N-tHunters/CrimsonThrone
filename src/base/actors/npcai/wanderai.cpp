@@ -22,7 +22,7 @@ void WanderAI::Process(float dt) {
   Wander();
 }
 
-bool WanderAI::GoToTarget() {
+bool WanderAI::GoToTargetPosition() {
   glm::vec3 position = this->actor->GetPhysicalObj()->getPosition(); 
 
   glm::vec3 rel_vec = target_position - position;
@@ -45,8 +45,8 @@ bool WanderAI::GoToTarget() {
 }
 
 void WanderAI::Wander() {
-  if(this->GoToTarget()) {
-    target_position = glm::vec3(rand() % 100 * 1.0f, 0.0f, rand() % 100 * 1.0f);
+  if(this->GoToTargetPosition()) {
+    target_position = glm::vec3(fmax(0, this->actor->GetPhysicalObj()->getPosition().x + rand() % 100 - 50), 0.0f, fmax(0, this->actor->GetPhysicalObj()->getPosition().z + rand() % 100 - 50));
     if(!is_const_speed)
       target_follow_speed = rand() % 10 + 5;
   }
