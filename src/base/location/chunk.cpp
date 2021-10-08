@@ -500,6 +500,12 @@ void Chunk::Update(float dt) {
     }
   }
 
+  for (Actor * actor : actors) {
+    if (!actor->IsAlive()) {
+      this->DeleteActor(actor);
+    }
+  }
+
   for (PhysicalObj * object : objects) {
     glm::vec3 position = object->getPosition();
     Chunk * chunk_ptr = this->location->GetChunkByPosition(position.x, position.z);

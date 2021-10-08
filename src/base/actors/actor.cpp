@@ -244,6 +244,9 @@ int Actor::GetDefence() {
  * Get damage can be dealt by weapon
  */
 int Actor::GetDamage() {
+  if (this->weapon == nullptr) {
+    return 1;
+  }
   return this->weapon->GetDamage();
 }
 
@@ -421,4 +424,8 @@ void Actor::drawAfter(ShaderHolder * shaderHolder, Camera * camera, int width, i
     this->floating_text->setPosition(this->obj->getPosition() + glm::vec3(0.0f, ((BoundaryBox*)obj->boundary)->getMax().y, 0.0f));
     this->floating_text->draw(shaderHolder, camera, width, height);
   }
+}
+
+bool Actor::IsAlive() {
+  return this->GetHealth() > 0;
 }

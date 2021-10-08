@@ -38,7 +38,7 @@ void init_demo_locations() {
     }
     }*/
 
-  for(int i = 0; i < rand() % 10; i++){
+  for(int i = 0; i < 10; i++){
     Actor * test_actor = (Actor *)new NPC("totacres", 10,
 					  new PhysicalObj(new Mesh(get_model("runner"), get_texture("fire")),
 							  true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
@@ -48,7 +48,7 @@ void init_demo_locations() {
     Weapon * totacres_wep = new Weapon("sercatot", 
 				       new PhysicalObj(new Mesh(get_model("human"), get_texture("blood"), (rand() % 10 + 10) / 20.0f),
 						       true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
-						       get_model("human")->getBoundaryBox(1.0f)), 0, 0);
+						       get_model("human")->getBoundaryBox(1.0f)), 1, 100);
     test_actor->SetWeapon(totacres_wep);
     
     open_world->GetChunk(0, 0)->AddActor(test_actor);
@@ -63,7 +63,7 @@ void init_demo_locations() {
      Weapon * totacres_wep = new Weapon("sercatot", 
 				       new PhysicalObj(new Mesh(get_model("human"), get_texture("blood"), (rand() % 10 + 10) / 20.0f),
 						       true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
-						       get_model("human")->getBoundaryBox(1.0f)), 0, 0);
+						       get_model("human")->getBoundaryBox(1.0f)), 5, 10);
     open_world->GetChunk(0, 0)->AddItem(totacres_wep);
     
   }

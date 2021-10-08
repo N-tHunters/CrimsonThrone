@@ -120,5 +120,7 @@ public:
 
   void draw(ShaderHolder *, Camera *, int, int);
   void drawAfter(ShaderHolder *, Camera *, int, int);
+
+  bool IsAlive();
 };
 #endif

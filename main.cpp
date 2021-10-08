@@ -321,7 +321,11 @@ int main()
 
 	// ----------------------------------------------- CODE ------------------------------------------
 
-	// Text* fps_counter = new Text(std::to_string(0.0f), glm::vec4(0.8f, 0.8f, 0.1f, 0.1f), Characters, 0.001f, glm::vec3(0, 0, 0));
+	Text* fps_counter = new Text(std::to_string(0.0f),
+		Characters,
+		1.0f,
+		glm::vec3(1.0f),
+		glm::vec2(10, height - 100));
 
 	float last_frame = glfwGetTime();
 	int hp = player->GetHealth();
@@ -571,8 +575,9 @@ int main()
 
 			player->draw(shaderHolder, camera, width, height);
 
-
 			logs->draw(shaderHolder);
+
+			fps_counter->draw(shaderHolder);
 
 			if (openedInventory) {
 			  inventory->draw(shaderHolder, width, height);
@@ -587,6 +592,25 @@ int main()
 				if (pressed_e) {
 					player->PickupItem(picked_item);
 					GetCurrentLocation()->GetCurrentChunk()->DeleteItem(picked_item);
+				}
+			}
+
+			std::pair<Actor*, float> collided_actors = GetCurrentLocation()->CollideActorsWithRay(player->GetPhysicalObj()->getPosition(), mouse_picker->getCurrentRay());
+			Actor* collided_actor = collided_actors.first;
+
+			if (collided_actor != nullptr) {
+				if (clicked) {
+					Weapon* player_weapon = player->GetWeapon();
+					float weapon_range = 3.0f;
+					if (player_weapon != nullptr) {
+						weapon_range = player_weapon->GetRange();
+					}
+					if (weapon_range > collided_actors.second) {
+						int player_damage = player->GetDamage();
+						collided_actor->DealDamage(player_damage);
+						player->GetWeapon()->GetPhysicalObj()->setRotationZ(90.0f);
+						printf("You hit %s for %d damage, it has %d hp left\n", collided_actor->GetName().c_str(), player_damage, collided_actor->GetHealth());
+					}
 				}
 			}
 
@@ -623,7 +647,7 @@ int main()
 				last_frame = current_frame;
 
 				if (glfwGetTime() - fps_change_last > 0.1) {
-					// fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
+					fps_counter->update(std::to_string((int)round(1.0 / dt)), Characters);
 					fps_change_last = glfwGetTime();
 				}
 			} else {

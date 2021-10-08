@@ -77,10 +77,10 @@ void Player::draw(ShaderHolder* shaderHolder, Camera* camera, int width, int hei
   if(this->weapon != nullptr) {
     glm::mat4 rotation_matrix = glm::mat4(1.0f);
     rotation_matrix = glm::rotate(rotation_matrix, glm::radians(this->m_camera->getRotationY() - 90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::vec4 offset_vec4 = glm::vec4(0.1f, -0.2f, 0.5f, 1.0f) * rotation_matrix;
+    glm::vec4 offset_vec4 = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f) * rotation_matrix;
     glm::vec3 offset = glm::vec3(offset_vec4);
     this->weapon->GetPhysicalObj()->setPosition(this->obj->getPosition() + offset);
-    this->weapon->GetPhysicalObj()->setRotation(glm::vec3(0.0f, this->m_camera->getRotationY(), 0.0f));
+    this->weapon->GetPhysicalObj()->setRotation(glm::vec3(0.0f, -this->m_camera->getRotationY() + 90.0f, 135.0f));
     this->weapon->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
   }
 }
