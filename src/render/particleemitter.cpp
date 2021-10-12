@@ -1,4 +1,5 @@
 #include <render/particleemitter.hpp>
+#include <algorithm>
 
 
 const int N_PARTICLES = 50;
@@ -16,7 +17,7 @@ void ParticleEmitter::update(float dt) {
     p.life -= dt; // reduce life
     if (p.life > 0.0f) {	// particle is alive, thus update
       p.pos -= p.vel * dt;
-      p.color.a = 1.0f * p.life / p.max_life;
+      p.color.a = std::fmax(1.0f * p.life / p.max_life, 0.0f);
     }
   }  
 }
