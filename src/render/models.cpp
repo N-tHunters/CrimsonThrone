@@ -23,5 +23,10 @@ void load_models(std::vector<std::string> model_names) {
 }
 
 Model* get_model(std::string model_name) {
-	return models[model_name];
+	Model* model = models[model_name];
+	if (model == nullptr) {
+		models[model_name] = new Model("resources/models/" + model_name + ".obj");
+		model = models[model_name];
+	}
+	return model;
 }

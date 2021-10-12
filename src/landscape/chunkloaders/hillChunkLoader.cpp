@@ -57,8 +57,8 @@ void HillChunkLoader::Load(AbstractChunk * chunk) {
 	// GLuint blend_texture = createTexture("resources/textures/rock.png");
 	// GLuint blend_texture = get_texture("rock");
 
-	GLuint texture1 = get_texture("grass");
-	GLuint texture2 = get_texture("grass");
+	GLuint texture1 = get_texture("grass2");
+	GLuint texture2 = get_texture("grass2");
 
 	LoadEnd(height_map, chunk, texture1, texture2, pixels);
 	trees_num = 10;

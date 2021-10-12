@@ -28,7 +28,7 @@ void main()
 	// diffuse = vec3(min(max(diff / lightVecL * 100.0, diff_sun * 0.75), 1.0));
 
 	diffuse = vec3(min(diff / lightVecL * 100.0f, 1.0f));
-	diffuse += vec3(diff_sun, diff_sun, 0.0f);
+	diffuse += vec3(diff_sun);
 
 	distance = length((view * model * vec4(position, 1.0f)).xyz);
 
