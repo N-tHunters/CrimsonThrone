@@ -25,7 +25,8 @@ void OverWorldGenerator::Generate(Location * location, size_t width, size_t heig
     "human",
     "frog",
     "runner",
-    "sword"
+    "sword",
+    "portal"
   };
 
   std::vector<std::string> texture_names = {
