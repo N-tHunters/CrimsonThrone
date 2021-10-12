@@ -22,6 +22,9 @@ Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * cam
   Actor(name, max_health, obj)
 {
   m_camera = camera;
+  m_direction = 1.0f;
+  m_side_direction = 1.0f;
+  m_velocity = 1.0f;
 }
 
 /**
@@ -63,14 +66,15 @@ void Player::SetSpeed(glm::vec2 speed) {
 
 void Player::SetSideSpeed(glm::vec2 side_speed) {
   m_side_speed = side_speed;
+  // printf("%f, %f\n", m_side_speed.x, m_side_speed.y);
 }
 
-void Player::CalculateSpeed(float rotation, float velocity, float direction) {
-  SetSpeed(glm::vec2(sin(glm::radians(rotation)), -cos(glm::radians(rotation))) * velocity * direction);
+void Player::CalculateSpeed(float rotation) {
+  SetSpeed(glm::vec2(sin(glm::radians(rotation)), -cos(glm::radians(rotation))) * m_velocity * m_direction);
 }
 
-void Player::CalculateSideSpeed(float rotation, float velocity, float direction) {
-  SetSpeed(glm::vec2(cos(glm::radians(rotation)), -sin(glm::radians(rotation))) * velocity * direction);
+void Player::CalculateSideSpeed(float rotation) {
+  SetSideSpeed(glm::vec2(cos(glm::radians(rotation)), sin(glm::radians(rotation))) * m_velocity * m_side_direction);
 }
 
 void Player::draw(ShaderHolder* shaderHolder, Camera* camera, int width, int height) {
@@ -83,4 +87,20 @@ void Player::draw(ShaderHolder* shaderHolder, Camera* camera, int width, int hei
     this->weapon->GetPhysicalObj()->setRotation(glm::vec3(0.0f, -this->m_camera->getRotationY() + 90.0f, 135.0f));
     this->weapon->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
   }
+}
+
+void Player::SetDirection(float direction) {
+  m_direction = direction;
+}
+
+void Player::SetSideDirection(float side_direction) {
+  m_side_direction = side_direction;
+}
+
+float Player::GetDirection() {
+  return m_direction;
+}
+
+float Player::GetSideDirection() {
+  return m_side_direction;
 }

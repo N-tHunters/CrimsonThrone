@@ -475,12 +475,10 @@ int main()
 			if (game_state != STATE_PAUSED && !openedInventory) {
 				if (cursorMotion.x != 0 || cursorMotion.y != 0) {
 					if (player->GetSpeed().x != 0 || player->GetSpeed().y != 0) {
-						player->SetSpeed(glm::vec2(-sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction,
-						-cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity * direction));
+						player->CalculateSpeed(camera->getRotationY());
 					}
 					if (player->GetSideSpeed().x != 0 || player->GetSideSpeed().y != 0) {
-						player->SetSideSpeed(glm::vec2(-sin(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity,
-						-cos(glm::radians(-(player->GetCamera()->getRotation().y + directionSide))) * velocity));
+						player->CalculateSideSpeed(camera->getRotationY());
 					}
 					cursorMotion *= sensivity;
 					player->GetCamera()->changeRotationX(-cursorMotion.y);
@@ -695,12 +693,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_W && action == GLFW_PRESS) {
 	  if(openedInventory) {}
 	  else {
-		player->SetSpeed(glm::vec2(-sin(glm::radians(-player->GetCamera()->getRotation().y)) * velocity,
-			-cos(glm::radians(-player->GetCamera()->getRotation().y)) * velocity));
-		direction = 1;
+	  	player->SetDirection(1.0f);
+		player->CalculateSpeed(player->GetCamera()->getRotation().y);
 	  }
 	}
-	if (key == GLFW_KEY_W && action == GLFW_RELEASE && direction > 0) {
+	if (key == GLFW_KEY_W && action == GLFW_RELEASE && player->GetDirection() > 0) {
 	  if(openedInventory) { inventory->prevElement(); }
 	  else {
 	  	player->SetSpeed(glm::vec2(0.0f));
@@ -709,11 +706,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_S && action == GLFW_PRESS) {
 	  if(openedInventory) { inventory->nextElement(); }
 	  else {
-	  	player->CalculateSpeed(player->GetCamera()->getRotation().y, velocity, direction);
-		direction = -1;
+	  	player->SetDirection(-1.0f);
+	  	player->CalculateSpeed(player->GetCamera()->getRotation().y);
 	  }
 	}
-	if (key == GLFW_KEY_S && action == GLFW_RELEASE && direction < 0) {
+	if (key == GLFW_KEY_S && action == GLFW_RELEASE && player->GetDirection() < 0) {
 	  if(openedInventory) {}
 	  else {
 		player->SetSpeed(glm::vec2(0.0f));
@@ -722,11 +719,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_A && action == GLFW_PRESS) {
 	  if(openedInventory) {}
 	  else {
-		player->CalculateSideSpeed(player->GetCamera()->getRotation().y, velocity, -1.0f);
-		directionSide = -1.0f;
+	  	player->SetSideDirection(-1.0f);
+		player->CalculateSideSpeed(player->GetCamera()->getRotation().y);
 	  }
 	}
-	if (key == GLFW_KEY_A && action == GLFW_RELEASE && directionSide < 0.0f) {
+	if (key == GLFW_KEY_A && action == GLFW_RELEASE && player->GetSideDirection() < 0.0f) {
 	  if(openedInventory) {}
 	  else {
 		player->SetSideSpeed(glm::vec2(0.0f));
@@ -736,13 +733,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_D && action == GLFW_PRESS) {
 	  if(openedInventory) {}
 	  else {
-		player->SetSideSpeed(glm::vec2(sin(glm::radians(-(player->GetCamera()->getRotation().y - 90.0f))) * velocity,
-		cos(glm::radians(-(player->GetCamera()->getRotation().y - 90.0f))) * velocity));
-		directionSide = 1.0f;
+	  	player->SetSideDirection(1.0f);
+		player->CalculateSideSpeed(player->GetCamera()->getRotation().y);
 	  }
 	}
 
-	if (key == GLFW_KEY_D && action == GLFW_RELEASE && directionSide > 0.0f) {
+	if (key == GLFW_KEY_D && action == GLFW_RELEASE && player->GetSideDirection() > 0.0f) {
 	  if(openedInventory) {}
 	  else {
 		player->SetSideSpeed(glm::vec2(0.0f));
