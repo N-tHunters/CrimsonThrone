@@ -60,9 +60,9 @@ void init_demo_locations() {
   
   for(int i = 0; i < 3; i++){
      Weapon * totacres_wep = new Weapon("sercatot", 
-				       new PhysicalObj(new Mesh(get_model("frog"), get_texture("blood"), (rand() % 10 + 10) / 20.0f),
+				       new PhysicalObj(new Mesh(get_model("sword"), get_texture("sword"), (rand() % 10 + 10) / 40.0f),
 						       true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
-						       get_model("human")->getBoundaryBox(1.0f)), 5, 10);
+						       get_model("sword")->getBoundaryBox(1.0f)), 5, 10);
     open_world->GetChunk(0, 0)->AddItem(totacres_wep);
     
   }

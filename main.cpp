@@ -542,7 +542,7 @@ int main()
 
 
 				if (isRunning)
-					player->GetPhysicalObj()->setSpeed((player->GetSpeed() + player->GetSideSpeed()) * 10.0f);
+					player->GetPhysicalObj()->setSpeed((player->GetSpeed() + player->GetSideSpeed()) * 30.0f);
 				else
 					player->GetPhysicalObj()->setSpeed(player->GetSpeed() + player->GetSideSpeed());
 
@@ -606,7 +606,6 @@ int main()
 					if (weapon_range > collided_actors.second) {
 						int player_damage = player->GetDamage();
 						collided_actor->DealDamage(player_damage);
-						player->GetWeapon()->GetPhysicalObj()->setRotationZ(90.0f);
 						printf("You hit %s for %d damage, it has %d hp left\n", collided_actor->GetName().c_str(), player_damage, collided_actor->GetHealth());
 					}
 				}
