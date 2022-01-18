@@ -18,14 +18,14 @@ void load_models(std::vector<std::string> model_names) {
 	}
 
 	for (int i = 0; i < model_names.size(); i ++) {
-		models[model_names[i]] = new Model("resources/models/" + model_names[i] + ".obj");
+		models.insert({model_names[i], new Model("resources/models/" + model_names[i] + ".obj")});
 	}
 }
 
 Model* get_model(std::string model_name) {
 	if (models.find(model_name) == models.end()) {
 		printf("Model \"%s\" not found, loading...\n", model_name.c_str());
-		models[model_name] = new Model("resources/models/" + model_name + ".obj");
+		models.insert({model_name, new Model("resources/models/" + model_name + ".obj")});
 	}
 	Model* model = models[model_name];
 	return model;
