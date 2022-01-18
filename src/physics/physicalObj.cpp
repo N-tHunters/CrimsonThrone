@@ -195,7 +195,7 @@ void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
 		this->force.y = 0.0f;
 		velocity.y = 0.0f;
 		setOnGround(true);
-	} else if (height > -max_speed) {
+	} else if (height > -0.1f) {
 		this->setOnGround(true);
 		this->force.y = 0.0f;
 	} else {
