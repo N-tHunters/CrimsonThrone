@@ -8,7 +8,7 @@ class LongJumpTrigger : public ShortJumpTrigger {
   Location * location;
   Chunk * chunk;
  public:
-  LongJumpTrigger(Boundary *, glm::vec3, glm::vec3, Chunk *);
+  LongJumpTrigger(BoundaryBox *, glm::vec3, glm::vec3, Chunk *);
   LongJumpTrigger(PhysicalObj *, glm::vec3, Chunk *);
   virtual void Trig(Chunk *, PhysicalObj *) override;
   virtual void TrigPlayer(Chunk *, PhysicalObj *) override;

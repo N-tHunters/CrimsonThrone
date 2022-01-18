@@ -20,6 +20,16 @@ void init_demo_locations() {
   Location * open_world = new Location(4, 4, 100, 100, new FlatGenerator());
   location_map[0] = open_world;
 
+  open_world->GetChunk(0, 0)->AddObj(new PhysicalObj(new Mesh(get_model("box"), get_texture("grass")),
+    true,
+    true,
+    false,
+    false,
+    glm::vec3(10.0f),
+    glm::vec3(0.0f),
+    "cube",
+    get_model("box")->getBoundaryBox(1.0f)));
+
   /*std::vector<std::tuple<Chunk *, glm::vec3>> exits;
   exits.push_back(std::make_tuple(open_world->GetChunk(0, 0), glm::vec3(2.0f, 2.0f, 2.0f)));
 

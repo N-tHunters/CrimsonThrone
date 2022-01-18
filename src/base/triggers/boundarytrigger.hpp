@@ -5,14 +5,14 @@
 #include "trigger.hpp"
 
 class BoundaryTrigger : public Trigger {
-  Boundary * boundary;
+  BoundaryBox * boundary;
   glm::vec3 position;
   PhysicalObj * link;
  public:
-  BoundaryTrigger(Boundary *, glm::vec3);
+  BoundaryTrigger(BoundaryBox *, glm::vec3);
   BoundaryTrigger(PhysicalObj *);
 
-  Boundary * GetBoundary();
+  BoundaryBox * GetBoundary();
   glm::vec3 GetPosition();
   PhysicalObj * GetLink();
 };

@@ -23,7 +23,7 @@ class PhysicalObj {
 	bool onGround;
 public:
 	bool isTransparent;
-	Boundary* boundary;
+	BoundaryBox* boundary;
 	float lastHeight;
 	std::string name;
 	glm::vec3 velocity;
@@ -31,9 +31,9 @@ public:
 	glm::vec3 force;
 	float mass;
 	PhysicalObj();
-	PhysicalObj(glm::vec3, Boundary*);
+	PhysicalObj(glm::vec3, BoundaryBox*);
 	PhysicalObj(Mesh*, bool, bool, bool, bool, glm::vec3, glm::vec3, const std::string&);
-	PhysicalObj(Mesh*, bool, bool, bool, bool, glm::vec3, glm::vec3, const std::string&, Boundary*);
+	PhysicalObj(Mesh*, bool, bool, bool, bool, glm::vec3, glm::vec3, const std::string&, BoundaryBox*);
 
 
 	// Getters and setters for position and rotation

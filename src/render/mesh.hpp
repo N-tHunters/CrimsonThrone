@@ -43,18 +43,18 @@ protected:
 	float m_scale;
 public:
 	bool activeDebug;
-	Mesh(const std::string&, std::vector<GLfloat>*, std::vector<unsigned int>*);
-	Mesh(const std::string&, std::vector<GLfloat>*, std::vector<unsigned int>*, int);
+	Mesh(const std::string&, std::vector<GLfloat>*, std::vector<GLuint>*);
+	Mesh(const std::string&, std::vector<GLfloat>*, std::vector<GLuint>*, int);
 	Mesh(GLuint texture1,
 		 GLuint texture2,
 		 std::vector<GLfloat> *vertices,
-		 std::vector<unsigned int> *indices,
+		 std::vector<GLuint> *indices,
 		 std::vector<unsigned char> pixels);
 	Mesh(Model*, GLuint, float);
 	Mesh(Model*, GLuint);
 	Mesh();
 
-	void loadObject(std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices);
+	void loadObject(std::vector<GLfloat> *vertices, std::vector<GLuint> *indices);
 	void init(PhysicalObj*);
 	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
 	void draw(ShaderHolder*, glm::vec3 position, glm::vec3 rotation, GLuint, GLuint);

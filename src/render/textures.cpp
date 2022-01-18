@@ -23,5 +23,8 @@ void load_textures(std::vector<std::string> texture_names) {
 }
 
 GLuint get_texture(std::string texture_name) {
+	if (textures.find(texture_name) == textures.end()) {
+		printf("ERROR::TEXTURE::NOT_FOUND: Texture \"%s\" not found\n", texture_name.c_str());
+	}
 	return textures[texture_name];
 }

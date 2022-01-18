@@ -23,6 +23,8 @@ void FlatChunkLoader::Load(AbstractChunk * chunk) {
   for (int i = 0; i < 32; i ++ ) {
     for (int j = 0; j < 32; j ++) {
       pixels.push_back(0);
+      pixels.push_back(0);
+      pixels.push_back(0);
     }
   }
 

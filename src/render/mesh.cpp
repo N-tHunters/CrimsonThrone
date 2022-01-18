@@ -36,7 +36,7 @@ Mesh::Mesh(Model* model, GLuint texture1, float scale) {
 	loadObject(&(model->vertices), &(model->indices));
 }
 
-Mesh::Mesh(GLuint texture1, GLuint texture2, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices, std::vector<unsigned char> pixels) {
+Mesh::Mesh(GLuint texture1, GLuint texture2, std::vector<GLfloat> *vertices, std::vector<GLuint> *indices, std::vector<unsigned char> pixels) {
 	this->type = 1;
 	this->obj = nullptr;
 	activeDebug = false;
@@ -90,7 +90,7 @@ Mesh::Mesh(GLuint texture1, GLuint texture2, std::vector<GLfloat> *vertices, std
  * @param[in]  vertices     The vertices
  * @param[in]  indices      The indices
  */
-Mesh::Mesh(const std::string& texturePath, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices) : Mesh(texturePath, vertices, indices, 1) {}
+Mesh::Mesh(const std::string& texturePath, std::vector<GLfloat> *vertices, std::vector<GLuint> *indices) : Mesh(texturePath, vertices, indices, 1) {}
 
 /**
  * @brief      Constructs a new instance.
@@ -100,7 +100,7 @@ Mesh::Mesh(const std::string& texturePath, std::vector<GLfloat> *vertices, std::
  * @param[in]  indices      The indices
  * @param[in]  type			The type
  */
-Mesh::Mesh(const std::string& texturePath, std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices, int type) {
+Mesh::Mesh(const std::string& texturePath, std::vector<GLfloat> *vertices, std::vector<GLuint> *indices, int type) {
 	this->type = type;
 	this->obj = nullptr;
 	activeDebug = false;
@@ -119,7 +119,7 @@ Mesh::Mesh(const std::string& texturePath, std::vector<GLfloat> *vertices, std::
 	loadObject(vertices, indices);
 }
 
-void Mesh::loadObject(std::vector<GLfloat> *vertices, std::vector<unsigned int> *indices) {
+void Mesh::loadObject(std::vector<GLfloat> *vertices, std::vector<GLuint> *indices) {
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
 	glGenBuffers(1, &EBO);
@@ -127,13 +127,13 @@ void Mesh::loadObject(std::vector<GLfloat> *vertices, std::vector<unsigned int> 
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices->at(0)) * vertices->size(), &(vertices->at(0)), GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * vertices->size(), vertices->data(),  GL_DYNAMIC_DRAW);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices->at(0)) * indices->size(), &(indices->at(0)), GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * indices->size(), indices->data(),  GL_DYNAMIC_DRAW);
 
 	// Position attribute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), 0);
 	glEnableVertexAttribArray(0);
 	// Normals
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));

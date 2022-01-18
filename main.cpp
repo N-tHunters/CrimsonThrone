@@ -295,7 +295,7 @@ int main()
 	player = new Player("player",
 						10,
 						new PhysicalObj(glm::vec3(100.0f, 10.0f, 10.0f),
-										new BoundaryBox(glm::vec3(-0.1f, -0.5f, -0.1f), glm::vec3(0.1f, 0.5f, 0.1f))),
+										new BoundaryBox(glm::vec3(-0.2f, -0.5f, -0.2f), glm::vec3(0.2f, 0.5f, 0.2f))),
 						camera);
 	player_core = new MagicCore();
 	player_core->SetPhysicalObj(player->GetPhysicalObj());
@@ -348,8 +348,8 @@ int main()
 
 	std::vector<float>* quad_vertices = new std::vector<float> {
 		-1.0f, -1.0f, 0.0f, 0.0f,
-		1.0f, -1.0f, 1.0f, 0.0f,
-		1.0f,  1.0f, 1.0f, 1.0f,
+		 1.0f, -1.0f, 1.0f, 0.0f,
+		 1.0f,  1.0f, 1.0f, 1.0f,
 		-1.0f,  1.0f, 0.0f, 1.0f
 	};
 

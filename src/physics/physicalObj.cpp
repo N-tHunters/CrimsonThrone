@@ -4,7 +4,7 @@
 
 PhysicalObj::PhysicalObj() {}
 
-PhysicalObj::PhysicalObj(glm::vec3 position, Boundary* boundary) {
+PhysicalObj::PhysicalObj(glm::vec3 position, BoundaryBox* boundary) {
 	this->lastHeight = 0.0f;
 	this->position = position;
 	this->velocity = glm::vec3(0.0f);
@@ -39,7 +39,7 @@ PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTrans
 	this->boundary = new BoundaryBox(-glm::vec3(0.5f), glm::vec3(0.5f));
 }
 
-PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, bool isFlying, glm::vec3 position, glm::vec3 rotation, const std::string& name, Boundary* boundary) {
+PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTransparent, bool isFlying, glm::vec3 position, glm::vec3 rotation, const std::string& name, BoundaryBox* boundary) {
 	this->lastHeight = 0.0f;
 	this->name = name;
 	this->mesh = mesh;
@@ -230,6 +230,31 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 	glm::vec3 other_velocity_z = glm::vec3(0.0f, 0.0f, other_object->velocity.z * dt);
 
 	bool collided = false;
+
+	if (this->boundary->Collide(static_cast<BoundaryBox*>(other_object->boundary),
+			this->getPosition() + this_velocity_x,
+			this->getRotation(),
+			other_object->getPosition() + other_velocity_x,
+			other_object->getRotation())) {
+		this->velocity.x = 0.0f;
+	}
+
+	if (this->boundary->Collide(static_cast<BoundaryBox*>(other_object->boundary),
+			this->getPosition() + this_velocity_y,
+			this->getRotation(),
+			other_object->getPosition() + other_velocity_y,
+			other_object->getRotation())) {
+		this->velocity.y = 0.0f;
+		this->setOnGround(true);
+	}
+
+	if (this->boundary->Collide(static_cast<BoundaryBox*>(other_object->boundary),
+			this->getPosition() + this_velocity_z,
+			this->getRotation(),
+			other_object->getPosition() + other_velocity_z,
+			other_object->getRotation())) {
+		this->velocity.z = 0.0f;
+	}
 
 	/*if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_x, this->getRotation(), other_object->getPosition() + other_velocity_x, other_object->getRotation())) {
 		if (this->boundary->Collide(other_object->boundary, this->getPosition() + glm::vec3(0, 1, 0) + this_velocity_x, this->getRotation(), other_object->getPosition() + other_velocity_z, other_object->getRotation()) || this_velocity_x.x == 0.0f)

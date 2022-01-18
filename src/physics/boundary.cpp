@@ -15,26 +15,11 @@ glm::vec3 BoundaryBox::getMax() {
 	return m_max;
 }
 
-BoundaryCapsule::BoundaryCapsule(float height, float radius) {
-	this->height = height;
-	this->radius = radius;
-};
-
-BoundaryPlane::BoundaryPlane(float width, float height) {
-	this->width = width;
-	this->height = height;
-};
-
-BoundarySphere::BoundarySphere(float radius) {
-	this->radius = radius;
-};
-
 bool BoundaryBox::Collide(BoundaryBox* other_boundary,
 						  glm::vec3 position,
 						  glm::vec3 rotation,
 						  glm::vec3 other_position,
 						  glm::vec3 other_rotation) {
-
 	glm::vec3 my_p0 = position + m_min;
 	glm::vec3 my_p1 = position + m_max;
 	glm::vec3 other_p0 = other_position + other_boundary->getMin();
@@ -44,39 +29,9 @@ bool BoundaryBox::Collide(BoundaryBox* other_boundary,
 	bool y = my_p1.y >= other_p0.y && other_p1.y >= my_p0.y;
 	bool z = my_p1.z >= other_p0.z && other_p1.z >= my_p0.z;
 
+	// printf("x:%d y:%d z:%d\n", x, y, z);
+
 	return x && y && z;
-}
-
-bool BoundaryPlane::Collide(Boundary* other_boundary,
-							glm::vec3 position,
-							glm::vec3 rotation,
-							glm::vec3 other_position,
-							glm::vec3 other_rotation) {
-	return false;
-}
-
-bool BoundaryCapsule::Collide(Boundary* other_boundary,
-							  glm::vec3 position,
-							  glm::vec3 rotation,
-							  glm::vec3 other_position,
-							  glm::vec3 other_rotation) {
-	return false;
-}
-
-bool BoundarySphere::Collide(Boundary* other_boundary,
-							 glm::vec3 position,
-							 glm::vec3 rotation,
-							 glm::vec3 other_position,
-							 glm::vec3 other_rotation) {
-	return false;
-}
-
-bool Boundary::Collide(Boundary* other_boundary,
-					   glm::vec3 position,
-					   glm::vec3 rotation,
-					   glm::vec3 other_position,
-					   glm::vec3 other_rotation) {
-	return false;
 }
 
 float CollideRayWithBox(glm::vec3 ray_position, glm::vec3 ray_direction, BoundaryBox* box, glm::vec3 box_position, glm::vec3 box_rotation) {

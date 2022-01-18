@@ -1,6 +1,6 @@
 #include "longjumptrigger.hpp"
 
-LongJumpTrigger::LongJumpTrigger(Boundary * boundary, glm::vec3 position, glm::vec3 jump_position, Chunk * chunk) : ShortJumpTrigger(boundary, position, jump_position) {
+LongJumpTrigger::LongJumpTrigger(BoundaryBox * boundary, glm::vec3 position, glm::vec3 jump_position, Chunk * chunk) : ShortJumpTrigger(boundary, position, jump_position) {
   this->location = chunk->GetLocation();
   this->chunk = chunk;
 }
