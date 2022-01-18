@@ -9,7 +9,10 @@ FlatGenerator::FlatGenerator() {}
 void FlatGenerator::Generate(Location * location, size_t width, size_t height, int chunk_width, int chunk_height, int vertices_number) {
 
 	std::vector<std::string> texture_names = {
-		"grass"
+	"grass",
+	"fire",
+	"frog"
+
 	};
 
 	std::vector<std::string> model_names = {

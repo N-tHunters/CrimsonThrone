@@ -1,5 +1,6 @@
 #include "dungeona1generator3d.hpp"
 #include <base/location/location.hpp>
+#include <render/models.hpp>
 #include <utility>
 #include <base/configuration.hpp>
 #include <base/triggers/longjumptrigger.hpp>
@@ -17,7 +18,6 @@ DungeonA1Generator3D::DungeonA1Generator3D(size_t floors, std::vector<std::tuple
 
 
 void DungeonA1Generator3D::Generate(Location * location, size_t width, size_t height, int chunk_width, int chunk_height, int vertices_number) {
-  printf("generating dungeon\n");
   FlatGenerator::Generate(location, width, height, chunk_width, chunk_height, vertices_number);
   GetDefaultTexture() = GetDefaultTexture();
   used.clear();
@@ -28,14 +28,13 @@ void DungeonA1Generator3D::Generate(Location * location, size_t width, size_t he
   for (size_t i = 0; i < (height + width * (height * 2 + 1) + width * height) * floors; i ++)
     walls.push_back(true);
 
-  Model* portal_model = new Model("resources/models/portal.obj");
+  Model* portal_model = get_model("peyotl");
 
   ladders.clear();
   for (size_t i = 0; i < width * height * floors; i++)
     ladders.push_back(NO_LADDER);
 
   this->GenerateDungeon(0, 0, 0, width, height, floors);
-  printf("structure generated\n");
 
   // PrintDungeon3D(height, width, floors);
 
@@ -186,7 +185,6 @@ void DungeonA1Generator3D::Generate(Location * location, size_t width, size_t he
     int choice = rand() % visited_cells.size();
     
     std::tuple<int, int, int> coords = visited_cells[choice];
-    printf("%d %d %d\n", std::get<0>(coords), std::get<1>(coords), std::get<2>(coords));
 
     PhysicalObj * portal = new PhysicalObj(new Mesh(portal_model, get_texture("fire")),
                                            false, true, false, false,
@@ -203,7 +201,6 @@ void DungeonA1Generator3D::Generate(Location * location, size_t width, size_t he
 }
 
 void DungeonA1Generator3D::GenerateDungeon(int tx, int ty, int tz, int width, int height, int floors) {
-  printf("Generating structure..\n");
   used[tz * width * height + ty * width + tx] = true;
   std::vector<std::tuple<int, int, int>> choices;
   bool side = false;
@@ -221,7 +218,6 @@ void DungeonA1Generator3D::GenerateDungeon(int tx, int ty, int tz, int width, in
         // Floor movements
         if (!used[nz * width * height + ny * width + nx] && !zmov) {
           choices.push_back({nx, ny, nz});
-          printf("%d %d %d\n", nx, ny, nz);
         }
       }
     }

@@ -30,10 +30,21 @@ void init_demo_locations() {
     "cube",
     get_model("box")->getBoundaryBox(1.0f)));
 
+  open_world->GetChunk(0, 0)->AddObj(new PhysicalObj(new Mesh(get_model("frog"), get_texture("frog")),
+    true,
+    true,
+    false,
+    false,
+    glm::vec3(20.0f),
+    glm::vec3(0.0f),
+    "frog",
+    get_model("frog")->getBoundaryBox(1.0f)));
+
+
   std::vector<std::tuple<Chunk *, glm::vec3>> exits;
   exits.push_back(std::make_tuple(open_world->GetChunk(0, 0), glm::vec3(2.0f, 2.0f, 2.0f)));
 
-  Model* portal_model = get_model("portal");
+  Model* portal_model = get_model("peyotl");
 
   location_map[1] = new Location(5, 5, 10, 10, new DungeonA1Generator3D(5, &exits));
   PhysicalObj * portal = new PhysicalObj(new Mesh(portal_model, get_texture("fire")),
