@@ -24,7 +24,7 @@ void load_models(std::vector<std::string> model_names) {
 
 Model* get_model(std::string model_name) {
 	if (models.find(model_name) == models.end()) {
-		printf("Model \"%s\" not found, loading...\n", model_name);
+		printf("Model \"%s\" not found, loading...\n", model_name.c_str());
 		models[model_name] = new Model("resources/models/" + model_name + ".obj");
 	}
 	Model* model = models[model_name];
