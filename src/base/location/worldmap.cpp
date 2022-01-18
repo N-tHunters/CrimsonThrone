@@ -30,7 +30,7 @@ void init_demo_locations() {
     "cube",
     get_model("box")->getBoundaryBox(1.0f)));
 
-  /*std::vector<std::tuple<Chunk *, glm::vec3>> exits;
+  std::vector<std::tuple<Chunk *, glm::vec3>> exits;
   exits.push_back(std::make_tuple(open_world->GetChunk(0, 0), glm::vec3(2.0f, 2.0f, 2.0f)));
 
   Model* portal_model = get_model("portal");
@@ -46,7 +46,7 @@ void init_demo_locations() {
   location_map[0]->GetChunk(0, 0)->AddTrigger(new LongJumpTrigger(portal, glm::vec3(2.0f, 2.0f, 2.0f), location_map[1]->GetChunk(0, 0)));
 
 
-  
+ /*
   Actor * last_actor = nullptr;
 
   for(int i = 0; i < 5; i++){
@@ -65,7 +65,7 @@ void init_demo_locations() {
     /*ParticleEmitter* test_particle_emitter = new ParticleEmitter(*(test_actor->GetPhysicalObj()), get_texture("void"));
 
       open_world->GetChunk(0, 0)->AddParticleEmitter(test_particle_emitter);*/
-  /*  }
+  /*}
 
   
   for(int i = 0; i < 3; i++){
@@ -75,7 +75,8 @@ void init_demo_locations() {
 						       get_model("sword")->getBoundaryBox(1.0f)), 5, 10);
     open_world->GetChunk(0, 0)->AddItem(totacres_wep);
     
-  }*/
+  }
+*/
 
   SetCurrentLocation(open_world);
   open_world->LoadABS();
