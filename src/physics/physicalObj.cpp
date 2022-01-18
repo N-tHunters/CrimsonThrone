@@ -195,7 +195,7 @@ void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
 		this->force.y = 0.0f;
 		velocity.y = 0.0f;
 		setOnGround(true);
-	} else if (height > -0.1f) {
+	} else if (height > -max_speed) {
 		this->setOnGround(true);
 		this->force.y = 0.0f;
 	} else {
@@ -228,6 +228,44 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 	glm::vec3 other_velocity_x = glm::vec3(other_object->velocity.x * dt, 0.0f, 0.0f);
 	glm::vec3 other_velocity_y = glm::vec3(0.0f, other_object->velocity.y * dt, 0.0f);
 	glm::vec3 other_velocity_z = glm::vec3(0.0f, 0.0f, other_object->velocity.z * dt);
+
+	float max_speed = 0.01f;
+
+	if (this_velocity_x.x > max_speed) {
+		this_velocity_x.x = max_speed;
+	} else if (this_velocity_x.x < -max_speed) {
+		this_velocity_x.x = -max_speed;
+	}
+
+	if (this_velocity_y.y > max_speed) {
+		this_velocity_y.y = max_speed;
+	} else if (this_velocity_y.y < -max_speed) {
+		this_velocity_y.y = -max_speed;
+	}
+
+	if (this_velocity_z.z > max_speed) {
+		this_velocity_z.z = max_speed;
+	} else if (this_velocity_z.z < -max_speed) {
+		this_velocity_z.z = -max_speed;
+	}
+
+	if (other_velocity_x.x > max_speed) {
+		other_velocity_x.x = max_speed;
+	} else if (other_velocity_x.x < -max_speed) {
+		other_velocity_x.x = -max_speed;
+	}
+
+	if (other_velocity_y.y > max_speed) {
+		other_velocity_y.y = max_speed;
+	} else if (other_velocity_y.y < -max_speed) {
+		other_velocity_y.y = -max_speed;
+	}
+
+	if (other_velocity_z.z > max_speed) {
+		other_velocity_z.z = max_speed;
+	} else if (other_velocity_z.z < -max_speed) {
+		other_velocity_z.z = -max_speed;
+	}
 
 	bool collided = false;
 
