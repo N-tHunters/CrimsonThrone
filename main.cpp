@@ -290,6 +290,7 @@ int main()
 
 
   /// Initialize game objects
+  init_models();
 
   camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
   player = new Player("player",
