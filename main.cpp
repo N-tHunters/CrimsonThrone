@@ -612,22 +612,6 @@ int main()
         }
       }
 
-      // второй проход
-      // glBindFramebuffer(GL_FRAMEBUFFER, 0); // возвращаем буфер кадра по умолчанию
-      // glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-      // glClear(GL_COLOR_BUFFER_BIT);
-
-      // shaderHolder->getPost()->Use();
-      // glUniform1f(glGetUniformLocation(shaderHolder->getPost()->Program, "speed"), sqrt(player->GetPhysicalObj()->velocity.x * player->GetPhysicalObj()->velocity.x +
-      //             player->GetPhysicalObj()->velocity.y * player->GetPhysicalObj()->velocity.y +
-      //             player->GetPhysicalObj()->velocity.z * player->GetPhysicalObj()->velocity.z));
-
-      // glBindVertexArray(quadVAO);
-      // glDisable(GL_DEPTH_TEST);
-      // glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-      // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-      // glBindVertexArray(0);
-
       if (game_state == STATE_PAUSED) {
         resume_button->draw(shaderHolder);
         exit_to_menu->draw(shaderHolder);
