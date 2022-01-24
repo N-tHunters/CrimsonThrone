@@ -18,17 +18,16 @@
 std::unordered_map<int, Location *> location_map;
 
 void init_demo_locations() {
-  load_textures({"sword", "wood"});
+  load_textures({"sword", "fire"});
   Location * open_world = new Location(4, 4, 100, 100, new FlatGenerator());
   location_map[0] = open_world;
 
-  std::vector<glm::vec4>roads;
+  // Create City Center
+  open_world->GetChunk(0, 0)->AddObj(create_wall(glm::vec3(200, 30, 200), glm::vec3(10, 60, 10), "fire"));
 
-  roads.push_back(glm::vec4(2.5f, 1.0f, 5.0f, 2.0f));
-
-
-  for(auto road: roads)
-    open_world->GetChunk(0, 0)->AddObj(create_wall(glm::vec3(road.x, 0, road.y), glm::vec3(road.z, 0.1f, road.w), "wood"));
+  for(int i = 0; i < 100; i++) {
+    open_world->GetChunk(0, 0)->AddObj(create_wall(glm::vec3(10 * (rand() % 40) + rand() % 10, 5, 10 * (rand() % 40) + rand() % 10), glm::vec3(10, 10, 10), GetDefaultTexture()));
+  }
 
   SetCurrentLocation(open_world);
   open_world->LoadABS();
