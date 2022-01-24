@@ -387,21 +387,7 @@ int main()
 
   logs = new TextBox(glm::vec4(-0.9, -0.9, 1.8, 0.3), Characters, 20.0f, glm::vec3(255), width, height);
 
-  // logs->addLine("Help me!");
-
-  std::vector<std::string> inventory_headers = {
-    "Name", "Value"
-  };
-
   DialogUI* current_dialog_ui = nullptr;
-
-  /*List* inventory_list = new List(glm::vec4(10, 10, width - 20, height - 20),
-    (std::vector<AbstractListElement*>*)player->GetInventoryPointer(),
-    "resources/textures/list.png",
-    20,
-    Characters,
-    &inventory_headers,
-    {0.9f, 0.1f});*/
   inventory = new Inventory(*player, Characters, width, height);
 
   glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
@@ -486,8 +472,10 @@ int main()
             player->CalculateSideSpeed(camera->getRotationY());
           }
           cursorMotion *= sensivity;
-          player->GetCamera()->changeRotationX(-cursorMotion.y);
-          player->GetCamera()->changeRotationY(-cursorMotion.x);
+          if (!inDialog) {
+            player->GetCamera()->changeRotationX(-cursorMotion.y);
+            player->GetCamera()->changeRotationY(-cursorMotion.x);
+          }
           if (player->GetCamera()->getRotation().x < -90.0f)
             player->GetCamera()->setRotationX(-90.0f);
           if (player->GetCamera()->getRotation().x > 90.0f)
@@ -538,7 +526,7 @@ int main()
         while (!chunk_ptr->IsLoaded())
           GetCurrentLocation()->LoadABS();
 
-        if (player_wants_to_jump) {
+        if (player_wants_to_jump && !inDialog) {
           if(GetMultijump())
           player->GetPhysicalObj()->jumpAnyway(chunk_ptr);
           else
@@ -546,10 +534,13 @@ int main()
         }
 
 
-        if (isRunning)
-          player->GetPhysicalObj()->setSpeed((player->GetSpeed() + player->GetSideSpeed()) * 30.0f);
-        else
-          player->GetPhysicalObj()->setSpeed(player->GetSpeed() + player->GetSideSpeed());
+
+        if (!inDialog) {
+          if (isRunning)
+            player->GetPhysicalObj()->setSpeed((player->GetSpeed() + player->GetSideSpeed()) * 30.0f);
+          else
+            player->GetPhysicalObj()->setSpeed(player->GetSpeed() + player->GetSideSpeed());
+        }
 
         chunk_ptr->CheckAllTriggersAsPlayer(player->GetPhysicalObj());
 
@@ -602,7 +593,7 @@ int main()
       Actor* collided_actor = collided_actors.first;
 
       if (collided_actor != nullptr) {
-        if (clicked) {
+        if (clicked && !inDialog) {
           Weapon* player_weapon = player->GetWeapon();
           float weapon_range = 3.0f;
           if (player_weapon != nullptr) {
@@ -615,13 +606,25 @@ int main()
           }
         } else if (pressed_e) {
           inDialog = true;
-          current_dialog_ui = new DialogUI((NPC*)(collided_actor), Characters);
+          current_dialog_ui = new DialogUI((NPC*)(collided_actor), &Characters, width, height);
+          glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         }
       }
 
       if (game_state == STATE_PAUSED) {
         resume_button->draw(shaderHolder);
         exit_to_menu->draw(shaderHolder);
+      } else if (game_state == STATE_RUNNING) {
+        if (current_dialog_ui != nullptr) {
+          current_dialog_ui->draw(shaderHolder);
+          if (clicked) {
+            if (current_dialog_ui->click(xpos, height - ypos)) {
+              current_dialog_ui = nullptr;
+              glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+              inDialog = false;
+            }
+          }
+        }
       }
 
       glFinish();

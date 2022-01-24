@@ -19,12 +19,7 @@ Text::Text(std::string text,
 		   glm::vec3 color,
 		   glm::vec2 position
 		): Frame(glm::vec4(0.0f)) {
-
-	// printf("%s: ", text.c_str());
-	// print_vector()
-
 	m_text = text;
-	this->rect = rect;
 	this->scale = scale;
 	this->color = color;
 	this->letters = new std::vector<Image*>;
@@ -43,6 +38,9 @@ Text::Text(std::string text,
 	float x = - width / 2.0f;
 	float y = - height / 2.0f;
 
+	this->rect.x = m_position.x + x;
+	this->rect.y = m_position.y + y;
+
 	for (size_t c = 0; c < text.size(); c ++) {
 		float xpos;
 		float ypos;
@@ -60,6 +58,53 @@ Text::Text(std::string text,
 	this->rect.z = width;
 	this->rect.w = height;
 }
+
+Text::Text(std::string text,
+		   std::map<GLchar, Character> Characters,
+		   float scale,
+		   glm::vec3 color,
+		   glm::vec2 position,
+		   float start): Frame(glm::vec4(0.0f)) {
+	m_text = text;
+	this->scale = scale;
+	this->color = color;
+	this->letters = new std::vector<Image*>;
+	m_position = position;
+
+	float width = 0.0f;
+	int height = 0;
+
+	for (size_t c = 0; c < text.size(); c ++) {
+		Character ch = Characters[text[c]];
+
+		width += ch.Bearing.x * scale + (ch.Advance >> 6) * scale;
+		height = std::max(int(ch.Bearing.y / 2 * scale), height);
+	}
+
+	float x = 0.0f + start;
+	float y = - height / 2.0f;
+
+	this->rect.x = m_position.x + x;
+	this->rect.y = m_position.y + y;
+
+	for (size_t c = 0; c < text.size(); c ++) {
+		float xpos;
+		float ypos;
+		float w, h;
+		Character ch = Characters[text[c]];
+
+		xpos = x + ch.Bearing.x * scale;
+		ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+
+		w = ch.Size.x * scale;
+		h = ch.Size.y * scale;
+		this->letters->push_back(new Image(glm::vec4(xpos, ypos, w, h), ch.TextureID, m_position));
+		x += (ch.Advance >> 6) * scale;
+	}
+	this->rect.z = width;
+	this->rect.w = height;
+}
+
 
 Text::Text(std::string text,
 		   std::map<GLchar, Character> Characters,

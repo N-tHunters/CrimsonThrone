@@ -19,6 +19,7 @@ class Text: public Frame {
 public:
 	Text(std::string, std::map<GLchar, Character>, float, glm::vec3);
 	Text(std::string, std::map<GLchar, Character>, float, glm::vec3, glm::vec2);
+	Text(std::string, std::map<GLchar, Character>, float, glm::vec3, glm::vec2, float);
 	void update(std::string, std::map<GLchar, Character>, glm::vec4);
 	void update(std::string, std::map<GLchar, Character>);
 	void draw(ShaderHolder*) override;

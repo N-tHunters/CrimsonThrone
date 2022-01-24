@@ -35,6 +35,7 @@ NPC::NPC(std::string name, int max_health, PhysicalObj * obj, NPCAI * ai) :
   Actor(name, max_health, obj) {
   this->ai = ai;
   this->ai->SetActor(this);
+  this->dialog = new Dialog();
 }
 
 NPCAI* NPC::GetAI() {

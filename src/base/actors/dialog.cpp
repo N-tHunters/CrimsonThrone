@@ -25,13 +25,13 @@ Dialog::Dialog() {
     {4, "Who are you?"}
 },
     {
-    {1, "Sorry"}
+    {0, "Sorry"}
 },
     {
-    {1, "Ok."}
+    {0, "Ok."}
 },
     {
-    {1, "Ok."}
+    {0, "Ok."}
 },
     {
     {-1, "Bye"}
