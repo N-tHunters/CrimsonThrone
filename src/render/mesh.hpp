@@ -50,6 +50,9 @@ public:
 		 std::vector<GLfloat> *vertices,
 		 std::vector<GLuint> *indices,
 		 std::vector<unsigned char> pixels);
+	Mesh(GLuint texture,
+		 std::vector<GLfloat> *vertices,
+		 std::vector<GLuint> *indices);
 	Mesh(Model*, GLuint, float);
 	Mesh(Model*, GLuint);
 	Mesh();

@@ -82,6 +82,20 @@ Mesh::Mesh(GLuint texture1, GLuint texture2, std::vector<GLfloat> *vertices, std
 	loadObject(vertices, indices);
 }
 
+Mesh::Mesh(GLuint texture, std::vector<GLfloat> *vertices, std::vector<GLuint> *indices) {
+	activeDebug = false;
+	this->type = 1;
+	this->obj = nullptr;
+	this->size = indices->size();
+	m_scale = 1.0f;
+
+	this->texture1 = texture;
+	this->loadTexture("resources/textures/dark.png", 1);
+	this->loadTexture("resources/textures/blend.png", 2);
+
+	loadObject(vertices, indices);
+}
+
 
 /**
  * @brief      Constructs a new instance.

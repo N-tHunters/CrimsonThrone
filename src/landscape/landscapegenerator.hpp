@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <string>
 #include <physics/physicalObj.hpp>
+#include <render/textures.hpp>
 
 class Location;
 

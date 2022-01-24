@@ -24,7 +24,7 @@ Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * cam
   m_camera = camera;
   m_direction = 1.0f;
   m_side_direction = 1.0f;
-  m_velocity = 100.0f;
+  m_velocity = 10.0f;
 }
 
 /**
@@ -69,7 +69,6 @@ void Player::SetSideSpeed(glm::vec2 side_speed) {
 }
 
 void Player::CalculateSpeed(float rotation) {
-  printf("%f\n", m_velocity);
   SetSpeed(glm::vec2(sin(glm::radians(rotation)), -cos(glm::radians(rotation))) * m_velocity * m_direction);
 }
 

@@ -5,6 +5,7 @@ void LandscapeGenerator::Generate(Location *, size_t, size_t, int, int, int) {}
 
 
 PhysicalObj * create_wall(glm::vec3 position, glm::vec3 size, std::string texture_path) {
+  GLuint texture = get_texture(texture_path);
   std::vector<float> vertices;
   std::vector<unsigned int> indices;
 
@@ -90,7 +91,7 @@ PhysicalObj * create_wall(glm::vec3 position, glm::vec3 size, std::string textur
     indices.push_back(i);
 
   
-  return new PhysicalObj(new Mesh(texture_path, &vertices, &indices),
+  return new PhysicalObj(new Mesh(texture, &vertices, &indices),
 			 false,
        true,
        false,
