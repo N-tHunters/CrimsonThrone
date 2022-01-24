@@ -129,16 +129,8 @@ void PhysicalObj::jump(Chunk* chunk) {
 	if (isActive == false) {
 		return;
 	}
-	if (velocity.y <= 0.0f) {
-		bool t = false;
-		for (int i = 0; i < chunk->GetObjsCount(); i++) {
-			if (this->boundary->Collide(chunk->GetObj(i)->boundary, this->getPosition() - glm::vec3(0.0f, 0.5f, 0.0f), this->getRotation(), chunk->GetObj(i)->getPosition(), chunk->GetObj(i)->getRotation())) {
-				t = true;
-				break;
-			}
-		}
-		if (this->detectCollision(chunk->GetTerrain()) > -1.0f) t = true;
-		if (t) velocity.y = 20.0f;
+	if (getOnGround()) {
+		velocity.y = 20.0f;
 	}
 }
 
@@ -158,11 +150,11 @@ void PhysicalObj::setSpeed(glm::vec2 speed) {
 void PhysicalObj::setSpeed(glm::vec3 speed) { velocity = speed; }
 
 float PhysicalObj::detectCollision(Terrain* terrain) {
-	return terrain->getHeight(getPosition()) - this->getPositionY() - reinterpret_cast<BoundaryBox*>(this->boundary)->getMin().y;
+	return terrain->getHeight(getPosition()) - this->getPositionY() - this->boundary->getMin().y;
 }
 
 float PhysicalObj::detectCollision(Terrain* terrain, glm::vec3 position) {
-	return terrain->getHeight(position) - position.y - reinterpret_cast<BoundaryBox*>(this->boundary)->getMin().y;
+	return terrain->getHeight(position) - position.y - this->boundary->getMin().y;
 }
 
 void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
@@ -174,21 +166,6 @@ void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
 		return;
 	}
 	float height = this->detectCollision(terrain);
-	float width = terrain->getTileWidth() / 2.0f;
-
-	/*for (int i = 0; i < floor(b_width / width) + 1; i ++) {
-		for (int j = 0; j < floor(b_length / width) + 1; j ++) {
-			float x = this->position.x - (i - (ceil(b_width / width) + 1.0f) / 2.0f) * width;
-			float y = this->position.y;
-			float z = this->position.z - (j - (ceil(b_length / width) + 1.0f) / 2.0f) * width;
-			float temp_height = this->detectCollision(terrain, glm::vec3(x, y, z));
-			if (temp_height > height) {
-				height = temp_height;
-			}
-		}
-	}*/
-
-	//height -= this->position.y;// + reinterpret_cast<BoundaryBox*>(this->boundary)->height / 2.0f;
 
 	if (height > 0) {
 		this->changePositionY(height);
@@ -198,13 +175,16 @@ void PhysicalObj::collideTerrain(Terrain* terrain, float dt, Chunk* chunk_ptr) {
 	} else if (height > -0.1f) {
 		this->setOnGround(true);
 		this->force.y = 0.0f;
+		velocity.y = 0.0f;
 	} else {
 		bool t = false;
 		for (int i = 0; i < chunk_ptr->GetObjsCount(); i++) {
 			if (this == chunk_ptr->GetObj(i)) {
 				continue;
 			}
-			if (this->boundary->Collide(chunk_ptr->GetObj(i)->boundary, this->getPosition() - glm::vec3(0.0f, 0.5f, 0.0f), this->getRotation(), chunk_ptr->GetObj(i)->getPosition(), chunk_ptr->GetObj(i)->getRotation())) {
+			PhysicalObj* object = chunk_ptr->GetObj(i);
+			// Move slightly down to check if there are objects beneath
+			if (this->boundary->Collide(object->boundary, this->getPosition() - glm::vec3(0.0f, 0.1f, 0.0f), this->getRotation(), object->getPosition(), object->getRotation())) {
 				t = true;
 				break;
 			}
@@ -225,54 +205,10 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 	glm::vec3 this_velocity_y = glm::vec3(0.0f, velocity.y * dt, 0.0f);
 	glm::vec3 this_velocity_z = glm::vec3(0.0f, 0.0f, velocity.z * dt);
 
-	glm::vec3 other_velocity_x = glm::vec3(other_object->velocity.x * dt, 0.0f, 0.0f);
-	glm::vec3 other_velocity_y = glm::vec3(0.0f, other_object->velocity.y * dt, 0.0f);
-	glm::vec3 other_velocity_z = glm::vec3(0.0f, 0.0f, other_object->velocity.z * dt);
-
-	float max_speed = 0.01f;
-
-	if (this_velocity_x.x > max_speed) {
-		this_velocity_x.x = max_speed;
-	} else if (this_velocity_x.x < -max_speed) {
-		this_velocity_x.x = -max_speed;
-	}
-
-	if (this_velocity_y.y > max_speed) {
-		this_velocity_y.y = max_speed;
-	} else if (this_velocity_y.y < -max_speed) {
-		this_velocity_y.y = -max_speed;
-	}
-
-	if (this_velocity_z.z > max_speed) {
-		this_velocity_z.z = max_speed;
-	} else if (this_velocity_z.z < -max_speed) {
-		this_velocity_z.z = -max_speed;
-	}
-
-	if (other_velocity_x.x > max_speed) {
-		other_velocity_x.x = max_speed;
-	} else if (other_velocity_x.x < -max_speed) {
-		other_velocity_x.x = -max_speed;
-	}
-
-	if (other_velocity_y.y > max_speed) {
-		other_velocity_y.y = max_speed;
-	} else if (other_velocity_y.y < -max_speed) {
-		other_velocity_y.y = -max_speed;
-	}
-
-	if (other_velocity_z.z > max_speed) {
-		other_velocity_z.z = max_speed;
-	} else if (other_velocity_z.z < -max_speed) {
-		other_velocity_z.z = -max_speed;
-	}
-
-	bool collided = false;
-
 	if (this->boundary->Collide(static_cast<BoundaryBox*>(other_object->boundary),
 			this->getPosition() + this_velocity_x,
 			this->getRotation(),
-			other_object->getPosition() + other_velocity_x,
+			other_object->getPosition(),
 			other_object->getRotation())) {
 		this->velocity.x = 0.0f;
 	}
@@ -280,59 +216,21 @@ void PhysicalObj::collide(PhysicalObj* other_object, float dt, glm::vec3 velocit
 	if (this->boundary->Collide(static_cast<BoundaryBox*>(other_object->boundary),
 			this->getPosition() + this_velocity_y,
 			this->getRotation(),
-			other_object->getPosition() + other_velocity_y,
+			other_object->getPosition(),
 			other_object->getRotation())) {
 		this->velocity.y = 0.0f;
-		this->setOnGround(true);
+		if (this->getPosition().y > other_object->getPosition().y) {
+			this->setOnGround(true);
+		}
 	}
 
 	if (this->boundary->Collide(static_cast<BoundaryBox*>(other_object->boundary),
 			this->getPosition() + this_velocity_z,
 			this->getRotation(),
-			other_object->getPosition() + other_velocity_z,
+			other_object->getPosition(),
 			other_object->getRotation())) {
 		this->velocity.z = 0.0f;
 	}
-
-	/*if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_x, this->getRotation(), other_object->getPosition() + other_velocity_x, other_object->getRotation())) {
-		if (this->boundary->Collide(other_object->boundary, this->getPosition() + glm::vec3(0, 1, 0) + this_velocity_x, this->getRotation(), other_object->getPosition() + other_velocity_z, other_object->getRotation()) || this_velocity_x.x == 0.0f)
-		{
-			this->velocity.x = 0.0f;
-		} else {
-			this->position.y += 0.5f;
-		}
-		//this->velocity.x = (this->position.x - other_object->getPositionX()) * 2.0f;
-		//this->force.x = (this->position.x - other_object->getPositionX()) * 10.0f;
-		collided = true;
-		this->force.x = 0.0f;
-		//other_object->velocity.x -= (this->position.x - other_object->getPositionX()) * 2.0f;
-	}
-
-	if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_y, this->getRotation(), other_object->getPosition() + other_velocity_y, other_object->getRotation())) {
-		this->velocity.y = 0.0f;
-		this->force.y = 0.0f;
-		collided = true;
-	}
-
-	if (this->boundary->Collide(other_object->boundary, this->getPosition() + this_velocity_z, this->getRotation(), other_object->getPosition() + other_velocity_z, other_object->getRotation())) {
-		if (this->boundary->Collide(other_object->boundary, this->getPosition() + glm::vec3(0, 1, 0) + this_velocity_z, this->getRotation(), other_object->getPosition() + other_velocity_z, other_object->getRotation()) || this_velocity_z.z == 0.0f)
-		{
-			this->velocity.z = 0.0f;
-		} else {
-			this->position.y += 0.5f;
-		}
-		this->force.z = 0.0f;
-		collided = true;
-	}
-
-	if (this->boundary->Collide(other_object->boundary,
-	                            this->getPosition(),
-	                            this->getRotation(),
-	                            other_object->getPosition(),
-	                            other_object->getRotation())) {
-		if (other_object->isActive)
-			other_object->force -= this->getPosition() - other_object->getPosition();
-	}*/
 }
 
 Mesh* PhysicalObj::getMesh() {

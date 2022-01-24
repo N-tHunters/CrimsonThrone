@@ -29,8 +29,6 @@ bool BoundaryBox::Collide(BoundaryBox* other_boundary,
 	bool y = my_p1.y >= other_p0.y && other_p1.y >= my_p0.y;
 	bool z = my_p1.z >= other_p0.z && other_p1.z >= my_p0.z;
 
-	// printf("x:%d y:%d z:%d\n", x, y, z);
-
 	return x && y && z;
 }
 

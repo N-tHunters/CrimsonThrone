@@ -6,6 +6,7 @@ layout (location = 2) in vec2 texCoord;
 out vec2 TexCoord;
 out vec3 diffuse;
 out float distance;
+out float ambient;
 
 uniform mat4 model;
 uniform mat4 view;
@@ -27,10 +28,11 @@ void main()
 	float diff_sun = max(dot(norm, sunDir), 0.0);
 	// diffuse = vec3(min(max(diff / lightVecL * 100.0, diff_sun * 0.75), 1.0));
 
-	diffuse = vec3(min(diff / lightVecL * 100.0f, 1.0f));
+	diffuse = vec3(max(min(diff / lightVecL * 100.0f, 1.0f), 0.0f));
 	diffuse += vec3(diff_sun);
 
 	distance = length((view * model * vec4(position, 1.0f)).xyz);
+	ambient = 0.3f;
 
 	TexCoord = vec2(texCoord.x, 1.0 - texCoord.y);
 
