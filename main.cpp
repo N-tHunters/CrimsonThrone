@@ -66,6 +66,7 @@
 #include <UI/text3d.hpp>
 #include <UI/image3d.hpp>
 #include <UI/inventory.hpp>
+#include <UI/dialogui.hpp>
 
 #include <landscape/dungeona1generator3d.hpp>
 
@@ -100,6 +101,7 @@ float velocity = 5.0f;
 bool player_wants_to_jump = false;
 bool isRunning = false;
 bool openedInventory = false;
+bool inDialog = false;
 
 std::map<GLchar, Character> Characters;
 
@@ -391,6 +393,8 @@ int main()
     "Name", "Value"
   };
 
+  DialogUI* current_dialog_ui = nullptr;
+
   /*List* inventory_list = new List(glm::vec4(10, 10, width - 20, height - 20),
     (std::vector<AbstractListElement*>*)player->GetInventoryPointer(),
     "resources/textures/list.png",
@@ -609,6 +613,9 @@ int main()
             collided_actor->DealDamage(player_damage);
             printf("You hit %s for %d damage, it has %d hp left\n", collided_actor->GetName().c_str(), player_damage, collided_actor->GetHealth());
           }
+        } else if (pressed_e) {
+          inDialog = true;
+          current_dialog_ui = new Dialog(collided_actor, Characters);
         }
       }
 
