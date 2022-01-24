@@ -4,6 +4,7 @@
  */
 #include "npc.hpp"
 #include "npcai/npcai.hpp"
+#include "dialog.hpp"
 
 /**
  * Empty constructor
@@ -11,6 +12,7 @@
  */
 NPC::NPC() {
   this->ai = nullptr;
+  this->dialog = new Dialog();
 }
 
 /**
@@ -42,4 +44,9 @@ NPCAI* NPC::GetAI() {
 void NPC::Process(float dt) {
   if(this->ai != nullptr) 
     this->ai->Process(dt);
+}
+
+
+Dialog * getDialog() {
+  return this->dialog;
 }
