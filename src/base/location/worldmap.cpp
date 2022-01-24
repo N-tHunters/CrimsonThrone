@@ -9,6 +9,7 @@
 #include <landscape/flatgenerator.hpp>
 #include <landscape/overworldgenerator.hpp>
 #include <landscape/dungeona1generator3d.hpp>
+#include <landscape/landscapegenerator.hpp>
 #include <unordered_map>
 #include <render/models.hpp>
 #include <render/textures.hpp>
@@ -17,77 +18,17 @@
 std::unordered_map<int, Location *> location_map;
 
 void init_demo_locations() {
+  load_textures({"sword", "wood"});
   Location * open_world = new Location(4, 4, 100, 100, new FlatGenerator());
   location_map[0] = open_world;
 
-  open_world->GetChunk(0, 0)->AddObj(new PhysicalObj(new Mesh(get_model("box"), get_texture("grass")),
-    true,
-    true,
-    false,
-    false,
-    glm::vec3(10.0f),
-    glm::vec3(0.0f),
-    "cube",
-    get_model("box")->getBoundaryBox(1.0f)));
+  std::vector<glm::vec4>roads;
 
-  open_world->GetChunk(0, 0)->AddObj(new PhysicalObj(new Mesh(get_model("frog"), get_texture("frog")),
-    true,
-    true,
-    false,
-    false,
-    glm::vec3(20.0f),
-    glm::vec3(0.0f),
-    "frog",
-    get_model("frog")->getBoundaryBox(1.0f)));
+  roads.push_back(glm::vec4(2.5f, 1.0f, 5.0f, 2.0f));
 
 
-  std::vector<std::tuple<Chunk *, glm::vec3>> exits;
-  exits.push_back(std::make_tuple(open_world->GetChunk(0, 0), glm::vec3(2.0f, 2.0f, 2.0f)));
-
-  Model* portal_model = get_model("peyotl");
-
-  location_map[1] = new Location(5, 5, 10, 10, new DungeonA1Generator3D(5, &exits));
-  PhysicalObj * portal = new PhysicalObj(new Mesh(portal_model, get_texture("fire")),
-					 false, true, false, false,
-					 glm::vec3(5.f + 10.f, 3.f, 5.f),
-					 glm::vec3(0.0f, 0.0f, 0.0f),
-					 "portal",
-					 get_model("portal")->getBoundaryBox(1.0f));
-  location_map[0]->GetChunk(0, 0)->AddObj(portal);
-  location_map[0]->GetChunk(0, 0)->AddTrigger(new LongJumpTrigger(portal, glm::vec3(2.0f, 2.0f, 2.0f), location_map[1]->GetChunk(0, 0)));
-
-
- /*
-  Actor * last_actor = nullptr;
-
-  for(int i = 0; i < 5; i++){
-    NPC * test_actor = new NPC("totacres", 10,
-					  new PhysicalObj(new Mesh(get_model("runner"), get_texture("fire")),
-							  true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
-							  get_model("runner")->getBoundaryBox(1.0f)),
-					  (NPCAI *)new AggressiveWandererAI(5.0f));
-
-    if(last_actor != nullptr)
-      ((AggressiveWandererAI*)test_actor->GetAI())->SetTarget(last_actor->GetPhysicalObj());
-    last_actor = test_actor;
-    
-    open_world->GetChunk(0, 0)->AddActor((Actor*)test_actor);
-
-    /*ParticleEmitter* test_particle_emitter = new ParticleEmitter(*(test_actor->GetPhysicalObj()), get_texture("void"));
-
-      open_world->GetChunk(0, 0)->AddParticleEmitter(test_particle_emitter);*/
-  /*}
-
-  
-  for(int i = 0; i < 3; i++){
-     Weapon * totacres_wep = new Weapon("sercatot", 
-				       new PhysicalObj(new Mesh(get_model("sword"), get_texture("sword"), (rand() % 10 + 10) / 40.0f),
-						       true, true, false, false, glm::vec3(rand() % 10, rand() % 10 + 10, rand() % 10), glm::vec3(3.0f, 1.0f, 1.0f), "test_actor_po",
-						       get_model("sword")->getBoundaryBox(1.0f)), 5, 10);
-    open_world->GetChunk(0, 0)->AddItem(totacres_wep);
-    
-  }
-*/
+  for(auto road: roads)
+    open_world->GetChunk(0, 0)->AddObj(create_wall(glm::vec3(road.x, 0, road.y), glm::vec3(road.z, 0.1f, road.w), "wood"));
 
   SetCurrentLocation(open_world);
   open_world->LoadABS();
