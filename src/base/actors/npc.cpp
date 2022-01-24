@@ -47,6 +47,6 @@ void NPC::Process(float dt) {
 }
 
 
-Dialog * getDialog() {
+Dialog * NPC::getDialog() {
   return this->dialog;
 }

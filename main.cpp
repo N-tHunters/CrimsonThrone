@@ -615,7 +615,7 @@ int main()
           }
         } else if (pressed_e) {
           inDialog = true;
-          current_dialog_ui = new Dialog(collided_actor, Characters);
+          current_dialog_ui = new DialogUI((NPC*)(collided_actor), Characters);
         }
       }
 

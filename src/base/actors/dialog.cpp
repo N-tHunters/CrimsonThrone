@@ -44,6 +44,10 @@ std::string Dialog::getLine() {
     return this->lines[this->current_line_index];
 }
 
+std::vector<std::pair<int, std::string>> Dialog::getPlayerLines() {
+    return this->player_lines[this->current_line_index];
+}
+
 void Dialog::startDialog() {
     this->current_line_index = 0;
 }
