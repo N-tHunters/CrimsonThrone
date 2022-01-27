@@ -319,7 +319,7 @@ int main() {
   camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
   player = new Player("player",
             10,
-            new PhysicalObj(glm::vec3(1000.0f, 1000.0f, 10.0f),
+            new PhysicalObj(glm::vec3(1000.0f, 10.0f, 1000.0f),
                     new BoundaryBox(glm::vec3(-0.2f, -0.5f, -0.2f), glm::vec3(0.2f, 0.5f, 0.2f))),
             camera);
   player_core = new MagicCore();

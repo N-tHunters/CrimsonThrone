@@ -19,7 +19,7 @@ std::unordered_map<int, Location *> location_map;
 
 void init_demo_locations() {
   load_textures({"sword", "fire"});
-  Location * open_world = new Location(4, 4, 100, 100, new FlatGenerator());
+  Location * open_world = new Location(100, 100, 100, 100, new FlatGenerator());
   location_map[0] = open_world;
 
   // Create City Center
