@@ -1,23 +1,25 @@
-#ifndef MODEL_H
-#define MODEL_H
+// Copyright 2021 N-tHunters
 
-#include <assimp/Importer.hpp>
+#pragma once
+
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
-#include <physics/boundary.hpp>
-#include "mesh.hpp"
-#include <physics/boundary.hpp>
 
-struct Model
-{
-	std::vector<GLfloat> vertices;
-	std::vector<GLuint> indices;
-	explicit Model(const std::string& path);
+#include <string>
+#include <vector>
 
-	BoundaryBox* getBoundaryBox(float scale);
-private:
-	void loadModel(const std::string& path);
-	void processNode(aiNode *node, const aiScene *scene);
+#include <assimp/Importer.hpp>
+
+#include <physics/boundary.hpp>
+#include <render/mesh.hpp>
+
+struct Model {
+  std::vector<GLfloat> vertices;
+  std::vector<GLuint> indices;
+  explicit Model(const std::string& path);
+  BoundaryBox* getBoundaryBox(float scale);
+  BoundaryBox* getBoundaryBox();
+ private:
+  void loadModel(const std::string& path);
+  void processNode(aiNode *node, const aiScene *scene);
 };
-
-#endif

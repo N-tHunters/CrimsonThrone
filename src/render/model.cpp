@@ -5,18 +5,15 @@ Model::Model(const std::string& path) {
 }
 
 void Model::loadModel(const std::string& path) {
-
 	Assimp::Importer import;
 
 	const aiScene *scene = import.ReadFile(path, aiProcess_Triangulate);
 
-
 	if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode)
 	{
-		std::cout << "ERROR::ASSIMP::" << import.GetErrorString() << std::endl;
+		printf("ERROR::ASSIMP::%s\n", import.GetErrorString());
 		return;
 	}
-	//directory = path.substr(0, path.find_last_of('/'));
 
 	this->processNode(scene->mRootNode, scene);
 }
@@ -86,4 +83,8 @@ BoundaryBox* Model::getBoundaryBox(float scale) {
 	}
 
 	return new BoundaryBox(min * scale, max * scale);
+}
+
+BoundaryBox* Model::getBoundaryBox() {
+	return getBoundaryBox(1.0f);
 }
