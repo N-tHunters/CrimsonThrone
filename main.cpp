@@ -633,6 +633,7 @@ int main() {
           }
         } else if (pressed_e) {
           inDialog = true;
+          reinterpret_cast<NPC*>(collided_actor)->getDialog()->startDialog(player);
           current_dialog_ui = new DialogUI(
             reinterpret_cast<NPC*>(collided_actor),
             &Characters,
