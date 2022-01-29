@@ -1,4 +1,4 @@
-#include "questgoal.h"
+#include "questgoal.hpp"
 
 
 QuestGoal::QuestGoal(std::string description) {

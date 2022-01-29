@@ -1,21 +1,15 @@
 #ifndef QUEST_H_
 #define QUEST_H_
 
-#include <string>
 #include <vector>
-
-class QuestGoal;
+#include "questgoal.hpp"
 
 class Quest {
     public:
-        std::string name;
-        std::string description;
-        int goals_count;
-        std::vector<QuestGoal*> goals;
-
+        int goals_num;
+        std::vector<QuestGoal *> goals;
 
         Quest(std::vector<QuestGoal *> goals);
 };
-
 
 #endif // QUEST_H_

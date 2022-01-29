@@ -1,4 +1,4 @@
-#include "quest.h"
+#include "quest.hpp"
 
 
 Quest::Quest(std::vector<QuestGoal *> goals) {
