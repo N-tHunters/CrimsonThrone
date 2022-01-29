@@ -18,7 +18,7 @@
 std::unordered_map<int, Location *> location_map;
 
 void init_demo_locations() {
-  load_textures({"sword", "fire"});
+  load_textures({"sword", "fire", "stone"});
   Location * open_world = new Location(100, 100, 100, 100, new FlatGenerator());
   location_map[0] = open_world;
 
@@ -42,9 +42,9 @@ void init_demo_locations() {
   		)
   	);
 
-  for(int i = 0; i < 100; i++) {
-    open_world->GetChunk(0, 0)->AddObj(create_wall(glm::vec3(10 * (rand() % 40) + rand() % 10, 5, 10 * (rand() % 40) + rand() % 10), glm::vec3(10, 10, 10), GetDefaultTexture()));
-  }
+  // for(int i = 0; i < 100; i++) {
+  //   open_world->GetChunk(0, 0)->AddObj(create_wall(glm::vec3(10 * (rand() % 40) + rand() % 10, 5, 10 * (rand() % 40) + rand() % 10), glm::vec3(10, 10, 10), GetDefaultTexture()));
+  // }
 
   SetCurrentLocation(open_world);
   open_world->LoadABS();

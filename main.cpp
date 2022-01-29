@@ -197,10 +197,7 @@ int main() {
 #ifndef NO_SOUND
   FileSound sound(&sound_engine, &source, "resources/sounds/firetail.wav");
   sound.Play();
-  //    Voice voice(&sound_engine, &source, "resources/voices/asto/");
-  //  voice.Say("sunyu huy sosy  sunyu huy sosi huy sunyux");
 #endif
-
   // Init GLFW
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -266,7 +263,6 @@ int main() {
   glGenFramebuffers(1, &framebuffer);
   glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
 
-  // создание текстурного объекта
   unsigned int texColorBuffer;
   glGenTextures(1, &texColorBuffer);
   glBindTexture(GL_TEXTURE_2D, texColorBuffer);
@@ -275,7 +271,6 @@ int main() {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glBindTexture(GL_TEXTURE_2D, 0);
 
-  // присоедиение текстуры к объекту текущего кадрового буфера
   glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
 
   unsigned int rbo;
@@ -319,7 +314,7 @@ int main() {
   camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
   player = new Player("player",
             10,
-            new PhysicalObj(glm::vec3(1000.0f, 10.0f, 1000.0f),
+            new PhysicalObj(glm::vec3(20.0f, 10.0f, 20.0f),
                     new BoundaryBox(glm::vec3(-0.2f, -0.5f, -0.2f), glm::vec3(0.2f, 0.5f, 0.2f))),
             camera);
   player_core = new MagicCore();

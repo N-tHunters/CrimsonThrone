@@ -1,9 +1,11 @@
 #include "flatchunkloader.hpp"
+#include <landscape/landscapegenerator.hpp>
 
 FlatChunkLoader::FlatChunkLoader(float size, int vertices_number, glm::vec3 position) {
   this->size = size;
   this->vertices_number = vertices_number;
   this->position = position;
+  this->house = false;
 }
 
 void FlatChunkLoader::Load(AbstractChunk * chunk) {
@@ -34,4 +36,14 @@ void FlatChunkLoader::Load(AbstractChunk * chunk) {
   GLuint texture2 = get_texture("grass");
 
   LoadEnd(height_map, chunk, texture1, texture2, pixels);
+}
+
+void FlatChunkLoader::LoadObjects(AbstractChunk* chunk) {
+  chunk->AddObj(create_wall(glm::vec3(chunk->GetX() * 100.0f, 5.0f, chunk->GetY() * 100.0f), glm::vec3(10, 10, 10), "stone"));
+  this->house = true;
+}
+
+
+bool FlatChunkLoader::AreObjectsLoaded() {
+  return this->house;
 }
