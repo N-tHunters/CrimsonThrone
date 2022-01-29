@@ -15,9 +15,10 @@ class Dialog {
                 std::vector<std::vector<std::pair<int, std::string>>> player_lines;
                 std::map<int, Quest*> quests;
                 int current_line_index;
+                Actor *me;
                 Player *talker;
         public:
-                Dialog();
+                Dialog(Actor *me);
                 std::string getLine();
                 std::vector<std::pair<int, std::string>> getPlayerLines();
                 void startDialog(Player *talker);

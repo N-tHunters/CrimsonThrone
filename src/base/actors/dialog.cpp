@@ -1,7 +1,8 @@
 #include "dialog.hpp"
 
 
-Dialog::Dialog() {
+Dialog::Dialog(Actor *me) {
+    this->me = me;
     this->current_line_index = 0;
 
     this->lines = {
@@ -56,6 +57,16 @@ std::vector<std::pair<int, std::string>> Dialog::getPlayerLines() {
 void Dialog::startDialog(Player* talker) {
     this->current_line_index = 0;
     this->talker = talker;
+
+    glm::vec3 position = this->me->GetPhysicalObj()->getPosition();
+
+    glm::vec3 rel_vec = this->talker->GetPhysicalObj()->getPosition() - position;
+    rel_vec.y = 0;
+    float degree = atan(rel_vec.x / rel_vec.z) * 180 / 3.1415 + 90;
+    glm::vec3 newRotation = this->me->GetPhysicalObj()->getRotation();
+    newRotation.y = degree;
+    this->me->GetPhysicalObj()->setRotation(newRotation);
+
 }
 
 void Dialog::nextLine(int line) {
