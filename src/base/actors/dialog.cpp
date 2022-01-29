@@ -31,12 +31,17 @@ Dialog::Dialog() {
     {0, "Ok."}
 },
     {
-    {0, "Ok."}
+    {0, "I will help you"}
 },
     {
     {-1, "Bye"}
 }
 };
+
+    setQuest(4, new Quest("WHOAMI?", {
+                new QuestGoal("get a sword")
+            }));
+    talker = nullptr;
 }
 
 
@@ -48,12 +53,25 @@ std::vector<std::pair<int, std::string>> Dialog::getPlayerLines() {
     return this->player_lines[this->current_line_index];
 }
 
-void Dialog::startDialog() {
+void Dialog::startDialog(Player* talker) {
     this->current_line_index = 0;
+    this->talker = talker;
 }
 
 void Dialog::nextLine(int line) {
     if(line == -1)
         return;
     this->current_line_index = line;
+    if(isQuest()) {
+        talker->addQuest(this->quests[current_line_index]);
+    }
+}
+
+
+void Dialog::setQuest(int line, Quest* quest) {
+    this->quests[line] = quest;
+}
+
+bool Dialog::isQuest() {
+    return (this->quests[this->current_line_index] != nullptr);
 }

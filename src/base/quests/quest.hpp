@@ -7,9 +7,10 @@
 class Quest {
     public:
         int goals_num;
+        std::string name;
         std::vector<QuestGoal *> goals;
 
-        Quest(std::vector<QuestGoal *> goals);
+        Quest(std::string name, std::vector<QuestGoal *> goals);
 };
 
 #endif // QUEST_H_

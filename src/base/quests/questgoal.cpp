@@ -6,6 +6,6 @@ QuestGoal::QuestGoal(std::string description) {
 }
 
 
-void complete() {
+void QuestGoal::complete() {
     this->is_completed = true;
 }

@@ -50,6 +50,8 @@ class Player : public Actor {
 
     float GetDirection();
     float GetSideDirection();
+
+    void addQuest(Quest *quest);
 };
 
 #endif

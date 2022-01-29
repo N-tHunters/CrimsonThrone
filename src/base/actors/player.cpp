@@ -105,3 +105,9 @@ float Player::GetDirection() {
 float Player::GetSideDirection() {
   return m_side_direction;
 }
+
+
+
+void Player::addQuest(Quest * quest) {
+  this->quests.push_back(quest);
+}
