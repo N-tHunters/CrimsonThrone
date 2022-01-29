@@ -1,5 +1,6 @@
 #include "flatchunkloader.hpp"
 #include <landscape/landscapegenerator.hpp>
+#include <base/actors/npc.hpp>
 
 FlatChunkLoader::FlatChunkLoader(float size, int vertices_number, glm::vec3 position) {
   this->size = size;
@@ -39,7 +40,27 @@ void FlatChunkLoader::Load(AbstractChunk * chunk) {
 }
 
 void FlatChunkLoader::LoadObjects(AbstractChunk* chunk) {
-  chunk->AddObj(create_wall(glm::vec3(chunk->GetX() * 100.0f, 5.0f, chunk->GetY() * 100.0f), glm::vec3(10, 10, 10), "stone"));
+  if (rand() % 10 < 3) {
+    chunk->AddObj(create_wall(glm::vec3(chunk->GetX() * 100.0f + 50.0f, 5.0f, chunk->GetY() * 100.0f + 50.0f), glm::vec3(10, 10, 10), "stone"));
+    chunk->AddActor(
+  	new NPC(
+  		"Totacres",
+  		100,
+  		new PhysicalObj(
+  			new Mesh(
+  				get_model("human"),
+  				get_texture("fire")
+  				),
+  			true, true, false, false,
+  			glm::vec3(chunk->GetX() * 100.0f + 50.0f, 10.0f, chunk->GetY() * 100.0f + 61.0f),
+  			glm::vec3(0.0f),
+  			"totacres",
+  			get_model("human")->getBoundaryBox(1.0f)
+  			)
+  		)
+  	);
+
+  }
   this->house = true;
 }
 

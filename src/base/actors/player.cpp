@@ -25,6 +25,7 @@ Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * cam
   m_direction = 1.0f;
   m_side_direction = 1.0f;
   m_velocity = 10.0f;
+  m_speed = glm::vec2(0.0f);
 }
 
 /**
