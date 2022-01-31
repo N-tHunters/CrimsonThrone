@@ -303,7 +303,7 @@ int main() {
 
   
   Image* image_loading = new Image(glm::vec4(width / 2 - 256, height / 2 - 256, 512, 512), "resources/textures/starting.png");
-  glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+  glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glfwPollEvents();
