@@ -42,7 +42,7 @@ Image3D::Image3D(glm::vec4 rect, glm::vec3 position, GLuint texture) {
 	m_size = indices.size();
 }
 
-void Image3D::draw(Shader* shader, Camera* camera, GLuint width, GLuint height) {
+void Image3D::draw(Camera* camera) {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 model = glm::mat4(1.0f);
@@ -57,7 +57,7 @@ void Image3D::draw(Shader* shader, Camera* camera, GLuint width, GLuint height) 
 	cameraRot = glm::rotate(cameraRot, glm::radians(camera->getRotation().y), glm::vec3(0.0f, 1.0f, 0.0f));
 	cameraRot = glm::rotate(cameraRot, glm::radians(camera->getRotation().z), glm::vec3(0.0f, 0.0f, 1.0f));
 	view = glm::translate(view, m_position - cameraPosition);
-	projection = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
+	projection = glm::perspective(glm::radians(45.0f), screen_resolution.x / screen_resolution.y, 0.1f, 1000.0f);
 
 	glm::vec3 lightPos = glm::vec3(20, 1, 20);
 
@@ -70,11 +70,11 @@ void Image3D::draw(Shader* shader, Camera* camera, GLuint width, GLuint height) 
 
 	GLint modelLoc, viewLoc, projLoc, camRotLoc;
 
-	shader->Use();
-	modelLoc = glGetUniformLocation(shader->Program, "model");
-	viewLoc = glGetUniformLocation(shader->Program, "view");
-	projLoc = glGetUniformLocation(shader->Program, "projection");
-	camRotLoc = glGetUniformLocation(shader->Program, "cameraRot");
+	shaderText3D.Use();
+	modelLoc = glGetUniformLocation(shaderText3D.Program, "model");
+	viewLoc = glGetUniformLocation(shaderText3D.Program, "view");
+	projLoc = glGetUniformLocation(shaderText3D.Program, "projection");
+	camRotLoc = glGetUniformLocation(shaderText3D.Program, "cameraRot");
 
 	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));

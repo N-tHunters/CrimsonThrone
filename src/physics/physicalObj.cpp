@@ -58,8 +58,8 @@ PhysicalObj::PhysicalObj(Mesh* mesh, bool isActive, bool isVisible, bool isTrans
 	this->mass = 1.0f;
 }
 
-void PhysicalObj::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height) {
-	if (this->isVisible) this->mesh->draw(shaderHolder, camera, width, height);
+void PhysicalObj::draw(Camera* camera) {
+	if (this->isVisible) this->mesh->draw(camera);
 }
 
 void PhysicalObj::update(float dt) {

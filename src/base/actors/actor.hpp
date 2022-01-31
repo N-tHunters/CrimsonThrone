@@ -118,8 +118,8 @@ public:
 
   std::stringstream * Save(Saver *);
 
-  void draw(ShaderHolder *, Camera *, int, int);
-  void drawAfter(ShaderHolder *, Camera *, int, int);
+  void draw(Camera *);
+  void drawAfter(Camera *);
 
   bool IsAlive();
 };

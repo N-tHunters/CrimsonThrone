@@ -161,12 +161,12 @@ void Location::UpdatePosition(glm::vec3 pos) {
 /**
  * Draw all chunks around current chunk (Position of current chunk
  * is taken from Location::UpdatePosition())
- * \param shaderHolder Pointer to all shaders
+ * \param  Pointer to all shaders
  * \param camera Pointer to camer
  * \param screen_width Width of screen
  * \param screen_height Height of screen
  */
-void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_width, int screen_height) {
+void Location::Draw(Camera * camera) {
 
   LoadABS();
   int lx = std::max((int)current_x - RENDER_RADIUS, 0); // Most left row
@@ -178,7 +178,7 @@ void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_wid
   for(int ix = lx; ix <= rx; ix++) {
     for(int iy = uy; iy <= dy; iy++) {
       if(this->chunks[ix][iy] != nullptr && this->chunks[ix][iy]->IsLoaded()) {
-        this->chunks[ix][iy]->Draw(shaderHolder, camera, screen_width, screen_height);
+        this->chunks[ix][iy]->Draw(camera);
       }
     }
   }
@@ -187,7 +187,7 @@ void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_wid
   for(int ix = lx; ix <= rx; ix++) {
     for(int iy = uy; iy <= dy; iy++) {
       if(this->chunks[ix][iy] != nullptr && this->chunks[ix][iy]->IsLoaded()) {
-        this->chunks[ix][iy]->DrawWater(shaderHolder, camera, screen_width, screen_height);
+        this->chunks[ix][iy]->DrawWater(camera);
       }
     }
   }
@@ -195,7 +195,7 @@ void Location::Draw(ShaderHolder * shaderHolder, Camera * camera, int screen_wid
   for(int ix = lx; ix <= rx; ix++) {
     for(int iy = uy; iy <= dy; iy++) {
       if(this->chunks[ix][iy] != nullptr && this->chunks[ix][iy]->IsLoaded()) {
-        this->chunks[ix][iy]->DrawAfter(shaderHolder, camera, screen_width, screen_height);
+        this->chunks[ix][iy]->DrawAfter(camera);
       }
     }
   }

@@ -8,9 +8,9 @@
 #include <map>
 
 // Render includes
-#include "../render/shaderLoader.hpp"
-#include "../render/imageLoader.hpp"
-#include "../render/shaderHolder.hpp"
+#include <render/shaderLoader.hpp>
+#include <render/imageLoader.hpp>
+
 
 // Base includes
 #include <base/items/item.hpp>
@@ -26,7 +26,7 @@ protected:
 
 public:
 	explicit Frame(glm::vec4);
-	virtual void draw(ShaderHolder*);
+	virtual void draw();
 };
 
 #endif

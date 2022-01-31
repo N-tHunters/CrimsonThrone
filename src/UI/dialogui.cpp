@@ -9,11 +9,11 @@ DialogUI::DialogUI(NPC* npc, std::map<GLchar, Character> *characters, int width,
 	update();
 }
 
-void DialogUI::draw(ShaderHolder* shaderHolder) {
-	m_npc_line_text->draw(shaderHolder);
+void DialogUI::draw() {
+	m_npc_line_text->draw();
 
 	for (Text* player_line_text: m_player_lines_text) {
-		player_line_text->draw(shaderHolder);
+		player_line_text->draw();
 	}
 }
 

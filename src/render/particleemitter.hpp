@@ -20,5 +20,5 @@ public:
   void respawn(Particle &particle, glm::vec3 offset);
   unsigned int firstUnusedParticle();
   void init();
-  void draw(ShaderHolder *, Camera *, int, int);
+  void draw(Camera *);
 };

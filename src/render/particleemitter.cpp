@@ -60,8 +60,8 @@ unsigned int ParticleEmitter::firstUnusedParticle()
 } 
 
 
-void ParticleEmitter::draw(ShaderHolder *shaderHolder, Camera *camera, int width, int height) {
+void ParticleEmitter::draw(Camera *camera) {
   for (Particle particle : particles) {
-    particle.draw(shaderHolder, camera, width, height);
+    particle.draw(camera);
   }
 }

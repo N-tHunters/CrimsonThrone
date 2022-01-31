@@ -22,7 +22,7 @@ public:
 	Text(std::string, std::map<GLchar, Character>, float, glm::vec3, glm::vec2, float);
 	void update(std::string, std::map<GLchar, Character>, glm::vec4);
 	void update(std::string, std::map<GLchar, Character>);
-	void draw(ShaderHolder*) override;
+	void draw() override;
 	glm::vec4 getRect();
 	void setPosition(float x, float y);
 	void changePosition(glm::vec2 delta);

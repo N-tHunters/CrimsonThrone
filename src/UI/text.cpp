@@ -170,9 +170,9 @@ void Text::update(std::string text, std::map<GLchar, Character> Characters) {
 	}
 }
 
-void Text::draw(ShaderHolder* shaderHolder) {
+void Text::draw() {
 	for (size_t i = 0; i < this->letters->size(); i ++)
-		this->letters->at(i)->draw(shaderHolder, this->color);
+		this->letters->at(i)->draw(this->color);
 }
 
 glm::vec4 Text::getRect() {

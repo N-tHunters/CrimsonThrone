@@ -26,12 +26,11 @@ private:
   float m_side_direction;
   float m_velocity;
   QuestUI* m_quest_ui;
-  ShaderHolder* m_shaderHolder;
   std::map<GLchar, Character> m_characters;
 
 public:
   Player();
-  Player(std::string, int, PhysicalObj *, Camera *, ShaderHolder* shaderHolder, std::map<GLchar, Character> characters);
+  Player(std::string, int, PhysicalObj *, Camera *, std::map<GLchar, Character> characters);
 
   void Update(float);
 
@@ -47,7 +46,7 @@ public:
   void CalculateSpeed(float rotation);
   void CalculateSideSpeed(float rotation);
 
-  void draw(ShaderHolder*, Camera*, int, int);
+  void draw(Camera*);
 
   void SetDirection(float direction);
   void SetSideDirection(float side_direction);

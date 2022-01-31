@@ -1,15 +1,15 @@
 #include <UI/button.hpp>
 #include <base/configuration.hpp>
 
-Button::Button(glm::vec4 rect, func function, std::string text, std::map<GLchar, Character> Characters, float scale, glm::vec3 color, int screen_width, int screen_height): Frame(rect) {
+Button::Button(glm::vec4 rect, func function, std::string text, std::map<GLchar, Character> Characters, float scale, glm::vec3 color): Frame(rect) {
 	this->rect = rect;
 	this->function = function;
 	this->text = new Text(text, Characters, scale / 24.0f, color);
 
-	this->rect.x = (rect.x + 1.0f) / 2.0f * screen_width;
-	this->rect.y = (rect.y + 1.0f) / 2.0f * screen_height;
-	this->rect.z = rect.z / 2.0f * screen_width;
-	this->rect.w = rect.w / 2.0f * screen_height;
+	this->rect.x = (rect.x + 1.0f) / 2.0f * screen_resolution.x;
+	this->rect.y = (rect.y + 1.0f) / 2.0f * screen_resolution.y;
+	this->rect.z = rect.z / 2.0f * screen_resolution.x;
+	this->rect.w = rect.w / 2.0f * screen_resolution.y;
 	rect = this->rect;
 
 	glm::vec2 center = glm::vec2(rect.x + rect.z / 2.0f, rect.y + rect.w / 2.0f);
@@ -146,23 +146,23 @@ void Button::update(glm::vec3 color) {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Button::draw(ShaderHolder* shaderHolder) {
+void Button::draw() {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	shaderHolder->getGUI()->Use();
+	shaderGUI.Use();
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), &(vertices[0]), GL_STATIC_DRAW);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glUniform1i(glGetUniformLocation(shaderHolder->getGUI()->Program, "ourTexture"), 0);
+	glUniform1i(glGetUniformLocation(shaderGUI.Program, "ourTexture"), 0);
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
 
-	this->text->draw(shaderHolder);
+	this->text->draw();
 }
 
 bool Button::check(glm::vec2 position) {

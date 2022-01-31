@@ -12,7 +12,7 @@ class TextBox : public Frame {
 	int index;
 	float m_scale;
 public:
-	TextBox(glm::vec4 rect, std::map<GLchar, Character> Characters, float scale, glm::vec3 color, int screen_width, int screen_height);
-	void draw(ShaderHolder* shaderHolder);
+	TextBox(glm::vec4 rect, std::map<GLchar, Character> Characters, float scale, glm::vec3 color);
+	void draw();
 	void addLine(const std::string& line);
 };

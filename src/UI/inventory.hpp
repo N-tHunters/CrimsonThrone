@@ -1,8 +1,10 @@
 #pragma once
 
 #include <base/actors/actor.hpp>
-#include <render/shaderHolder.hpp>
+
 #include <render/camera.hpp>
+#include <render/shaders.hpp>
+
 #include <UI/text.hpp>
 
 class Inventory {
@@ -21,8 +23,8 @@ class Inventory {
   std::map<GLchar, Character> &characters;
 
 public:
-  Inventory(Actor& actor, std::map<GLchar, Character> &Characters, int, int);
-  void draw(ShaderHolder* shaderHolder, int width, int height);
+  Inventory(Actor& actor, std::map<GLchar, Character> &Characters);
+  void draw();
   void open();
   void update(float dt);
   void nextElement();

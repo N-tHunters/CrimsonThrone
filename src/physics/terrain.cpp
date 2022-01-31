@@ -298,8 +298,8 @@ float Terrain::getHeightMap(int x, int y) {
 	return this->height[x][y];
 }
 
-void Terrain::draw(ShaderHolder* shaderHolder, Camera* camera, GLuint width, GLuint height) {
-	this->obj->draw(shaderHolder, camera, width, height);
+void Terrain::draw(Camera* camera) {
+	this->obj->draw(camera);
 }
 
 glm::vec3 Terrain::getPosition() {

@@ -7,7 +7,7 @@
 
 #include <physics/terrain.hpp>
 #include <physics/physicalObj.hpp>
-#include <render/shaderHolder.hpp>
+
 #include <base/triggers/boundarytrigger.hpp>
 #include <base/items/item.hpp>
 #include <base/actors/actor.hpp>
@@ -42,9 +42,9 @@ class Chunk {
 
   Terrain * GetTerrain();
 
-  void Draw(ShaderHolder *, Camera *, int, int);
-  void DrawWater(ShaderHolder *, Camera *, int, int);
-  void DrawAfter(ShaderHolder *, Camera *, int, int);
+  void Draw(Camera *);
+  void DrawWater(Camera *);
+  void DrawAfter(Camera *);
 
   size_t GetItemsCount();
   size_t GetActorsCount();

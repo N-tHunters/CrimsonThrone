@@ -12,10 +12,11 @@
 
 // Render includes
 #include <render/shaderLoader.hpp>
-#include <render/shaderHolder.hpp>
+
 #include <render/constants.hpp>
 #include <render/camera.hpp>
 #include <render/texture.hpp>
+#include <render/shaders.hpp>
 
 #include <string>
 #include <vector>
@@ -59,9 +60,9 @@ public:
 
 	void loadObject(std::vector<GLfloat> *vertices, std::vector<GLuint> *indices);
 	void init(PhysicalObj*);
-	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
-	void draw(ShaderHolder*, glm::vec3 position, glm::vec3 rotation, GLuint, GLuint);
-	void draw(ShaderHolder*);
+	void draw(Camera*);
+	void draw(glm::vec3 position, glm::vec3 rotation);
+	void draw();
 	void rotate(glm::vec3);
 	void changeTexture(const std::string&);
 	void loadTexture(const std::string& texturePath, char number);

@@ -4,14 +4,14 @@
 const int BORDER_WIDTH = 1;
 
 
-TextBox::TextBox(glm::vec4 rect, std::map<GLchar, Character> Characters, float scale, glm::vec3 color, int screen_width, int screen_height) : Frame(rect) {
+TextBox::TextBox(glm::vec4 rect, std::map<GLchar, Character> Characters, float scale, glm::vec3 color) : Frame(rect) {
   this->rect = rect;
   // this->text = new Text(text, glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), Characters, scale / 24.0f, color);
 
-  this->rect.x = (rect.x + 1.0f) / 2.0f * screen_width;
-  this->rect.y = (rect.y + 1.0f) / 2.0f * screen_height;
-  this->rect.z = rect.z / 2.0f * screen_width;
-  this->rect.w = rect.w / 2.0f * screen_height;
+  this->rect.x = (rect.x + 1.0f) / 2.0f * screen_resolution.x;
+  this->rect.y = (rect.y + 1.0f) / 2.0f * screen_resolution.y;
+  this->rect.z = rect.z / 2.0f * screen_resolution.x;
+  this->rect.w = rect.w / 2.0f * screen_resolution.y;
 
   rect = this->rect;
 
@@ -94,24 +94,24 @@ TextBox::TextBox(glm::vec4 rect, std::map<GLchar, Character> Characters, float s
   m_position = glm::vec2(rect.x, rect.y);
 }
 
-void TextBox::draw(ShaderHolder* shaderHolder) {
+void TextBox::draw() {
   glClear(GL_DEPTH_BUFFER_BIT);
 
-  shaderHolder->getGUI()->Use();
+  shaderGUI.Use();
 
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), &(vertices[0]), GL_STATIC_DRAW);
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texture);
-  glUniform1i(glGetUniformLocation(shaderHolder->getGUI()->Program, "Texture"), 0);
+  glUniform1i(glGetUniformLocation(shaderGUI.Program, "Texture"), 0);
 
   glBindVertexArray(VAO);
   glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
 
   for (int i = index; i < this->lines.size(); i ++) {
-    this->lines[i]->draw(shaderHolder);
+    this->lines[i]->draw();
   }
 }
 

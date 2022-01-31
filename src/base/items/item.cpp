@@ -101,14 +101,3 @@ std::stringstream * Item::Save(Saver * saver, int entry) {
   
   return ss;
 }
-
-/**
- * Get values to be shown in list
- * \return Pointer to vector of values casted to string
- */
-std::vector<std::string>* Item::getValues() {
-  std::vector<std::string> * values = new std::vector<std::string>();
-  values->push_back(this->name);
-  values->push_back("10 coins");
-  return values;
-}

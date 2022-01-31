@@ -6,7 +6,7 @@
 #include <glm/glm.hpp>
 #include <render/camera.hpp>
 #include <render/shaderLoader.hpp>
-#include <render/shaderHolder.hpp>
+
 #include "../debug.hpp"
 
 class Chunk;
@@ -82,7 +82,7 @@ public:
 	void collideTerrain(Terrain*, float, Chunk*);
 	Mesh* getMesh();
 
-	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
+	void draw(Camera*);
 
 	void collide(PhysicalObj*, float, glm::vec3, bool);
 };

@@ -9,7 +9,6 @@
 #include <sstream>
 
 #include <physics/physicalObj.hpp>
-#include <UI/abstractListElement.hpp>
 
 class Actor;
 class Saver;
@@ -20,7 +19,7 @@ class Saver;
  * 
  * This class represent base for pickable and usable game objects like HealPotion and Weapon. Inherit it or it's child objects to implement new type of game item
  */
-class Item : public AbstractListElement {
+class Item {
 private:
   std::string name;
 
@@ -45,8 +44,6 @@ public:
 
   virtual std::stringstream * Save(Saver *);
   virtual std::stringstream * Save(Saver *, int);
-
-  virtual std::vector<std::string>* getValues();
 };
 
 #endif

@@ -2,7 +2,7 @@
 
 #include <UI/text.hpp>
 #include <base/actors/npc.hpp>
-#include <render/shaderHolder.hpp>
+
 
 class DialogUI {
 	NPC* m_npc;
@@ -15,7 +15,7 @@ class DialogUI {
 	std::vector<Text*> m_player_lines_text;
 public:
 	DialogUI(NPC* npc, std::map<GLchar, Character> *characters, int, int);
-	void draw(ShaderHolder*);
+	void draw();
 	bool click(int x, int y);
 	void update();
 };

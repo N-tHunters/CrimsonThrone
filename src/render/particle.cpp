@@ -39,7 +39,7 @@ Particle::Particle(float scale, GLuint texture) : pos(0.0f), vel(0.0f), color(1.
   this->texture = texture;
 }
 
-void Particle::draw(ShaderHolder *shaderHolder, Camera * camera, int width, int height) {
+void Particle::draw(Camera * camera) {
   glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 
   glm::mat4 view = glm::mat4(1.0f);
@@ -50,19 +50,19 @@ void Particle::draw(ShaderHolder *shaderHolder, Camera * camera, int width, int 
   cameraRot = glm::rotate(cameraRot, glm::radians(camera->getRotation().y), glm::vec3(0.0f, 1.0f, 0.0f));
   cameraRot = glm::rotate(cameraRot, glm::radians(camera->getRotation().z), glm::vec3(0.0f, 0.0f, 1.0f));
   view = glm::translate(view, pos - cameraPosition);
-  projection = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
+  projection = glm::perspective(glm::radians(45.0f), screen_resolution.x / screen_resolution.y, 0.1f, 1000.0f);
 
   glActiveTexture(GL_TEXTURE9);
   glBindTexture(GL_TEXTURE_2D, texture);
 
-  shaderHolder->getParticle()->Use();
+  shaderParticle.Use();
 
-  GLuint _offset = glGetUniformLocation(shaderHolder->getParticle()->Program, "offset");
-  GLuint _color = glGetUniformLocation(shaderHolder->getParticle()->Program, "color");
-  GLuint _projection = glGetUniformLocation(shaderHolder->getParticle()->Program, "projection");
-  GLuint _cameraRot = glGetUniformLocation(shaderHolder->getParticle()->Program, "cameraRot");
-  GLuint _view = glGetUniformLocation(shaderHolder->getParticle()->Program, "view");
-  GLuint _scale = glGetUniformLocation(shaderHolder->getParticle()->Program, "scale");
+  GLuint _offset = glGetUniformLocation(shaderParticle.Program, "offset");
+  GLuint _color = glGetUniformLocation(shaderParticle.Program, "color");
+  GLuint _projection = glGetUniformLocation(shaderParticle.Program, "projection");
+  GLuint _cameraRot = glGetUniformLocation(shaderParticle.Program, "cameraRot");
+  GLuint _view = glGetUniformLocation(shaderParticle.Program, "view");
+  GLuint _scale = glGetUniformLocation(shaderParticle.Program, "scale");
 
   if (life > 0.0f) {
     glUniform3fv(_offset, 1, glm::value_ptr(glm::vec3(0.0f)));

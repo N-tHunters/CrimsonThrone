@@ -18,7 +18,7 @@ Player::Player() : Actor() {}
  * \param obj Physical object
  * \param camera View camera
  */
-Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * camera, ShaderHolder* shaderHolder, std::map<GLchar, Character> characters) :
+Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * camera, std::map<GLchar, Character> characters) :
   Actor(name, max_health, obj)
 {
   m_camera = camera;
@@ -28,7 +28,6 @@ Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * cam
   m_speed = glm::vec2(0.0f);
   m_side_speed = glm::vec2(0.0f);
   m_quest_ui = nullptr;
-  m_shaderHolder = shaderHolder;
   m_characters = characters;
 }
 
@@ -81,7 +80,7 @@ void Player::CalculateSideSpeed(float rotation) {
   SetSideSpeed(glm::vec2(cos(glm::radians(rotation)), sin(glm::radians(rotation))) * m_velocity * m_side_direction);
 }
 
-void Player::draw(ShaderHolder* shaderHolder, Camera* camera, int width, int height) {
+void Player::draw(Camera* camera) {
   if (this->weapon != nullptr) {
     glm::mat4 rotation_matrix = glm::mat4(1.0f);
     rotation_matrix = glm::rotate(rotation_matrix, glm::radians(this->m_camera->getRotationY() - 90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -90,7 +89,7 @@ void Player::draw(ShaderHolder* shaderHolder, Camera* camera, int width, int hei
     glm::vec3 offset = glm::vec3(offset_vec4);
     this->weapon->GetPhysicalObj()->setPosition(this->obj->getPosition() + offset);
     this->weapon->GetPhysicalObj()->setRotation(glm::vec3(0.0f, -this->m_camera->getRotationY() + 90.0f, -45.0f - this->m_camera->getRotationX()));
-    this->weapon->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
+    this->weapon->GetPhysicalObj()->draw(camera);
   }
   if (m_quest_ui != nullptr) {
     m_quest_ui->draw();
@@ -117,7 +116,7 @@ float Player::GetSideDirection() {
 
 void Player::addQuest(Quest * quest) {
   this->quests.push_back(quest);
-  m_quest_ui = new QuestUI(quest, m_shaderHolder, glm::vec2(10, 400), m_characters);
+  m_quest_ui = new QuestUI(quest, glm::vec2(10, 400), m_characters);
 }
 
 std::vector<Quest *> * Player::getQuests() {

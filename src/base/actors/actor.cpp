@@ -411,19 +411,19 @@ std::stringstream * Actor::Save(Saver * saver) {
 
 void Actor::Process(float dt) {}
 
-void Actor::draw(ShaderHolder * shaderHolder, Camera * camera, int width, int height) {
-  this->obj->draw(shaderHolder, camera, width, height);
+void Actor::draw(Camera * camera) {
+  this->obj->draw(camera);
   if(this->weapon != nullptr) {
     this->weapon->GetPhysicalObj()->setPosition(this->obj->getPosition() + glm::vec3(0.1f, -0.2f, 0.5f));
     this->weapon->GetPhysicalObj()->changeRotation(glm::vec3(0.0f, 0.0f, (rand() % 100) / 1.0f));
-    this->weapon->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
+    this->weapon->GetPhysicalObj()->draw(camera);
   }
 }
 
-void Actor::drawAfter(ShaderHolder * shaderHolder, Camera * camera, int width, int height) {
+void Actor::drawAfter(Camera * camera) {
   if (this->floating_text != nullptr) {
     this->floating_text->setPosition(this->obj->getPosition() + glm::vec3(0.0f, ((BoundaryBox*)obj->boundary)->getMax().y, 0.0f));
-    this->floating_text->draw(shaderHolder, camera, width, height);
+    this->floating_text->draw(camera);
   }
 }
 

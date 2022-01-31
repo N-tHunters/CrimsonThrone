@@ -15,7 +15,7 @@
 
 #include <render/shaderLoader.hpp>
 #include <render/camera.hpp>
-#include <render/shaderHolder.hpp>
+
 #include <render/textures.hpp>
 
 #include <math/vectors.hpp>
@@ -63,7 +63,7 @@ public:
 	float getHeightMap(int x, int y);
 	float getTileWidth();
 
-	void draw(ShaderHolder*, Camera*, GLuint, GLuint);
+	void draw(Camera*);
 };
 
 #endif

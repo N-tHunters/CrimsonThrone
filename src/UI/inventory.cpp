@@ -2,9 +2,9 @@
 #include <physics/physicalObj.hpp>
 
 
-Inventory::Inventory(Actor& actor, std::map<GLchar, Character> &Characters, int width, int height):
+Inventory::Inventory(Actor& actor, std::map<GLchar, Character> &Characters):
   actor(actor), characters(Characters) {
-  this->rect = glm::vec4(10.0f, 10.0f, width - 20, height - 20);
+  this->rect = glm::vec4(10.0f, 10.0f, screen_resolution.x - 20, screen_resolution.y - 20);
   this->color = glm::vec4(0.1f, 0.1f, 0.1f, 0.0f);
   
   vertices = {rect.x,     	 rect.y + rect.w, 0.0f, 0.0f, 1.0f,
@@ -15,9 +15,7 @@ Inventory::Inventory(Actor& actor, std::map<GLchar, Character> &Characters, int 
   indices = {0, 1, 2,
     1, 2, 3
   };
-
-
-
+  
   glGenTextures(1, &texture);
   glBindTexture(GL_TEXTURE_2D, texture); // All upcoming GL_TEXTURE_2D operations now have effect on our texture object
   // Set our texture parameters
@@ -66,35 +64,35 @@ Inventory::Inventory(Actor& actor, std::map<GLchar, Character> &Characters, int 
 			       glm::vec2(rect.x + 400, rect.w + rect.y - 40 - 55.0f * 0));
 }
 
-void Inventory::draw(ShaderHolder* shaderHolder, int width, int height) {
+void Inventory::draw() {
   glClear(GL_DEPTH_BUFFER_BIT);
 
-  shaderHolder->getGUI()->Use();
+  shaderGUI.Use();
 
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), &(vertices[0]), GL_STATIC_DRAW);
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, texture);
-  glUniform1i(glGetUniformLocation(shaderHolder->getGUI()->Program, "ourTexture"), 0);
-  glUniform2fv(glGetUniformLocation(shaderHolder->getGUI()->Program, "resolution"), 1, glm::value_ptr(glm::vec2(width, height)));
+  glUniform1i(glGetUniformLocation(shaderGUI.Program, "ourTexture"), 0);
+  glUniform2fv(glGetUniformLocation(shaderGUI.Program, "resolution"), 1, glm::value_ptr(screen_resolution));
 
   glBindVertexArray(VAO);
   glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
   glBindVertexArray(0);
 
   for (Text* item_name : item_names) {
-    item_name->draw(shaderHolder);
+    item_name->draw();
   }
 
   if(weapon_index != -1) {
     this->hold_weapon->setPosition(rect.x + 400, rect.w + rect.y - 40 - 55.0f * weapon_index);
-    this->hold_weapon->draw(shaderHolder);
+    this->hold_weapon->draw();
   }
   
   if(actor.GetInventorySize() > 0) {
     PhysicalObj *po = actor.GetItemAt(0)->GetPhysicalObj();
-    po->getMesh()->draw(shaderHolder, glm::vec3(3.0f, 1.5f, -7.0f), element_rotation, width, height);
+    po->getMesh()->draw(glm::vec3(3.0f, 1.5f, -7.0f), element_rotation);
   }
 }
 

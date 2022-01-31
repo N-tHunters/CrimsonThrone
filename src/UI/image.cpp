@@ -87,15 +87,14 @@ Image::Image(glm::vec4 rect, GLuint textureID, glm::vec2 position): Frame(rect) 
 	glBindVertexArray(0);
 }
 
-void Image::draw(ShaderHolder* shaderHolder) {
+void Image::draw() {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	shaderHolder->getGUI()->Use();
-
+	shaderGUI.Use();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glUniform1i(glGetUniformLocation(shaderHolder->getGUI()->Program, "text"), 0);
-	glUniform2fv(glGetUniformLocation(shaderHolder->getGUI()->Program, "resolution"), 1, glm::value_ptr(shaderHolder->getResolution()));
+	glUniform1i(glGetUniformLocation(shaderGUI.Program, "text"), 0);
+	glUniform2fv(glGetUniformLocation(shaderGUI.Program, "resolution"), 1, glm::value_ptr(screen_resolution));
 
 
 	glBindVertexArray(VAO);
@@ -103,18 +102,18 @@ void Image::draw(ShaderHolder* shaderHolder) {
 	glBindVertexArray(0);
 }
 
-void Image::draw(ShaderHolder* shaderHolder, glm::vec3 drawColor) {
+void Image::draw(glm::vec3 draw_color) {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 
-	shaderHolder->getText()->Use();
+	shaderText.Use();
 
-	glUniform1i(glGetUniformLocation(shaderHolder->getText()->Program, "text"), 0);
-	glUniform3fv(glGetUniformLocation(shaderHolder->getText()->Program, "textColor"), 1, glm::value_ptr(drawColor));
-	glUniform2fv(glGetUniformLocation(shaderHolder->getGUI()->Program, "resolution"), 1, glm::value_ptr(shaderHolder->getResolution()));
-	glUniform2fv(glGetUniformLocation(shaderHolder->getGUI()->Program, "objectpos"), 1, glm::value_ptr(m_position));
+	glUniform1i(glGetUniformLocation(shaderText.Program, "text"), 0);
+	glUniform3fv(glGetUniformLocation(shaderText.Program, "textColor"), 1, glm::value_ptr(draw_color));
+	glUniform2fv(glGetUniformLocation(shaderGUI.Program, "resolution"), 1, glm::value_ptr(screen_resolution));
+	glUniform2fv(glGetUniformLocation(shaderGUI.Program, "objectpos"), 1, glm::value_ptr(m_position));
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);

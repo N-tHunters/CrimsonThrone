@@ -1,7 +1,8 @@
-#ifndef BAR_H
-#define BAR_H
+#pragma once
 
 #include <UI/frame.hpp>
+
+#include <render/shaders.hpp>
 
 class Bar: public Frame {
 	int* value;
@@ -9,7 +10,5 @@ class Bar: public Frame {
 	glm::vec4 rect;
 public:
 	Bar(glm::vec4, int*, int*, glm::vec3);
-	void draw(ShaderHolder*, int, int);
+	void draw(int, int);
 };
-
-#endif

@@ -60,10 +60,10 @@ Bar::Bar(glm::vec4 rect, int* value, int* maxValue, glm::vec3 color) : Frame(rec
 	glBindVertexArray(0);
 }
 
-void Bar::draw(ShaderHolder* shaderHolder, int width, int height) {
+void Bar::draw(int width, int height) {
 	glClear(GL_DEPTH_BUFFER_BIT);
 
-	shaderHolder->getGUI()->Use();
+	shaderGUI.Use();
 
 	this->vertices[10] = this->rect.x + this->rect.z * (*this->value / *this->maxValue);
 	this->vertices[15] = this->rect.x + this->rect.z * (*this->value / *this->maxValue);
@@ -73,8 +73,8 @@ void Bar::draw(ShaderHolder* shaderHolder, int width, int height) {
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
-	glUniform1i(glGetUniformLocation(shaderHolder->getGUI()->Program, "ourTexture"), 0);
-	glUniform2fv(glGetUniformLocation(shaderHolder->getGUI()->Program, "resolution"), 1, glm::value_ptr(glm::vec2(width, height)));
+	glUniform1i(glGetUniformLocation(shaderGUI.Program, "ourTexture"), 0);
+	glUniform2fv(glGetUniformLocation(shaderGUI.Program, "resolution"), 1, glm::value_ptr(glm::vec2(width, height)));
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);

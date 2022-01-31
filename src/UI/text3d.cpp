@@ -57,8 +57,8 @@ glm::vec3 Text3D::getPosition() {
 	return m_position;
 }
 
-void Text3D::draw(ShaderHolder* shaders, Camera* camera, GLuint width, GLuint height) {
+void Text3D::draw(Camera* camera) {
 	for (int i = 0; i < m_letters.size(); i ++) {
-		m_letters[i]->draw(shaders->getText3D(), camera, width, height);
+		m_letters[i]->draw(camera);
 	}
 }

@@ -23,5 +23,5 @@ public:
 	void setPosition(glm::vec3 position);
 	glm::vec3 getPosition();
 
-	void draw(ShaderHolder* shaders, Camera* camera, GLuint width, GLuint height);
+	void draw(Camera* camera);
 };

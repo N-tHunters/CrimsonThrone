@@ -34,6 +34,7 @@
 #include <render/imageLoader.hpp>
 #include <render/textures.hpp>
 #include <render/models.hpp>
+#include <render/shaders.hpp>
 
 #include <physics/physicalObj.hpp>
 #include <physics/boundary.hpp>
@@ -56,11 +57,8 @@
 #include <sound/voice.h>
 
 #include <UI/frame.hpp>
-// #include <UI/list.hpp>
-#include <UI/container.hpp>
 #include <UI/bar.hpp>
 #include <UI/text.hpp>
-#include <UI/abstractListElement.hpp>
 #include <UI/button.hpp>
 #include <UI/textBox.hpp>
 #include <UI/text3d.hpp>
@@ -129,7 +127,7 @@ float push_m = 0.0f;
 void load_characters();
 bool clicked;
 
-ShaderHolder* shaderHolder;
+;
 int width, height;
 
 TextBox* logs;
@@ -282,31 +280,12 @@ int main() {
   glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 
   if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-    std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
+    printf("ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n");
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-  // Build and compile our shader program
-  Shader ourShader("resources/shaders/vertex_shader.glsl", "resources/shaders/fragment_shader.glsl");
-  Shader GUIShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/GUI_fragment_shader.glsl");
-  Shader textShader("resources/shaders/GUI_vertex_shader.glsl", "resources/shaders/text_fragment_shader.glsl");
-  Shader waterShader("resources/shaders/water_vertex_shader.glsl", "resources/shaders/water_fragment_shader.glsl");
-  Shader postShader("resources/shaders/post_vertex_shader.glsl", "resources/shaders/post_fragment_shader.glsl");
-  Shader text3dShader("resources/shaders/text3d_vertex_shader.glsl", "resources/shaders/text3d_fragment_shader.glsl");
-  Shader particleShader("resources/shaders/particle_vertex_shader.glsl", "resources/shaders/particle_fragment_shader.glsl");
-
-
-  shaderHolder = new ShaderHolder(&ourShader,
-                                  &GUIShader,
-                                  &textShader,
-                                  &waterShader,
-                                  &postShader,
-                                  &text3dShader,
-                  &particleShader,
-                                  width, height);
-
+  load_shaders(width, height);
   load_characters();
   setDefaultCharacters(Characters);
-
 
   /// Initialize game objects
   init_models();
@@ -317,7 +296,6 @@ int main() {
             new PhysicalObj(glm::vec3(20.0f, 10.0f, 20.0f),
                     new BoundaryBox(glm::vec3(-0.2f, -0.5f, -0.2f), glm::vec3(0.2f, 0.5f, 0.2f))),
 		      camera,
-		      shaderHolder,
 		      Characters);
   player_core = new MagicCore();
   player_core->SetPhysicalObj(player->GetPhysicalObj());
@@ -330,7 +308,7 @@ int main() {
 
   glfwPollEvents();
 
-  image_loading->draw(shaderHolder);
+  image_loading->draw();
 
   glFinish();
 
@@ -387,7 +365,7 @@ int main() {
   glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(quad_indices->at(0)) * quad_indices->size(), &(quad_indices->at(0)), GL_STATIC_DRAW);
 
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), reinterpret_cast<GLvoid*>(0));
-  glEnableVertexAttribArray(0);\
+  glEnableVertexAttribArray(0);
   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (GLvoid*)(2 * sizeof(GLfloat)));
   glEnableVertexAttribArray(1);
 
@@ -395,19 +373,19 @@ int main() {
 
   glfwSetCursorPos(window, (double)width / 2.0, (double)height / 2.0);
 
-  Button* resume_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "resume", Characters, 7.0f, glm::vec3(255), width, height);
-  Button* exit_to_menu = new Button(glm::vec4(-0.1, -0.20, 0.2, 0.1), (function)change_to_main_menu, "exit to menu", Characters, 7.0f, glm::vec3(255), width, height);
-  Button* play_button = new Button(glm::vec4(-0.1, 0.0, 0.2, 0.2), (function)change_to_running, "START GAME", Characters, 10.0f, glm::vec3(255), width, height);
-  Button* exit_button = new Button(glm::vec4(-0.1, -0.3, 0.2, 0.15), (function)close_window, "exit game", Characters, 10.0f, glm::vec3(255), width, height);
+  Button* resume_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "resume", Characters, 7.0f, glm::vec3(255));
+  Button* exit_to_menu = new Button(glm::vec4(-0.1, -0.20, 0.2, 0.1), (function)change_to_main_menu, "exit to menu", Characters, 7.0f, glm::vec3(255));
+  Button* play_button = new Button(glm::vec4(-0.1, 0.0, 0.2, 0.2), (function)change_to_running, "START GAME", Characters, 10.0f, glm::vec3(255));
+  Button* exit_button = new Button(glm::vec4(-0.1, -0.3, 0.2, 0.15), (function)close_window, "exit game", Characters, 10.0f, glm::vec3(255));
 
   game_state = STATE_MAIN_MENU;
 
   float dt = 0.0f;
 
-  logs = new TextBox(glm::vec4(-0.9, -0.9, 1.8, 0.3), Characters, 20.0f, glm::vec3(255), width, height);
+  logs = new TextBox(glm::vec4(-0.9, -0.9, 1.8, 0.3), Characters, 20.0f, glm::vec3(255));
 
   DialogUI* current_dialog_ui = nullptr;
-  inventory = new Inventory(*player, Characters, width, height);
+  inventory = new Inventory(*player, Characters);
 
   glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 
@@ -459,7 +437,7 @@ int main() {
 
     if (game_state == STATE_MAIN_MENU) {
       ypos = height - ypos;
-      glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+      glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
       glfwPollEvents();
@@ -481,8 +459,8 @@ int main() {
         exit_button->click(glm::vec2(xpos, ypos));
       }
 
-      play_button->draw(shaderHolder);
-      exit_button->draw(shaderHolder);
+      play_button->draw();
+      exit_button->draw();
 
       glFinish();
 
@@ -585,16 +563,16 @@ int main() {
           chunk_ptr);
       }
 
-      GetCurrentLocation()->Draw(shaderHolder, camera, width, height);
+      GetCurrentLocation()->Draw(camera);
 
-      player->draw(shaderHolder, camera, width, height);
+      player->draw(camera);
 
-      logs->draw(shaderHolder);
+      logs->draw();
 
-      fps_counter->draw(shaderHolder);
+      fps_counter->draw();
 
       if (openedInventory) {
-        inventory->draw(shaderHolder, width, height);
+        inventory->draw();
         inventory->update(dt);
       }
 
@@ -605,7 +583,7 @@ int main() {
         mouse_picker->getCurrentRay());
       Item * picked_item = result.first;
       if (picked_item != nullptr) {
-        press_e_text->draw(shaderHolder);
+        press_e_text->draw();
         if (pressed_e) {
           player->PickupItem(picked_item);
           GetCurrentLocation()->GetCurrentChunk()->DeleteItem(picked_item);
@@ -646,11 +624,11 @@ int main() {
       }
 
       if (game_state == STATE_PAUSED) {
-        resume_button->draw(shaderHolder);
-        exit_to_menu->draw(shaderHolder);
+        resume_button->draw();
+        exit_to_menu->draw();
       } else if (game_state == STATE_RUNNING) {
         if (current_dialog_ui != nullptr) {
-          current_dialog_ui->draw(shaderHolder);
+          current_dialog_ui->draw();
           if (clicked) {
             if (current_dialog_ui->click(xpos, height - ypos)) {
               current_dialog_ui = nullptr;

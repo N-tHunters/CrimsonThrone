@@ -148,44 +148,44 @@ Terrain * Chunk::GetTerrain() {
 
 /**
  * Draw everything in this chunk - terrain, actors, items and objects
- * \param shaderHolder Shader set used to render
+ * \param  Shader set used to render
  * \param camera Point of view
  * \param width Width of the screen
  * \param height Height of the screen
  */
-void Chunk::Draw(ShaderHolder * shaderHolder, Camera * camera, int width, int height) {
-  this->terrain->draw(shaderHolder, camera, width, height);
+void Chunk::Draw(Camera * camera) {
+  this->terrain->draw(camera);
   for (size_t i = 0; i <  this->GetObjsCount(); i ++) {
 
       // auto t1 = std::chrono::high_resolution_clock::now();
-    this->objects[i]->draw(shaderHolder, camera, width, height);
+    this->objects[i]->draw(camera);
 
       // auto t2 = std::chrono::high_resolution_clock::now();
       // printf("%f\n", std::chrono::duration<double, std::milli>(t2 - t1));
   }
   for (size_t i = 0; i <  this->GetActorsCount(); i ++) {
-    this->actors[i]->draw(shaderHolder, camera, width, height);
+    this->actors[i]->draw(camera);
   }
   for (size_t i = 0; i <  this->GetItemsCount(); i ++) {
-    this->items[i]->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
+    this->items[i]->GetPhysicalObj()->draw(camera);
   }
 
 }
   
 
-void Chunk::DrawWater(ShaderHolder * shaderHolder, Camera * camera, int width, int height) {
+void Chunk::DrawWater(Camera * camera) {
   if (this->water_obj != nullptr) {
-    this->water_obj->draw(shaderHolder, camera, width, height);
+    this->water_obj->draw(camera);
   }
   
   for (size_t i = 0; i < this->GetParticleEmittersCount(); i ++) {
-    this->particle_emitters[i]->draw(shaderHolder, camera, width, height);
+    this->particle_emitters[i]->draw(camera);
   }
 }
 
-void Chunk::DrawAfter(ShaderHolder * shaderHolder, Camera * camera, int width, int height) {
+void Chunk::DrawAfter(Camera * camera) {
   for (size_t i = 0; i <  this->GetActorsCount(); i ++) {
-    this->actors[i]->drawAfter(shaderHolder, camera, width, height);
+    this->actors[i]->drawAfter(camera);
   }
 }
 

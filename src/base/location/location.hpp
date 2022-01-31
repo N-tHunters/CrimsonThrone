@@ -31,7 +31,7 @@ class Location {
   Chunk * GetCurrentChunk();
   void UpdatePosition(glm::vec3);
 
-  void Draw(ShaderHolder *, Camera *, int, int);
+  void Draw(Camera *);
   void Update(float);
   void LoadABS();
   std::pair<Actor *, float> CollideActorsWithRay(glm::vec3, glm::vec3);

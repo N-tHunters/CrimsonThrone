@@ -4,6 +4,8 @@
 #include <UI/frame.hpp>
 #include <UI/text.hpp>
 
+#include <render/shaders.hpp>
+
 typedef void (*func)();
 
 class Button: public Frame {
@@ -12,10 +14,10 @@ class Button: public Frame {
 	Text* text;
 
 public:
-	Button(glm::vec4 rect, func function, std::string text, std::map<GLchar, Character> Characters, float scale, glm::vec3 color, int screen_width, int screen_height);
+	Button(glm::vec4 rect, func function, std::string text, std::map<GLchar, Character> Characters, float scale, glm::vec3 color);
 	bool check(glm::vec2 position);
 	void click(glm::vec2 position);
-	void draw(ShaderHolder* shaderHolder);
+	void draw();
 	void update(glm::vec3 color);
 };
 

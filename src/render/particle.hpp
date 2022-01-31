@@ -1,8 +1,17 @@
 #pragma once
 
-#include <glm/glm.hpp>
-#include <render/shaderHolder.hpp>
 #include <render/camera.hpp>
+#include <render/shaders.hpp>
+
+#ifndef GLAD_MATRIX_INCLUDED
+#define GLAD_MATRIX_INCLUDED
+
+#include <GL/glew.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+#endif
 
 
 class Particle {
@@ -17,6 +26,6 @@ public:
   GLuint VAO, EBO, VBO;
 
   Particle(float scale, GLuint texture);
-  void draw(ShaderHolder *, Camera *, int, int);
+  void draw(Camera *);
   void update(float dt);
 };
