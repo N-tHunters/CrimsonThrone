@@ -316,7 +316,9 @@ int main() {
             10,
             new PhysicalObj(glm::vec3(20.0f, 10.0f, 20.0f),
                     new BoundaryBox(glm::vec3(-0.2f, -0.5f, -0.2f), glm::vec3(0.2f, 0.5f, 0.2f))),
-            camera);
+		      camera,
+		      shaderHolder,
+		      Characters);
   player_core = new MagicCore();
   player_core->SetPhysicalObj(player->GetPhysicalObj());
 

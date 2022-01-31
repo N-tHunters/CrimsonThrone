@@ -18,7 +18,7 @@ Player::Player() : Actor() {}
  * \param obj Physical object
  * \param camera View camera
  */
-Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * camera) :
+Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * camera, ShaderHolder* shaderHolder, std::map<GLchar, Character> characters) :
   Actor(name, max_health, obj)
 {
   m_camera = camera;
@@ -27,6 +27,9 @@ Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * cam
   m_velocity = 10.0f;
   m_speed = glm::vec2(0.0f);
   m_side_speed = glm::vec2(0.0f);
+  m_quest_ui = nullptr;
+  m_shaderHolder = shaderHolder;
+  m_characters = characters;
 }
 
 /**
@@ -79,7 +82,7 @@ void Player::CalculateSideSpeed(float rotation) {
 }
 
 void Player::draw(ShaderHolder* shaderHolder, Camera* camera, int width, int height) {
-  if(this->weapon != nullptr) {
+  if (this->weapon != nullptr) {
     glm::mat4 rotation_matrix = glm::mat4(1.0f);
     rotation_matrix = glm::rotate(rotation_matrix, glm::radians(this->m_camera->getRotationY() - 90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     rotation_matrix = glm::rotate(rotation_matrix, glm::radians(this->m_camera->getRotationZ()), glm::vec3(0.0f, 0.0f, 1.0f));
@@ -88,6 +91,9 @@ void Player::draw(ShaderHolder* shaderHolder, Camera* camera, int width, int hei
     this->weapon->GetPhysicalObj()->setPosition(this->obj->getPosition() + offset);
     this->weapon->GetPhysicalObj()->setRotation(glm::vec3(0.0f, -this->m_camera->getRotationY() + 90.0f, -45.0f - this->m_camera->getRotationX()));
     this->weapon->GetPhysicalObj()->draw(shaderHolder, camera, width, height);
+  }
+  if (m_quest_ui != nullptr) {
+    m_quest_ui->draw();
   }
 }
 
@@ -111,6 +117,7 @@ float Player::GetSideDirection() {
 
 void Player::addQuest(Quest * quest) {
   this->quests.push_back(quest);
+  m_quest_ui = new QuestUI(quest, m_shaderHolder, glm::vec2(10, 400), m_characters);
 }
 
 std::vector<Quest *> * Player::getQuests() {
