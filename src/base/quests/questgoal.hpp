@@ -2,6 +2,8 @@
 #define QUESTGOAL_H_
 
 #include <string>
+#include <algorithm>
+#include <base/actors/actor.hpp>
 
 class QuestGoal {
     public:
@@ -10,6 +12,8 @@ class QuestGoal {
 
         QuestGoal(std::string description);
         void complete();
+        virtual std::pair<int, int> getProgress();
+        virtual void check(Actor *);
 };
 
 #endif // QUESTGOAL_H_
