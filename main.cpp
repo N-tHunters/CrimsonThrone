@@ -375,8 +375,8 @@ int main() {
 
   Button* resume_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "resume", Characters, 7.0f, glm::vec3(255));
   Button* exit_to_menu = new Button(glm::vec4(-0.1, -0.20, 0.2, 0.1), (function)change_to_main_menu, "exit to menu", Characters, 7.0f, glm::vec3(255));
-  Button* play_button = new Button(glm::vec4(-0.1, 0.0, 0.2, 0.2), (function)change_to_running, "START GAME", Characters, 10.0f, glm::vec3(255));
-  Button* exit_button = new Button(glm::vec4(-0.1, -0.3, 0.2, 0.15), (function)close_window, "exit game", Characters, 10.0f, glm::vec3(255));
+  Button* play_button = new Button(glm::vec4(-0.1, 0.0, 0.2, 0.2), (function)change_to_running, "Start", Characters, 10.0f, glm::vec3(255));
+  Button* exit_button = new Button(glm::vec4(-0.1, -0.3, 0.2, 0.15), (function)close_window, "Exit", Characters, 10.0f, glm::vec3(255));
 
   game_state = STATE_MAIN_MENU;
 
@@ -823,7 +823,7 @@ void load_characters() {
   if (FT_Init_FreeType(&ft))
     printf("ERROR::FREETYPE: Could not init FreeType Library\n");
   FT_Face face;
-  if (FT_New_Face(ft, "resources/fonts/Benne-Regular.ttf", 0, &face))
+  if (FT_New_Face(ft, "resources/fonts/Ubuntu-Medium.ttf", 0, &face))
     printf("ERROR::FREETYPE: Failed to load font\n");
 
 
