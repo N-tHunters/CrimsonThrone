@@ -39,7 +39,9 @@ Dialog::Dialog(Actor *me) {
 }
 };
 
-    setQuest(4, new Quest("WHOAMI?", {
+    setQuest(4, new Quest("WHOAMI?",
+                          "Hunt the wampus",
+                          {
                 new QuestGoal("get a sword")
             }));
     talker = nullptr;
