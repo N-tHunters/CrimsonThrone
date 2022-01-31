@@ -112,3 +112,7 @@ float Player::GetSideDirection() {
 void Player::addQuest(Quest * quest) {
   this->quests.push_back(quest);
 }
+
+std::vector<Quest *> * Player::getQuests() {
+  return &this->quests;
+}

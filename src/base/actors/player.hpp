@@ -52,6 +52,7 @@ class Player : public Actor {
     float GetSideDirection();
 
     void addQuest(Quest *quest);
+    std::vector<Quest *> * getQuests();
 };
 
 #endif
