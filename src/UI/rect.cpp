@@ -6,10 +6,10 @@ Rect::Rect(int x, int y, int w, int h) {
 	this->w = w;
 	this->h = h;
 
-	vertices = {0, h, 0, 0, 1,
+	vertices = {0, static_cast<float>(h), 0, 0, 1,
 	            0, 0, 0, 0, 0,
-	            w, h, 0, 1, 1,
-	            w, 0, 0, 1, 0
+	            static_cast<float>(w), static_cast<float>(h), 0, 1, 1,
+	            static_cast<float>(w), 0, 0, 1, 0
 	           };
 	indices = {0, 1, 2,
 	           1, 2, 3
