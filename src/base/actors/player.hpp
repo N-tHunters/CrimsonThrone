@@ -55,6 +55,8 @@ public:
 
   void addQuest(Quest *quest);
   std::vector<Quest *> * getQuests();
+
+  void drawUI();
 };
 
 #endif

@@ -166,7 +166,7 @@ void Location::UpdatePosition(glm::vec3 pos) {
  * \param screen_width Width of screen
  * \param screen_height Height of screen
  */
-void Location::Draw(Camera * camera) {
+void Location::Draw(Camera * camera, Player * player) {
 
   LoadABS();
   int lx = std::max((int)current_x - RENDER_RADIUS, 0); // Most left row
@@ -182,6 +182,7 @@ void Location::Draw(Camera * camera) {
       }
     }
   }
+  player->draw(camera);
 
 
   for(int ix = lx; ix <= rx; ix++) {

@@ -90,6 +90,9 @@ void Player::draw(Camera* camera) {
     this->weapon->GetPhysicalObj()->setRotation(glm::vec3(0, -this->m_camera->getRotationY() + 90.0f, -45.0f - this->m_camera->getRotationX()));
     this->weapon->GetPhysicalObj()->draw(camera);
   }
+}
+
+void Player::drawUI() {
   if (m_quest_ui != nullptr) {
     m_quest_ui->draw();
   }

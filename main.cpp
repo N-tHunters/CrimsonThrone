@@ -534,9 +534,7 @@ int main() {
           chunk_ptr);
       }
 
-      GetCurrentLocation()->Draw(camera);
-
-      player->draw(camera);
+      GetCurrentLocation()->Draw(camera, player);
 
       logs->draw();
 

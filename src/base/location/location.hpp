@@ -11,6 +11,7 @@
 
 #include "chunk.hpp"
 #include <landscape/landscapegenerator.hpp>
+#include <base/actors/player.hpp>
 
 class Location {
  private:
@@ -31,7 +32,7 @@ class Location {
   Chunk * GetCurrentChunk();
   void UpdatePosition(glm::vec3);
 
-  void Draw(Camera *);
+  void Draw(Camera *, Player *);
   void Update(float);
   void LoadABS();
   std::pair<Actor *, float> CollideActorsWithRay(glm::vec3, glm::vec3);
