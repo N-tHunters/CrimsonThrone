@@ -503,7 +503,8 @@ void Chunk::Update(float dt) {
 
   for (Actor * actor : actors) {
     if (!actor->IsAlive()) {
-      this->AddObj(create_wall(actor->GetPhysicalObj()->getPosition(), glm::vec3(0.1, 0.1, 0.1), "fire"));
+      Item *drop = actor->GetDrop();
+      this->AddItem(drop);
       this->DeleteActor(actor);
     }
   }

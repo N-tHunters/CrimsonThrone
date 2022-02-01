@@ -598,10 +598,6 @@ int main() {
           if (weapon_range > collided_actors.second) {
             int player_damage = player->GetDamage();
             collided_actor->DealDamage(player_damage);
-            printf("You hit %s for %d damage, it has %d hp left\n",
-              collided_actor->GetName().c_str(),
-              player_damage,
-              collided_actor->GetHealth());
           }
         } else if (pressed_e) {
           inDialog = true;

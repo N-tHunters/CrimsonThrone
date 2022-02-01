@@ -122,5 +122,7 @@ public:
   void drawAfter(Camera *);
 
   bool IsAlive();
+
+  Item* GetDrop();
 };
 #endif

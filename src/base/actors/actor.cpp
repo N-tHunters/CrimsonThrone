@@ -16,6 +16,8 @@
 #include <base/items/stackableitem.hpp>
 #include <base/saver.hpp>
 #include <physics/boundary.hpp>
+#include <render/textures.hpp>
+#include <render/models.hpp>
 
 
 /**
@@ -34,7 +36,7 @@ Actor::Actor(std::string name, int max_health, PhysicalObj * obj) : Actor() {
   this->max_health = max_health;
   this->health = max_health;
   this->obj = obj;
-  this->floating_text = new Text3D(name, obj->getPosition() + glm::vec3(0.0f, ((BoundaryBox*)obj->boundary)->getMax().y + 0.25f, 0.0f), 0.001f);
+  this->floating_text = new Text3D(name, obj->getPosition() + glm::vec3(0.0f, ((BoundaryBox*)obj->boundary)->getMax().y + 0.1f, 0.0f), 0.001f);
   this->weapon = nullptr;
 }
 
@@ -422,11 +424,23 @@ void Actor::draw(Camera * camera) {
 
 void Actor::drawAfter(Camera * camera) {
   if (this->floating_text != nullptr) {
-    this->floating_text->setPosition(this->obj->getPosition() + glm::vec3(0.0f, ((BoundaryBox*)obj->boundary)->getMax().y, 0.0f));
+    this->floating_text->setPosition(this->obj->getPosition() + glm::vec3(0.0f, ((BoundaryBox*)obj->boundary)->getMax().y + 0.1f, 0.0f));
     this->floating_text->draw(camera);
   }
 }
 
 bool Actor::IsAlive() {
   return this->GetHealth() > 0;
+}
+
+
+
+Item* Actor::GetDrop() {
+  return new Weapon("Sword",
+                    new PhysicalObj(new Mesh(get_model("sword"), get_texture("fire")),
+                                    true, true, false, false,
+                                    this->GetPhysicalObj()->getPosition(),
+                                    glm::vec3(0.0f, 0.0f, 0.0f),
+                                    "sword"),
+                    10, 10);
 }
