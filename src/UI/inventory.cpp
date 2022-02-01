@@ -2,8 +2,8 @@
 #include <physics/physicalObj.hpp>
 
 
-Inventory::Inventory(Actor& actor, std::map<GLchar, Character> &Characters):
-  actor(actor), characters(Characters) {
+Inventory::Inventory(Actor& actor):
+  actor(actor) {
   this->rect = glm::vec4(10.0f, 10.0f, screen_resolution.x - 20, screen_resolution.y - 20);
   this->color = glm::vec4(0.1f, 0.1f, 0.1f, 0.0f);
   
@@ -58,7 +58,6 @@ Inventory::Inventory(Actor& actor, std::map<GLchar, Character> &Characters):
   glBindVertexArray(0);
 
   this->hold_weapon = new Text("wep",
-			       characters,
 			       0.6f,
 			       glm::vec3(1.0f, 0.0f, 0.0f),
 			       glm::vec2(rect.x + 400, rect.w + rect.y - 40 - 55.0f * 0));
@@ -106,7 +105,6 @@ void Inventory::open() {
     if(i == index) col = glm::vec3(1.0f, 1.0f, 0.0f);
     
     item_names.push_back(new Text(actor.GetItemAt(i)->GetName(),
-				  characters,
 				  0.6f,
 				  col,
     				  glm::vec2(rect.x + 130, rect.w + rect.y - 40 - 55.0f * i)));

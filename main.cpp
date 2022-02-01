@@ -71,9 +71,6 @@
 #include <base/configuration.hpp>
 #include <base/location/worldmap.hpp>
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
 #define NO_SOUND
 
 const char CONFIG_FILE[] = "resources/settings.ini";
@@ -119,7 +116,6 @@ bool isRunning = false;
 bool openedInventory = false;
 bool inDialog = false;
 
-std::map<GLchar, Character> Characters;
 
 bool push = false;
 bool pressed_e = false;
@@ -285,7 +281,6 @@ int main() {
 
   load_shaders(width, height);
   load_characters();
-  setDefaultCharacters(Characters);
 
   /// Initialize game objects
   init_models();
@@ -295,8 +290,7 @@ int main() {
             10,
             new PhysicalObj(glm::vec3(20.0f, 10.0f, 20.0f),
                     new BoundaryBox(glm::vec3(-0.2f, -0.5f, -0.2f), glm::vec3(0.2f, 0.5f, 0.2f))),
-		      camera,
-		      Characters);
+		      camera);
   player_core = new MagicCore();
   player_core->SetPhysicalObj(player->GetPhysicalObj());
 
@@ -322,7 +316,6 @@ int main() {
   // ----------------------------------------------- CODE ------------------------------------------
 
   Text* fps_counter = new Text(std::to_string(0.0f),
-    Characters,
     1.0f,
     glm::vec3(1.0f),
     glm::vec2(10, height - 100));
@@ -373,19 +366,19 @@ int main() {
 
   glfwSetCursorPos(window, (double)width / 2.0, (double)height / 2.0);
 
-  Button* resume_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "resume", Characters, 7.0f, glm::vec3(255));
-  Button* exit_to_menu = new Button(glm::vec4(-0.1, -0.20, 0.2, 0.1), (function)change_to_main_menu, "exit to menu", Characters, 7.0f, glm::vec3(255));
-  Button* play_button = new Button(glm::vec4(-0.1, 0.0, 0.2, 0.2), (function)change_to_running, "Start", Characters, 10.0f, glm::vec3(255));
-  Button* exit_button = new Button(glm::vec4(-0.1, -0.3, 0.2, 0.15), (function)close_window, "Exit", Characters, 10.0f, glm::vec3(255));
+  Button* resume_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "resume", 7.0f, glm::vec3(255));
+  Button* exit_to_menu = new Button(glm::vec4(-0.1, -0.20, 0.2, 0.1), (function)change_to_main_menu, "exit to menu",  7.0f, glm::vec3(255));
+  Button* play_button = new Button(glm::vec4(-0.1, 0.0, 0.2, 0.2), (function)change_to_running, "Start",  10.0f, glm::vec3(255));
+  Button* exit_button = new Button(glm::vec4(-0.1, -0.3, 0.2, 0.15), (function)close_window, "Exit",  10.0f, glm::vec3(255));
 
   game_state = STATE_MAIN_MENU;
 
   float dt = 0.0f;
 
-  logs = new TextBox(glm::vec4(-0.9, -0.9, 1.8, 0.3), Characters, 20.0f, glm::vec3(255));
+  logs = new TextBox(glm::vec4(-0.9, -0.9, 1.8, 0.3),  20.0f, glm::vec3(255));
 
   DialogUI* current_dialog_ui = nullptr;
-  inventory = new Inventory(*player, Characters);
+  inventory = new Inventory(*player);
 
   glm::mat4 projection_matrix = glm::perspective(glm::radians(45.0f), (GLfloat)width / (GLfloat)height, 0.1f, 1000.0f);
 
@@ -405,7 +398,6 @@ int main() {
 
   Text* press_e_text = new Text(
     "Press [E]",
-    Characters,
     0.4f,
     glm::vec3(0),
     glm::vec2(width / 2.0f, width / 2.0f));
@@ -616,7 +608,6 @@ int main() {
           reinterpret_cast<NPC*>(collided_actor)->getDialog()->startDialog(player);
           current_dialog_ui = new DialogUI(
             reinterpret_cast<NPC*>(collided_actor),
-            &Characters,
             width,
             height);
           glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -652,8 +643,7 @@ int main() {
 
         if (glfwGetTime() - fps_change_last > 0.1) {
           fps_counter->update(
-            std::to_string(static_cast<int>(round(1.0 / dt))),
-            Characters);
+            std::to_string(static_cast<int>(round(1.0 / dt))));
           fps_change_last = glfwGetTime();
         }
       } else {
@@ -816,55 +806,6 @@ void key_callback(
       glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     }
   }
-}
-
-void load_characters() {
-  FT_Library ft;
-  if (FT_Init_FreeType(&ft))
-    printf("ERROR::FREETYPE: Could not init FreeType Library\n");
-  FT_Face face;
-  if (FT_New_Face(ft, "resources/fonts/Ubuntu-Medium.ttf", 0, &face))
-    printf("ERROR::FREETYPE: Failed to load font\n");
-
-
-  FT_Set_Pixel_Sizes(face, 0, 128);
-
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-  for (GLubyte c = 0; c < 128; c++) {
-    if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
-      printf("ERROR::FREETYTPE: Failed to load Glyph\n");
-      continue;
-    }
-    GLuint texture;
-    glGenTextures(1, &texture);
-    glBindTexture(GL_TEXTURE_2D, texture);
-    glTexImage2D(
-        GL_TEXTURE_2D,
-        0,
-        GL_RED,
-        face->glyph->bitmap.width,
-        face->glyph->bitmap.rows,
-        0,
-        GL_RED,
-        GL_UNSIGNED_BYTE,
-        face->glyph->bitmap.buffer);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    Character character = {
-      texture,
-      glm::ivec2(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-      glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
-      (GLuint)face->glyph->advance.x
-    };
-    Characters.insert(std::pair<GLchar, Character>(c, character));
-  }
-
-  FT_Done_Face(face);
-  FT_Done_FreeType(ft);
 }
 
 void MessageCallback(

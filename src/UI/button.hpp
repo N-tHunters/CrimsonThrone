@@ -14,7 +14,7 @@ class Button: public Frame {
 	Text* text;
 
 public:
-	Button(glm::vec4 rect, func function, std::string text, std::map<GLchar, Character> Characters, float scale, glm::vec3 color);
+	Button(glm::vec4 rect, func function, std::string text, float scale, glm::vec3 color);
 	bool check(glm::vec2 position);
 	void click(glm::vec2 position);
 	void draw();

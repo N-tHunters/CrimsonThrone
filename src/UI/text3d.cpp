@@ -1,6 +1,6 @@
 #include <UI/text3d.hpp>
 
-Text3D::Text3D(const std::string& string, glm::vec3 position, std::map<GLchar, Character> characters, float scale) {
+Text3D::Text3D(const std::string& string, glm::vec3 position, float scale) {
 	m_string = string;
 	m_position = position;
 	m_rect = glm::vec4(0);
@@ -9,7 +9,7 @@ Text3D::Text3D(const std::string& string, glm::vec3 position, std::map<GLchar, C
 	int height = 0;
 
 	for (size_t c = 0; c < string.size(); c ++) {
-		Character ch = characters[string[c]];
+		Character ch = font_characters[string[c]];
 
 		width += ch.Bearing.x * scale + (ch.Advance >> 6) * scale;
 		height = std::max(int(ch.Bearing.y / 2 * scale), height);
@@ -22,7 +22,7 @@ Text3D::Text3D(const std::string& string, glm::vec3 position, std::map<GLchar, C
 		float xpos;
 		float ypos;
 		float w, h;
-		Character ch = characters[string[c]];
+		Character ch = font_characters[string[c]];
 
 		xpos = x + ch.Bearing.x * scale;
 		ypos = y - (ch.Size.y - ch.Bearing.y) * scale;

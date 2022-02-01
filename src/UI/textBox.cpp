@@ -4,7 +4,7 @@
 const int BORDER_WIDTH = 1;
 
 
-TextBox::TextBox(glm::vec4 rect, std::map<GLchar, Character> Characters, float scale, glm::vec3 color) : Frame(rect) {
+TextBox::TextBox(glm::vec4 rect, float scale, glm::vec3 color) : Frame(rect) {
   this->rect = rect;
   // this->text = new Text(text, glm::vec4(0.0f, 0.0f, 0.0f, 0.0f), Characters, scale / 24.0f, color);
 
@@ -87,7 +87,6 @@ TextBox::TextBox(glm::vec4 rect, std::map<GLchar, Character> Characters, float s
 
   m_scale = scale;
 
-  this->characters = Characters;
   this->max_lines = std::floor(this->rect.w / (m_scale + 10.0f));
   this->index = 0;
 
@@ -116,7 +115,7 @@ void TextBox::draw() {
 }
 
 void TextBox::addLine(const std::string& line) {
-  Text* text = new Text(line, characters, m_scale / 24.0f, glm::vec3(255, 255, 255), m_position);
+  Text* text = new Text(line, m_scale / 24.0f, glm::vec3(255, 255, 255), m_position);
   text->changePosition(glm::vec2(10.0f + text->getRect().z / 2.0f, this->rect.w - 10.0f - m_scale * 0.5f - (10.0f + m_scale) * this->lines.size()));
 
   this->lines.push_back(text);

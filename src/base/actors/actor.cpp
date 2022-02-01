@@ -34,7 +34,7 @@ Actor::Actor(std::string name, int max_health, PhysicalObj * obj) : Actor() {
   this->max_health = max_health;
   this->health = max_health;
   this->obj = obj;
-  this->floating_text = new Text3D(name, obj->getPosition() + glm::vec3(0.0f, ((BoundaryBox*)obj->boundary)->getMax().y, 0.0f), getDefaultCharacters(), 0.01f);
+  this->floating_text = new Text3D(name, obj->getPosition() + glm::vec3(0.0f, ((BoundaryBox*)obj->boundary)->getMax().y + 0.25f, 0.0f), 0.001f);
   this->weapon = nullptr;
 }
 

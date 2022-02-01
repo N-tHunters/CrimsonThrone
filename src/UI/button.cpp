@@ -1,10 +1,10 @@
 #include <UI/button.hpp>
 #include <base/configuration.hpp>
 
-Button::Button(glm::vec4 rect, func function, std::string text, std::map<GLchar, Character> Characters, float scale, glm::vec3 color): Frame(rect) {
+Button::Button(glm::vec4 rect, func function, std::string text, float scale, glm::vec3 color): Frame(rect) {
 	this->rect = rect;
 	this->function = function;
-	this->text = new Text(text, Characters, scale / 24.0f, color);
+	this->text = new Text(text, scale / 24.0f, color);
 
 	this->rect.x = (rect.x + 1.0f) / 2.0f * screen_resolution.x;
 	this->rect.y = (rect.y + 1.0f) / 2.0f * screen_resolution.y;
@@ -37,7 +37,7 @@ Button::Button(glm::vec4 rect, func function, std::string text, std::map<GLchar,
 
 	glm::vec2 textPosition = glm::vec2(center.x - this->text->getRect().z / 2.0f, center.y - this->text->getRect().w / 2.0f);
 
-	this->text->update(text, Characters, glm::vec4(textPosition,
+	this->text->update(text, glm::vec4(textPosition,
 	                   glm::vec2(this->text->getRect().z, this->text->getRect().w)));
 
 	glGenTextures(1, &texture);

@@ -5,6 +5,7 @@
 
 #include <UI/character.hpp>
 #include <UI/image3d.hpp>
+#include <UI/text.hpp>
 
 #include <map>
 
@@ -15,7 +16,7 @@ class Text3D {
 	std::vector<Image3D*> m_letters;
 
 public:
-	Text3D(const std::string& string, glm::vec3 position, std::map<GLchar, Character> characters, float scale);
+	Text3D(const std::string& string, glm::vec3 position, float scale);
 
 	void setString(const std::string& string);
 	std::string getString();

@@ -1,8 +1,7 @@
 #include <UI/dialogui.hpp>
 
-DialogUI::DialogUI(NPC* npc, std::map<GLchar, Character> *characters, int width, int height) {
+DialogUI::DialogUI(NPC* npc, int width, int height) {
 	m_npc = npc;
-	m_characters = characters;
 	m_width = width;
 	m_height = height;
 
@@ -22,10 +21,10 @@ void DialogUI::update() {
 	m_npc_line = m_npc->getDialog()->getLine();
 	m_player_lines = m_npc->getDialog()->getPlayerLines();
 
-	m_npc_line_text = new Text(m_npc_line, *m_characters, 0.2f, glm::vec3(1), glm::vec2(m_width * 0.5, m_height * 0.25));
+	m_npc_line_text = new Text(m_npc_line, 0.2f, glm::vec3(1), glm::vec2(m_width * 0.5, m_height * 0.25));
 
 	for (int i = 0; i < m_player_lines.size(); i ++) {
-		Text* player_line_text = new Text(m_player_lines[i].second, *m_characters, 0.2f, glm::vec3(1), glm::vec2(20, m_height * 0.75 - i * 50), 0.0f);
+		Text* player_line_text = new Text(m_player_lines[i].second, 0.2f, glm::vec3(1), glm::vec2(20, m_height * 0.75 - i * 50), 0.0f);
 		m_player_lines_text.push_back(player_line_text);
 	}
 }

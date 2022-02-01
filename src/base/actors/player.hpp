@@ -26,11 +26,10 @@ private:
   float m_side_direction;
   float m_velocity;
   QuestUI* m_quest_ui;
-  std::map<GLchar, Character> m_characters;
 
 public:
   Player();
-  Player(std::string, int, PhysicalObj *, Camera *, std::map<GLchar, Character> characters);
+  Player(std::string, int, PhysicalObj *, Camera *);
 
   void Update(float);
 

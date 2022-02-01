@@ -20,10 +20,8 @@ class Inventory {
   Text* hold_weapon;
   int weapon_index;
   
-  std::map<GLchar, Character> &characters;
-
 public:
-  Inventory(Actor& actor, std::map<GLchar, Character> &Characters);
+  Inventory(Actor& actor);
   void draw();
   void open();
   void update(float dt);

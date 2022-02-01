@@ -18,7 +18,7 @@ Player::Player() : Actor() {}
  * \param obj Physical object
  * \param camera View camera
  */
-Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * camera, std::map<GLchar, Character> characters) :
+Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * camera) :
   Actor(name, max_health, obj)
 {
   m_camera = camera;
@@ -28,7 +28,6 @@ Player::Player(std::string name, int max_health, PhysicalObj * obj, Camera * cam
   m_speed = glm::vec2(0.0f);
   m_side_speed = glm::vec2(0.0f);
   m_quest_ui = nullptr;
-  m_characters = characters;
 }
 
 /**
@@ -116,7 +115,7 @@ float Player::GetSideDirection() {
 
 void Player::addQuest(Quest * quest) {
   this->quests.push_back(quest);
-  m_quest_ui = new QuestUI(quest, glm::vec2(10, 400), m_characters);
+  m_quest_ui = new QuestUI(quest, glm::vec2(10, 400));
 }
 
 std::vector<Quest *> * Player::getQuests() {
