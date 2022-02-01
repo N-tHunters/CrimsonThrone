@@ -45,11 +45,11 @@ void FlatChunkLoader::LoadObjects(AbstractChunk* chunk) {
     chunk->AddActor(
   	new NPC(
   		"Totacres",
-  		100,
+  		30,
   		new PhysicalObj(
   			new Mesh(
   				get_model("human"),
-  				get_texture("fire")
+  				get_texture("water")
   				),
   			true, true, false, false,
   			glm::vec3(chunk->GetX() * 100.0f + 50.0f, 10.0f, chunk->GetY() * 100.0f + 61.0f),

@@ -437,7 +437,7 @@ bool Actor::IsAlive() {
 
 Item* Actor::GetDrop() {
   return new Weapon("Sword",
-                    new PhysicalObj(new Mesh(get_model("sword"), get_texture("fire")),
+                    new PhysicalObj(new Mesh(get_model("sword"), get_texture("sword")),
                                     true, true, false, false,
                                     this->GetPhysicalObj()->getPosition(),
                                     glm::vec3(0.0f, 0.0f, 0.0f),

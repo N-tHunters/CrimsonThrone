@@ -5,7 +5,7 @@
 #include "dungeongenerator.hpp"
 
 class DungeonA1Generator : public DungeonGenerator {
-  void GenerateDungeon(int, int, int, int);
+  void GenerateDungeon(int, int, int, int) override;
 
 public:
   DungeonA1Generator();

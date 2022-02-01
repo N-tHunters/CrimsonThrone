@@ -87,7 +87,7 @@ void Player::draw(Camera* camera) {
     glm::vec4 offset_vec4 = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f) * rotation_matrix;
     glm::vec3 offset = glm::vec3(offset_vec4);
     this->weapon->GetPhysicalObj()->setPosition(this->obj->getPosition() + offset);
-    this->weapon->GetPhysicalObj()->setRotation(glm::vec3(0.0f, -this->m_camera->getRotationY() + 90.0f, -45.0f - this->m_camera->getRotationX()));
+    this->weapon->GetPhysicalObj()->setRotation(glm::vec3(0, -this->m_camera->getRotationY() + 90.0f, -45.0f - this->m_camera->getRotationX()));
     this->weapon->GetPhysicalObj()->draw(camera);
   }
   if (m_quest_ui != nullptr) {
