@@ -25,7 +25,12 @@ GLuint createTexture(std::vector<unsigned char> pixels, int width, char channels
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	GLuint color_mode = GL_RGB;
+	if (channels == 4) {
+		color_mode = GL_RGBA;
+	}
+
+	glTexImage2D(GL_TEXTURE_2D, 0, color_mode, width, height, 0, color_mode, GL_UNSIGNED_BYTE, image);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	freeImage(image);
 
@@ -47,7 +52,7 @@ GLuint createTexture(std::string texturePath) {
 	int width, height;
 	unsigned char* image = loadImage(texturePath, &width, &height);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	freeImage(image);
 

@@ -88,8 +88,6 @@ Image::Image(glm::vec4 rect, GLuint textureID, glm::vec2 position): Frame(rect) 
 }
 
 void Image::draw() {
-	glClear(GL_DEPTH_BUFFER_BIT);
-
 	shaderGUI.Use();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
@@ -103,8 +101,6 @@ void Image::draw() {
 }
 
 void Image::draw(glm::vec3 draw_color) {
-	glClear(GL_DEPTH_BUFFER_BIT);
-
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture);
 

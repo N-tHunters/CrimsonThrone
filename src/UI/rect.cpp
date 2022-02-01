@@ -6,10 +6,10 @@ Rect::Rect(int x, int y, int w, int h) {
 	this->w = w;
 	this->h = h;
 
-	vertices = {x,     y + h, 0, 0, 1,
-	            x,     y,     0, 0, 0,
-	            x + w, y + h, 0, 1, 1,
-	            x + w, y,     0, 1, 0
+	vertices = {0, h, 0, 0, 1,
+	            0, 0, 0, 0, 0,
+	            w, h, 0, 1, 1,
+	            w, 0, 0, 1, 0
 	           };
 	indices = {0, 1, 2,
 	           1, 2, 3
@@ -41,12 +41,10 @@ Rect::Rect(int x, int y, int w, int h) {
 void Rect::draw() {
 	shaderGUI.Use();
 
-	// glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	// glBufferData(GL_ARRAY_BUFFER, sizeof(vertices[0]) * vertices.size(), &(vertices[0]), GL_STATIC_DRAW);
-
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 	glUniform1i(glGetUniformLocation(shaderGUI.Program, "ourTexture"), 0);
+	glUniform2fv(glGetUniformLocation(shaderGUI.Program, "objectpos"), 1, glm::value_ptr(glm::vec2(x, y)));
 
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, this->indices.size(), GL_UNSIGNED_INT, 0);
@@ -55,6 +53,11 @@ void Rect::draw() {
 
 void Rect::setTexture(GLuint texture) {
 	m_texture = texture;
+}
+
+void Rect::setPosition(int new_x, int new_y) {
+	x = new_x;
+	y = new_y;
 }
 
 bool Rect::checkPoint(int px, int py) {

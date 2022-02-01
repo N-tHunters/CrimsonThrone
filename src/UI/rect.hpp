@@ -15,13 +15,17 @@
 
 class Rect {
 	GLuint VBO, VAO, EBO, m_texture;
-	std::vector<int> vertices;
+	std::vector<GLfloat> vertices;
 	std::vector<unsigned int> indices;
 public:
 	int x, y, w, h;
 	Rect(int, int, int, int);
+	
 	void draw();
+
 	void setTexture(GLuint);
+	void setPosition(int x, int y);
+
 	bool checkPoint(int x, int y);
 	bool checkPoint(glm::vec2 pos);
 };

@@ -16,8 +16,8 @@ class Button {
 	Text* text;
 
 public:
-	Button(glm::vec2 size, glm::vec2 pos, func function, std::string text, float scale, glm::vec3 color);
-	Button(int, int, int, int, func, std::string, float, glm::vec3);
+	Button(glm::vec2 size, glm::vec2 pos, func function, std::string text, float scale, glm::vec3 color, int orientation);
+	Button(int, int, int, int, func, std::string, float, glm::vec3, int);
 	bool check(glm::vec2 position);
 	void click(glm::vec2 position);
 	void draw();
