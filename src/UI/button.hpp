@@ -3,18 +3,21 @@
 
 #include <UI/frame.hpp>
 #include <UI/text.hpp>
+#include <UI/rect.hpp>
 
 #include <render/shaders.hpp>
+#include <render/texture.hpp>
 
 typedef void (*func)();
 
-class Button: public Frame {
-	glm::vec4 rect;
+class Button {
+	Rect* rect;
 	func function;
 	Text* text;
 
 public:
-	Button(glm::vec4 rect, func function, std::string text, float scale, glm::vec3 color);
+	Button(glm::vec2 size, glm::vec2 pos, func function, std::string text, float scale, glm::vec3 color);
+	Button(int, int, int, int, func, std::string, float, glm::vec3);
 	bool check(glm::vec2 position);
 	void click(glm::vec2 position);
 	void draw();

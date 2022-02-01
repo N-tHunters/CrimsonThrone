@@ -3,15 +3,15 @@
 // std::vector<GLuint> loaded_textures;
 // GLuint texture;
 
-GLuint createTexture(std::vector<int> pixels, int width) {
-	int height = pixels.size() / width / 4;
+GLuint createTexture(std::vector<unsigned char> pixels, int width, char channels) {
+	int height = pixels.size() / width / channels;
 	unsigned char* image = (unsigned char *)malloc(sizeof(GL_FLOAT) * pixels.size());
 
-	for (int i = 0; i < pixels.size() / 4; i ++) {
-		image[4 * i] = pixels[3 * i];
-		image[4 * i + 1] = pixels[3 * i + 1];
-		image[4 * i + 2] = pixels[3 * i + 2];
-		image[4 * i + 3] = pixels[3 * i + 3];
+	for (int i = 0; i < pixels.size() / channels; i ++) {
+		for (int k = 0; k < channels; k ++) {
+			image[channels * i + k] = pixels[channels * i + k];
+			// printf("%d\n", pixles[i * channels + k]);
+		}
 	}
 
 	GLuint texture;
@@ -25,7 +25,7 @@ GLuint createTexture(std::vector<int> pixels, int width) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	freeImage(image);
 

@@ -5,5 +5,5 @@
 #include <render/imageLoader.hpp>
 #include <string>
 
-GLuint createTexture(std::vector<int>, int width);
+GLuint createTexture(std::vector<unsigned char>, int width, char channels);
 GLuint createTexture(std::string texturePath);

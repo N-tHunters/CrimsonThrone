@@ -65,6 +65,7 @@
 #include <UI/image3d.hpp>
 #include <UI/inventory.hpp>
 #include <UI/dialogui.hpp>
+#include <UI/mainmenu.hpp>
 
 #include <landscape/dungeona1generator3d.hpp>
 
@@ -251,38 +252,11 @@ int main() {
 
   glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
   glDebugMessageCallback(MessageCallback, 0);
-  // Frame buffer
-
-  unsigned int framebuffer;
-  glGenFramebuffers(1, &framebuffer);
-  glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
-
-  unsigned int texColorBuffer;
-  glGenTextures(1, &texColorBuffer);
-  glBindTexture(GL_TEXTURE_2D, texColorBuffer);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glBindTexture(GL_TEXTURE_2D, 0);
-
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texColorBuffer, 0);
-
-  unsigned int rbo;
-  glGenRenderbuffers(1, &rbo);
-  glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-  glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-  glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
-
-  if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-    printf("ERROR::FRAMEBUFFER:: Framebuffer is not complete!\n");
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
   load_shaders(width, height);
   load_characters();
 
-  /// Initialize game objects
+  // Initialize game objects
   init_models();
 
   camera = new Camera(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 0.0f));
@@ -366,10 +340,7 @@ int main() {
 
   glfwSetCursorPos(window, (double)width / 2.0, (double)height / 2.0);
 
-  Button* resume_button = new Button(glm::vec4(-0.1, -0.05, 0.2, 0.1), (function)change_to_running, "resume", 7.0f, glm::vec3(255));
-  Button* exit_to_menu = new Button(glm::vec4(-0.1, -0.20, 0.2, 0.1), (function)change_to_main_menu, "exit to menu",  7.0f, glm::vec3(255));
-  Button* play_button = new Button(glm::vec4(-0.1, 0.0, 0.2, 0.2), (function)change_to_running, "Start",  10.0f, glm::vec3(255));
-  Button* exit_button = new Button(glm::vec4(-0.1, -0.3, 0.2, 0.15), (function)close_window, "Exit",  10.0f, glm::vec3(255));
+  MainMenu main_menu = MainMenu((function)change_to_running, (function)close_window);
 
   game_state = STATE_MAIN_MENU;
 
@@ -434,25 +405,33 @@ int main() {
 
       glfwPollEvents();
 
-      if (play_button->check(glm::vec2(xpos, ypos))) {
-        play_button->update(glm::vec3(100));
-      } else {
-        play_button->update(glm::vec3(0));
-      }
+      main_menu.highlight(xpos, ypos);
 
-      if (exit_button->check(glm::vec2(xpos, ypos))) {
-        exit_button->update(glm::vec3(100));
-      } else {
-        exit_button->update(glm::vec3(0));
-      }
+      main_menu.draw();
 
       if (clicked) {
-        play_button->click(glm::vec2(xpos, ypos));
-        exit_button->click(glm::vec2(xpos, ypos));
+        main_menu.click(xpos, ypos);
       }
 
-      play_button->draw();
-      exit_button->draw();
+      // if (play_button->check(glm::vec2(xpos, ypos))) {
+      //   play_button->update(glm::vec3(100));
+      // } else {
+      //   play_button->update(glm::vec3(0));
+      // }
+
+      // if (exit_button->check(glm::vec2(xpos, ypos))) {
+      //   exit_button->update(glm::vec3(100));
+      // } else {
+      //   exit_button->update(glm::vec3(0));
+      // }
+
+      // if (clicked) {
+        // play_button->click(glm::vec2(xpos, ypos));
+        // exit_button->click(glm::vec2(xpos, ypos));
+      // }
+
+      // play_button->draw();
+      // exit_button->draw();
 
       glFinish();
 
@@ -484,19 +463,19 @@ int main() {
 
       if (game_state == STATE_PAUSED) {
         ypos = height - ypos;
-        if (resume_button->check(glm::vec2(xpos, ypos))) {
-          resume_button->update(glm::vec3(255, 255, 0));
-        } else {
-          resume_button->update(glm::vec3(0));
-        }
-        if (exit_to_menu->check(glm::vec2(xpos, ypos))) {
-          exit_to_menu->update(glm::vec3(255, 255, 0));
-        } else {
-          exit_to_menu->update(glm::vec3(0));
-        }
+        // if (resume_button->check(glm::vec2(xpos, ypos))) {
+          // resume_button->update(glm::vec3(255, 255, 0));
+        // } else {
+          // resume_button->update(glm::vec3(0));
+        // }
+        // if (exit_to_menu->check(glm::vec2(xpos, ypos))) {
+          // exit_to_menu->update(glm::vec3(255, 255, 0));
+        // } else {
+          // exit_to_menu->update(glm::vec3(0));
+        // }
         if (clicked) {
-          resume_button->click(glm::vec2(xpos, ypos));
-          exit_to_menu->click(glm::vec2(xpos, ypos));
+          // resume_button->click(glm::vec2(xpos, ypos));
+          // exit_to_menu->click(glm::vec2(xpos, ypos));
         }
       }
       glEnable(GL_DEPTH_TEST);
@@ -611,8 +590,8 @@ int main() {
       }
 
       if (game_state == STATE_PAUSED) {
-        resume_button->draw();
-        exit_to_menu->draw();
+        // resume_button->draw();
+        // exit_to_menu->draw();
       } else if (game_state == STATE_RUNNING) {
         if (current_dialog_ui != nullptr) {
           current_dialog_ui->draw();
