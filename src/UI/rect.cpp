@@ -6,10 +6,10 @@ Rect::Rect(int x, int y, int w, int h) {
 	this->w = w;
 	this->h = h;
 
-	vertices = {x,     y + h, 0.0f, 0.0f, 1.0f,
-	            x,     y,     0.0f, 0.0f, 0.0f,
-	            x + w, y + h, 0.0f, 1.0f, 1.0f,
-	            x + w, y,     0.0f, 1.0f, 0.0f
+	vertices = {x,     y + h, 0, 0, 1,
+	            x,     y,     0, 0, 0,
+	            x + w, y + h, 0, 1, 1,
+	            x + w, y,     0, 1, 0
 	           };
 	indices = {0, 1, 2,
 	           1, 2, 3

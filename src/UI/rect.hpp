@@ -15,7 +15,7 @@
 
 class Rect {
 	GLuint VBO, VAO, EBO, m_texture;
-	std::vector<GLfloat> vertices;
+	std::vector<int> vertices;
 	std::vector<unsigned int> indices;
 public:
 	int x, y, w, h;
