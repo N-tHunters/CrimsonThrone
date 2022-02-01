@@ -51,3 +51,10 @@ void NPC::Process(float dt) {
 Dialog * NPC::getDialog() {
   return this->dialog;
 }
+
+
+void NPC::DealDamage(int damage, Actor * dealer) {
+  if(this->ai != nullptr)
+    this->ai->ProcessHit(dealer);
+  Actor::DealDamage(damage, dealer);
+}

@@ -24,6 +24,7 @@ protected:
   NPCAI * GetAI();
   void Process(float dt);
     Dialog * getDialog();
+    void DealDamage(int, Actor*);
 };
 
 #endif

@@ -266,7 +266,7 @@ void Actor::Heal(int amount) {
  * Substract some amount of health
  * \param amount Amount of health to substract
  */
-void Actor::DealDamage(int amount) {
+void Actor::DealDamage(int amount, Actor *dealer) {
   this->health -= amount;
 }
 
@@ -417,7 +417,7 @@ void Actor::draw(Camera * camera) {
   this->obj->draw(camera);
   if(this->weapon != nullptr) {
     this->weapon->GetPhysicalObj()->setPosition(this->obj->getPosition() + glm::vec3(0.1f, -0.2f, 0.5f));
-    this->weapon->GetPhysicalObj()->changeRotation(glm::vec3(0.0f, 0.0f, (rand() % 100) / 1.0f));
+    this->weapon->GetPhysicalObj()->changeRotation(glm::vec3(0.0f, 0.0f, (rand() % 70) / 1.0f));
     this->weapon->GetPhysicalObj()->draw(camera);
   }
 }

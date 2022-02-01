@@ -38,8 +38,9 @@ void init_demo_locations() {
   			glm::vec3(0.0f),
   			"totacres",
   			get_model("human")->getBoundaryBox(1.0f)
-  			)
-  		)
+  			),
+    new AggressiveWandererAI(15.0f)
+            )
   	);
   open_world->GetChunk(0, 0)->GetActor(0)->SetWeapon(new Weapon("Sword",
                     new PhysicalObj(new Mesh(get_model("sword"), get_texture("sword"), 0.2f),
@@ -47,7 +48,7 @@ void init_demo_locations() {
                                     glm::vec3(0.0f, 0.0f, 0.0f),
                                     glm::vec3(0.0f, 0.0f, 0.0f),
                                     "sword"),
-                    10, 10));
+                    10, 2));
 
   // for(int i = 0; i < 100; i++) {
   //   open_world->GetChunk(0, 0)->AddObj(create_wall(glm::vec3(10 * (rand() % 40) + rand() % 10, 5, 10 * (rand() % 40) + rand() % 10), glm::vec3(10, 10, 10), GetDefaultTexture()));

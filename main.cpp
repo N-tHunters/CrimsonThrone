@@ -574,7 +574,7 @@ int main() {
           }
           if (weapon_range > collided_actors.second) {
             int player_damage = player->GetDamage();
-            collided_actor->DealDamage(player_damage);
+            collided_actor->DealDamage(player_damage, player);
           }
         } else if (pressed_e) {
           inDialog = true;

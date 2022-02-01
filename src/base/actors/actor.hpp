@@ -102,7 +102,7 @@ public:
 
   int GetDefence();
   int GetDamage();
-  void DealDamage(int);
+  virtual void DealDamage(int, Actor*);
   void Heal(int);
 
   size_t GetInventorySize();

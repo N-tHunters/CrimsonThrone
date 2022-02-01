@@ -11,5 +11,6 @@ public:
   virtual void SetActor(Actor *);
   
   virtual void Process(float dt);
+  virtual void ProcessHit(Actor *);
   virtual void Communicate(Actor *);
 };

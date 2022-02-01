@@ -8,4 +8,6 @@ void NPCAI::SetActor(Actor * actor) {
 void NPCAI::Process(float dt) {
 }
 
+void NPCAI::ProcessHit(Actor *) {}
+
 void NPCAI::Communicate(Actor *) {}
