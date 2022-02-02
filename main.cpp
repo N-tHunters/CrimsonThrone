@@ -346,7 +346,7 @@ int main() {
 
   float dt = 0.0f;
 
-  logs = new TextBox(glm::vec4(-0.9, -0.9, 1.8, 0.3),  20.0f, glm::vec3(255));
+  logs = new TextBox(glm::vec4(-0.9, -1.8, 1.8, 0.3),  20.0f, glm::vec3(255));
 
   DialogUI* current_dialog_ui = nullptr;
   inventory = new Inventory(*player);
