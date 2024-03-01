@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iostream>
 #include <cstring>
+#include <cstdint>
 #include <vector>
 #include <string>
 
